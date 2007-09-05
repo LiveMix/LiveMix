@@ -1,0 +1,26 @@
+==== 0.4 ====
+First version of live mix, before il will be jackmix
+
+- new layout with pre post and sub
+- basic GUI (get components from Hydrogen)
+- add in matrix add set method
+- add plf/alf
+- calulate pk only when need
+- fix channel order
+- prefix jack posts
+- warning cleaning
+- linear end : ~ -52.0 - -60.0 dB => ~2.5m - 0.0m) (-52db to don't have angle in change !)
+- i18n / l10n
+- change output xml
+- add stereo (pan/bal)
+- add mute
+- add effect (LADSPA - LRDF) (get components from Hydrogen)
+- load/save effect
+- add CPU load (jack and internal)
+- change backend data arengement (to internal data).
+- fix: Effect without input havn't name!
+- add internal post
+- backend => singleton
+- actions (volumes/selection) => status
+
+

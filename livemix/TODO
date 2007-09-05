@@ -1,0 +1,60 @@
+External code review welcome (it's my fist QP application and c++ application from long time ;-)
+
+
+==== 0.5 ====
+V - extends LADSPA support
+V - implement samplerate hint
+V - rm nonreal time effect
+V - some LADSPA crash due activate never call !!
+V - replace cons with qmake
+V - debug remove panel
+V - implement toggle hint (better)
+V - add LCD display to effect out
+V - create a debian package
+V - create auto packager for src and bin
+V - change all jackmix to LiveMix
+V - add sub menu in edit menu
+V - implement logarithmic hint
+
+- add first application icon
+- effect before bal/pan
+- better effect implementation on mono channel
+
+- fix hidden effect channel
+- display nb in - out
+- improve tooltip on effect label
+- add effect cost (CPU use)
+
+==== 0.6 ====
+- add lash support (help welcome)
+- save jack connection
+- add possibility to change jack application name
+
+==== 0.7 ====
+- MIDI learn - middle click
+- key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
+
+==== 0.8 ====
+- fix effect selector first click
+- add display name (LabelFader)
+- better GUI (add LabelRotary, LabelSwitch)
+- mv pre channel to out (LabelRotarySwitch)
+- center channel label
+
+==== 0.9 ====
+- display dB on the GUI (artwork welcome, in SVG if possible - to be tested)
+- add test button (can play a sound for each channel).
+
+==== 1.0 ====
+- bug fix !
+
+==== post 1.0 (or optional) ====
+- add integrater player (help welcome)
+- add sound analising in monitor (FFT) (help welcome)
+- add MIDI support (help welcome, I don't have hardware)
+- add mute groupe
+- add possibility to hide some part of the gui (gain, sound analising, ...)
+- add lv2 support (help welcome)
+
+==== Idies ====
+- add crossfader (help to define it is welcone)
