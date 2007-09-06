@@ -1,2 +1,0 @@
-?package(livemix):needs="X11" section="Apps/Sound"\
-  title="LiveMix" command="/usr/bin/livemix"
