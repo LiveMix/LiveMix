@@ -1,0 +1,11 @@
+#!/bin/bash
+
+make
+make INSTALL_ROOT=../livemix-$1-bin install
+cd ..
+mv livemix-$1-bin/usr/bin/data livemix-$1-bin/usr/bin/livemix  livemix-$1-bin
+rm -rf  livemix-$1-bin/usr
+tar -cvjf livemix-$1-bin.tar.bz2 livemix-$1-bin
+rm -rf livemix-$1-bin
+cd livemix
+
