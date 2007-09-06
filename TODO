@@ -20,6 +20,8 @@ V - implement logarithmic hint
 - effect before bal/pan
 - better effect implementation on mono channel
 
+- key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
+
 - fix hidden effect channel
 - display nb in - out
 - improve tooltip on effect label
@@ -32,7 +34,6 @@ V - implement logarithmic hint
 
 ==== 0.7 ====
 - MIDI learn - middle click
-- key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
 
 ==== 0.8 ====
 - fix effect selector first click
