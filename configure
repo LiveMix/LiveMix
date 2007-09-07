@@ -83,7 +83,7 @@ fi
 echo ""
 $QMAKE_BIN --version
 
-$QMAKE_BIN all.pro "prefix=$prefix"
+$QMAKE_BIN all.pro "prefix=$prefix" -config release
 
 rm -f config.h
 echo "#define CONFIG_PREFIX \"$prefix\"" >> config.h
