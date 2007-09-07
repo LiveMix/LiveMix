@@ -61,7 +61,7 @@ LCDDigit::LCDDigit( QWidget * pParent, LCDType type )
 
     // Small blue FontSet image
     if (m_pSmallBlueFontSet == NULL ) {
-        QString sSmallBlueFontSet = QCoreApplication::applicationDirPath() + "/data/LCDSmallBlueFontSet.png";
+        QString sSmallBlueFontSet = ":/data/LCDSmallBlueFontSet.png";
         m_pSmallBlueFontSet = new QPixmap();
         bool ok = m_pSmallBlueFontSet->load( sSmallBlueFontSet );
         if( ok == false ) {
@@ -71,7 +71,7 @@ LCDDigit::LCDDigit( QWidget * pParent, LCDType type )
 
     // Small red FontSet image
     if (m_pSmallRedFontSet == NULL ) {
-        QString sSmallRedFontSet = QCoreApplication::applicationDirPath() + "/data/LCDSmallRedFontSet.png";
+        QString sSmallRedFontSet = ":/data/LCDSmallRedFontSet.png";
         m_pSmallRedFontSet = new QPixmap();
         bool ok = m_pSmallRedFontSet->load( sSmallRedFontSet );
         if( ok == false ) {
@@ -81,7 +81,7 @@ LCDDigit::LCDDigit( QWidget * pParent, LCDType type )
 
     // Large gray FontSet image
     if (m_pLargeGrayFontSet == NULL ) {
-        QString sLargeGrayFontSet = QCoreApplication::applicationDirPath() + "/data/LCDLargeGrayFontSet.png";
+        QString sLargeGrayFontSet = ":/data/LCDLargeGrayFontSet.png";
         m_pLargeGrayFontSet = new QPixmap();
         bool ok = m_pLargeGrayFontSet->load( sLargeGrayFontSet );
         if( ok == false ) {
@@ -91,7 +91,7 @@ LCDDigit::LCDDigit( QWidget * pParent, LCDType type )
 
     // Small gray FontSet image
     if (m_pSmallGrayFontSet == NULL ) {
-        QString sSmallGrayFontSet = QCoreApplication::applicationDirPath() + "/data/LCDSmallGrayFontSet.png";
+        QString sSmallGrayFontSet = ":/data/LCDSmallGrayFontSet.png";
         m_pSmallGrayFontSet = new QPixmap();
         bool ok = m_pSmallGrayFontSet->load( sSmallGrayFontSet );
         if( ok == false ) {

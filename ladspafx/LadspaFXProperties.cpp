@@ -49,7 +49,7 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX
 // setMinimumSize( width(), height() );
 // setFixedHeight( height() );
     setFixedHeight( 259 );
-// setWindowIcon( QPixmap( QCoreApplication::applicationDirPath() + "/data/icon16.png" ) );
+// setWindowIcon( QPixmap( ":/data/icon16.png" ) );
 
     QHBoxLayout *hbox = new QHBoxLayout();
     hbox->setSpacing( 0 );
@@ -59,7 +59,7 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX
 
     // Background image
 // QPixmap background;
-// bool ok = background.load( QCoreApplication::applicationDirPath() + "/data/mixerPanel/mixer_background.png" );
+// bool ok = background.load( ":/data/mixerPanel/mixer_background.png" );
 // if( !ok ){
 //  qDebug() << "Error loading pixmap";
 // }
@@ -238,7 +238,7 @@ void LadspaFXProperties::updateControls()
             m_pActivateBtn->setPressed(true);
         }
 
-        /*  QString mixerline_text_path = QCoreApplication::applicationDirPath() + "/data/mixerPanel/mixer_background.png";
+        /*  QString mixerline_text_path = ":/data/mixerPanel/mixer_background.png";
           QPixmap textBackground;
           if( textBackground.load( mixerline_text_path ) == false ){
            qDebug() << "Error loading pixmap";

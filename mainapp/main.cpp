@@ -24,6 +24,7 @@
 #include <QtCore/QTranslator>
 #include <QtCore/QLocale>
 #include <QtGui/QApplication>
+#include <QtGui/QIcon>
 
 #include "mainwindow.h"
 
@@ -88,19 +89,20 @@ int main( int argc, char** argv )
 
     QApplication *qapp = new QApplication( argc, argv );
     QStringList args = qapp->arguments();
+    qapp->setWindowIcon(QIcon(":/data/livemix.svg"));
 
     QTranslator tor( 0 );
     QString sTranslationFile = QString("livemix.") + QLocale::system().name();
     QString sLocale = QLocale::system().name();
     if ( sLocale != "C") {
-        QString sTranslationPath = "i18n";
+        QString sTranslationPath = ":i18n";
         QString total = sTranslationPath + "/" + sTranslationFile + ".qm";
 
         bool bTransOk = tor.load( total, "." );
         if ( bTransOk ) {
             qDebug() << "Using locale: " + sTranslationPath + "/" + sTranslationFile;
         } else {
-            sTranslationPath = QCoreApplication::applicationDirPath() + "/i18n";
+            sTranslationPath = ":/i18n";
             total = sTranslationPath + "/" + sTranslationFile + ".qm";
             bTransOk = tor.load( total, "." );
             if (bTransOk) {

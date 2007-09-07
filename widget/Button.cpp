@@ -99,7 +99,7 @@ bool Button::loadImage( const QString& sFilename, QPixmap& pixmap )
     */
 #endif
     // load an image
-    if ( pixmap.load( QCoreApplication::applicationDirPath() + "/data/" + sFilename ) == false ) {
+    if ( pixmap.load( ":/data/" + sFilename ) == false ) {
         if ( sFilename != "" ) {
 //   qDebug() << "Error loading image: '" << sFilename.toStdString() << "'";
         }

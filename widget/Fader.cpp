@@ -52,24 +52,24 @@ Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString ch
     resize( 23, 116 );
 
     // Background image
-    QString background_path = QCoreApplication::applicationDirPath() + "/data/fader_background.png";
+    QString background_path = ":/data/fader_background.png";
     bool ok = m_back.load( background_path );
     if( ok == false ) {
-        qDebug() << "Fader: Error loading pixmap: " << QCoreApplication::applicationDirPath() + "/data/fader_background.png";
+        qDebug() << "Fader: Error loading pixmap: " << ":/data/fader_background.png";
     }
 
     // Leds image
-    QString leds_path = QCoreApplication::applicationDirPath() + "/data/fader_leds.png";
+    QString leds_path = ":/data/fader_leds.png";
     ok = m_leds.load( leds_path );
     if( ok == false ) {
-        qDebug() << "Error loading pixmap: " << QCoreApplication::applicationDirPath() + "/data/fader_background.png";
+        qDebug() << "Error loading pixmap: " << ":/data/fader_background.png";
     }
 
     // Knob image
-    QString knob_path = QCoreApplication::applicationDirPath() + "/data/fader_knob.png";
+    QString knob_path = ":/data/fader_knob.png";
     ok = m_knob.load( knob_path );
     if( ok == false ) {
-        qDebug() << "Error loading pixmap: " << QCoreApplication::applicationDirPath() + "/data/fader_knob.png";
+        qDebug() << "Error loading pixmap: " << ":/data/fader_knob.png";
     }
 }
 Fader::~Fader()
@@ -323,10 +323,10 @@ QPixmap* Knob::m_background = NULL;
  m_fValue = 0.0;
  
  if ( m_background == NULL ) {
-  QString sBackground_path = QCoreApplication::applicationDirPath() + "/data/knob_images.png";
+  QString sBackground_path = ":/data/knob_images.png";
   m_background = new QPixmap();
   if ( m_background->load( sBackground_path ) == false ){
-   qDebug() << "Error loading pixmap" << QCoreApplication::applicationDirPath() + "/data/knob_images.png";
+   qDebug() << "Error loading pixmap" << ":/data/knob_images.png";
   }
  }
  

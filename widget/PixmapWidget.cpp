@@ -63,9 +63,9 @@ void PixmapWidget::setPixmap( QString sPixmapPath, bool expand_horiz )
     m_sPixmapPath = sPixmapPath;
     __expand_horiz = expand_horiz;
 
-    bool ok = m_pixmap.load( QCoreApplication::applicationDirPath() + "/data/" + sPixmapPath );
+    bool ok = m_pixmap.load( ":/data/" + sPixmapPath );
     if ( !ok ) {
-        qDebug() << "error loading: " << QCoreApplication::applicationDirPath() + "/data/" + sPixmapPath;
+        qDebug() << "error loading: " << ":/data/" + sPixmapPath;
     }
 
     resize( m_pixmap.width(), m_pixmap.height() );

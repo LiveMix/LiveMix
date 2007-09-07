@@ -90,14 +90,14 @@ Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseInt
 
     if ( m_background_normal == NULL ) {
         m_background_normal = new QPixmap();
-        if ( m_background_normal->load( QCoreApplication::applicationDirPath() + "/data/rotary_images.png" ) == false ) {
-            qDebug() << "Error loading pixmap: " << QCoreApplication::applicationDirPath() + "/data/rotary_images.png";
+        if ( m_background_normal->load( ":/data/rotary_images.png" ) == false ) {
+            qDebug() << "Error loading pixmap: " << ":/data/rotary_images.png";
         }
     }
     if ( m_background_center == NULL ) {
         m_background_center = new QPixmap();
-        if ( m_background_center->load( QCoreApplication::applicationDirPath() + "/data/rotary_center_images.png" ) == false ) {
-            qDebug() << "Error loading pixmap: " << QCoreApplication::applicationDirPath() + "/data/rotary_center_images.png";
+        if ( m_background_center->load( ":/data/rotary_center_images.png" ) == false ) {
+            qDebug() << "Error loading pixmap: " << ":/data/rotary_center_images.png";
         }
     }
 

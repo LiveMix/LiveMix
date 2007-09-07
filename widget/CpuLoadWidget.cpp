@@ -49,14 +49,14 @@ CpuLoadWidget::CpuLoadWidget( QWidget *pParent )
 // m_nXRunValue = 0;
 
     // Background image
-    QString background_path = QCoreApplication::applicationDirPath() + "/data/cpuLoad_back.png";
+    QString background_path = ":/data/cpuLoad_back.png";
     bool ok = m_back.load( background_path );
     if( !ok ) {
         qDebug() << "Error loading pixmap " + background_path;
     }
 
     // Leds image
-    QString leds_path = QCoreApplication::applicationDirPath() + "/data/cpuLoad_leds.png";
+    QString leds_path = ":/data/cpuLoad_leds.png";
     ok = m_leds.load( leds_path );
     if( !ok ) {
         qDebug() << "Error loading pixmap " + leds_path;
