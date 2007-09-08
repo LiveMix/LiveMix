@@ -22,7 +22,9 @@
 #define BACKEND_INTERFACE_H
 
 #include "guiserver_interface.h"
+#ifdef LADSPA_SUPPORT
 #include "LadspaFX.h"
+#endif
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
@@ -50,8 +52,10 @@ public:
     ~effect();
 
 // wrorking data:
+#ifdef LADSPA_SUPPORT
     LadspaFX *fx;
     LadspaFXProperties *gui;
+#endif
 // jack_default_audio_sample_t* eff_l;
 // jack_default_audio_sample_t* eff_r;
     float m_fCpuUse; // part
@@ -185,6 +189,7 @@ class Backend : public QObject
     Q_OBJECT
 public:
     enum ChannelType {IN, OUT, PRE, POST, SUB};
+    enum ElementType {GAIN, MUTE, PAN_BAL, TO_PRE, TO_POST, TO_SUB, TO_MAIN, FADER, TO_ALF, TO_PLF, PRE_VOL, MUTE_EFFECT};
 
     ~Backend();
 
@@ -332,11 +337,6 @@ public:
 
 
     // should be in mixingmatrix !
-    QWidget* effect_start;
-
-    enum Backend::ChannelType selectType;
-    QString selectChannel;
-    QList<effect*> visibleEffect;
 
 public slots:
     /**

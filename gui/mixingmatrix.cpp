@@ -70,7 +70,7 @@ Widget::Widget(QWidget* p)
 // effect_layout->setSpacing(0);
 // effect_layout->setMargin(0);
     QWidget* effect_start = new QWidget();
-    Backend::instance()->effect_start = effect_start;
+    m_pEffectStart = effect_start;
     effect_layout->addWidget(effect_start);
     QVBoxLayout *effect_start_layout = new QVBoxLayout;
     effect_start_layout->setSpacing(0);
@@ -179,12 +179,12 @@ void Widget::displayFX(struct effect *fx)
         connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, struct effect*)), this, SLOT(removeFX(LadspaFXProperties*, struct effect*)));
     }
     fx->gui->show();
-    Backend::instance()->visibleEffect << fx;
+    m_lVisibleEffect << fx;
 }
 
 void Widget::removeFX(LadspaFXProperties* widget, struct effect* fx)
 {
-    Backend::instance()->visibleEffect.removeAll(fx);
+    m_lVisibleEffect.removeAll(fx);
     disconnect(widget, 0, 0, 0);
 // disconnect(0, 0, widget, 0);
     widget->hide();
@@ -196,26 +196,26 @@ void Widget::removeFX(LadspaFXProperties* widget, struct effect* fx)
     effect_layout->parentWidget()->setMinimumSize(size);
     effect_layout->parentWidget()->adjustSize();
 
-    switch (Backend::instance()->selectType)
+    switch (m_eSelectType)
     {
     case Backend::IN: {
-            Backend::instance()->removeInEffect(Backend::instance()->selectChannel, fx);
+            Backend::instance()->removeInEffect(m_sSelectChannel, fx);
             break;
         }
     case Backend::OUT: {
-            Backend::instance()->removeOutEffect(Backend::instance()->selectChannel, fx);
+            Backend::instance()->removeOutEffect(m_sSelectChannel, fx);
             break;
         }
     case Backend::PRE: {
-            Backend::instance()->removePreEffect(Backend::instance()->selectChannel, fx);
+            Backend::instance()->removePreEffect(m_sSelectChannel, fx);
             break;
         }
     case Backend::POST: {
-            Backend::instance()->removePostEffect(Backend::instance()->selectChannel, fx);
+            Backend::instance()->removePostEffect(m_sSelectChannel, fx);
             break;
         }
     case Backend::SUB: {
-            Backend::instance()->removeSubEffect(Backend::instance()->selectChannel, fx);
+            Backend::instance()->removeSubEffect(m_sSelectChannel, fx);
             break;
         }
     }
@@ -229,25 +229,25 @@ void Widget::addFX()
     LadspaFX* fx = LadspaFXProperties::getFXSelector(NULL);
     if (fx != NULL) {
         struct effect* elem = NULL;
-        switch (Backend::instance()->selectType) {
+        switch (m_eSelectType) {
         case Backend::IN: {
-                elem = Backend::instance()->addInEffect(Backend::instance()->selectChannel, fx);
+                elem = Backend::instance()->addInEffect(m_sSelectChannel, fx);
                 break;
             }
         case Backend::OUT: {
-                elem = Backend::instance()->addOutEffect(Backend::instance()->selectChannel, fx);
+                elem = Backend::instance()->addOutEffect(m_sSelectChannel, fx);
                 break;
             }
         case Backend::PRE: {
-                elem = Backend::instance()->addPreEffect(Backend::instance()->selectChannel, fx);
+                elem = Backend::instance()->addPreEffect(m_sSelectChannel, fx);
                 break;
             }
         case Backend::POST: {
-                elem = Backend::instance()->addPostEffect(Backend::instance()->selectChannel, fx);
+                elem = Backend::instance()->addPostEffect(m_sSelectChannel, fx);
                 break;
             }
         case Backend::SUB: {
-                elem = Backend::instance()->addSubEffect(Backend::instance()->selectChannel, fx);
+                elem = Backend::instance()->addSubEffect(m_sSelectChannel, fx);
                 break;
             }
         }
@@ -301,52 +301,52 @@ void Widget::select(Backend::ChannelType type, QString channel)
 void Widget::doSelect(Backend::ChannelType type, QString channel)
 {
 // effect = new struct effectData;
-    if (Backend::instance()->selectType == type && Backend::instance()->selectChannel == channel) {
+    if (m_eSelectType == type && m_sSelectChannel == channel) {
         return;
     }
-    Backend::instance()->selectType = type;
-    Backend::instance()->selectChannel = channel;
+    m_eSelectType = type;
+    m_sSelectChannel = channel;
 
     effectName->setText(channel);
-    Backend::instance()->effect_start->show();
+    m_pEffectStart->show();
 
-    foreach (struct effect* fx, Backend::instance()->visibleEffect) {
+    foreach (struct effect* fx, m_lVisibleEffect) {
         fx->gui->hide();
     }
-    Backend::instance()->visibleEffect.clear();
+    m_lVisibleEffect.clear();
 
-    switch (Backend::instance()->selectType) {
+    switch (m_eSelectType) {
     case Backend::IN: {
-            showMessage(trUtf8("Input '%1' selected.").arg(Backend::instance()->getInput(Backend::instance()->selectChannel)->display_name));
-            foreach (effect* elem, *(Backend::instance()->getInEffects(Backend::instance()->selectChannel))) {
+            showMessage(trUtf8("Input '%1' selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
+            foreach (effect* elem, *(Backend::instance()->getInEffects(m_sSelectChannel))) {
                 displayFX(elem);
             }
             break;
         }
     case Backend::OUT: {
             showMessage(trUtf8("Output selected."));
-            foreach (effect* elem, *(Backend::instance()->getOutEffects(Backend::instance()->selectChannel))) {
+            foreach (effect* elem, *(Backend::instance()->getOutEffects(m_sSelectChannel))) {
                 displayFX(elem);
             }
             break;
         }
     case Backend::PRE: {
-            showMessage(trUtf8("Pre fader aux '%1' selected.").arg(Backend::instance()->getPre(Backend::instance()->selectChannel)->display_name));
-            foreach (effect* elem, *(Backend::instance()->getPreEffects(Backend::instance()->selectChannel))) {
+            showMessage(trUtf8("Pre fader aux '%1' selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
+            foreach (effect* elem, *(Backend::instance()->getPreEffects(m_sSelectChannel))) {
                 displayFX(elem);
             }
             break;
         }
     case Backend::POST: {
-            showMessage(trUtf8("Post fader aux '%1' selected.").arg(Backend::instance()->getPost(Backend::instance()->selectChannel)->display_name));
-            foreach (effect* elem, *(Backend::instance()->getPostEffects(Backend::instance()->selectChannel))) {
+            showMessage(trUtf8("Post fader aux '%1' selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
+            foreach (effect* elem, *(Backend::instance()->getPostEffects(m_sSelectChannel))) {
                 displayFX(elem);
             }
             break;
         }
     case Backend::SUB: {
-            showMessage(trUtf8("Sub-groupe '%1' selected.").arg(Backend::instance()->getSub(Backend::instance()->selectChannel)->display_name));
-            foreach (effect* elem, *(Backend::instance()->getSubEffects(Backend::instance()->selectChannel))) {
+            showMessage(trUtf8("Sub-groupe '%1' selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
+            foreach (effect* elem, *(Backend::instance()->getSubEffects(m_sSelectChannel))) {
                 displayFX(elem);
             }
             break;
@@ -546,6 +546,18 @@ void Widget::removesubchannel( QString name )
     for (QMap<QString, PostWidget*>::iterator i = post.begin() ; i != post.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
     }
+}
+
+void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
+	UNUSED(p_eType);
+	UNUSED(p_sChannelName);
+	UNUSED(p_eElement);
+	UNUSED(p_sReatedChannelName);
+	UNUSED(ev);
+}
+
+void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
+	middleClick(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, ev);
 }
 
 InWidget::InWidget(QString channel) : QWidget()

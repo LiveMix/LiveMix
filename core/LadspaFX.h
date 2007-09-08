@@ -113,7 +113,7 @@ public:
     void connectAudioPorts();
     void activate();
     void deactivate();
-    void processFX( unsigned nFrames );
+    void processFX(unsigned nFrames, bool stereo);
 
 
     const QString& getPluginLabel()

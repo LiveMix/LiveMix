@@ -15,10 +15,9 @@ V - create auto packager for src and bin
 V - change all jackmix to LiveMix
 V - add sub menu in edit menu
 V - implement logarithmic hint
-
-- add first application icon
-- effect before bal/pan
-- better effect implementation on mono channel
+V - add first application icon
+V - effect before bal/pan on in channel
+V - better effect implementation on mono channel
 
 - key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
 

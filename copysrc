@@ -1,0 +1,35 @@
+#!/bin/bash
+
+cd ..
+cp -a livemix livemix-$1
+cd livemix-$1
+
+make clean
+make distclean
+
+rm -rf .settings
+rm gethydrogen.tar.gz linda lintian* .cdtproject .project
+find . -name .svn -print | while read f;
+do
+   rm -rf $f
+done
+find . -name objs -print | while read f;
+do
+   rm -rf $f
+done
+find . -name libs -print | while read f;
+do
+   rm -rf $f
+done
+find . -name "*~" -print | while read f;
+do
+   rm $f
+done
+find . -name Makefile -print | while read f;
+do
+   rm $f
+done
+find . -name Makefile.am -print | while read f;
+do
+   rm $f
+done

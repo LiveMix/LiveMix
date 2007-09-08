@@ -1,4 +1,7 @@
-<!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+               "http://www.oasis-open.org/docbook/xml/5.0/docbook.dtd" [
+<!--doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [ -->
 
 <!-- Process this file with docbook-to-man to generate an nroff manual
      page: `docbook-to-man manpage.sgml > manpage.1'.  You may view
@@ -57,7 +60,7 @@ manpage.1: manpage.sgml
   <refnamediv>
     <refname>&dhpackage;</refname>
 
-    <refpurpose>program to do something</refpurpose>
+    <refpurpose>live mix table</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
@@ -92,7 +95,7 @@ manpage.1: manpage.sgml
     </para>
 	<para>
 	  On Debian systems, the complete text of the GNU General Public
-	  License can be found in /usr/share/common-licenses/GPL.
+	  License can be found in /usr/share/common-licenses/GPL-2.
 	</para>
 
   </refsect1>

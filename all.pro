@@ -13,11 +13,11 @@ target.files = livemix
 
 # icon
 icon.path = $$prefix/share/pixmaps
-icon.files = debian/livemix.xpm debian/livemix-16.xpm
+icon.files = dist/livemix.xpm dist/livemix-16.xpm
 
 # desktop
 desktop.path = $$prefix/share/applications
-desktop.files = debian/livemix.desktop
+desktop.files = dist/livemix.desktop
 
 # sample
 sample.path = $$prefix/share/livemix/sample

@@ -1,12 +1,21 @@
 #!/bin/bash
 
+echo "build livemix-$1"
+
+./copysrc $1
+
 cd ..
-ln -s livemix livemix-$1
-tar -cvhzf livemix_$1.orig.tar.gz livemix-$1
-cd livemix
+
+tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
+
+cd livemix-$1
 
 dpkg-buildpackage -rfakeroot
 
-rm ../livemix-$1
-rm -rf debian/livemix
+cd ../livemix
 
+rm -rf ../livemix-$1
+
+lintian ../livemix_$1*.deb
+lintian ../livemix_$1*.dsc
+linda ../livemix_$1*

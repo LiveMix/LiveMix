@@ -238,21 +238,32 @@ int process( jack_nframes_t nframes, void* arg )
             }
             if (!elem->mute)
             {
-                float gain_l = elem->gain * (1-elem->bal);
-                float gain_r = elem->gain * (1+elem->bal);
-                float volume = elem->volume;
                 elem->sample_l = (jack_default_audio_sample_t*) jack_port_get_buffer(elem->in_l, nframes);
                 elem->sample_r = elem->stereo ? (jack_default_audio_sample_t*) jack_port_get_buffer(
                                      elem->in_r, nframes ) : elem->sample_l;
-                for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    elem->pre_l[n] = elem->sample_l[n] * gain_l;
-                    elem->pre_r[n] = elem->sample_r[n] * gain_r;
+                float gain = elem->gain;
+                if (elem->stereo) {
+	                for ( jack_nframes_t n=0; n<nframes; n++ ) {
+	                    elem->pre_l[n] = elem->sample_l[n] * gain;
+                    	elem->pre_r[n] = elem->sample_r[n] * gain;
+                    }
+                }
+                else {
+	                for ( jack_nframes_t n=0; n<nframes; n++ ) {
+	                    elem->pre_l[n] = elem->sample_l[n] * gain;
+                    	elem->pre_r[n] = elem->pre_l[n];
+                    }
                 }
                 /// Effect.
                 foreach (effect* effect, elem->effects) {
                     backend->prossesLadspaFX(effect, elem->pre_l, elem->pre_r, nframes, calculate_pk);
                 }
+                float bal_l = 1-elem->bal;
+                float bal_r = 1+elem->bal;
+                float volume = elem->volume;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                    elem->pre_l[n] *= bal_l;
+                    elem->pre_r[n] *= bal_r;
                     elem->post_l[n] = elem->pre_l[n] * volume;
                     elem->post_r[n] = elem->pre_r[n] * volume;
                     if (calculate_pk) {
@@ -285,6 +296,7 @@ int process( jack_nframes_t nframes, void* arg )
             if (elem->stereo) {
                 elem->pre_r = (jack_default_audio_sample_t*)jack_port_get_buffer( elem->out_r, nframes );
             } else {
+            	
                 elem->pre_r = elem->pre_l;
             }
             for ( jack_nframes_t n=0; n<nframes; n++ ) elem->pre_l[ n ] = 0;
@@ -721,127 +733,51 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
 //qDebug() << QString("processLadspaFX - Label: %1, nb in: %2, nb out: %3, in l: %4, in r: %5")
 //  .arg(m_sLabel).arg(m_nIAPorts).arg(m_nOAPorts).arg(right_channel[0]).arg(left_channel[0]);
 
-        switch (pFX->fx->getInputAudio()) {
-        case 0: {
-            switch (pFX->fx->getOutputAudio()) {
-            case 0: {
-                pFX->fx->processFX(nframes);
-                break;
-            }
-            case 1: {
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferL[i];
-                }
-                break;
-            }
-            case 2: {
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
-                }
-                break;
-            }
-            }
-            break;
+        if (pFX->fx->getInputAudio() >=  2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+	        for ( unsigned i = 0; i < nframes; ++i) {
+	            pFX->fx->m_pInBufferL[i] = left_channel[i];
+	            pFX->fx->m_pInBufferR[i] = right_channel[i];
+	        }
         }
-        case 1: {
-            switch (pFX->fx->getOutputAudio()) {
-            case 0: {
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    pFX->fx->m_pInBufferL[i] = left_channel[i] + right_channel[i];
-                }
-                pFX->fx->processFX(nframes);
-                break;
-            }
-            case 1: {
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    pFX->fx->m_pInBufferL[i] = left_channel[i];
-                    pFX->fx->m_pInBufferR[i] = right_channel[i];
-                }
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
-                }
-                break;
-            }
-            case 2: {
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    pFX->fx->m_pInBufferL[i] = left_channel[i] + right_channel[i];
-                }
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
-                }
-                break;
-            }
-            }
-            break;
+        else {
+	        if (left_channel != right_channel) {
+		        for ( unsigned i = 0; i < nframes; ++i) {
+		            pFX->fx->m_pInBufferL[i] = left_channel[i] + right_channel[i];
+		        }
+	        }
+	        else {
+		        for ( unsigned i = 0; i < nframes; ++i) {
+		            pFX->fx->m_pInBufferL[i] = left_channel[i];
+		        }
+	        }
         }
-        case 2: {
-            for ( unsigned i = 0; i < nframes; ++i) {
-                pFX->fx->m_pInBufferL[i] = left_channel[i];
-                pFX->fx->m_pInBufferR[i] = right_channel[i];
-            }
-            switch (pFX->fx->getOutputAudio()) {
-            case 0: {
-                pFX->fx->processFX(nframes);
-                break;
-            }
-            case 1: {
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferL[i];
-                }
-                break;
-            }
-            case 2: {
-                pFX->fx->processFX(nframes);
-                for ( unsigned i = 0; i < nframes; ++i) {
-                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
-                }
-                break;
-            }
-            }
-            break;
+        pFX->fx->processFX(nframes, left_channel != right_channel);
+        if (left_channel != right_channel) {
+	        if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+	            for ( unsigned i = 0; i < nframes; ++i) {
+	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
+	                right_channel[i] = pFX->fx->m_pOutBufferL[i];
+	            }
+	        }
+	        else {
+	            for ( unsigned i = 0; i < nframes; ++i) {
+	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
+	                right_channel[i] = pFX->fx->m_pOutBufferR[i];
+	            }
+	        }
         }
+        else {
+	        if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+	            for ( unsigned i = 0; i < nframes; ++i) {
+	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
+	            }
+	        }
+	        else {
+	            for ( unsigned i = 0; i < nframes; ++i) {
+	                left_channel[i] = pFX->fx->m_pOutBufferL[i] + pFX->fx->m_pOutBufferR[i];
+	            }
+	        }
         }
-        /*  if (pFX->fx->getPluginType() == LadspaFX::STEREO_FX) { // STEREO FX
-           for ( unsigned i = 0; i < nframes; ++i) {
-            pFX->fx->m_pBuffer_L[i] = left_channel[i];
-            pFX->fx->m_pBuffer_R[i] = right_channel[i];
-           }
-           pFX->fx->processFX(nframes);
-           for ( unsigned i = 0; i < nframes; ++i) {
-            left_channel[i] = pFX->fx->m_pBuffer_L[i];
-            right_channel[i] = pFX->fx->m_pBuffer_R[i];
-           }
-          }
-          else { // prosses for each channel
-           for ( unsigned i = 0; i < nframes; ++i) {
-            pFX->fx->m_pBuffer_L[i] = left_channel[i];
-           }
-           pFX->fx->processFX(nframes);
-           for ( unsigned i = 0; i < nframes; ++i) {
-            left_channel[i] = pFX->fx->m_pBuffer_L[i];
-           }
-           
-           if (left_channel != right_channel) {
-            for ( unsigned i = 0; i < nframes; ++i) {
-             pFX->fx->m_pBuffer_L[i] = right_channel[i];
-            }
-            pFX->fx->processFX(nframes);
-            for ( unsigned i = 0; i < nframes; ++i) {
-             right_channel[i] = pFX->fx->m_pBuffer_L[i];
-            }
-           }
-          }*/
         if (p_bCalculatePk && pFX->m_iCount++ % 20 == 0) {
             //  qDebug()<<pFX->fx->getPluginName()<<(int)left_channel<<(int)right_channel<<(pFX->fx->getPluginType() == LadspaFX::STEREO_FX);
             pFX->m_iCount = 0;
@@ -1286,8 +1222,6 @@ in::in(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, 
     bal = 0;
     plf = false;
     main = true;
-    sample_l = (jack_default_audio_sample_t*) jack_port_get_buffer(in_l, p_nframes);
-    sample_r = stereo ? (jack_default_audio_sample_t*) jack_port_get_buffer(in_r, p_nframes) : sample_l;
 }
 in::~in()
 {
@@ -1302,15 +1236,10 @@ out::out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     out_r = r;
     volume = 0.1;
     alf = false;
-    out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(out_l, p_nframes);
-    if (stereo) {
-        out_s_r = (jack_default_audio_sample_t*)jack_port_get_buffer(out_r, p_nframes);
-    } else {
-        out_s_r = out_s_l;
-    }
 }
 out::~out()
-{}
+{
+}
 pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
 {
     out_l = l;
@@ -1318,15 +1247,10 @@ pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     volume = 0.1;
     bal = 0;
     alf = false;
-    pre_l = (jack_default_audio_sample_t*)jack_port_get_buffer(out_l, p_nframes);
-    if (stereo) {
-        pre_r = (jack_default_audio_sample_t*)jack_port_get_buffer(out_r, p_nframes);
-    } else {
-        pre_r = pre_l;
-    }
 }
 pre::~pre()
-{}
+{
+}
 post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nframes, jack_port_t* s_l, jack_port_t* s_r, jack_port_t* r_l, jack_port_t* r_r)
         : channel(p_name, p_stereo, p_nframes)
         , out_l(s_l)
@@ -1343,17 +1267,9 @@ post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nfra
     alf = false;
     main = true;
     external = p_external;
-    if (external) {
-        post_l = (jack_default_audio_sample_t*)jack_port_get_buffer(out_l, p_nframes);
-        post_r = stereo ? (jack_default_audio_sample_t*)jack_port_get_buffer(out_r, p_nframes) : post_l;
-    } else {
+    if (!external) {
         post_l = new jack_default_audio_sample_t[p_nframes];
         post_r = new jack_default_audio_sample_t[p_nframes];
-    }
-    if (external) {
-        return_sample_l = (jack_default_audio_sample_t*) jack_port_get_buffer(in_l, p_nframes);
-        return_sample_r = stereo ? (jack_default_audio_sample_t*)jack_port_get_buffer(in_r, p_nframes) : return_sample_l;
-    } else {
         return_sample_l = post_l;
         return_sample_r = post_r;
     }
@@ -1375,12 +1291,6 @@ sub::sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     bal = 0;
     alf = false;
     main = true;
-    sub_l = (jack_default_audio_sample_t*)jack_port_get_buffer(out_l, p_nframes);
-    if (stereo) {
-        sub_r = (jack_default_audio_sample_t*)jack_port_get_buffer(out_r, p_nframes);
-    } else {
-        sub_r = sub_l;
-    }
 }
 sub::~sub()
 {}

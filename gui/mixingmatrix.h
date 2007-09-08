@@ -93,6 +93,9 @@ public:
 
     void showMessage( const QString& msg, int msec=5000 );
 
+	void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+	void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+
 public slots:
     // Fills the empty nodes with 1to1-controls
     void init();
@@ -126,6 +129,46 @@ private:
     QTimer *m_pStatusTimer;
 
 // EffectData effect;
+    QWidget* m_pEffectStart;
+
+    enum Backend::ChannelType m_eSelectType;
+    QString m_sSelectChannel;
+    QList<effect*> m_lVisibleEffect;
+};
+
+class Wrapp : public QObject {
+    Q_OBJECT
+public:
+	Wrapp(Widget* p_pMatrix, QObject* p_pObject, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName) 
+	 : QObject()
+	 , m_pMatrix(p_pMatrix)
+	 , m_eType(p_eType)
+	 , m_sChannelName(p_sChannelName)
+	 , m_eElement(p_eElement)
+	 , m_sReatedChannelName(p_sReatedChannelName)
+	{
+	    connect(p_pObject, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
+	    connect(p_pObject, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );
+	};
+	
+public slots:
+	void middleClick(QMouseEvent* p_ev) {
+		m_pMatrix->middleClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
+	};
+	void rightClick(QMouseEvent* p_ev) {
+		m_pMatrix->rightClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
+	};
+
+private:
+	Widget* m_pMatrix;
+	Backend::ChannelType m_eType;
+	QString m_sChannelName;
+	Backend::ElementType m_eElement;
+	QString m_sReatedChannelName;
+	
+	void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+	void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+ 
 };
 
 class InWidget : public QWidget
@@ -164,6 +207,8 @@ private:
     QMap<QString, Rotary*> pre;
     QMap<QString, Rotary*> post;
     QMap<QString, ToggleButton*> sub;
+
+	QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class PreWidget : public QWidget
@@ -182,6 +227,8 @@ signals:
 
 private:
     QString m_Channel;
+
+	QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class PostWidget : public QWidget
@@ -207,6 +254,8 @@ private:
     QWidget* wSub;
     QVBoxLayout* lSub;
     QMap<QString, ToggleButton*> sub;
+
+	QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class SubWidget : public QWidget
@@ -225,6 +274,8 @@ signals:
 
 private:
     QString m_Channel;
+
+	QMap<QWidget*, Wrapp*> wrapps;
 };
 
 class MainWidget : public QWidget
@@ -247,13 +298,15 @@ public:
 
 signals:
     void clicked(Backend::ChannelType, QString channel);
+
+private:
+	QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 void addLine(QVBoxLayout*, bool bold =false);
 void addLine(QHBoxLayout*, bool bold =false);
 void addSpacer(QVBoxLayout*);
 
-}
-; // JackMix
+}; // JackMix
 
 #endif // MIXINGMATRIX_H

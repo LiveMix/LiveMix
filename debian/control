@@ -1,7 +1,7 @@
 Source: livemix
 Section: sound
 Priority: extra
-Maintainer: Stephane Brunner <stephane.brunner@gmail.com>
+Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
 Build-Depends: debhelper (>= 5), autotools-dev, docbook-to-man, libqt4-dev, pkg-config, libjack-dev, liblrdf-dev, ladspa-sdk
 Standards-Version: 3.7.2
 
@@ -10,4 +10,12 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: swh-plugins
 Suggests: cmt, tap-plugins, ladspa-plugin
-Description: Simple mix table based on jack for live performances
+Description: Simple mix table for live performances.
+ It will be based on Jack and LADSPA.
+ Features :
+  - In, pre fader, post fader, sub-groupes custumisable channel.
+  - All in will be stereo in internal.
+  - LADSPA effects.
+  - PK meters.
+  - CPU meters.
+  - Hydrogen GUI.

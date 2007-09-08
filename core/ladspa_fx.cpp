@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  */
 
 #ifdef LADSPA_SUPPORT
@@ -67,7 +66,6 @@ void LadspaFXGroup::addChild( LadspaFXGroup *pChild )
 {
     m_childGroups.push_back( pChild );
 }
-
 
 
 ////////////////
@@ -156,8 +154,6 @@ LadspaFX::~LadspaFX()
         delete outputControlPorts[i];
     }
 }
-
-
 
 
 // Static
@@ -388,7 +384,6 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
 }
 
 
-
 void LadspaFX::connectAudioPorts()
 {
     if (m_nIAPorts == 1 && m_nOAPorts == 1) {
@@ -437,11 +432,10 @@ void LadspaFX::connectAudioPorts(float* p_pInL, float* p_pInR, float* p_pOutL, f
 }
 
 
-
-void LadspaFX::processFX( unsigned nFrames )
+void LadspaFX::processFX( unsigned nFrames, bool stereo )
 {
     m_d->run( m_handle, nFrames );
-    if (m_nIAPorts == 1 && m_nOAPorts == 1) {
+    if (stereo && m_nIAPorts == 1 && m_nOAPorts == 1) {
         m_d->run( m_handleBis, nFrames );
     }
 //qDebug() << QString("processFX - Label: %1, nb in: %2, nb out: %3, in l: %4, in r: %5, out l: %6, out r: %7")
