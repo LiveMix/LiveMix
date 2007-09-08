@@ -16,7 +16,6 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
- 
 */
 
 #ifndef MIXINGMATRIX_H
@@ -43,9 +42,12 @@
 #define pint qint32
 #endif
 
-namespace JackMix
+namespace LiveMix
 {
 
+class KeyDo;
+class Wrapp;
+class WrappVolume;
 class InWidget;
 class PreWidget;
 class PostWidget;
@@ -61,7 +63,6 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-
     // \param inchannels, outchannels, backend, parent, name=0
     Widget( QWidget* parent);
     ~Widget();
@@ -90,11 +91,17 @@ public:
 // void mode( Mode n ) { _mode=n; }
 
     void doSelect(Backend::ChannelType, QString channel);
+    Backend::ChannelType getSelectedChanelType();
+    QString getSetectedChannelName();
 
     void showMessage( const QString& msg, int msec=5000 );
 
-	void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
-	void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+    void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+    void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+
+    void action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    void addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
+    void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
 
 public slots:
     // Fills the empty nodes with 1to1-controls
@@ -134,48 +141,105 @@ private:
     enum Backend::ChannelType m_eSelectType;
     QString m_sSelectChannel;
     QList<effect*> m_lVisibleEffect;
+
+    QMap<Backend::ChannelType, QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>*> m_mShurtCut;
+    QMap<QKeySequence, KeyDo*> m_mKeyToWrapp;
+    WrappVolume* m_pSelectedWrapper;
+
+    void keyPressEvent (QKeyEvent * p_pEvent);
+    void wheelEvent (QWheelEvent *p_pEvent);
 };
 
-class Wrapp : public QObject {
+class KeyDo
+{
+public:
+    KeyDo(Widget* p_pMatrix);
+    virtual ~KeyDo();
+    virtual void action() =0;
+
+protected:
+    Widget* m_pMatrix;
+};
+class KeyDoSelectChannel : public KeyDo
+{
+public:
+    KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName);
+    ~KeyDoSelectChannel();
+    void action();
+private:
+    Backend::ChannelType m_eType;
+    QString m_sChannelName;
+};
+class KeyDoChannelAction : public KeyDo
+{
+public:
+    KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    ~KeyDoChannelAction();
+    void action();
+private:
+    Backend::ElementType m_eElement;
+    QString m_sReatedChannelName;
+};
+class KeyDoDirectAction : public KeyDo
+{
+public:
+    KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    ~KeyDoDirectAction();
+    void action();
+private:
+    Backend::ChannelType m_eType;
+    QString m_sChannelName;
+    Backend::ElementType m_eElement;
+    QString m_sReatedChannelName;
+};
+
+class Wrapp : public QObject
+{
     Q_OBJECT
 public:
-	Wrapp(Widget* p_pMatrix, QObject* p_pObject, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName) 
-	 : QObject()
-	 , m_pMatrix(p_pMatrix)
-	 , m_eType(p_eType)
-	 , m_sChannelName(p_sChannelName)
-	 , m_eElement(p_eElement)
-	 , m_sReatedChannelName(p_sReatedChannelName)
-	{
-	    connect(p_pObject, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
-	    connect(p_pObject, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );
-	};
-	
+    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+
+    virtual bool exec();
+
 public slots:
-	void middleClick(QMouseEvent* p_ev) {
-		m_pMatrix->middleClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
-	};
-	void rightClick(QMouseEvent* p_ev) {
-		m_pMatrix->rightClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
-	};
+    void middleClick(QMouseEvent* p_ev);
+    void rightClick(QMouseEvent* p_ev);
 
 private:
-	Widget* m_pMatrix;
-	Backend::ChannelType m_eType;
-	QString m_sChannelName;
-	Backend::ElementType m_eElement;
-	QString m_sReatedChannelName;
-	
-	void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
-	void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
- 
+    Widget* m_pMatrix;
+
+    Backend::ChannelType m_eType;
+    QString m_sChannelName;
+    Backend::ElementType m_eElement;
+    QString m_sReatedChannelName;
+};
+
+class WrappVolume : public Wrapp
+{
+    Q_OBJECT
+public:
+    WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    Volume* getVolume();
+private:
+    Volume* m_pWidget;
+};
+
+class WrappToggle : public Wrapp
+{
+    Q_OBJECT
+public:
+    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+
+    bool exec();
+private:
+    ToggleButton* m_pWidget;
 };
 
 class InWidget : public QWidget
 {
     Q_OBJECT
 public:
-    InWidget( QString channel );
+    InWidget(QString p_sChannel, Widget* p_pMatrix);
     ~InWidget();
 
     void addPre(QString channelIn, QString channelPre);
@@ -195,6 +259,7 @@ signals:
 
 private:
     QString m_Channel;
+    Widget* m_pMatrix;
 
     QWidget* wPre;
     QWidget* wPost;
@@ -208,7 +273,7 @@ private:
     QMap<QString, Rotary*> post;
     QMap<QString, ToggleButton*> sub;
 
-	QMap<QWidget*, Wrapp*> m_mWrapps;
+// QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class PreWidget : public QWidget
@@ -228,7 +293,7 @@ signals:
 private:
     QString m_Channel;
 
-	QMap<QWidget*, Wrapp*> m_mWrapps;
+// QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class PostWidget : public QWidget
@@ -255,7 +320,7 @@ private:
     QVBoxLayout* lSub;
     QMap<QString, ToggleButton*> sub;
 
-	QMap<QWidget*, Wrapp*> m_mWrapps;
+// QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 class SubWidget : public QWidget
@@ -275,7 +340,7 @@ signals:
 private:
     QString m_Channel;
 
-	QMap<QWidget*, Wrapp*> wrapps;
+// QMap<QWidget*, Wrapp*> wrapps;
 };
 
 class MainWidget : public QWidget
@@ -300,13 +365,14 @@ signals:
     void clicked(Backend::ChannelType, QString channel);
 
 private:
-	QMap<QWidget*, Wrapp*> m_mWrapps;
+// QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
 void addLine(QVBoxLayout*, bool bold =false);
 void addLine(QHBoxLayout*, bool bold =false);
 void addSpacer(QVBoxLayout*);
 
-}; // JackMix
+}
+; // LiveMix
 
 #endif // MIXINGMATRIX_H

@@ -126,11 +126,11 @@ int main( int argc, char** argv )
             file = args[ i ];
     }
 
-    JackMix::MainWindow *mw;
+    LiveMix::MainWindow *mw;
     if ( !file.isEmpty() )
-        mw = new JackMix::MainWindow( file );
+        mw = new LiveMix::MainWindow( file );
     else
-        mw = new JackMix::MainWindow();
+        mw = new LiveMix::MainWindow();
     mw->show();
 
     int ret = qapp->exec();

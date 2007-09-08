@@ -27,7 +27,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 QPixmap* LCDDigit::m_pSmallBlueFontSet = NULL;
@@ -446,4 +446,4 @@ void LCDSpinBox::wheelEvent ( QWheelEvent *ev )
 }
 
 }
-; //JackMix
+; //LiveMix

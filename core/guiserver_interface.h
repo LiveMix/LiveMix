@@ -24,7 +24,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-namespace JackMix
+namespace LiveMix
 {
 
 /**
@@ -49,7 +49,8 @@ public:
     virtual QString getItem( const QString& title, const QString& label, const QStringList& list ) const =0;
 };
 
-};
+}
+; // LiveMix
 
 #endif // GUISERVER_INTERFACE_H
 

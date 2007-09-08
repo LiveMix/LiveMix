@@ -20,6 +20,10 @@ V - effect before bal/pan on in channel
 V - better effect implementation on mono channel
 
 - key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
+  - assign key
+  - save key
+  - load key
+- fix dump witout jack
 
 - fix hidden effect channel
 - display nb in - out

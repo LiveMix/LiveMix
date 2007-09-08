@@ -25,7 +25,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QInputDialog>
 
-namespace JackMix
+namespace LiveMix
 {
 
 GraphicalGuiServer::GraphicalGuiServer( QWidget* p ) : _parent( p )
@@ -77,4 +77,4 @@ QString GraphicalGuiServer::getItem( const QString& title, const QString& label,
 }
 
 }
-; //JackMix
+; //LiveMix

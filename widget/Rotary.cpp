@@ -18,6 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include "Rotary.h"
 
 #include "globals.h"
@@ -28,7 +29,7 @@
 
 #define MV_HEIGHT 201.0
 
-namespace JackMix
+namespace LiveMix
 {
 
 RotaryTooltip::RotaryTooltip()
@@ -70,7 +71,7 @@ QPixmap* Rotary::m_background_center = NULL;
 
 
 Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip, QString channel, QString channel2 )
-        : QWidget( parent )
+        : Volume( parent )
         , _channel(channel)
         , _channel2(channel2)
         , m_bUseIntSteps( bUseIntSteps )
@@ -184,7 +185,6 @@ void Rotary::setValue( float fValue, bool do_emit )
 }
 
 
-
 void Rotary::mousePressEvent(QMouseEvent *ev)
 {
     setCursor( QCursor( Qt::SizeVerCursor ) );
@@ -204,8 +204,6 @@ void Rotary::mousePressEvent(QMouseEvent *ev)
 }
 
 
-
-
 void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 {
     UNUSED(ev);
@@ -215,13 +213,34 @@ void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 }
 
 
+void Rotary::incValue(bool p_bDirection)
+{
+    if ( m_bUseIntSteps ) {
+        if (p_bDirection) {
+            setValue( getValue() + 1, true );
+        } else {
+            setValue( getValue() - 1, true );
+        }
+    } else {
+        float delta = 0.5;
+        if (m_fMin > -20) {
+            float fRange = m_fMax - m_fMin;
+            delta = fRange / MV_HEIGHT;
+        }
 
+        if (p_bDirection) {
+            setValue( m_fValue + delta, true );
+        } else {
+            setValue( m_fValue - delta, true );
+        }
+    }
+}
 
-void Rotary::wheelEvent ( QWheelEvent *ev )
+/*void Rotary::wheelEvent ( QWheelEvent *ev )
 {
 // qDebug() << "wheelEvent delta: " << ev->delta();
     ev->accept();
-
+ 
     if ( m_bUseIntSteps ) {
         if ( ev->delta() > 0 ) {
             setValue( getValue() + 1, true );
@@ -234,15 +253,14 @@ void Rotary::wheelEvent ( QWheelEvent *ev )
             float fRange = m_fMax - m_fMin;
             delta = fRange / MV_HEIGHT;
         }
-
+ 
         if ( ev->delta() > 0 ) {
             setValue( m_fValue + delta, true );
         } else {
             setValue( m_fValue - delta, true );
         }
     }
-}
-
+}*/
 
 void Rotary::mouseMoveEvent( QMouseEvent *ev )
 {
@@ -267,7 +285,6 @@ void Rotary::mouseMoveEvent( QMouseEvent *ev )
 }
 
 
-
 void Rotary::setMin( float fMin )
 {
     m_fMin = fMin;
@@ -278,7 +295,6 @@ float Rotary::getMin()
 {
     return m_fMin;
 }
-
 
 
 void Rotary::setMax( float fMax )
@@ -294,4 +310,4 @@ float Rotary::getMax()
 }
 
 }
-; //JackMix
+; //LiveMix

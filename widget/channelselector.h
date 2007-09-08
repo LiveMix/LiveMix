@@ -26,7 +26,7 @@
 class QListWidget;
 class QPushButton;
 
-namespace JackMix
+namespace LiveMix
 {
 
 class ChannelSelector : public QDialog
@@ -49,6 +49,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif // CHANNELSELECTOR_H

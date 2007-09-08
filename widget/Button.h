@@ -24,6 +24,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "Action.h"
 //#include "PixmapWidget.h"
 
 #include <QtGui/QMouseEvent>
@@ -31,13 +32,13 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
 
-namespace JackMix
+namespace LiveMix
 {
 
 /**
  * Generic Button with pixmaps and text.
  */
-class Button : public QWidget
+class Button : public Action
 {
     Q_OBJECT
 
@@ -121,17 +122,18 @@ public:
     bool getValue();
     void setValue(bool value);
 
+    void mousePressEvent( QMouseEvent *ev );
+
 signals:
     void valueChanged(ToggleButton* ref);
     void valueChanged(QString channel, bool value);
     void valueChanged(QString channel, QString channel2, bool value);
 
 private:
-    void mousePressEvent( QMouseEvent *ev );
     void mouseReleaseEvent( QMouseEvent *ev );
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

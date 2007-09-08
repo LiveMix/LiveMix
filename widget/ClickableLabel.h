@@ -26,7 +26,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMouseEvent>
 
-namespace JackMix
+namespace LiveMix
 {
 
 class ClickableLabel : public QLabel
@@ -42,6 +42,6 @@ signals:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

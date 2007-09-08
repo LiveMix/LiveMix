@@ -35,7 +35,7 @@
 #include <QtGui/QFrame>
 #include <QtGui/QCloseEvent>
 
-namespace JackMix
+namespace LiveMix
 {
 
 LadspaFXProperties::LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX)
@@ -495,4 +495,4 @@ void LadspaFXProperties::activateBtnClicked()
 }
 
 }
-; //JackMix
+; //LiveMix

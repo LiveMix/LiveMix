@@ -28,11 +28,11 @@
 
 #include "globals.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, QSize size, bool use_skin_style, QString channel, QString channel2 )
-        : QWidget( pParent )
+        : Action( pParent )
         , _channel(channel)
         , _channel2(channel2)
         , m_bPressed( false )
@@ -329,4 +329,4 @@ ToggleButton* ToggleButton::createByPass(QWidget* pParent, QString channel)
 }
 
 }
-; //JackMix
+; //LiveMix

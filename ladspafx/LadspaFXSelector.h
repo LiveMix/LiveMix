@@ -28,7 +28,7 @@
 
 #include <QtGui/QDialog>
 
-namespace JackMix
+namespace LiveMix
 {
 
 class LadspaFXSelector : public QDialog, public Ui_LadspaFXSelector_UI
@@ -59,6 +59,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

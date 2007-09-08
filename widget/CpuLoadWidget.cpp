@@ -30,7 +30,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 CpuLoadWidget::CpuLoadWidget( QWidget *pParent )
@@ -141,30 +141,5 @@ void CpuLoadWidget::paintEvent( QPaintEvent*)
     painter.drawPixmap( QRect( 0, (height()-1)/2 +2, pos, (height()-1)/2 -1), m_leds, QRect( 0, 0, pos, 1) );
 }
 
-
-/*void CpuLoadWidget::updateCpuLoadWidget()
-{
- // Process time
- int perc = 0;
- if (m_pBackend->getMaxProcessTime() != 0.0 ) {
-  perc = (int)(m_pBackend->getProcessTime() / (m_pBackend->getMaxProcessTime() / 100.0));
- }
- setValue(perc / 100.0);
- 
- if (m_nXRunValue > 0) {
-  m_nXRunValue -= 5;
- }
- 
- update();
-}*/
-
-
-//void CpuLoadWidget::XRunEvent()
-//{
-// cout << "[xRunEvent]"
-// m_nXRunValue = 100;
-// update();
-//}
-
 }
-; //JackMix
+; //LiveMix

@@ -34,7 +34,7 @@
 #include "LCD.h"
 #include "Button.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 class LadspaFXProperties : public QWidget
@@ -87,6 +87,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

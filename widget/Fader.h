@@ -17,27 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  */
 
 
 #ifndef FADER_H
 #define FADER_H
 
+#include "backend.h"
+#include "Action.h"
+
 #include <QtGui/QWidget>
 #include <QtGui/QPixmap>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWheelEvent>
 #include <QtGui/QPaintEvent>
-#include "backend.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 ///
 /// Fader and VuMeter widget
 ///
-class Fader : public QWidget
+class Fader : public Volume
 {
     Q_OBJECT
 
@@ -66,6 +67,8 @@ public:
     {
         return m_bLinDb;
     };
+
+    void incValue(bool p_bDirection);
 
     void setMaxPeak( float fMax );
     void setMinPeak( float fMin );
@@ -97,7 +100,7 @@ public:
 
     virtual void mousePressEvent(QMouseEvent *ev);
     virtual void mouseMoveEvent(QMouseEvent *ev);
-    virtual void wheelEvent( QWheelEvent *ev );
+//    virtual void wheelEvent( QWheelEvent *ev );
     virtual void paintEvent(QPaintEvent *ev);
 
 signals:

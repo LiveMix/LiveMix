@@ -27,7 +27,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 PixmapWidget::PixmapWidget( QWidget *pParent )
@@ -101,4 +101,4 @@ void PixmapWidget::paintEvent( QPaintEvent* ev)
 }
 
 }
-; //JackMix
+; //LiveMix

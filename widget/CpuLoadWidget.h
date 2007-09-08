@@ -30,7 +30,7 @@
 
 //#include "backend_interface.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 ///
@@ -70,6 +70,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

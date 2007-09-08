@@ -29,7 +29,7 @@
 #include <QtCore/QDebug>
 #include <sys/time.h>
 
-namespace JackMix
+namespace LiveMix
 {
 
 float m_fProcessTime = 0.0f;   /// time used in process function
@@ -44,7 +44,7 @@ Backend::Backend( GuiServer_Interface* g ) :  gui( g )
 
     //client = 0;
     if ( client ) {
-        ::jack_set_process_callback( client, JackMix::process, this );
+        ::jack_set_process_callback( client, LiveMix::process, this );
         qDebug() << "JackBackend::JackBackend() activate";
         ::jack_activate( client );
 
@@ -243,15 +243,14 @@ int process( jack_nframes_t nframes, void* arg )
                                      elem->in_r, nframes ) : elem->sample_l;
                 float gain = elem->gain;
                 if (elem->stereo) {
-	                for ( jack_nframes_t n=0; n<nframes; n++ ) {
-	                    elem->pre_l[n] = elem->sample_l[n] * gain;
-                    	elem->pre_r[n] = elem->sample_r[n] * gain;
+                    for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                        elem->pre_l[n] = elem->sample_l[n] * gain;
+                        elem->pre_r[n] = elem->sample_r[n] * gain;
                     }
-                }
-                else {
-	                for ( jack_nframes_t n=0; n<nframes; n++ ) {
-	                    elem->pre_l[n] = elem->sample_l[n] * gain;
-                    	elem->pre_r[n] = elem->pre_l[n];
+                } else {
+                    for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                        elem->pre_l[n] = elem->sample_l[n] * gain;
+                        elem->pre_r[n] = elem->pre_l[n];
                     }
                 }
                 /// Effect.
@@ -296,7 +295,7 @@ int process( jack_nframes_t nframes, void* arg )
             if (elem->stereo) {
                 elem->pre_r = (jack_default_audio_sample_t*)jack_port_get_buffer( elem->out_r, nframes );
             } else {
-            	
+
                 elem->pre_r = elem->pre_l;
             }
             for ( jack_nframes_t n=0; n<nframes; n++ ) elem->pre_l[ n ] = 0;
@@ -734,49 +733,44 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
 //  .arg(m_sLabel).arg(m_nIAPorts).arg(m_nOAPorts).arg(right_channel[0]).arg(left_channel[0]);
 
         if (pFX->fx->getInputAudio() >=  2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
-	        for ( unsigned i = 0; i < nframes; ++i) {
-	            pFX->fx->m_pInBufferL[i] = left_channel[i];
-	            pFX->fx->m_pInBufferR[i] = right_channel[i];
-	        }
-        }
-        else {
-	        if (left_channel != right_channel) {
-		        for ( unsigned i = 0; i < nframes; ++i) {
-		            pFX->fx->m_pInBufferL[i] = left_channel[i] + right_channel[i];
-		        }
-	        }
-	        else {
-		        for ( unsigned i = 0; i < nframes; ++i) {
-		            pFX->fx->m_pInBufferL[i] = left_channel[i];
-		        }
-	        }
+            for ( unsigned i = 0; i < nframes; ++i) {
+                pFX->fx->m_pInBufferL[i] = left_channel[i];
+                pFX->fx->m_pInBufferR[i] = right_channel[i];
+            }
+        } else {
+            if (left_channel != right_channel) {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    pFX->fx->m_pInBufferL[i] = left_channel[i] + right_channel[i];
+                }
+            } else {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    pFX->fx->m_pInBufferL[i] = left_channel[i];
+                }
+            }
         }
         pFX->fx->processFX(nframes, left_channel != right_channel);
         if (left_channel != right_channel) {
-	        if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
-	            for ( unsigned i = 0; i < nframes; ++i) {
-	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
-	                right_channel[i] = pFX->fx->m_pOutBufferL[i];
-	            }
-	        }
-	        else {
-	            for ( unsigned i = 0; i < nframes; ++i) {
-	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
-	                right_channel[i] = pFX->fx->m_pOutBufferR[i];
-	            }
-	        }
-        }
-        else {
-	        if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
-	            for ( unsigned i = 0; i < nframes; ++i) {
-	                left_channel[i] = pFX->fx->m_pOutBufferL[i];
-	            }
-	        }
-	        else {
-	            for ( unsigned i = 0; i < nframes; ++i) {
-	                left_channel[i] = pFX->fx->m_pOutBufferL[i] + pFX->fx->m_pOutBufferR[i];
-	            }
-	        }
+            if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
+                    right_channel[i] = pFX->fx->m_pOutBufferL[i];
+                }
+            } else {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
+                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
+                }
+            }
+        } else {
+            if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    left_channel[i] = pFX->fx->m_pOutBufferL[i];
+                }
+            } else {
+                for ( unsigned i = 0; i < nframes; ++i) {
+                    left_channel[i] = pFX->fx->m_pOutBufferL[i] + pFX->fx->m_pOutBufferR[i];
+                }
+            }
         }
         if (p_bCalculatePk && pFX->m_iCount++ % 20 == 0) {
             //  qDebug()<<pFX->fx->getPluginName()<<(int)left_channel<<(int)right_channel<<(pFX->fx->getPluginType() == LadspaFX::STEREO_FX);
@@ -1238,8 +1232,7 @@ out::out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     alf = false;
 }
 out::~out()
-{
-}
+{}
 pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
 {
     out_l = l;
@@ -1249,8 +1242,7 @@ pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     alf = false;
 }
 pre::~pre()
-{
-}
+{}
 post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nframes, jack_port_t* s_l, jack_port_t* s_r, jack_port_t* r_l, jack_port_t* r_r)
         : channel(p_name, p_stereo, p_nframes)
         , out_l(s_l)
@@ -1294,4 +1286,5 @@ sub::sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
 }
 sub::~sub()
 {}
-}; // JackMix
+
+}; // LiveMix

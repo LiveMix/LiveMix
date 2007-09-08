@@ -28,7 +28,7 @@
 #include <LadspaFX.h>
 #include <QtCore/QList>
 
-namespace JackMix
+namespace LiveMix
 {
 
 /**
@@ -64,7 +64,7 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif
 

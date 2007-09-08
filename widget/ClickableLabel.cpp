@@ -27,7 +27,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPalette>
 
-namespace JackMix
+namespace LiveMix
 {
 
 ClickableLabel::ClickableLabel( QWidget *pParent )
@@ -40,9 +40,6 @@ ClickableLabel::ClickableLabel( QWidget *pParent )
     this->setPalette( defaultPalette );
 
     this->setAlignment( Qt::AlignCenter );
-
-
-
 }
 
 
@@ -53,4 +50,4 @@ void ClickableLabel::mousePressEvent( QMouseEvent * e )
 }
 
 }
-; //JackMix
+; //LiveMix

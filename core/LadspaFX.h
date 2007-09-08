@@ -27,7 +27,7 @@
 #include <QtCore/QLibrary>
 #include "ladspa.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 class LadspaFXInfo
@@ -180,7 +180,7 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif // LADSPA_SUPPORT
 

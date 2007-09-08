@@ -35,7 +35,7 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QListWidgetItem>
 
-namespace JackMix
+namespace LiveMix
 {
 
 LadspaFXSelector::LadspaFXSelector(LadspaFX* nLadspaFX)
@@ -270,6 +270,6 @@ QList<LadspaFXInfo*> LadspaFXSelector::findPluginsInGroup( const QString& sSelec
 }
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

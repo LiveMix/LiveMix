@@ -6,6 +6,8 @@ echo "build livemix-$1"
 
 cd ..
 
+rm livemix_$1*
+
 tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
 
 cd livemix-$1
@@ -16,6 +18,5 @@ cd ../livemix
 
 rm -rf ../livemix-$1
 
-lintian ../livemix_$1*.deb
 lintian ../livemix_$1*.dsc
-linda ../livemix_$1*
+linda ../livemix_$1*.dsc

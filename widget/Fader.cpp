@@ -28,11 +28,11 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel, Backend::ChannelType p_type, bool p_bLinDb )
-        : QWidget( pParent )
+        : Volume( pParent )
         , _channel( channel )
         , m_type(p_type)
         , m_bWithoutKnob( bWithoutKnob )
@@ -94,11 +94,32 @@ void Fader::mousePressEvent(QMouseEvent *ev)
     mouseMoveEvent( ev );
 }
 
+void Fader::incValue(bool p_bDirection)
+{
+    if (m_bUseIntSteps) {
+        if (p_bDirection) {
+            setValue( m_fValue + 1, true );
+        } else {
+            setValue( m_fValue - 1, true );
+        }
+    } else {
+        float step = 0.5;
+        if (m_fMinValue > -20) {
+            step = ( m_fMaxValue - m_fMinValue ) / 50.0;
+        }
 
-void Fader::wheelEvent ( QWheelEvent *ev )
+        if (p_bDirection) {
+            setValue( m_fValue + step, true );
+        } else {
+            setValue( m_fValue - step, true );
+        }
+    }
+}
+
+/*void Fader::wheelEvent ( QWheelEvent *ev )
 {
     ev->accept();
-
+ 
     if ( m_bUseIntSteps ) {
         if ( ev->delta() > 0 ) {
             setValue( m_fValue + 1, true );
@@ -110,14 +131,14 @@ void Fader::wheelEvent ( QWheelEvent *ev )
         if (m_fMinValue != -60) {
             step = ( m_fMaxValue - m_fMinValue ) / 50.0;
         }
-
+ 
         if ( ev->delta() > 0 ) {
             setValue( m_fValue + step, true );
         } else {
             setValue( m_fValue - step, true );
         }
     }
-}
+}*/
 
 
 void Fader::setValue( float fVal, bool do_emit )
@@ -302,124 +323,5 @@ void Fader::setMinPeak( float fMin )
     m_fMinPeak = fMin;
 }
 
-
-//////////////////////////////////
-
-/*
- 
-QPixmap* Knob::m_background = NULL;
- 
- 
-///
-/// Constructor
-///
- : QWidget( pParent )
- , _channel( channel )
-{
- setAttribute(Qt::WA_NoBackground);
- 
- m_nWidgetWidth = 18;
- m_nWidgetHeight = 18;
- m_fValue = 0.0;
- 
- if ( m_background == NULL ) {
-  QString sBackground_path = ":/data/knob_images.png";
-  m_background = new QPixmap();
-  if ( m_background->load( sBackground_path ) == false ){
-   qDebug() << "Error loading pixmap" << ":/data/knob_images.png";
-  }
- }
- 
- resize( m_nWidgetWidth, m_nWidgetHeight );
 }
- 
- 
- 
-///
-/// Destructor
-///
-Knob::~ Knob()
-{
-}
- 
- 
- 
-void Knob::paintEvent( QPaintEvent* ev )
-{
- QPainter painter(this);
- 
- int nFrame = (int)(31.0 * m_fValue);
- int xPos = m_nWidgetWidth * nFrame;
-// bitBlt(&m_temp, 0, 0, m_background, xPos, 0, m_nWidgetWidth, m_nWidgetHeight, CopyROP);
- painter.drawPixmap( rect(), *m_background, QRect( xPos, 0, m_nWidgetWidth, m_nWidgetHeight ) );
-}
- 
- 
- 
-void Knob::setValue( float fValue, bool do_emit )
-{
- if ( fValue == m_fValue ) {
-  return;
- }
- 
- if ( fValue < 0.0 ) {
-  fValue = 0.0;
-  qDebug() << "[setValue] fValue < 0";
- }
- else if ( fValue > 1.0 ) {
-  fValue = 1.0;
-  qDebug() << "[setValue] fValue > 1";
- }
- 
- if ( fValue != m_fValue ) {
-  m_fValue = fValue;
-  update();
- }
- 
- if (do_emit) {
-  emit valueChanged(_channel, m_fValue);
-  int base = 10;
-  emit dbValueChanged(_channel, db2lin(m_fValue, m_fMinValue));
- }
-}
- 
- 
- 
-void Knob::mousePressEvent(QMouseEvent *ev)
-{
- setCursor( QCursor( Qt::SizeVerCursor ) );
- 
- m_fMousePressValue = m_fValue;
- m_fMousePressY = ev->y();
-}
- 
- 
- 
-void Knob::mouseReleaseEvent( QMouseEvent *ev )
-{
- setCursor( QCursor( Qt::ArrowCursor ) );
-}
- 
- 
- 
- void Knob::mouseMoveEvent( QMouseEvent *ev ) {
- float y = ev->y() - m_fMousePressY;
- float fNewValue = m_fMousePressValue - ( y / 100.0 );
- setValue( fNewValue, true );
-}
- 
- 
-void Knob::wheelEvent ( QWheelEvent *ev )
-{
- ev->accept();
- 
- if ( ev->delta() > 0 ) {
-  setValue( m_fValue + 0.025, true );
- }
- else {
-  setValue( m_fValue - 0.025, true );
- }
-}
-*/
-}
-; //JackMix
+; //LiveMix

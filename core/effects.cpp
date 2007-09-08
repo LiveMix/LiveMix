@@ -34,7 +34,7 @@
 #include <lrdf.h>
 #endif
 
-namespace JackMix
+namespace LiveMix
 {
 
 // static data
@@ -383,6 +383,6 @@ void Effects::RDFDescend( const QString& sBase, LadspaFXGroup *pGroup, QList<Lad
 #endif // LRDF_SUPPORT
 
 }
-; //JackMix
+; //LiveMix
 
 #endif // LADSPA SUPPORT

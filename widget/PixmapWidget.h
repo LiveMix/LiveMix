@@ -28,7 +28,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QColor>
 
-namespace JackMix
+namespace LiveMix
 {
 
 class PixmapWidget : public QWidget
@@ -52,6 +52,6 @@ protected:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

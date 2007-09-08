@@ -36,7 +36,7 @@
 class QDomElement;
 class QDomDocument;
 
-namespace JackMix
+namespace LiveMix
 {
 
 #define MAIN "main"
@@ -459,7 +459,9 @@ private:
     bool removeOutput( jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo );
 
 };
-};
+
+}
+; // LiveMix
 
 #endif // BACKEND_INTERFACE_H
 

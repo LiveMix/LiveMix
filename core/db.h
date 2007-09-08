@@ -22,7 +22,7 @@
 
 #include <QtCore/QString>
 
-namespace JackMix
+namespace LiveMix
 {
 
 float db2lin(float db);
@@ -48,6 +48,6 @@ QString displayDb(float db, float min);
 QString displayDbShort(float db, float min);
 
 }
-; //JackMix
+; //LiveMix
 
 #endif /*DB_H_*/

@@ -7,7 +7,6 @@ CONFIG += qt warn_on thread
 # precompile_header
 
 LIBS += ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
-#-lQtXml
 QT += xml
 
 PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
@@ -15,7 +14,7 @@ PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../l
 # -lQtNetwork
 
 DESTDIR = ..
-INCLUDEPATH += . ../core ../gui ../widget
+INCLUDEPATH += ../core ../gui ../widget
 
 contains(LMDEFINES, LRDF_SUPPORT ){
 	LIBS += -llrdf

@@ -40,11 +40,13 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QFont>
 
-namespace JackMix
+namespace LiveMix
 {
 
 Widget::Widget(QWidget* p)
         : QWidget( p )
+        , m_mShurtCut()
+        , m_pSelectedWrapper(NULL)
 {
     QVBoxLayout *main_layout = new QVBoxLayout;
     main_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -353,7 +355,16 @@ void Widget::doSelect(Backend::ChannelType type, QString channel)
         }
     }
     effect_layout->parentWidget()->resize(effect_layout->parentWidget()->minimumSize());
+}
 
+Backend::ChannelType Widget::getSelectedChanelType()
+{
+    return m_eSelectType;
+}
+
+QString Widget::getSetectedChannelName()
+{
+    return m_sSelectChannel;
 }
 
 void Widget::update()
@@ -423,7 +434,7 @@ void Widget::init()
 
 void Widget::addinchannel( QString name, bool related )
 {
-    InWidget* elem = new InWidget(name);
+    InWidget* elem = new InWidget(name, this);
     connect(elem->fader, SIGNAL( displayValueChanged(Backend::ChannelType, QString, QString) ), this, SLOT( faderValueChange( Backend::ChannelType, QString, QString ) ) );
     in_layout->addWidget(elem);
     in[name] = elem;
@@ -548,48 +559,215 @@ void Widget::removesubchannel( QString name )
     }
 }
 
-void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
-	UNUSED(p_eType);
-	UNUSED(p_sChannelName);
-	UNUSED(p_eElement);
-	UNUSED(p_sReatedChannelName);
-	UNUSED(ev);
-}
-
-void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
-	middleClick(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, ev);
-}
-
-InWidget::InWidget(QString channel) : QWidget()
-        , m_Channel(channel)
+void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev)
 {
-    QVBoxLayout* layout = new QVBoxLayout;
+    UNUSED(p_eType);
+    UNUSED(p_sChannelName);
+    UNUSED(p_eElement);
+    UNUSED(p_sReatedChannelName);
+    UNUSED(ev);
+}
+
+void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev)
+{
+    middleClick(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, ev);
+}
+
+void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+{
+    if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)
+            && (*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)
+            && (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(p_sReatedChannelName)) {
+        Wrapp* pWrapp = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
+        if (!pWrapp->exec()) {
+            m_pSelectedWrapper = (WrappVolume*)pWrapp;
+        } else {
+            m_pSelectedWrapper = NULL;
+        }
+    }
+}
+void Widget::keyPressEvent ( QKeyEvent * p_pEvent )
+{
+    qDebug()<<1111;
+    if (!p_pEvent->isAutoRepeat()) {
+        if (p_pEvent->key() == Qt::Key_Home || p_pEvent->key() == Qt::Key_Up || p_pEvent->key() == Qt::Key_PageUp) {
+            if (m_pSelectedWrapper != NULL) {
+                m_pSelectedWrapper->getVolume()->incValue(true);
+            }
+        } else if (p_pEvent->key() == Qt::Key_End || p_pEvent->key() == Qt::Key_Down || p_pEvent->key() == Qt::Key_PageDown) {
+            if (m_pSelectedWrapper != NULL) {
+                m_pSelectedWrapper->getVolume()->incValue(false);
+            }
+        } else {
+            QKeySequence keys = QKeySequence(p_pEvent->key()+p_pEvent->modifiers());
+            qDebug()<<keys.toString();
+            if (m_mKeyToWrapp.contains(keys)) {
+                m_mKeyToWrapp[keys]->action();
+            }
+        }
+    }
+}
+void Widget::wheelEvent(QWheelEvent *p_pEvent)
+{
+    qDebug()<<(p_pEvent->delta() > 0);
+    if (m_pSelectedWrapper != NULL) {
+        m_pSelectedWrapper->getVolume()->incValue(p_pEvent->delta() > 0);
+    }
+}
+void Widget::addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+{
+    if (!m_mShurtCut.contains(p_eType)) {
+        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
+    }
+    if (!m_mShurtCut[p_eType]->contains(p_sChannelName)) {
+        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<Backend::ElementType, QMap<QString, Wrapp*>*>());
+    }
+    if (!(*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)) {
+        (*m_mShurtCut[p_eType])[p_sChannelName]->insert(p_eElement, new QMap<QString, Wrapp*>());
+    }
+    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(p_sReatedChannelName,
+            new WrappVolume(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
+}
+void Widget::addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+{
+    if (!m_mShurtCut.contains(p_eType)) {
+        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
+    }
+    if (!m_mShurtCut[p_eType]->contains(p_sChannelName)) {
+        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<Backend::ElementType, QMap<QString, Wrapp*>*>());
+    }
+    if (!(*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)) {
+        (*m_mShurtCut[p_eType])[p_sChannelName]->insert(p_eElement, new QMap<QString, Wrapp*>());
+    }
+    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(p_sReatedChannelName,
+            new WrappToggle(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
+}
+
+
+KeyDo::KeyDo(Widget* p_pMatrix)
+        : m_pMatrix(p_pMatrix)
+{}
+KeyDo::~KeyDo()
+{}
+
+KeyDoSelectChannel::KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName)
+        : KeyDo(p_pMatrix)
+        , m_eType(p_eType)
+        , m_sChannelName(p_sChannelName)
+{}
+KeyDoSelectChannel::~KeyDoSelectChannel()
+{}
+void KeyDoSelectChannel::action()
+{
+    m_pMatrix->doSelect(m_eType, m_sChannelName);
+}
+
+KeyDoChannelAction::KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+        : KeyDo(p_pMatrix)
+        , m_eElement(p_eElement)
+        , m_sReatedChannelName(p_sReatedChannelName)
+{}
+KeyDoChannelAction::~KeyDoChannelAction()
+{}
+void KeyDoChannelAction::action()
+{
+    m_pMatrix->action(m_pMatrix->getSelectedChanelType(), m_pMatrix->getSetectedChannelName(), m_eElement, m_sReatedChannelName);
+}
+
+KeyDoDirectAction::KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+        : KeyDo(p_pMatrix)
+        , m_eType(p_eType)
+        , m_sChannelName(p_sChannelName)
+        , m_eElement(p_eElement)
+        , m_sReatedChannelName(p_sReatedChannelName)
+{}
+KeyDoDirectAction::~KeyDoDirectAction()
+{}
+void KeyDoDirectAction::action()
+{
+    m_pMatrix->action(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName);
+}
+
+Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+        : QObject()
+        , m_pMatrix(p_pMatrix)
+        , m_eType(p_eType)
+        , m_sChannelName(p_sChannelName)
+        , m_eElement(p_eElement)
+        , m_sReatedChannelName(p_sReatedChannelName)
+{
+    connect(p_pWidget, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
+    connect(p_pWidget, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );
+};
+bool Wrapp::exec()
+{
+    return false;
+}
+void Wrapp::middleClick(QMouseEvent* p_ev)
+{
+    m_pMatrix->middleClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
+};
+void Wrapp::rightClick(QMouseEvent* p_ev)
+{
+    m_pMatrix->rightClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
+};
+//void Wrapp::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
+//}
+//void Wrapp::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev) {
+//}
+
+WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+        : Wrapp(p_pMatrix, p_pWidget, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName)
+        , m_pWidget(p_pWidget)
+{}
+Volume* WrappVolume::getVolume()
+{
+    return m_pWidget;
+}
+
+WrappToggle::WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
+        : Wrapp(p_pMatrix, p_pWidget, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName)
+        , m_pWidget(p_pWidget)
+{}
+bool WrappToggle::exec()
+{
+    m_pWidget->mousePressEvent(NULL);
+    return true;
+}
+
+
+InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
+        : QWidget()
+        , m_Channel(p_sChannel)
+        , m_pMatrix(p_pMatrix)
+{
+    QVBoxLayout* layout = new QVBoxLayout();
     setLayout(layout);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
     setFixedWidth(CHANNEL_WIDTH);
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(channel));
+    layout->addWidget(new QLabel(p_sChannel));
 
-    Rotary *gain = new Rotary(0, Rotary::TYPE_NORMAL, trUtf8("Gain"), false, true, channel);
+    Rotary *gain = new Rotary(0, Rotary::TYPE_NORMAL, trUtf8("Gain"), false, true, p_sChannel);
     layout->addWidget(gain);
     connect(gain, SIGNAL( dbValueChanged(QString, float) ), Backend::instance(), SLOT( setInGain( QString, float ) ) );
-    gain->setDbValue(Backend::instance()->getInput(channel)->gain);
+    gain->setDbValue(Backend::instance()->getInput(p_sChannel)->gain);
 
-    ToggleButton* mute = ToggleButton::createSolo(0, channel);
+    ToggleButton* mute = ToggleButton::createSolo(0, p_sChannel);
     mute->setToolTip(trUtf8("mute"));
     mute->setText(trUtf8("M"));
     layout->addWidget(mute);
     connect(mute, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInMute( QString, bool ) ) );
-    mute->setValue(Backend::instance()->getInput(channel)->mute);
+    mute->setValue(Backend::instance()->getInput(p_sChannel)->mute);
 
-    ToggleButton* plf = ToggleButton::createSolo(0, channel);
+    ToggleButton* plf = ToggleButton::createSolo(0, p_sChannel);
     plf->setToolTip(trUtf8("plf"));
     plf->setText(trUtf8("plf"));
     layout->addWidget(plf);
     connect(plf, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInPlf( QString, bool ) ) );
-    plf->setValue(Backend::instance()->getInput(channel)->plf);
+    plf->setValue(Backend::instance()->getInput(p_sChannel)->plf);
 
     addLine(layout);
 
@@ -623,24 +801,24 @@ InWidget::InWidget(QString channel) : QWidget()
     addLine(layout);
     lSub->parentWidget()->hide();
 
-    Rotary *bal = new Rotary(0, Rotary::TYPE_CENTER, Backend::instance()->getInput(channel)->stereo ? trUtf8("Bal") :  trUtf8("Pan"), false, true, channel);
+    Rotary *bal = new Rotary(0, Rotary::TYPE_CENTER, Backend::instance()->getInput(p_sChannel)->stereo ? trUtf8("Bal") :  trUtf8("Pan"), false, true, p_sChannel);
     layout->addWidget(bal);
     connect(bal, SIGNAL( valueChanged(QString, float) ), Backend::instance(), SLOT( setInBal( QString, float ) ) );
-    bal->setValue(Backend::instance()->getInput(channel)->bal);
+    bal->setValue(Backend::instance()->getInput(p_sChannel)->bal);
 
-    ToggleButton* main_on = ToggleButton::createMute(0, channel);
+    ToggleButton* main_on = ToggleButton::createMute(0, p_sChannel);
     main_on->setToolTip(trUtf8("Main"));
     main_on->setText(trUtf8("LR"));
     layout->addWidget(main_on);
     connect(main_on, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInMain( QString, bool ) ) );
-    main_on->setValue(Backend::instance()->getInput(channel)->main);
+    main_on->setValue(Backend::instance()->getInput(p_sChannel)->main);
 
-    fader = new Fader(0, false, false, channel, Backend::IN);
+    fader = new Fader(NULL, false, false, p_sChannel, Backend::IN);
     fader->setFixedSize( 23, 232 );
     layout->addWidget(fader);
     connect(fader, SIGNAL( dbValueChanged(QString, float) ), Backend::instance(), SLOT( setInVolume( QString, float ) ) );
 
-    fader->setDbValue(Backend::instance()->getInput(channel)->volume);
+    fader->setDbValue(Backend::instance()->getInput(p_sChannel)->volume);
 }
 InWidget::~InWidget()
 {}
@@ -653,6 +831,7 @@ void InWidget::mouseReleaseEvent(QMouseEvent* ev)
 void InWidget::addPre(QString channelIn, QString channelPre)
 {
     Rotary *elem = new Rotary(0, Rotary::TYPE_NORMAL, channelPre, false, true, channelIn, channelPre);
+    m_pMatrix->addVolume(elem, Backend::IN, channelIn, Backend::TO_PRE, channelPre);
     lPre->addWidget(elem);
     pre[channelPre] = elem;
     connect(elem, SIGNAL( dbValueChanged(QString, QString, float) ), Backend::instance(), SLOT( setInPreVolume( QString, QString, float ) ) );
@@ -1037,4 +1216,4 @@ void addSpacer(QVBoxLayout* layout)
 }
 
 }
-; //JackMix
+; //LiveMix

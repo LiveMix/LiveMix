@@ -17,11 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  */
 
 #ifndef ROTARY_H
 #define ROTARY_H
+
+#include "LCD.h"
+#include "db.h"
+#include "Action.h"
 
 #include <QtGui/QWidget>
 #include <QtGui/QPixmap>
@@ -29,10 +32,7 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QPaintEvent>
 
-#include "LCD.h"
-#include "db.h"
-
-namespace JackMix
+namespace LiveMix
 {
 
 class RotaryTooltip : public QWidget
@@ -49,7 +49,7 @@ private:
 
 
 
-class Rotary : public QWidget
+class Rotary : public Volume
 {
     Q_OBJECT
 public:
@@ -86,6 +86,7 @@ public:
         } else
             return lin2db( m_fValue, m_fMin );
     }
+    void incValue(bool p_bDirection);
 
 signals:
 //  void valueChanged(Rotary *ref);
@@ -121,10 +122,10 @@ private:
     virtual void mousePressEvent(QMouseEvent *ev);
     virtual void mouseReleaseEvent( QMouseEvent *ev );
     virtual void mouseMoveEvent(QMouseEvent *ev);
-    virtual void wheelEvent( QWheelEvent *ev );
+//    virtual void wheelEvent( QWheelEvent *ev );
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

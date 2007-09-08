@@ -19,7 +19,6 @@
 */
 
 #include "mainwindow.h"
-//#include "mainwindow.moc"
 
 #include "mixingmatrix.h"
 #include "channelselector.h"
@@ -41,7 +40,7 @@
 
 #include <QtXml/QDomDocument>
 
-using namespace JackMix;
+using namespace LiveMix;
 
 MainWindow::MainWindow( QWidget* p ) : QMainWindow( p ), _initScheduled( true )
 {
@@ -280,7 +279,6 @@ void MainWindow::openFile( QString path )
             }
 
             QDomElement out = jackmix.firstChildElement( "out" );
-            qDebug()<<out.isNull();
             if (!out.isNull()) {
                 Backend::instance()->setOutVolume( MAIN, out.attribute( "volume" ).toDouble() );
                 Backend::instance()->setOutMute( MAIN, toBool( out.attribute( "mute" ) ) );
@@ -617,7 +615,7 @@ void MainWindow::addSub( QString name, bool stereo )
 void MainWindow::removeInput()
 {
     qDebug( "MainWindow::removeInput()" );
-    JackMix::ChannelSelector *tmp = new JackMix::ChannelSelector( trUtf8("Delete Input channels"), trUtf8("Select the input channels for deletion:"), Backend::instance()->inchannels(), this );
+    LiveMix::ChannelSelector *tmp = new LiveMix::ChannelSelector( trUtf8("Delete Input channels"), trUtf8("Select the input channels for deletion:"), Backend::instance()->inchannels(), this );
     connect( tmp, SIGNAL( selectedChannel( QString ) ), this, SLOT( removeInput( QString ) ) );
     tmp->show();
 }
@@ -637,7 +635,7 @@ void MainWindow::removeInput( QString n )
 void MainWindow::removePre()
 {
     qDebug( "MainWindow::removePre()" );
-    JackMix::ChannelSelector *tmp = new JackMix::ChannelSelector( trUtf8("Delete Pre channels"), trUtf8("Select the pre channels for deletion:"), Backend::instance()->prechannels(), this );
+    LiveMix::ChannelSelector *tmp = new LiveMix::ChannelSelector( trUtf8("Delete Pre channels"), trUtf8("Select the pre channels for deletion:"), Backend::instance()->prechannels(), this );
     connect( tmp, SIGNAL( selectedChannel( QString ) ), this, SLOT( removePre( QString ) ) );
     tmp->show();
 }
@@ -657,7 +655,7 @@ void MainWindow::removePre( QString n )
 void MainWindow::removePost()
 {
     qDebug( "MainWindow::removePost()" );
-    JackMix::ChannelSelector *tmp = new JackMix::ChannelSelector( trUtf8("Delete Post channels"), trUtf8("Select the post channels for deletion:"), Backend::instance()->postchannels(), this );
+    LiveMix::ChannelSelector *tmp = new LiveMix::ChannelSelector( trUtf8("Delete Post channels"), trUtf8("Select the post channels for deletion:"), Backend::instance()->postchannels(), this );
     connect( tmp, SIGNAL( selectedChannel( QString ) ), this, SLOT( removePost( QString ) ) );
     tmp->show();
 }
@@ -677,7 +675,7 @@ void MainWindow::removePost( QString n )
 void MainWindow::removeSub()
 {
     qDebug( "MainWindow::removeSub()" );
-    JackMix::ChannelSelector *tmp = new JackMix::ChannelSelector( trUtf8("Delete Sub channels"), trUtf8("Select the sub channels for deletion:"), Backend::instance()->subchannels(), this );
+    LiveMix::ChannelSelector *tmp = new LiveMix::ChannelSelector( trUtf8("Delete Sub channels"), trUtf8("Select the sub channels for deletion:"), Backend::instance()->subchannels(), this );
     connect( tmp, SIGNAL( selectedChannel( QString ) ), this, SLOT( removeSub( QString ) ) );
     tmp->show();
 }

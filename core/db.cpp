@@ -19,12 +19,10 @@
 
 #include "db.h"
 
-
-//#include <c++/4.1.2/cmath>
 #include <math.h>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 //private static float ln10_20 = log(10) / 20.0;
@@ -109,4 +107,4 @@ QString displayDbShort(float db, float min)
 };
 
 }
-; //JackMix
+; //LiveMix

@@ -7,7 +7,7 @@ CONFIG += qt warn_on thread staticlib
 
 
 DESTDIR = ../libs
-INCLUDEPATH += . ../core
+INCLUDEPATH += ../core
 
 #PRECOMPILED_HEADER  = precompiled.h
 
@@ -24,6 +24,8 @@ HEADERS += \
 		LCD.h \
 		Rotary.h \
 		Button.h \
+		Action.h \
+		GetKeyField.h \
 
 
 SOURCES += \
@@ -35,3 +37,6 @@ SOURCES += \
 		LCD.cpp \
 		Rotary.cpp \
 		Button.cpp \
+		Action.cpp \
+		GetKeyField.cpp \
+		

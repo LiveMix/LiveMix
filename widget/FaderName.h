@@ -24,7 +24,7 @@
 
 #include "PixmapWidget.h"
 
-namespace JackMix
+namespace LiveMix
 {
 
 class FaderName : public QWidget
@@ -64,6 +64,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif /*FADERNAME_H_*/

@@ -31,7 +31,7 @@
 
 #include <QtCore/QList>
 
-namespace JackMix
+namespace LiveMix
 {
 
 class LCDDigit : public QWidget
@@ -142,6 +142,6 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif

@@ -28,7 +28,7 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QPushButton>
 
-namespace JackMix
+namespace LiveMix
 {
 
 ChannelSelector::ChannelSelector( QString title, QString label, QStringList channels, QWidget* p, const char* n ) : QDialog( p )
@@ -80,4 +80,4 @@ void ChannelSelector::addChannel( QString )
 void ChannelSelector::removeChannel( QString )
 {}
 
-}; //JackMix
+}; //LiveMix

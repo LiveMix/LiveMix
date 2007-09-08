@@ -36,7 +36,7 @@ class QVBox;
 class QAction;
 class QMenu;
 
-namespace JackMix
+namespace LiveMix
 {
 
 class Backend;
@@ -112,5 +112,7 @@ private:
     bool _initScheduled;
 };
 
-};
+}
+; //LiveMix
+
 #endif

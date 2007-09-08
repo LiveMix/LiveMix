@@ -26,7 +26,7 @@
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
-namespace JackMix
+namespace LiveMix
 {
 
 FaderName::FaderName(QWidget* parent)
@@ -102,4 +102,4 @@ void FaderName::mouseDoubleClickEvent( QMouseEvent * e )
 }
 
 }
-; //JackMix
+; //LiveMix

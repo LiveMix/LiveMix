@@ -25,7 +25,7 @@
 
 class QWidget;
 
-namespace JackMix
+namespace LiveMix
 {
 
 class GraphicalGuiServer : public GuiServer_Interface
@@ -46,7 +46,7 @@ private:
 };
 
 }
-; //JackMix
+; //LiveMix
 
 #endif // GRAPHICALGUISERVER_H
 
