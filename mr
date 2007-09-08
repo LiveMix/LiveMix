@@ -1,0 +1,8 @@
+#! /bin/bash
+
+#rm -rf cache/objects/*
+
+#scons&&./livemix $1
+
+QTDIR=/usr/share/qt4/
+qmake-qt4 all.pro&&make&&./livemix $1
