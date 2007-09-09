@@ -75,33 +75,10 @@ Button::~Button()
 
 bool Button::loadImage( const QString& sFilename, QPixmap& pixmap )
 {
-#if QT_VERSION == 0x040100 // SVG renderer was introduced in QT4.1
-    /*
-    if ( sFilename.endsWith( ".svg" ) ) {
-    ERRORLOG( "************* LOAD SVG!!" );
-    if ( !QFile::exists( sFilename ) ) {
-     return false;
-    }
-    QSvgRenderer doc( sFilename );
-    if ( doc.isValid() == false ) {
-     ERRORLOG( "error loading SVG image: '" + sFilename.toStdString() + "'" );
-     return false;
-    }
-
-    QPainter p;
-    p.begin( &pixmap );
-    p.setViewport( 0, 0, width(), height() );
-    p.eraseRect( 0, 0, width(), height() );
-    doc.render( &p );
-    p.end();
-    return true;
-    }
-    */
-#endif
     // load an image
-    if ( pixmap.load( ":/data/" + sFilename ) == false ) {
+    if (!pixmap.load( ":/data/" + sFilename)) {
         if ( sFilename != "" ) {
-//   qDebug() << "Error loading image: '" << sFilename.toStdString() << "'";
+		   	qDebug() << "Error loading image: '" << sFilename << "'";
         }
         return false;
     }
@@ -127,8 +104,10 @@ void Button::mouseReleaseEvent(QMouseEvent* ev)
         emit clicked(this);
     } else if (ev->button() == Qt::RightButton) {
         emit rightClicked(this);
+    	emit rightClick(ev);
+    } else if (ev->button() == Qt::MidButton) {
+    	emit middleClick(ev);
     }
-
 }
 
 
@@ -257,20 +236,22 @@ ToggleButton::~ToggleButton()
 {}
 
 
-void ToggleButton::mousePressEvent(QMouseEvent*)
+void ToggleButton::mousePressEvent(QMouseEvent* ev)
 {
-    if (m_bPressed) {
-        m_bPressed = false;
-    } else {
-        m_bPressed = true;
+    if (ev == NULL || ev->button() == Qt::LeftButton) {
+	    if (m_bPressed) {
+	        m_bPressed = false;
+	    } else {
+	        m_bPressed = true;
+	    }
+	    update();
+	
+	    emit clicked();
+	    emit clicked(this);
+	    emit valueChanged(this);
+	    emit valueChanged(_channel, m_bPressed);
+	    emit valueChanged(_channel, _channel2, m_bPressed);
     }
-    update();
-
-    emit clicked();
-    emit clicked(this);
-    emit valueChanged(this);
-    emit valueChanged(_channel, m_bPressed);
-    emit valueChanged(_channel, _channel2, m_bPressed);
 }
 
 bool ToggleButton::getValue()
@@ -284,9 +265,14 @@ void ToggleButton::setValue(bool value)
 }
 
 
-void ToggleButton::mouseReleaseEvent(QMouseEvent*)
+void ToggleButton::mouseReleaseEvent(QMouseEvent* ev)
 {
     // do nothing, this method MUST override Button's one
+    if (ev->button() == Qt::RightButton) {
+    	emit rightClick(ev);
+    } else if (ev->button() == Qt::MidButton) {
+    	emit middleClick(ev);
+    }
 }
 
 Button* Button::create(QWidget* pParent, QString channel, QString channel2)

@@ -11,8 +11,6 @@ QT += xml
 
 PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
 
-# -lQtNetwork
-
 DESTDIR = ..
 INCLUDEPATH += ../core ../gui ../widget
 

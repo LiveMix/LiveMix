@@ -17,14 +17,62 @@
  */
 
 #include "GetKeyField.h"
+#include "globals.h"
+
+#include "QDebug"
 
 namespace LiveMix
 {
 
 GetKeyField::GetKeyField()
-{}
+: QTextEdit()
+, m_pKeySequence()
+{
+	setFixedSize(150, 25);
+	setTextInteractionFlags(Qt::NoTextInteraction);
+}
 
 GetKeyField::~GetKeyField()
-{}
+{
+}
+
+QKeySequence GetKeyField::getKeySequence() {
+	return m_pKeySequence;
+}
+void GetKeyField::setKeySequence(QKeySequence p_pKeySequence) {
+	m_pKeySequence = p_pKeySequence;
+	setText(m_pKeySequence.toString());
+}
+
+void GetKeyField::keyPressEvent(QKeyEvent * p_pEvent) {
+	switch (p_pEvent->key()) {
+		case Qt::Key_Alt:
+		case Qt::Key_AltGr:
+		case Qt::Key_Shift:
+		case Qt::Key_Meta:
+		case Qt::Key_Control:
+		case Qt::Key_Super_L:
+		case Qt::Key_Super_R:
+		case Qt::Key_Menu:
+		case Qt::Key_Hyper_L:
+		case Qt::Key_Hyper_R:
+		case Qt::Key_Home:
+		case Qt::Key_Up:
+		case Qt::Key_PageUp:
+		case Qt::Key_Left:
+		case Qt::Key_Right:
+		case Qt::Key_End:
+		case Qt::Key_Down:
+		case Qt::Key_PageDown:
+			setKeySequence(QKeySequence());
+			break;
+		default:
+			setKeySequence(QKeySequence(p_pEvent->key()+p_pEvent->modifiers()));
+	}
+}
+void GetKeyField::keyReleaseEvent(QKeyEvent * p_pEvent) {
+	UNUSED(p_pEvent);
+	setKeySequence(m_pKeySequence);
+}
 
 }; // LiveMix

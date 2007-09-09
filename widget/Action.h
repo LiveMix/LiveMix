@@ -26,18 +26,20 @@ namespace LiveMix
 
 class Action : public QWidget
 {
+    Q_OBJECT
 public:
     Action(QWidget* p_pParent =NULL);
     virtual ~Action();
 
 signals:
-    void rightClick(QKeyEvent * p_pEvent);
-    void middleClick(QKeyEvent * p_pEvent);
+    void rightClick(QMouseEvent * p_pEvent);
+    void middleClick(QMouseEvent * p_pEvent);
 
 };
 
 class Volume : public Action
 {
+    Q_OBJECT
 public:
     Volume(QWidget* p_pParent =NULL);
     virtual ~Volume();

@@ -19,14 +19,27 @@
 #ifndef GETKEYFIELD_H_
 #define GETKEYFIELD_H_
 
+#include <QTextEdit>
+#include <QKeyEvent>
+
 namespace LiveMix
 {
 
-class GetKeyField
+class GetKeyField : public QTextEdit 
 {
+    Q_OBJECT
 public:
     GetKeyField();
     virtual ~GetKeyField();
+    
+    QKeySequence getKeySequence();
+    void setKeySequence(QKeySequence p_pKeySequence);
+
+	virtual void keyPressEvent(QKeyEvent * p_pEvent);
+	virtual void keyReleaseEvent(QKeyEvent * p_pEvent);
+
+private:
+	QKeySequence m_pKeySequence;
 };
 
 }

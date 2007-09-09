@@ -249,13 +249,15 @@ void MainWindow::openFile( QString path )
         QDomDocument doc( "bla" );
         doc.setContent( &file );
 
-        QDomElement jackmix = doc.documentElement();
-        QString version = jackmix.attribute( "version", "0.4" );
+        QDomElement livemix = doc.documentElement();
+        QString version = livemix.attribute( "version", "0.5" );
 
-        if ( version == "0.4" ) {
+        if ( version == "0.5" || version == "0.4" ) {
+			openActionBinding(livemix, Backend::IN, "", true);
 
-            for ( QDomElement in = jackmix.firstChildElement( "in" ); !in.isNull(); in = in.nextSiblingElement( "in" ) ) {
+            for ( QDomElement in = livemix.firstChildElement( "in" ); !in.isNull(); in = in.nextSiblingElement( "in" ) ) {
                 QString name = in.attribute( "name" );
+				openActionBinding(in, Backend::IN, name);
                 Backend::instance()->addInput( name, toBool(in.attribute( "stereo" ) ) );
                 Backend::instance()->setInGain( name, in.attribute( "gain" ).toFloat() );
                 Backend::instance()->setInVolume( name, in.attribute( "volume" ).toFloat() );
@@ -278,8 +280,20 @@ void MainWindow::openFile( QString path )
                 }
             }
 
-            QDomElement out = jackmix.firstChildElement( "out" );
+            QDomElement out = livemix.firstChildElement( "out" );
             if (!out.isNull()) {
+			    QDomElement binding = livemix.firstChildElement("actionbinding");
+			    if (!binding.isNull()) {    	
+				    QDomElement select = livemix.firstChildElement("select");
+				    if (!binding.isNull()) {
+				    	_mixerwidget->insertKeyToWrapp(QKeySequence(binding.attribute("key")), new KeyDoSelectChannel(_mixerwidget, Backend::OUT, MAIN));
+				    }
+					openActionBinding(binding, Backend::OUT, MAIN, "bal", Backend::PAN_BAL);
+					openActionBindingList(binding, Backend::OUT, MAIN, "fader", Backend::FADER);
+					openActionBinding(binding, Backend::OUT, MAIN, "mute", Backend::MUTE);
+					openActionBinding(binding, Backend::OUT, MAIN, "afl", Backend::TO_ALF);
+					openActionBinding(binding, Backend::OUT, MAIN, "effect", Backend::MUTE_EFFECT);
+			    }
                 Backend::instance()->setOutVolume( MAIN, out.attribute( "volume" ).toDouble() );
                 Backend::instance()->setOutMute( MAIN, toBool( out.attribute( "mute" ) ) );
                 Backend::instance()->setOutAlf( MAIN, toBool( out.attribute( "alf" ) ) );
@@ -292,8 +306,9 @@ void MainWindow::openFile( QString path )
                 }
             }
 
-            for ( QDomElement pre = jackmix.firstChildElement( "pre" ); !pre.isNull(); pre = pre.nextSiblingElement( "pre" ) ) {
+            for ( QDomElement pre = livemix.firstChildElement( "pre" ); !pre.isNull(); pre = pre.nextSiblingElement( "pre" ) ) {
                 QString name = pre.attribute( "name" );
+				openActionBinding(pre, Backend::PRE, name);
                 Backend::instance()->addPre( name, toBool( pre.attribute( "stereo" ) ) );
                 Backend::instance()->setPreVolume( name, pre.attribute( "volume" ).toDouble() );
                 Backend::instance()->setPreMute( name, toBool( pre.attribute( "mute" ) ) );
@@ -304,8 +319,9 @@ void MainWindow::openFile( QString path )
                 }
             }
 
-            for ( QDomElement post = jackmix.firstChildElement( "post" ); !post.isNull(); post = post.nextSiblingElement( "post" ) ) {
+            for ( QDomElement post = livemix.firstChildElement( "post" ); !post.isNull(); post = post.nextSiblingElement( "post" ) ) {
                 QString name = post.attribute( "name" );
+				openActionBinding(post, Backend::POST, name);
                 Backend::instance()->addPost( name, toBool( post.attribute( "stereo" ) ), toBool( post.attribute( "external" ) ) );
                 Backend::instance()->setPostPreVolume( name, post.attribute( "pre-volume" ).toDouble() );
                 Backend::instance()->setPostPostVolume( name, post.attribute( "post-volume" ).toDouble() );
@@ -324,8 +340,9 @@ void MainWindow::openFile( QString path )
                 }
             }
 
-            for ( QDomElement sub = jackmix.firstChildElement( "sub" ); !sub.isNull(); sub = sub.nextSiblingElement( "sub" ) ) {
+            for ( QDomElement sub = livemix.firstChildElement( "sub" ); !sub.isNull(); sub = sub.nextSiblingElement( "sub" ) ) {
                 QString name = sub.attribute( "name" );
+				openActionBinding(sub, Backend::SUB, name);
                 Backend::instance()->addSub( name, toBool( sub.attribute( "stereo" ) ) );
                 Backend::instance()->setSubVolume( name, sub.attribute( "volume" ).toDouble() );
                 Backend::instance()->setSubMute( name, toBool( sub.attribute( "mute" ) ) );
@@ -357,11 +374,42 @@ void MainWindow::saveFile()
         path += ".lm";
 
     QString xml = "<livemix versimute=\"0.5\">";
-    foreach( QString name, Backend::instance()->inchannels() ) {
+    xml += QString( "  <actionbinding>" );
+	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
+		KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
+		if (typeid(*pKeyDo).name() == typeid(KeyDoChannelAction).name()) {
+			KeyDoChannelAction* pKD = (KeyDoChannelAction*)pKeyDo;
+    		QString tagname;
+			switch (pKD->m_eElement) {
+				case Backend::GAIN: tagname = "gain"; break;
+				case Backend::PAN_BAL: tagname = "bal"; break;
+				case Backend::TO_PRE: tagname = "pre"; break;
+				case Backend::TO_POST: tagname = "post"; break;
+				case Backend::FADER: tagname = "fader"; break;
+				case Backend::PRE_VOL: tagname = "prevol"; break;
+				case Backend::MUTE: tagname = "mute"; break;
+				case Backend::TO_SUB: tagname = "sub"; break;
+				case Backend::TO_MAIN: tagname = "main"; break;
+				case Backend::TO_ALF: tagname = "afl"; break;
+				case Backend::TO_PLF: tagname = "pfl"; break;
+				case Backend::MUTE_EFFECT: tagname = "effect"; break;
+			}
+			if (pKD->m_sReatedChannelName == "") {
+		        xml += QString("    <%1 key=\"%2\" />").arg(tagname).arg(rKey.toString());
+			}
+			else {
+		        xml += QString("    <%1 sub=\"%3\" key=\"%2\" />").arg(tagname).arg(rKey.toString()).arg(pKD->m_sReatedChannelName);
+			}
+		}
+	}
+    xml += QString( "  </actionbinding>" );
+
+    foreach( QString name, Backend::instance()->inchannels() ) {    	
         const struct in* elem = Backend::instance()->getInput( name );
         xml += QString( "  <in name=\"%1\" gain=\"%2\" volume=\"%3\" mute=\"%4\" plf=\"%5\" bal=\"%6\" stereo=\"%7\" main=\"%8\">" )
                .arg( name ).arg( elem->gain ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->plf ) )
                .arg( elem->bal ).arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) );
+		xml += saveActionBinding(Backend::IN, name);
 
         foreach( QString pre, Backend::instance()->prechannels() ) {
             xml += QString( "    <pre name=\"%1\" volume=\"%2\" />" ).arg( pre ).arg( elem->pre[ pre ] );
@@ -386,6 +434,37 @@ void MainWindow::saveFile()
         xml += QString( "  <out volume=\"%1\" mute=\"%2\" alf=\"%3\" bal=\"%4\" monovolume=\"%5\" phonevolume=\"%6\">" )
                .arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( elem->bal )
                .arg( Backend::instance()->getOutput( MONO )->volume ).arg( Backend::instance()->getOutput( PLF )->volume );
+        xml += QString( "    <actionbinding>" );
+    	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
+			KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
+			if (typeid(*pKeyDo).name() == typeid(KeyDoSelectChannel).name()) {
+				KeyDoSelectChannel* pKD = (KeyDoSelectChannel*)pKeyDo;
+				if (pKD->m_eType == Backend::OUT && pKD->m_sChannelName == MAIN) {
+			        xml += QString("      <select key=\"%1\" />").arg(rKey.toString());
+				}
+			}
+			else if (typeid(*pKeyDo).name() == typeid(KeyDoDirectAction).name()) {
+				KeyDoDirectAction* pKD = (KeyDoDirectAction*)pKeyDo;
+				if (pKD->m_eType == Backend::OUT && pKD->m_sChannelName == MAIN) {
+		    		QString tagname;
+					switch (pKD->m_eElement) {
+						case Backend::PAN_BAL: tagname = "bal"; break;
+						case Backend::FADER: tagname = "fader"; break;
+						case Backend::MUTE: tagname = "mute"; break;
+						case Backend::TO_ALF: tagname = "afl"; break;
+						case Backend::MUTE_EFFECT: tagname = "effect"; break;
+						default: break;
+					}
+					if (pKD->m_sReatedChannelName == "") {
+				        xml += QString("      <%1 key=\"%2\" />").arg(tagname).arg(rKey.toString());
+					}
+					else {
+				        xml += QString("      <%1 sub=\"%3\" key=\"%2\" />").arg(tagname).arg(rKey.toString()).arg(pKD->m_sReatedChannelName);
+					}
+				}
+			}
+    	}
+        xml += QString( "    </actionbinding>" );
 
         for (QList<struct effect *>::const_iterator effect = elem->effects.begin();
                 effect != elem->effects.end();
@@ -399,6 +478,7 @@ void MainWindow::saveFile()
         const struct pre* elem = Backend::instance()->getPre( name );
         xml += QString( "  <pre name=\"%1\" volume=\"%2\" mute=\"%3\" alf=\"%4\" stereo=\"%5\">" )
                .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( fromBool( elem->stereo ) );
+		xml += saveActionBinding(Backend::PRE, name);
 
         for (QList<struct effect *>::const_iterator effect = elem->effects.begin();
                 effect != elem->effects.end();
@@ -413,6 +493,7 @@ void MainWindow::saveFile()
         xml += QString( "  <post name=\"%1\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" alf=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" plf=\"%10\">" )
                .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) )
                .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) ).arg( fromBool( elem->plf ) );
+		xml += saveActionBinding(Backend::POST, name);
 
         foreach( QString sub, Backend::instance()->subchannels() ) {
             xml += QString( "    <sub name=\"%1\" mute=\"%2\" />" ).arg( sub ).arg( fromBool( elem->sub[ sub ] ) );
@@ -431,6 +512,7 @@ void MainWindow::saveFile()
         xml += QString( "  <sub name=\"%1\" volume=\"%2\" mute=\"%3\" alf=\"%4\" stereo=\"%5\" main=\"%6\" bal=\"%7\">" )
                .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( fromBool( elem->stereo ) )
                .arg( fromBool( elem->main ) ).arg( elem->bal );
+		xml += saveActionBinding(Backend::SUB, name);
 
         for (QList<struct effect *>::const_iterator effect = elem->effects.begin();
                 effect != elem->effects.end();
@@ -448,34 +530,12 @@ void MainWindow::saveFile()
         stream << xml.replace( ">", ">\n" );
         file.close();
     }
-
 }
 
-/*
-    LadspaFX* pFX = LadspaFX::load( sFilename, sName, 44100 );
-    Effects::getInstance()->setLadspaFX( pFX, nFX );
-    if (pFX) {
-     pFX->setEnabled( bEnabled );
-     pFX->setVolume( fVolume );
-     TiXmlNode* inputControlNode;
- 
-  string sName = LocalFileMng::readXmlString( inputControlNode, "name", "" );
-  float fValue = LocalFileMng::readXmlFloat( inputControlNode, "value", 0.0 );
- 
-  for (unsigned nPort = 0; nPort < pFX->inputControlPorts.size(); nPort++) {
-   LadspaControlPort *port = pFX->inputControlPorts[ nPort ];
-   if ( string(port->sName) == sName) {
-    port->fControlValue = fValue;
-   }
-  }
-*/
-LadspaFX* MainWindow::openEffect(QDomElement effect)
+LadspaFX* MainWindow::openEffect(const QDomElement& effect)
 {
-// int pos = 0;
-// for ( QDomElement effect = parent.firstChildElement( "effect" ); !effect.isNull(); effect = effect.nextSiblingElement( "effect" ) ) {
     LadspaFX* pFX = LadspaFX::load( effect.attribute( "filename" ), effect.attribute( "name" ), 44100 );
     pFX->setEnabled( toBool(effect.attribute( "enabled" )) );
-//  Backend::instance()->setSubEffectMute( name, pos, toBool( effect.attribute( "mute" ) ) );
     for ( QDomElement attr = effect.firstChildElement( "attribute" ); !attr.isNull(); attr = attr.nextSiblingElement( "attribute" ) ) {
         QString sName = attr.attribute( "name" );
         float fValue = attr.attribute( "value" ).toFloat();
@@ -487,22 +547,96 @@ LadspaFX* MainWindow::openEffect(QDomElement effect)
             }
         }
     }
-//  pos++;
-// }
     return pFX;
 }
 
-/*
-        <fx>
-            <name>alias</name>
-            <filename>/usr/lib/ladspa/alias_1407.so</filename>
-            <enabled>true</enabled>
-            <inputControlPort>
-                <name>Aliasing level</name>
-                <value>0.275862</value>
-            </inputControlPort>
-        </fx>
-*/
+void MainWindow::openActionBinding(const QDomElement& channel, const Backend::ChannelType p_eType, const QString& p_sChannelName, bool p_bMain)
+{
+    QDomElement binding = channel.firstChildElement("actionbinding");
+    if (!binding.isNull()) {
+    	if (!p_bMain) {
+		    QDomElement select = binding.firstChildElement("select");
+		    if (!select.isNull()) {
+		    	_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoSelectChannel(_mixerwidget, p_eType, p_sChannelName));
+		    }
+    	}
+		openActionBinding(binding, p_eType, p_sChannelName, "gain", Backend::GAIN, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "bal", Backend::PAN_BAL, p_bMain);
+		openActionBindingList(binding, p_eType, p_sChannelName, "pre", Backend::TO_PRE, p_bMain);
+		openActionBindingList(binding, p_eType, p_sChannelName, "post", Backend::TO_POST, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "fader", Backend::FADER, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "prevol", Backend::PRE_VOL, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "mute", Backend::MUTE, p_bMain);
+		openActionBindingList(binding, p_eType, p_sChannelName, "sub", Backend::TO_SUB, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "main", Backend::TO_MAIN, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "afl", Backend::TO_ALF, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "pfl", Backend::TO_PLF, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "effect", Backend::MUTE_EFFECT, p_bMain);
+    }
+}
+
+void MainWindow::openActionBinding(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain) {
+    QDomElement select = binding.firstChildElement(p_sTagName);
+    if (!select.isNull()) {
+    	if (p_bMain) {
+    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, select.attribute("sub")));
+    	}
+    	else {
+    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, binding.attribute("sub")));
+    	}
+    }
+}
+void MainWindow::openActionBindingList(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain) {
+    for ( QDomElement attr = binding.firstChildElement(p_sTagName); !attr.isNull(); attr = attr.nextSiblingElement(p_sTagName) ) {
+    	if (p_bMain) {
+	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, attr.attribute("sub")));
+    	}
+    	else {
+	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, binding.attribute("sub")));
+    	}
+    }
+}
+QString MainWindow::saveActionBinding(Backend::ChannelType p_eType, const QString& p_sChannelName) {
+        QString xml("    <actionbinding>");
+    	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
+			KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
+			if (typeid(*pKeyDo).name() == typeid(KeyDoSelectChannel).name()) {
+				KeyDoSelectChannel* pKD = (KeyDoSelectChannel*)pKeyDo;
+				if (pKD->m_eType == p_eType && pKD->m_sChannelName == p_sChannelName) {
+			        xml += QString("      <select key=\"%1\" />").arg(rKey.toString());
+				}
+			}
+			else if (typeid(*pKeyDo).name() == typeid(KeyDoDirectAction).name()) {
+				KeyDoDirectAction* pKD = (KeyDoDirectAction*)pKeyDo;
+				if (pKD->m_eType == p_eType && pKD->m_sChannelName == p_sChannelName) {
+		    		QString tagname;
+					switch (pKD->m_eElement) {
+						case Backend::GAIN: tagname = "gain"; break;
+						case Backend::PAN_BAL: tagname = "bal"; break;
+						case Backend::TO_PRE: tagname = "pre"; break;
+						case Backend::TO_POST: tagname = "post"; break;
+						case Backend::FADER: tagname = "fader"; break;
+						case Backend::PRE_VOL: tagname = "prevol"; break;
+						case Backend::MUTE: tagname = "mute"; break;
+						case Backend::TO_SUB: tagname = "sub"; break;
+						case Backend::TO_MAIN: tagname = "main"; break;
+						case Backend::TO_ALF: tagname = "afl"; break;
+						case Backend::TO_PLF: tagname = "pfl"; break;
+						case Backend::MUTE_EFFECT: tagname = "effect"; break;
+					}
+					if (pKD->m_sReatedChannelName == "") {
+				        xml += QString("      <%1 key=\"%2\" />").arg(tagname).arg(rKey.toString());
+					}
+					else {
+				        xml += QString("      <%1 sub=\"%3\" key=\"%2\" />").arg(tagname).arg(rKey.toString()).arg(pKD->m_sReatedChannelName);
+					}
+				}
+			}
+    	}
+        xml += QString( "    </actionbinding>" );
+        return xml;
+}
+
 void MainWindow::saveEffect(QString& xml, struct effect* effect)
 {
     xml += QString( "    <effect name=\"%1\" filename=\"%2\" enabled=\"%3\" >" ).arg( effect->fx->getPluginLabel() )

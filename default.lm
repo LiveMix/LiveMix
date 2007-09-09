@@ -1,5 +1,21 @@
 <jackmix versimute="0.4">
+  <actionbinding>
+    <bal key="B" />
+    <fader key="F" />
+    <gain key="G" />
+    <mute key="M" />
+    <pfl key="L" />
+    <pre sub="r1" key="Ctrl+1" />
+    <pre sub="r2" key="Ctrl+2" />
+    <post sub="corus" key="Ctrl+C" />
+    <post sub="ext" key="Ctrl+E" />
+    <post sub="reverb" key="Ctrl+R" />
+  </actionbinding>
   <in name="1" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="1" />
+      <gain key="Esc" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -8,12 +24,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="2" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="2" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -22,12 +41,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="3" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="3" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -36,12 +58,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="4" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="4" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -50,12 +75,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="5" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="5" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -64,12 +92,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="6" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="6" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -78,12 +109,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="7" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="7" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -92,12 +126,15 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="8" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+    <actionbinding>
+      <select key="8" />
+    </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>
     <effect name="singlePara" filename="/usr/lib/ladspa/single_para_1203.so" enabled="no" >
@@ -106,24 +143,33 @@
     </effect>
     <effect name="lowpass_iir" filename="/usr/lib/ladspa/lowpass_iir_1891.so" enabled="no" >
     </effect>
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
     <effect name="sc4" filename="/usr/lib/ladspa/sc4_1882.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="9-10" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
+    <actionbinding>
+      <select key="9" />
+    </actionbinding>
     <effect name="dj_eq" filename="/usr/lib/ladspa/dj_eq_1901.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <in name="11-12" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
-    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
-    </effect>
+    <actionbinding>
+      <select key="0" />
+    </actionbinding>
     <effect name="dj_eq" filename="/usr/lib/ladspa/dj_eq_1901.so" enabled="no" >
+    </effect>
+    <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
   <out volume="0.1" mute="no" alf="no" bal="0" monovolume="1" phonevolume="1">
+    <actionbinding>
+      <select key="P" />
+    </actionbinding>
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </out>

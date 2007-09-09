@@ -60,10 +60,6 @@ RotaryTooltip::~RotaryTooltip()
 // delete m_pDisplay;
 }
 
-
-
-
-
 ///////////////////
 
 QPixmap* Rotary::m_background_normal = NULL;
@@ -187,29 +183,35 @@ void Rotary::setValue( float fValue, bool do_emit )
 
 void Rotary::mousePressEvent(QMouseEvent *ev)
 {
-    setCursor( QCursor( Qt::SizeVerCursor ) );
-
-    m_fMousePressValue = m_fValue;
-    m_fMousePressY = ev->y();
-
-    if ( m_bShowValueToolTip ) {
-        char tmp[20];
-        if (m_type == TYPE_NORMAL) {
-            sprintf( tmp, "%#.1f", m_fValue );
-        } else {
-            sprintf( tmp, "%#.2f", m_fValue );
-        }
-        m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), QString( tmp ) );
-    }
+	if (ev->button() == Qt::LeftButton) {
+	    setCursor( QCursor( Qt::SizeVerCursor ) );
+	
+	    m_fMousePressValue = m_fValue;
+	    m_fMousePressY = ev->y();
+	
+	    if ( m_bShowValueToolTip ) {
+	        char tmp[20];
+	        if (m_type == TYPE_NORMAL) {
+	            sprintf( tmp, "%#.1f", m_fValue );
+	        } else {
+	            sprintf( tmp, "%#.2f", m_fValue );
+	        }
+	        m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), QString( tmp ) );
+	    }
+	}
 }
 
 
 void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 {
-    UNUSED(ev);
-
-    setCursor( QCursor( Qt::ArrowCursor ) );
-    m_pValueToolTip->hide();
+	if (ev->button() == Qt::LeftButton) {
+	    setCursor( QCursor( Qt::ArrowCursor ) );
+	    m_pValueToolTip->hide();
+    } else if (ev->button() == Qt::RightButton) {
+    	emit rightClick(ev);
+    } else if (ev->button() == Qt::MidButton) {
+    	emit middleClick(ev);
+    }
 }
 
 

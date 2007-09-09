@@ -102,6 +102,10 @@ public:
     void action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
     void addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
     void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
+    
+    const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
+    void clearKeyToWrapp() { return m_mKeyToWrapp.clear(); };
+    void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
 
 public slots:
     // Fills the empty nodes with 1to1-controls
@@ -112,7 +116,7 @@ private slots:
     void update();
     void select(Backend::ChannelType, QString channel);
     void addFX();
-    void displayFX(struct effect *fx);
+    void displayFX(struct effect *fx, Backend::ChannelType p_eType, QString p_sChannelName);
     void faderValueChange(Backend::ChannelType type, QString channel, QString p_fValue);
     void onStatusTimerEvent();
 
@@ -166,7 +170,7 @@ public:
     KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName);
     ~KeyDoSelectChannel();
     void action();
-private:
+
     Backend::ChannelType m_eType;
     QString m_sChannelName;
 };
@@ -176,7 +180,7 @@ public:
     KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoChannelAction();
     void action();
-private:
+
     Backend::ElementType m_eElement;
     QString m_sReatedChannelName;
 };
@@ -186,7 +190,7 @@ public:
     KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoDirectAction();
     void action();
-private:
+
     Backend::ChannelType m_eType;
     QString m_sChannelName;
     Backend::ElementType m_eElement;
@@ -280,7 +284,7 @@ class PreWidget : public QWidget
 {
     Q_OBJECT
 public:
-    PreWidget(QString channel);
+    PreWidget(QString channel, Widget* p_pMatrix);
     ~PreWidget();
 
     Fader* fader;
@@ -292,6 +296,7 @@ signals:
 
 private:
     QString m_Channel;
+    Widget* m_pMatrix;
 
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
@@ -300,7 +305,7 @@ class PostWidget : public QWidget
 {
     Q_OBJECT
 public:
-    PostWidget(QString channel);
+    PostWidget(QString channel, Widget* p_pMatrix);
     ~PostWidget();
 
     void addSub(QString channelPost, QString channelSub);
@@ -315,6 +320,7 @@ signals:
 
 private:
     QString m_Channel;
+    Widget* m_pMatrix;
 
     QWidget* wSub;
     QVBoxLayout* lSub;
@@ -327,7 +333,7 @@ class SubWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SubWidget(QString channel );
+    SubWidget(QString channel, Widget* p_pMatrix);
     ~SubWidget();
 
     Fader* fader;
@@ -339,6 +345,7 @@ signals:
 
 private:
     QString m_Channel;
+    Widget* m_pMatrix;
 
 // QMap<QWidget*, Wrapp*> wrapps;
 };
@@ -347,7 +354,7 @@ class MainWidget : public QWidget
 {
     Q_OBJECT
 public:
-    MainWidget();
+    MainWidget(Widget* p_pMatrix);
     ~MainWidget();
 
     void update();
@@ -365,6 +372,7 @@ signals:
     void clicked(Backend::ChannelType, QString channel);
 
 private:
+    Widget* m_pMatrix;
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 

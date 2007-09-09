@@ -16,13 +16,13 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
- 
 */
 
 #ifndef JACKMIX_MAINWINDOW_H
 #define JACKMIX_MAINWINDOW_H
 
 #include "LadspaFX.h"
+#include "backend.h"
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QDockWidget>
@@ -94,8 +94,13 @@ private:
 
     void init();
 
-    LadspaFX* openEffect(QDomElement elem);
+    LadspaFX* openEffect(const QDomElement& elem);
     void saveEffect(QString& xml, struct effect*);
+    
+	void openActionBinding(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain =false);
+	void openActionBindingList(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain =false);
+    void openActionBinding(const QDomElement& channel, const Backend::ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
+	QString saveActionBinding(const Backend::ChannelType p_eType, const QString& p_sChannelName);
 
     bool toBool( QString );
     QString fromBool( bool );

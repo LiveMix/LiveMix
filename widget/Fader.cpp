@@ -80,18 +80,30 @@ Fader::~Fader()
 
 void Fader::mouseMoveEvent( QMouseEvent *ev )
 {
-    float fVal = (float)( height() - ev->y() ) / (float)height();
-    fVal = fVal * ( m_fMaxValue - m_fMinValue );
-
-    fVal = fVal + m_fMinValue;
-
-    setValue( fVal, true );
+	if (ev->button() == Qt::LeftButton) {
+	    float fVal = (float)( height() - ev->y() ) / (float)height();
+	    fVal = fVal * ( m_fMaxValue - m_fMinValue );
+	
+	    fVal = fVal + m_fMinValue;
+	
+	    setValue( fVal, true );
+	}
 }
 
 
 void Fader::mousePressEvent(QMouseEvent *ev)
 {
     mouseMoveEvent( ev );
+}
+
+void Fader::mouseReleaseEvent(QMouseEvent* ev)
+{
+    if (ev->button() == Qt::LeftButton) {
+    } else if (ev->button() == Qt::RightButton) {
+    	emit rightClick(ev);
+    } else if (ev->button() == Qt::MidButton) {
+    	emit middleClick(ev);
+    }
 }
 
 void Fader::incValue(bool p_bDirection)

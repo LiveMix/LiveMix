@@ -51,6 +51,8 @@ public:
     void closeEvent( QCloseEvent *ev );
 
     static LadspaFX* getFXSelector(LadspaFX* oldFx);
+    ToggleButton* getActivateButton() { return m_pActivateBtn; };
+    
 public slots:
     void faderChanged(Fader * ref);
     void toggleChanged(ToggleButton* ref);
