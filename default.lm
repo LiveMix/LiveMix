@@ -14,7 +14,6 @@
   <in name="1" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="1" />
-      <gain key="Esc" />
     </actionbinding>
     <effect name="highpass_iir" filename="/usr/lib/ladspa/highpass_iir_1890.so" enabled="no" >
     </effect>

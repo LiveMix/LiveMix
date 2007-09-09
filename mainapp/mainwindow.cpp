@@ -282,9 +282,9 @@ void MainWindow::openFile( QString path )
 
             QDomElement out = livemix.firstChildElement( "out" );
             if (!out.isNull()) {
-			    QDomElement binding = livemix.firstChildElement("actionbinding");
+			    QDomElement binding = out.firstChildElement("actionbinding");
 			    if (!binding.isNull()) {    	
-				    QDomElement select = livemix.firstChildElement("select");
+				    QDomElement select = binding.firstChildElement("select");
 				    if (!binding.isNull()) {
 				    	_mixerwidget->insertKeyToWrapp(QKeySequence(binding.attribute("key")), new KeyDoSelectChannel(_mixerwidget, Backend::OUT, MAIN));
 				    }

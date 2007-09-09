@@ -23,6 +23,7 @@ V - better effect implementation on mono channel
   - assign key
   - save key
   - load key
+  - add status
 - fix dump witout jack
 
 - fix hidden effect channel

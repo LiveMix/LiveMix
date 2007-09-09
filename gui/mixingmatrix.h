@@ -106,6 +106,8 @@ public:
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
     void clearKeyToWrapp() { return m_mKeyToWrapp.clear(); };
     void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
+    
+    QString displayElement(Backend::ElementType p_eElement);
 
 public slots:
     // Fills the empty nodes with 1to1-controls
@@ -157,11 +159,12 @@ private:
 class KeyDo
 {
 public:
-    KeyDo(Widget* p_pMatrix);
     virtual ~KeyDo();
     virtual void action() =0;
+    virtual QString name() =0;
 
 protected:
+    KeyDo(Widget* p_pMatrix);
     Widget* m_pMatrix;
 };
 class KeyDoSelectChannel : public KeyDo
@@ -170,6 +173,7 @@ public:
     KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName);
     ~KeyDoSelectChannel();
     void action();
+    QString name() {return "KeyDoSelectChannel";};
 
     Backend::ChannelType m_eType;
     QString m_sChannelName;
@@ -180,6 +184,7 @@ public:
     KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoChannelAction();
     void action();
+    QString name() {return "KeyDoChannelAction";};
 
     Backend::ElementType m_eElement;
     QString m_sReatedChannelName;
@@ -190,6 +195,7 @@ public:
     KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoDirectAction();
     void action();
+    QString name() {return "KeyDoDirectAction " + m_sChannelName + " " + m_sReatedChannelName + " " + m_pMatrix->displayElement(m_eElement);};
 
     Backend::ChannelType m_eType;
     QString m_sChannelName;

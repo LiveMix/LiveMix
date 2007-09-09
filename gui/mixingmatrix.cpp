@@ -561,6 +561,36 @@ void Widget::removesubchannel( QString name )
     }
 }
 
+QString Widget::displayElement(Backend::ElementType p_eElement) {
+	switch (p_eElement) {
+		case Backend::GAIN:
+			return trUtf8("gain");
+		case Backend::PAN_BAL:
+			return trUtf8("pan/bal");
+		case Backend::TO_PRE:
+			return trUtf8("pre");
+		case Backend::TO_POST:
+			return trUtf8("post");
+		case Backend::FADER:
+			return trUtf8("fader");
+		case Backend::PRE_VOL:
+			return trUtf8("pre vol");
+		case Backend::MUTE:
+			return trUtf8("mute");
+		case Backend::TO_SUB:
+			return trUtf8("sub");
+		case Backend::TO_MAIN:
+			return trUtf8("main");
+		case Backend::TO_ALF:
+			return trUtf8("alf");
+		case Backend::TO_PLF:
+			return trUtf8("plf");
+		case Backend::MUTE_EFFECT:
+			return trUtf8("mute effect");
+	}
+	return "";
+}
+
 void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev)
 {
     UNUSED(p_eType);
@@ -595,50 +625,23 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 		}
 	}
     // TODO assigne old key !
-	AssigneToPannel* panel = NULL;
+	AssigneToPannel* panel = new AssigneToPannel(p_sChannelName, displayElement(p_eElement), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);;
 	bool volume = true;
 	switch (p_eElement) {
 		case Backend::GAIN:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("gain"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
 		case Backend::PAN_BAL:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("pan/bal"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
 		case Backend::TO_PRE:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("pre"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
 		case Backend::TO_POST:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("post"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
 		case Backend::FADER:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("fader"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
 		case Backend::PRE_VOL:
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("pre vol"), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;			
+			break;
 		case Backend::MUTE:
-			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("mute"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;
 		case Backend::TO_SUB:
-			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("sub"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;
 		case Backend::TO_MAIN:
-			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("main"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;
 		case Backend::TO_ALF:
-			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("alf"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;
 		case Backend::TO_PLF:
-			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("plf"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
-			break;
 		case Backend::MUTE_EFFECT:
 			volume = false;
-			panel = new AssigneToPannel(p_sChannelName, trUtf8("mute effect"), false, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);
 			break;
 	}
 
@@ -651,7 +654,9 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	    		if ((!m_mKeyToWrapp.contains(panel->getActionOnChannelKeySequence())) || QMessageBox::question (this, trUtf8("Reassigne key")
 	    				, trUtf8("Does I reassigne the %1 key").arg(panel->getActionOnChannelKeySequence().toString())
 	    				, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)) {
+qDebug()<<(m_mKeyToWrapp[panel->getActionOnChannelKeySequence()]->name());
 	    			delete m_mKeyToWrapp[rActionOnChannelKeySequence];
+	    			delete m_mKeyToWrapp[panel->getActionOnChannelKeySequence()];
 		    		m_mKeyToWrapp.remove(rActionOnChannelKeySequence);
 		    		m_mKeyToWrapp.insert(panel->getActionOnChannelKeySequence()
 		    				, new KeyDoDirectAction(this, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
@@ -702,12 +707,19 @@ void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Ba
 
 void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
 {
+showMessage("333");
+qDebug()<<(p_eType==Backend::IN);
+qDebug()<<p_sChannelName;
+qDebug()<<p_sReatedChannelName;
+qDebug()<<displayElement(p_eElement);
+qDebug()<<(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->size();
     if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)
             && (*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)
             && (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(p_sReatedChannelName)) {
         Wrapp* pWrapp = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
         if (!pWrapp->exec()) {
             m_pSelectedWrapper = (WrappVolume*)pWrapp;
+            showMessage(QString("Select %1 %2 on channel %3.").arg(displayElement(p_eElement)).arg(p_sReatedChannelName).arg(p_sChannelName));
         } else {
             m_pSelectedWrapper = NULL;
         }
@@ -781,7 +793,8 @@ KeyDoSelectChannel::KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p
         : KeyDo(p_pMatrix)
         , m_eType(p_eType)
         , m_sChannelName(p_sChannelName)
-{}
+{
+}
 KeyDoSelectChannel::~KeyDoSelectChannel()
 {}
 void KeyDoSelectChannel::action()
@@ -793,7 +806,8 @@ KeyDoChannelAction::KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p
         : KeyDo(p_pMatrix)
         , m_eElement(p_eElement)
         , m_sReatedChannelName(p_sReatedChannelName)
-{}
+{
+}
 KeyDoChannelAction::~KeyDoChannelAction()
 {}
 void KeyDoChannelAction::action()
@@ -807,7 +821,8 @@ KeyDoDirectAction::KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_e
         , m_sChannelName(p_sChannelName)
         , m_eElement(p_eElement)
         , m_sReatedChannelName(p_sReatedChannelName)
-{}
+{
+}
 KeyDoDirectAction::~KeyDoDirectAction()
 {}
 void KeyDoDirectAction::action()
