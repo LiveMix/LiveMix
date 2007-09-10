@@ -7,10 +7,6 @@ SUBDIRS = core widget ladspafx gui mainapp
 target.path = $$prefix/bin
 target.files = livemix
 
-# data
-#data.path = $$prefix/bin/data
-#data.files = data/*
-
 # icon
 icon.path = $$prefix/share/pixmaps
 icon.files = dist/livemix.xpm dist/livemix-16.xpm
@@ -24,15 +20,16 @@ sample.path = $$prefix/share/livemix/sample
 sample.files = default.lm
 
 # mime
-mime.path = $$prefix/lib/mime/packages
-mime.files = dist/livemix.mime
+#mime.path = $$prefix/lib/mime/packages
+#mime.files = dist/livemix.mime
 
 # mime2
-mime2.path = $$prefix/share/mime/packages
-mime2.files = dist/livemix-mime.xml
+#mime2.path = $$prefix/share/mime/packages
+#mime2.files = dist/livemix-mime.xml
 
 
 #INSTALLS += target data icon desktop sample
-INSTALLS += target icon desktop sample mime mime2
+INSTALLS += target icon desktop sample
+#mime mime2
 
 
