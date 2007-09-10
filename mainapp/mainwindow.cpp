@@ -135,18 +135,18 @@ void MainWindow::init()
     connect( _remove_prechannel_action, SIGNAL( triggered() ), this, SLOT( removePre() ) );
     editPre->addAction( _remove_prechannel_action );
     QMenu* editPost = _editmenu->addMenu(trUtf8("P&ost"));
-    _add_postchannel_action = new QAction(trUtf8("Add &External mono..."), this );
-    connect( _add_postchannel_action, SIGNAL( triggered() ), this, SLOT( addPostMonoExternal() ) );
-    editPost->addAction( _add_postchannel_action );
-    _add_stpostchannel_action = new QAction(trUtf8("Add External stereo..."), this );
-    connect( _add_stpostchannel_action, SIGNAL( triggered() ), this, SLOT( addPostStereoExternal() ) );
-    editPost->addAction( _add_stpostchannel_action );
     _add_intpostchannel_action = new QAction(trUtf8("Add Internal &mono..."), this );
     connect( _add_intpostchannel_action, SIGNAL( triggered() ), this, SLOT( addPostMonoInternal() ) );
     editPost->addAction( _add_intpostchannel_action );
     _add_stintpostchannel_action = new QAction(trUtf8("Add Internal &stereo..."), this );
     connect( _add_stintpostchannel_action, SIGNAL( triggered() ), this, SLOT( addPostStereoInternal() ) );
     editPost->addAction( _add_stintpostchannel_action );
+    _add_postchannel_action = new QAction(trUtf8("Add &External mono..."), this );
+    connect( _add_postchannel_action, SIGNAL( triggered() ), this, SLOT( addPostMonoExternal() ) );
+    editPost->addAction( _add_postchannel_action );
+    _add_stpostchannel_action = new QAction(trUtf8("Add External stereo..."), this );
+    connect( _add_stpostchannel_action, SIGNAL( triggered() ), this, SLOT( addPostStereoExternal() ) );
+    editPost->addAction( _add_stpostchannel_action );
     _remove_postchannel_action = new QAction(trUtf8("&Remove..."), this );
     connect( _remove_postchannel_action, SIGNAL( triggered() ), this, SLOT( removePost() ) );
     editPost->addAction( _remove_postchannel_action );
@@ -162,7 +162,7 @@ void MainWindow::init()
     editSub->addAction( _remove_subchannel_action );
 
     _helpmenu = menuBar()->addMenu(trUtf8("&Help"));
-    _helpmenu->addAction(trUtf8("About &JackMix"), this, SLOT( about() ) );
+    _helpmenu->addAction(trUtf8("About &LiveMix"), this, SLOT( about() ) );
     _helpmenu->addAction(trUtf8("About &Qt"), this, SLOT( aboutQt() ) );
 
     _mixerwidget = new Widget(this);

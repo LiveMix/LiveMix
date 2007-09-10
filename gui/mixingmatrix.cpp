@@ -652,7 +652,7 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
     	if (panel->getActionOnChannelKeySequence() != QKeySequence()) {
     		if (panel->getActionOnChannelKeySequence() != rActionOnChannelKeySequence) {
 	    		if ((!m_mKeyToWrapp.contains(panel->getActionOnChannelKeySequence())) || QMessageBox::question (this, trUtf8("Reassigne key")
-	    				, trUtf8("Does I reassigne the %1 key").arg(panel->getActionOnChannelKeySequence().toString())
+	    				, trUtf8("Does I reassigne the %1 key ?").arg(panel->getActionOnChannelKeySequence().toString())
 	    				, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)) {
 qDebug()<<(m_mKeyToWrapp[panel->getActionOnChannelKeySequence()]->name());
 	    			delete m_mKeyToWrapp[rActionOnChannelKeySequence];

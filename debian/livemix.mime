@@ -1,1 +1,1 @@
-application/livemix; livemix '%s'; edit=livemix '%s'; description="LiveMix - Mix table"; nametemplate=%s.lm
+application/x-livemix;livemix;description="LiveMix - Mix table";nametemplate=%s.lm;test=test "$DISPLAY" != "";priority=7

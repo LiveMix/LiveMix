@@ -20,10 +20,13 @@ V - effect before bal/pan on in channel
 V - better effect implementation on mono channel
 
 - key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
-  - assign key
-  - save key
-  - load key
+V  - assign key
+V  - save key
+V  - load key
   - add status
+  - use QLineEdit (remove set size)
+  - fix core dump
+  - test main
 - fix dump witout jack
 
 - fix hidden effect channel

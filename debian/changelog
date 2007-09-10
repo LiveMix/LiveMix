@@ -1,6 +1,7 @@
-livemix (0.5-1.0) unstable; urgency=low
+livemix (0.45svn20070910-1.0) unstable; urgency=low
 
   * Initial release
+  * To Solve bug https://bugs.launchpad.net/ubuntu/+bug/138621
 
  -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Tue,  4 Sep 2007 10:04:57 +0200
 

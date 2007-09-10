@@ -12,8 +12,8 @@ icon.path = $$prefix/share/pixmaps
 icon.files = dist/livemix.xpm dist/livemix-16.xpm
 
 # desktop
-desktop.path = $$prefix/share/applications
-desktop.files = dist/livemix.desktop
+#desktop.path = $$prefix/share/applications
+#desktop.files = dist/livemix.desktop
 
 # sample
 sample.path = $$prefix/share/livemix/sample
@@ -28,8 +28,7 @@ sample.files = default.lm
 #mime2.files = dist/livemix-mime.xml
 
 
-#INSTALLS += target data icon desktop sample
-INSTALLS += target icon desktop sample
-#mime mime2
+INSTALLS += target icon sample
+#mime mime2 desktop data 
 
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-  <mime-type type="application/livemix">
+  <mime-type type="application/x-livemix">
     <comment>LiveMix - Mix table</comment>
     <comment xml:lang="en">LiveMix - Mix table</comment>
     <comment xml:lang="fr">LiveMix - Table de mixage</comment>
-    <magic priority="100">
-      <match type="string" value="&lt;livemix" offset="0"/>
+    <glob priority="80" pattern="*.lm" />
+    <magic priority="80">
+      <match type="string" value="&lt;livemix" offset="0:256"/>
     </magic>
-    <glob pattern="*.lm" />
   </mime-type>
 </mime-info>

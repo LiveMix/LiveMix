@@ -4,9 +4,9 @@ echo "Updating translation (*.ts) files"
 
 cd ../
 
-UI=`find . | grep "\.ui"`
-CPP=`find . | grep "\.cpp"`
-H=`find . | grep "\.h"`
+UI=`find . | grep "\.ui$"`
+CPP=`find . | grep "\.cpp$"`
+H=`find . | grep "\.h$"`
 FILES="$UI $CPP $H"
 
 CMD="$QTDIR/bin/lupdate ${FILES} -ts"
