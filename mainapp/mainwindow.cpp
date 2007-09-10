@@ -373,7 +373,7 @@ void MainWindow::saveFile()
     if ( ! path.endsWith( ".lm" ) )
         path += ".lm";
 
-    QString xml = "<livemix versimute=\"0.5\">";
+    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<livemix versimute=\"0.5\">";
     xml += QString( "  <actionbinding>" );
 	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
 		KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
