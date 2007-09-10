@@ -12,7 +12,7 @@ tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
 
 cd livemix-$1
 
-dpkg-buildpackage -rfakeroot
+dpkg-buildpackage -S -sa -rfakeroot
 #-S -sa
 
 cd ../livemix
