@@ -12,7 +12,7 @@ tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
 
 cd livemix-$1
 
-dpkg-buildpackage -S -rfakeroot
+dpkg-buildpackage -rfakeroot
 #-S -sa
 
 cd ../livemix
@@ -22,4 +22,4 @@ rm -rf ../livemix-$1
 lintian ../livemix_$1*.dsc
 linda ../livemix_$1*.dsc
 
-echo "To upload use: dput ../livemix_$1-1.0_i386.changes"
+echo "To upload use: dput ../livemix_$1-1.0_source.changes"
