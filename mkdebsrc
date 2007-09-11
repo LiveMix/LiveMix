@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mkdeb $1 -S -sa

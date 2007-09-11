@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "build livemix-$1"
+echo "build livemix-$1" ($2 $3)
 
 ./copysrc $1
 
@@ -12,7 +12,7 @@ tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
 
 cd livemix-$1
 
-dpkg-buildpackage -S -sa -rfakeroot
+dpkg-buildpackage $2 $3 -rfakeroot
 #-S -sa
 
 cd ../livemix
