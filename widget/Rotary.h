@@ -86,7 +86,7 @@ public:
         } else
             return lin2db( m_fValue, m_fMin );
     }
-    void incValue(bool p_bDirection);
+    void incValue(bool p_bDirection, int p_iStep =1);
 
 signals:
 //  void valueChanged(Rotary *ref);

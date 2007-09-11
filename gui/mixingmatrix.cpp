@@ -44,6 +44,21 @@
 namespace LiveMix
 {
 
+class ScrollArea : public QScrollArea {
+	void keyPressEvent ( QKeyEvent * e ) {
+		switch (e->key()) {
+			case Qt::Key_Up:
+			case Qt::Key_Down:
+			case Qt::Key_PageUp:
+			case Qt::Key_PageDown:
+				e->setAccepted(false);
+				break;
+			default:
+				QScrollArea::keyPressEvent(e);
+		}
+	}
+};
+
 Widget::Widget(QWidget* p)
         : QWidget( p )
         , m_mShurtCut()
@@ -53,9 +68,9 @@ Widget::Widget(QWidget* p)
     main_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
 #ifdef LADSPA_SUPPORT
-    QScrollArea *effectScrollArea = new QScrollArea;
+    QScrollArea *effectScrollArea = new ScrollArea;
 // effectScrollArea->setFrameShape( QFrame::NoFrame );
-// effectScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	effectScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     effectScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     QWidget* effect = new QWidget;
 // effect->setMinimumWidth(50);
@@ -626,14 +641,17 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 		}
 	}
     // TODO assigne old key !
-	AssigneToPannel* panel = new AssigneToPannel(p_sChannelName, displayElement(p_eElement), true, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);;
 	bool volume = true;
+	bool only_dirrect = false;
 	switch (p_eElement) {
+		case Backend::FADER:
+			if (p_sChannelName == MAIN && p_sReatedChannelName != MAIN) {
+				only_dirrect = true;
+			}
 		case Backend::GAIN:
 		case Backend::PAN_BAL:
 		case Backend::TO_PRE:
 		case Backend::TO_POST:
-		case Backend::FADER:
 		case Backend::PRE_VOL:
 			break;
 		case Backend::MUTE:
@@ -645,6 +663,7 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 			volume = false;
 			break;
 	}
+	AssigneToPannel* panel = new AssigneToPannel(p_sChannelName, displayElement(p_eElement) + " " + p_sReatedChannelName, volume, only_dirrect, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);;
 
     if (panel->exec() == QDialog::Accepted) {
 //qDebug()<<111<<panel->getActionOnChannelKeySequence().toString()<<rSelectChannelKeySequence.toString();
@@ -655,7 +674,6 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	    		if ((!m_mKeyToWrapp.contains(panel->getActionOnChannelKeySequence())) || QMessageBox::question (this, trUtf8("Reassigne key")
 	    				, trUtf8("Does I reassigne the %1 key ?").arg(panel->getActionOnChannelKeySequence().toString())
 	    				, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)) {
-qDebug()<<(m_mKeyToWrapp[panel->getActionOnChannelKeySequence()]->name());
 	    			delete m_mKeyToWrapp[rActionOnChannelKeySequence];
 	    			delete m_mKeyToWrapp[panel->getActionOnChannelKeySequence()];
 		    		m_mKeyToWrapp.remove(rActionOnChannelKeySequence);
@@ -674,6 +692,7 @@ qDebug()<<(m_mKeyToWrapp[panel->getActionOnChannelKeySequence()]->name());
 	    				, trUtf8("Does I reassigne the %1 key").arg(panel->getSelectChannelKeySequence().toString())
 	    				, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)) {
 	    			delete m_mKeyToWrapp[rSelectChannelKeySequence];
+	    			delete m_mKeyToWrapp[panel->getSelectChannelKeySequence()];
 			    	m_mKeyToWrapp.remove(rSelectChannelKeySequence);
 		    		m_mKeyToWrapp.insert(panel->getSelectChannelKeySequence(), new KeyDoSelectChannel(this, p_eType, p_sChannelName));
 	    		}
@@ -689,6 +708,7 @@ qDebug()<<(m_mKeyToWrapp[panel->getActionOnChannelKeySequence()]->name());
 	    				, trUtf8("Does I reassigne the %1 key").arg(panel->getActionOnSelectedChannelKeySequence().toString())
 	    				, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)) {
 	    			delete m_mKeyToWrapp[rActionOnSelectedChannelKeySequence];
+	    			delete m_mKeyToWrapp[panel->getActionOnSelectedChannelKeySequence()];
 			    	m_mKeyToWrapp.remove(rActionOnSelectedChannelKeySequence);
 		    		m_mKeyToWrapp.insert(panel->getActionOnSelectedChannelKeySequence(), new KeyDoChannelAction(this, p_eElement, p_sReatedChannelName));
 	    		}
@@ -728,20 +748,45 @@ qDebug()<<(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->size();
 }
 void Widget::keyPressEvent ( QKeyEvent * p_pEvent )
 {
-    if (p_pEvent->key() == Qt::Key_Home || p_pEvent->key() == Qt::Key_Up || p_pEvent->key() == Qt::Key_PageUp) {
-        if (m_pSelectedWrapper != NULL) {
-            m_pSelectedWrapper->getVolume()->incValue(true);
-        }
-    } else if (p_pEvent->key() == Qt::Key_End || p_pEvent->key() == Qt::Key_Down || p_pEvent->key() == Qt::Key_PageDown) {
-        if (m_pSelectedWrapper != NULL) {
-            m_pSelectedWrapper->getVolume()->incValue(false);
-        }
-    } else if (!p_pEvent->isAutoRepeat()) {
-        QKeySequence keys = QKeySequence(p_pEvent->key()+p_pEvent->modifiers());
-        if (m_mKeyToWrapp.contains(keys)) {
-            m_mKeyToWrapp[keys]->action();
-        }
-    }
+	switch (p_pEvent->key()) {
+		case Qt::Key_Home:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(true, 10);
+	        }
+	        break;
+		case Qt::Key_PageUp:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(true, 4);
+	        }
+	        break;
+		case Qt::Key_Up:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(true, 1);
+	        }
+	        break;
+		case Qt::Key_End:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(false, 10);
+	        }
+	        break;
+		case Qt::Key_PageDown:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(false, 4);
+	        }
+	        break;
+		case Qt::Key_Down:
+	        if (m_pSelectedWrapper != NULL) {
+            	m_pSelectedWrapper->getVolume()->incValue(false, 1);
+	        }
+	        break;
+	    default:
+		    if (!p_pEvent->isAutoRepeat()) {
+		        QKeySequence keys = QKeySequence(p_pEvent->key()+p_pEvent->modifiers());
+		        if (m_mKeyToWrapp.contains(keys)) {
+		            m_mKeyToWrapp[keys]->action();
+		        }
+		    }
+	}
 }
 void Widget::wheelEvent(QWheelEvent *p_pEvent)
 {

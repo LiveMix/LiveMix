@@ -19,13 +19,13 @@
 #ifndef GETKEYFIELD_H_
 #define GETKEYFIELD_H_
 
-#include <QTextEdit>
+#include <QLineEdit>
 #include <QKeyEvent>
 
 namespace LiveMix
 {
 
-class GetKeyField : public QTextEdit 
+class GetKeyField : public QLineEdit 
 {
     Q_OBJECT
 public:

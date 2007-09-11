@@ -134,13 +134,13 @@ void Fader::mouseDoubleClickEvent(QMouseEvent* ev) {
     }
 }
 
-void Fader::incValue(bool p_bDirection)
+void Fader::incValue(bool p_bDirection, int p_iStep)
 {
     if (m_bUseIntSteps) {
         if (p_bDirection) {
-            setValue( m_fValue + 1, true );
+            setValue( m_fValue + 1 * p_iStep, true );
         } else {
-            setValue( m_fValue - 1, true );
+            setValue( m_fValue - 1 * p_iStep, true );
         }
     } else {
         float step = 0.5;
@@ -149,9 +149,9 @@ void Fader::incValue(bool p_bDirection)
         }
 
         if (p_bDirection) {
-            setValue( m_fValue + step, true );
+            setValue( m_fValue + step * p_iStep, true );
         } else {
-            setValue( m_fValue - step, true );
+            setValue( m_fValue - step * p_iStep, true );
         }
     }
 }

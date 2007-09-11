@@ -756,13 +756,15 @@ void MainWindow::removeInput()
 void MainWindow::removeInput( QString n )
 {
     qDebug( "MainWindow::removeInput( QString %s )", qPrintable( n ) );
-    foreach(effect* fx, *Backend::instance()->getInEffects(n)) {
-        if (fx->gui) {
-            _mixerwidget->removeFX(fx->gui, fx);
-        }
-    }
-    if ( Backend::instance()->removeInput( n ) ) {
-        _mixerwidget->removeinchannel( n );
+    if (Backend::instance()->inchannels().contains(n)) {
+	    foreach(effect* fx, *Backend::instance()->getInEffects(n)) {
+	        if (fx->gui) {
+	            _mixerwidget->removeFX(fx->gui, fx);
+	        }
+	    }
+	    if ( Backend::instance()->removeInput( n ) ) {
+	        _mixerwidget->removeinchannel( n );
+	    }
     }
 }
 
@@ -776,13 +778,15 @@ void MainWindow::removePre()
 void MainWindow::removePre( QString n )
 {
     qDebug( "MainWindow::removePre( QString %s )", qPrintable( n ) );
-    foreach(effect* fx, *Backend::instance()->getInEffects(n)) {
-        if (fx->gui) {
-            _mixerwidget->removeFX(fx->gui, fx);
-        }
-    }
-    if ( Backend::instance()->removePre( n ) ) {
-        _mixerwidget->removeprechannel( n );
+    if (Backend::instance()->prechannels().contains(n)) {
+	    foreach(effect* fx, *Backend::instance()->getPreEffects(n)) {
+	        if (fx->gui) {
+	            _mixerwidget->removeFX(fx->gui, fx);
+	        }
+	    }
+	    if ( Backend::instance()->removePre( n ) ) {
+	        _mixerwidget->removeprechannel( n );
+	    }
     }
 }
 
@@ -796,13 +800,15 @@ void MainWindow::removePost()
 void MainWindow::removePost( QString n )
 {
     qDebug( "MainWindow::removePost( QString %s )", qPrintable( n ) );
-    foreach(effect* fx, *Backend::instance()->getInEffects(n)) {
-        if (fx->gui) {
-            _mixerwidget->removeFX(fx->gui, fx);
-        }
-    }
-    if ( Backend::instance()->removePost( n ) ) {
-        _mixerwidget->removepostchannel( n );
+    if (Backend::instance()->postchannels().contains(n)) {
+	    foreach(effect* fx, *Backend::instance()->getPostEffects(n)) {
+	        if (fx->gui) {
+	            _mixerwidget->removeFX(fx->gui, fx);
+	        }
+	    }
+	    if ( Backend::instance()->removePost( n ) ) {
+	        _mixerwidget->removepostchannel( n );
+	    }
     }
 }
 
@@ -816,13 +822,15 @@ void MainWindow::removeSub()
 void MainWindow::removeSub( QString n )
 {
     qDebug( "MainWindow::removeSub( QString %s )", qPrintable( n ) );
-    foreach(effect* fx, *Backend::instance()->getInEffects(n)) {
-        if (fx->gui) {
-            _mixerwidget->removeFX(fx->gui, fx);
-        }
-    }
-    if ( Backend::instance()->removeSub( n ) ) {
-        _mixerwidget->removesubchannel( n );
+    if (Backend::instance()->subchannels().contains(n)) {
+	    foreach(effect* fx, *Backend::instance()->getSubEffects(n)) {
+	        if (fx->gui) {
+	            _mixerwidget->removeFX(fx->gui, fx);
+	        }
+	    }
+	    if ( Backend::instance()->removeSub( n ) ) {
+	        _mixerwidget->removesubchannel( n );
+	    }
     }
 }
 

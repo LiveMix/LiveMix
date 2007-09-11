@@ -81,7 +81,7 @@ QString displayDb(float db, float min)
     } else {
         float milli = db2lin(db, min) * 1000;
 //  if (milli > 0.1) {
-        return QString("%1 milli").arg(milli, 0, 'f', 3);
+        return QString("%1 milli").arg(milli, 0, 'f', 2);
 //  }
 //  else {
 //   return QString("%1 micro").arg((int)(milli * 1000));

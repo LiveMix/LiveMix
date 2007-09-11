@@ -68,7 +68,7 @@ public:
         return m_bLinDb;
     };
 
-    void incValue(bool p_bDirection);
+    void incValue(bool p_bDirection, int p_iStep =1);
 
     void setMaxPeak( float fMax );
     void setMinPeak( float fMin );

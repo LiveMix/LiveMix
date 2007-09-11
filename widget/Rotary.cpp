@@ -217,13 +217,13 @@ void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 }
 
 
-void Rotary::incValue(bool p_bDirection)
+void Rotary::incValue(bool p_bDirection, int p_iStep)
 {
     if ( m_bUseIntSteps ) {
         if (p_bDirection) {
-            setValue( getValue() + 1, true );
+            setValue( getValue() + 1 * p_iStep, true );
         } else {
-            setValue( getValue() - 1, true );
+            setValue( getValue() - 1 * p_iStep, true );
         }
     } else {
         float delta = 0.5;
@@ -233,9 +233,9 @@ void Rotary::incValue(bool p_bDirection)
         }
 
         if (p_bDirection) {
-            setValue( m_fValue + delta, true );
+            setValue( m_fValue + delta * p_iStep, true );
         } else {
-            setValue( m_fValue - delta, true );
+            setValue( m_fValue - delta * p_iStep, true );
         }
     }
 }

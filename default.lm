@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jackmix versimute="0.4">
   <actionbinding>
+    <afl key="A" />
     <bal key="B" />
     <fader key="F" />
     <gain key="G" />
@@ -168,6 +169,7 @@
   </in>
   <out volume="0.1" mute="no" alf="no" bal="0" monovolume="1" phonevolume="1">
     <actionbinding>
+      <fader sub="main" key="Space" />
       <select key="P" />
     </actionbinding>
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >

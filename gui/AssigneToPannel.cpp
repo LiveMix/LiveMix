@@ -11,7 +11,7 @@
 namespace LiveMix
 {
 
-AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, QKeySequence p_rActionOnChannelKeySequence
+AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, bool p_bOnlyDirrect, QKeySequence p_rActionOnChannelKeySequence
 			, QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence)
 : QDialog()
 , m_pActionOnChannel(new GetKeyField)
@@ -27,8 +27,10 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
 	m_pActionOnSelectedChannel->setKeySequence(p_rActionOnSelectedChannelKeySequence);
 
 	layout->addWidget(m_pActionOnChannel, 1, 2);
-	layout->addWidget(m_pSelectChannel, 2, 2);
-	layout->addWidget(m_pActionOnSelectedChannel, 3, 2);
+	if (!p_bOnlyDirrect) {
+		layout->addWidget(m_pSelectChannel, 2, 2);
+		layout->addWidget(m_pActionOnSelectedChannel, 3, 2);
+	}
 
 	if (p_bVolume) {
 		layout->addWidget(new QLabel(trUtf8("Key to select the %2 of the channel %1").arg(p_sChannel).arg(p_sFunction)), 1, 1);
@@ -37,13 +39,15 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
 		layout->addWidget(new QLabel(trUtf8("Key to %2 the channel %1").arg(p_sChannel).arg(p_sFunction)), 1, 1);
 	}
 	
-	layout->addWidget(new QLabel(trUtf8("Key to select the channel %1").arg(p_sChannel)), 2, 1);
-	
-	if (p_bVolume) {
-		layout->addWidget(new QLabel(trUtf8("Key to select the %1 of selected channel").arg(p_sFunction)), 3, 1);
-	}
-	else {
-		layout->addWidget(new QLabel(trUtf8("Key to %1 the selected channel").arg(p_sFunction)), 3, 1);
+	if (!p_bOnlyDirrect) {
+		layout->addWidget(new QLabel(trUtf8("Key to select the channel %1").arg(p_sChannel)), 2, 1);
+		
+		if (p_bVolume) {
+			layout->addWidget(new QLabel(trUtf8("Key to select the %1 of selected channel").arg(p_sFunction)), 3, 1);
+		}
+		else {
+			layout->addWidget(new QLabel(trUtf8("Key to %1 the selected channel").arg(p_sFunction)), 3, 1);
+		}
 	}
 	
 	QWidget* buttons = new QWidget;

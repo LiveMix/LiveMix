@@ -25,11 +25,12 @@ namespace LiveMix
 {
 
 GetKeyField::GetKeyField()
-: QTextEdit()
+: QLineEdit()
 , m_pKeySequence()
 {
-	setFixedSize(150, 25);
-	setTextInteractionFlags(Qt::NoTextInteraction);
+//	setFixedSize(150, 25);
+//	setTextInteractionFlags(Qt::NoTextInteraction);
+	setReadOnly(true); 
 }
 
 GetKeyField::~GetKeyField()

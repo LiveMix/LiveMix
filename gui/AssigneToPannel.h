@@ -12,7 +12,7 @@ class AssigneToPannel : public QDialog
 {
     Q_OBJECT
 public:
-	AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, QKeySequence p_rActionOnChannelKeySequence
+	AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, bool p_bOnlyDirrect, QKeySequence p_rActionOnChannelKeySequence
 			, QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence);
 	virtual ~AssigneToPannel();
 	

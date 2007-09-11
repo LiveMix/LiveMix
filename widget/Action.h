@@ -49,7 +49,7 @@ public:
     // in fact the external value is standanrd and internal in dB
     virtual void setDbValue(float fValue) =0;
     virtual float getDbValue() =0;
-    virtual void incValue(bool p_bDirection) =0;
+    virtual void incValue(bool p_bDirection, int p_iStep =1) =0;
 };
 
 }

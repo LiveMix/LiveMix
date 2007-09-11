@@ -23,10 +23,14 @@ V - better effect implementation on mono channel
 V  - assign key
 V  - save key
 V  - load key
-  - add status
-  - use QLineEdit (remove set size)
-  - fix core dump
-  - test main
+V  - add status
+V  - use QLineEdit (remove set size)
+V  - fix core dump
+
+- test main
+- custum message for mono and phono.
+
+- add status for rotary changes
 - By default open default.lm.
 - fix dump witout jack
 
