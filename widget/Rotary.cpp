@@ -84,6 +84,7 @@ Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseInt
     m_nWidgetWidth = 28;
     m_nWidgetHeight = 26;
     m_fValue = 0.0;
+	m_fMousePressValue = m_fMin - 1;
 
     if ( m_background_normal == NULL ) {
         m_background_normal = new QPixmap();
@@ -207,6 +208,7 @@ void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 	if (ev->button() == Qt::LeftButton) {
 	    setCursor( QCursor( Qt::ArrowCursor ) );
 	    m_pValueToolTip->hide();
+	    m_fMousePressValue = m_fMin - 1;
     } else if (ev->button() == Qt::RightButton) {
     	emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
@@ -266,23 +268,25 @@ void Rotary::incValue(bool p_bDirection)
 
 void Rotary::mouseMoveEvent( QMouseEvent *ev )
 {
-    float fRange = m_fMax - m_fMin;
+    if (m_fMousePressValue != m_fMin - 1) {
+        float fRange = m_fMax - m_fMin;
 
-    float deltaY = ev->y() - m_fMousePressY;
-    float fNewValue = ( m_fMousePressValue - ( deltaY / MV_HEIGHT * fRange ) );
+        float deltaY = ev->y() - m_fMousePressY;
+        float fNewValue = ( m_fMousePressValue - ( deltaY / MV_HEIGHT * fRange ) );
 
-    setValue( fNewValue, true );
+        setValue( fNewValue, true );
 
-    if ( m_bShowValueToolTip ) {
-        QString tip;
-        if (m_type == TYPE_NORMAL) {
-            tip = displayDbShort(m_fValue, m_fMin);
-        } else {
-            char tmp[20];
-            sprintf( tmp, "%#.2f", m_fValue );
-            tip = tmp;
+        if ( m_bShowValueToolTip ) {
+            QString tip;
+            if (m_type == TYPE_NORMAL) {
+                tip = displayDbShort(m_fValue, m_fMin);
+            } else {
+                char tmp[20];
+                sprintf( tmp, "%#.2f", m_fValue );
+                tip = tmp;
+            }
+            m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), tip );
         }
-        m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), tip );
     }
 }
 
@@ -290,6 +294,7 @@ void Rotary::mouseMoveEvent( QMouseEvent *ev )
 void Rotary::setMin( float fMin )
 {
     m_fMin = fMin;
+	m_fMousePressValue = m_fMin - 1;
     update();
 }
 

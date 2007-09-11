@@ -50,6 +50,8 @@ Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString ch
     setMinimumSize( 23, 116 );
     setMaximumSize( 23, 116);
     resize( 23, 116 );
+	
+	m_fMousePressValue = m_fMinValue - 1;
 
     // Background image
     QString background_path = ":/data/fader_background.png";
@@ -80,29 +82,55 @@ Fader::~Fader()
 
 void Fader::mouseMoveEvent( QMouseEvent *ev )
 {
-	if (ev->button() == Qt::LeftButton) {
+    if (m_fMousePressValue != m_fMinValue - 1) {
+        float fRange = m_fMaxValue - m_fMinValue;
+
+        float deltaY = ev->y() - m_fMousePressY;
+        float fNewValue = ( m_fMousePressValue - ( deltaY / height() * fRange ) );
+
+        setValue( fNewValue, true );
+    }
+/*	if (ev->button() == Qt::LeftButton) {
 	    float fVal = (float)( height() - ev->y() ) / (float)height();
 	    fVal = fVal * ( m_fMaxValue - m_fMinValue );
 	
 	    fVal = fVal + m_fMinValue;
 	
 	    setValue( fVal, true );
-	}
+	}*/
 }
 
 
 void Fader::mousePressEvent(QMouseEvent *ev)
 {
-    mouseMoveEvent( ev );
+	if (ev->button() == Qt::LeftButton) {
+	    setCursor( QCursor( Qt::SizeVerCursor ) );
+	
+	    m_fMousePressValue = m_fValue;
+	    m_fMousePressY = ev->y();
+	}
 }
 
 void Fader::mouseReleaseEvent(QMouseEvent* ev)
 {
     if (ev->button() == Qt::LeftButton) {
+	    setCursor( QCursor( Qt::ArrowCursor ) );
+	    m_fMousePressValue = m_fMinValue - 1;
     } else if (ev->button() == Qt::RightButton) {
     	emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
     	emit middleClick(ev);
+    }
+}
+
+void Fader::mouseDoubleClickEvent(QMouseEvent* ev) {
+    if (ev->button() == Qt::LeftButton) {
+	    float fVal = (float)( height() - ev->y() - 15.0 ) / ((float)height() - 30.0);
+	    fVal = fVal * ( m_fMaxValue - m_fMinValue );
+	
+	    fVal = fVal + m_fMinValue;
+	
+	    setValue( fVal, true );
     }
 }
 
@@ -315,6 +343,7 @@ void Fader::paintEvent( QPaintEvent *ev)
 void Fader::setMinValue( float fMin )
 {
     m_fMinValue = fMin;
+	m_fMousePressValue = m_fMinValue - 1;
 }
 
 

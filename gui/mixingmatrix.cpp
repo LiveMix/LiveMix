@@ -127,6 +127,7 @@ Widget::Widget(QWidget* p)
     status_layout->addWidget(m_pStatusLabel);
     cpuLoad = new CpuLoadWidget(NULL);
     status_layout->addWidget(cpuLoad);
+    cpuLoad->setToolTip(trUtf8("- %CPU used by LiveMix backend.\n- CPU load given by Jack."));
 // status.setColor( QPalette::Background, QColor( 128, 134, 152 ) );
 
     QHBoxLayout *mix_layout = new QHBoxLayout;
