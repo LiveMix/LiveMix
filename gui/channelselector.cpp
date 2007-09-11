@@ -27,6 +27,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QListWidget>
 #include <QtGui/QPushButton>
+#include <QDebug>
 
 namespace LiveMix
 {
@@ -68,7 +69,9 @@ void ChannelSelector::commit()
 //    qDebug( "Returning: %s", _list->currentItem()->text().toStdString().c_str() );
     foreach (QListWidgetItem * item, _list->selectedItems ()) {
         emit selectedChannel(item->text());
+#if QT_VERSION >= 0x040300
         _list->removeItemWidget(item);
+#endif
     }
 }
 void ChannelSelector::commitnquit()
