@@ -649,12 +649,12 @@ void MainWindow::saveEffect(QString& xml, struct effect* effect)
 }
 void MainWindow::about()
 {
-    QMessageBox::about( this, "LiveMix: About LiveMix", "<qt> \
+    QMessageBox::about( this, trUtf8("LiveMix: About LiveMix"), trUtf8("<qt> \
                         <p>Maintainer <b>Stéphane Brunner</b> &lt;stephane.brunner@gmail.com&gt;</p> \
                         <p>LiveMix is a mixer application for live performance using Jack (<a href=\"http://www.jackaudio.org/\">www.jackaudio.org</a>) and LADSPA (<a href=\"http://www.ladspa.org/\">www.ladspa.org</a>). \
                         Check out <a href=\"http://livemix.codingteam.net/\">livemix.codingteam.net</a> for more information and new versions of LiveMix.</p> \
                         <p>This application and all its components are licensed under the GPL.</p> \
-                        </qt>" );
+                        </qt>") );
 }
 void MainWindow::aboutQt()
 {

@@ -27,6 +27,7 @@ V  - load key
   - use QLineEdit (remove set size)
   - fix core dump
   - test main
+- By default open default.lm.
 - fix dump witout jack
 
 - fix hidden effect channel

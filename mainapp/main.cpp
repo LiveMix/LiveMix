@@ -80,12 +80,16 @@ void setPalette( QApplication *pQApp )
     // A text color that contrasts with Highlight.
     defaultPalette.setColor( QPalette::HighlightedText, QColor( 255, 255, 255 ) );
 
+    defaultPalette.setColor( QPalette::Link, QColor( 78, 84, 102 ) );
+    defaultPalette.setColor( QPalette::LinkVisited, QColor( 88, 94, 112 ) );
+
     pQApp->setPalette( defaultPalette );
 }
 
 int main( int argc, char** argv )
 {
     qDebug() << "JackMix starting";
+    //Q_INIT_RESOURCE(i18n);
 
     QApplication *qapp = new QApplication( argc, argv );
     QStringList args = qapp->arguments();
@@ -96,26 +100,27 @@ int main( int argc, char** argv )
     QString sLocale = QLocale::system().name();
     if ( sLocale != "C") {
         QString sTranslationPath = ":i18n";
-        QString total = sTranslationPath + "/" + sTranslationFile + ".qm";
 
-        bool bTransOk = tor.load( total, "." );
+        bool bTransOk = tor.load( "livemix.fr.qm", "." );
+//        bool bTransOk = tor.load( sTranslationFile, sTranslationPath );
         if ( bTransOk ) {
             qDebug() << "Using locale: " + sTranslationPath + "/" + sTranslationFile;
         } else {
-            sTranslationPath = ":/i18n";
-            total = sTranslationPath + "/" + sTranslationFile + ".qm";
-            bTransOk = tor.load( total, "." );
-            if (bTransOk) {
-                qDebug() << "Using locale: " + sTranslationPath + "/" + sTranslationFile;
-            } else {
-                qDebug() << "Warning: no locale found: " + sTranslationPath + "/" + sTranslationFile;
-            }
+            qDebug() << "Warning: no locale found: " + sTranslationPath + "/" + sTranslationFile;
         }
         if (tor.isEmpty()) {
-            qDebug() << "Warning: error loading locale: ";
+            qDebug() << "Warning: error loading locale";
         }
     }
     qapp->installTranslator( &tor );
+
+//    QTranslator translator;
+//    translator.load("livemix.fr.qm", ":i18n");
+//    translator.load("livemix.fr.qm", "/home/sbrunner/workspace/livemix/i18n");
+//    qapp->installTranslator(&translator);
+
+    qDebug() << qapp->trUtf8("Locale Test C.");
+    qDebug() << qapp->tr("Locale Test C.");
 
     setPalette( qapp );
 
