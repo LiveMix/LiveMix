@@ -104,3 +104,6 @@ prefix=/your/prefix ./configure
 
 "
 
+cd i18n
+./updateTranslations.sh
+cd ..

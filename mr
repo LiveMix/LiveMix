@@ -1,8 +1,8 @@
 #! /bin/bash
 
-#rm -rf cache/objects/*
+cd i18n
+./updateTranslations.sh
+cd ..
 
-#scons&&./livemix $1
-
-QTDIR=/usr/share/qt4/
+#make qmake
 qmake-qt4 all.pro&&make&&./livemix $1

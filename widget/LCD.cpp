@@ -156,6 +156,26 @@ void LCDDigit::paintEvent(QPaintEvent *ev)
 
 void LCDDigit::set( char ch )
 {
+//	qDebug()<<(char)'é'<<ch;
+// don't work !
+	if (QString("àáâä").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'a';
+	}
+	else if (QString("éèêë").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'e';
+	}
+	else if (QString("ìíîï").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'i';
+	}
+	else if (QString("òóôö").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'o';
+	}
+	else if (QString("ùúûü").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'u';
+	}
+	else if (QString("ýÿ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'y';
+	}
     int MAXCOL = 66;
     const char keymap[] = {
                               'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ',
