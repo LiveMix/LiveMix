@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "build livemix-$1" ($2 $3)
+echo "build livemix-$1 ($2 $3)"
 
 ./copysrc $1
 
@@ -16,8 +16,6 @@ dpkg-buildpackage $2 $3 -rfakeroot
 #-S -sa
 
 cd ../livemix
-
-rm -rf ../livemix-$1
 
 lintian ../livemix_$1*.dsc
 linda ../livemix_$1*.dsc

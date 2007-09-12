@@ -44,4 +44,4 @@ def parse_ts(filename):
 
 
 
-parse_ts("livemix.fr.ts")
+parse_ts("livemix_fr.ts")

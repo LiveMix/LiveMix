@@ -29,7 +29,7 @@ DEFINES += $$LMDEFINES
 message( LM defines: $$LMDEFINES )
 
 TRANSLATIONS = \
-	../i18n/livemix.fr.ts
+	../i18n/livemix_fr.ts
 
 RESOURCES = ../livemix.qrc
 

@@ -9,13 +9,13 @@ CPP=`find . | grep "\.cpp$"`
 H=`find . | grep "\.h$"`
 FILES="$UI $CPP $H"
 
-CMD="$QTDIR/bin/lupdate ${FILES} -ts"
+CMD="$QTDIR/bin/lupdate-qt4 ${FILES} -ts"
 
-$CMD i18n/livemix.fr.ts
+$CMD i18n/livemix_fr.ts
 
 echo "Creating *.qm files"
 cd i18n
-$QTDIR/bin/lrelease *.ts
+$QTDIR/bin/lrelease-qt4 *.ts
 
 
 echo "Stats"

@@ -25,6 +25,7 @@
 #include <QtCore/QLocale>
 #include <QtGui/QApplication>
 #include <QtGui/QIcon>
+#include <QtGui/QPushButton>
 
 #include "mainwindow.h"
 
@@ -95,13 +96,13 @@ int main( int argc, char** argv )
     QStringList args = qapp->arguments();
     qapp->setWindowIcon(QIcon(":/data/livemix.svg"));
 
-    QTranslator tor( 0 );
-    QString sTranslationFile = QString("livemix.") + QLocale::system().name();
+    QTranslator tor;
+    QString sTranslationFile = QString("livemix_") + QLocale::system().name();
     QString sLocale = QLocale::system().name();
     if ( sLocale != "C") {
         QString sTranslationPath = ":i18n";
 
-        bool bTransOk = tor.load( "livemix.fr.qm", "." );
+        bool bTransOk = tor.load(sTranslationFile, sTranslationPath);
 //        bool bTransOk = tor.load( sTranslationFile, sTranslationPath );
         if ( bTransOk ) {
             qDebug() << "Using locale: " + sTranslationPath + "/" + sTranslationFile;
@@ -119,10 +120,15 @@ int main( int argc, char** argv )
 //    translator.load("livemix.fr.qm", "/home/sbrunner/workspace/livemix/i18n");
 //    qapp->installTranslator(&translator);
 
-    qDebug() << qapp->trUtf8("Locale Test C.");
-    qDebug() << qapp->tr("Locale Test C.");
+//    qDebug() << QPushButton::trUtf8("Locale Test C.");
+//    qDebug() << QPushButton::tr("Locale Test C.");
 
     setPalette( qapp );
+
+//     QPushButton hello(QPushButton::tr("Hello world!"));
+//     hello.resize(100, 30);
+//     hello.show();
+
 
     QString file;
     for( int i=1; i<args.size(); ++i ) {

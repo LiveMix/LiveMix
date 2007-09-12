@@ -50,9 +50,6 @@
      <file>data/mixerline_text_background.png</file>
      <file>data/rotary_center_images.png</file>
      <file>data/rotary_images.png</file>
-     <!--file>i18n/livemix.fr_FR.qm</file>
-     <file>i18n/livemix.fr_FR.ts</file-->
-     <file>i18n/livemix.fr.qm</file>
-     <file>i18n/livemix.fr.ts</file>
+     <file>i18n/livemix_fr.qm</file>
  </qresource>
  </RCC>
