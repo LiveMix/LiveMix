@@ -728,12 +728,6 @@ void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Ba
 
 void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName)
 {
-showMessage("333");
-qDebug()<<(p_eType==Backend::IN);
-qDebug()<<p_sChannelName;
-qDebug()<<p_sReatedChannelName;
-qDebug()<<displayElement(p_eElement);
-qDebug()<<(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->size();
     if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)
             && (*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)
             && (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(p_sReatedChannelName)) {

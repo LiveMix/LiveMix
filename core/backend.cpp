@@ -53,6 +53,7 @@ Backend::Backend( GuiServer_Interface* g ) :  gui( g )
     } else {
         qWarning() << "\n No jack-connection! :(\n\n";
         gui->message( "No Jack-connection :-(", "<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it and try JackMix again.</p><p>If you don't know what I am talking about, than JackMix might not be the program you want...</p></qt>" );
+        exit(-1);
     }
     addOutput( MAIN, true );
     addOutput( MONO, false );

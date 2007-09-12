@@ -26,6 +26,7 @@ V  - load key
 V  - add status
 V  - use QLineEdit (remove set size)
 V  - fix core dump
+  - open key assignement of output !
 
 - test main
 - custum message for mono and phono.
