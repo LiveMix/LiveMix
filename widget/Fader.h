@@ -133,49 +133,12 @@ private:
     float m_fMaxValue;
 
     QPixmap m_back;
+    QPixmap m_top;
+    QPixmap m_bottom;
     QPixmap m_leds;
     QPixmap m_knob;
 };
 
-
-/*
-class Knob : public QWidget
-{
- Q_OBJECT
- public:
-  Knob( QWidget* parent, QString channel );
-  ~Knob();
- 
-  void setValue( float fValue, bool emit = false );
-  float getValue() { return m_fValue; }
-  // in fact the external value is standanrd and internal in dB
-  void setDbValue( float fVal );
-  float getDbValue();
- 
- signals:
-  void valueChanged(QString Channel, float value);
-  // in fact the external value is standanrd and internal in dB
-  void dbValueChanged(QString Channel, float value);
- 
- private:
-  QString _channel;
- 
-  static QPixmap *m_background;
- 
-  int m_nWidgetWidth;
-  int m_nWidgetHeight;
- 
-  float m_fValue;
-  float m_fMousePressValue;
-  float m_fMousePressY;
- 
-  virtual void paintEvent( QPaintEvent *ev );
-  virtual void mousePressEvent( QMouseEvent *ev );
-  virtual void mouseReleaseEvent( QMouseEvent *ev );
-  virtual void mouseMoveEvent( QMouseEvent *ev );
-  virtual void wheelEvent( QWheelEvent *ev );
-};
-*/
 }
 ; //JackMix
 

@@ -156,38 +156,63 @@ void LCDDigit::paintEvent(QPaintEvent *ev)
 
 void LCDDigit::set( char ch )
 {
-//	qDebug()<<(char)'é'<<ch;
-// don't work !
-	if (QString("àáâä").contains(ch, Qt::CaseInsensitive)) {
+	// remove unsupported accent
+	if (QString::fromUtf8("àáâ").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'a';
 	}
-	else if (QString("éèêë").contains(ch, Qt::CaseInsensitive)) {
+	else if (QString::fromUtf8("ê").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'e';
 	}
-	else if (QString("ìíîï").contains(ch, Qt::CaseInsensitive)) {
+	else if (QString::fromUtf8("ìíîï").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'i';
 	}
-	else if (QString("òóôö").contains(ch, Qt::CaseInsensitive)) {
+	else if (QString::fromUtf8("òóô").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'o';
 	}
-	else if (QString("ùúûü").contains(ch, Qt::CaseInsensitive)) {
+	else if (QString::fromUtf8("ùúû").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'u';
 	}
-	else if (QString("ýÿ").contains(ch, Qt::CaseInsensitive)) {
+	else if (QString::fromUtf8("ýÿ").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'y';
 	}
+	if (QString::fromUtf8("ÀÁÂ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'A';
+	}
+	else if (QString::fromUtf8("ËÊ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'E';
+	}
+	else if (QString::fromUtf8("ÌÍÎÏ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'I';
+	}
+	else if (QString::fromUtf8("ÒÓÔ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'O';
+	}
+	else if (QString::fromUtf8("ÙÚÛ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'U';
+	}
+	else if (QString::fromUtf8("ÝŸ").contains(ch, Qt::CaseInsensitive)) {
+		ch = 'Y';
+	}
     int MAXCOL = 66;
-    const char keymap[] = {
+    const QChar keymap[] = {
                               'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ',
                               'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ',
                               '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', ' ',
-                              '-', ':', '/', '\\', ',', ';', '.', '-', ' ', ' ', '#', '~', '+', '*', '!', '?', '$', '?', '%', '&', '(', ')', '[', ']', '{', '}', '=', '<', '>',
-                              '?', '?', ' ', ' ', '?', '?', '?', '@', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-                              '|', '?', '?', '\'', '?', ' ', ' ',
-                              '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '.'
-                              //            '-', ':', '/', '\\', ',', ';', '.', '-', '÷', '×', '#', '~', '+', '*', '!', '?', '$', '?', '%', '&', '(', ')', '[', ']', '{', '}', '=', '<', '>', '«', '»', ' ', ' ',
-                              //            '?', '°', 'ê', '@', '€', '£', '¥', '½', '⅓', '¼', '¾', 'ä', 'ö', 'ü', 'ë', 'è', 'é', '?', 'Ä', 'Ö', 'Ü', 'È', 'É', 'ß', '|', '“', '”', '’', '‚',
-                              //            ' ', ' ', '?', '?', '?', '?', '?', '?', '↑', '↓', '←', '→', '↘', '↙'
+//                              '-', ':', '/', '\\', ',', ';', '.', '-', ' ', ' ', '#', '~', '+', '*', '!', '?', '$', '?', '%', '&', '(', ')', '[', ']', '{', '}', '=', '<', '>',
+//                              '?', '?', ' ', ' ', '?', '?', '?', '@', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
+//                              '|', '?', '?', '\'', '?', ' ', ' ',
+//                              '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '.'
+
+                              '-', ':', '/', '\\', ',', ';', '.', '-', QString::fromUtf8("÷").at(0), QString::fromUtf8("×").at(0), '#', '~', '+', '*', '!', '?', '$', 
+                              '?', '%', '&', '(', ')', '[', ']', '{', '}', '=', '<', '>', QString::fromUtf8("«").at(0), QString::fromUtf8("»").at(0), ' ', ' ',
+                   			  '?', QString::fromUtf8("°").at(0), QString::fromUtf8("ê").at(0), '@', QString::fromUtf8("€").at(0), QString::fromUtf8("£").at(0), QString::fromUtf8("¥").at(0), 
+                   			  QString::fromUtf8("½").at(0), QString::fromUtf8("⅓").at(0), QString::fromUtf8("¼").at(0), QString::fromUtf8("¾").at(0), QString::fromUtf8("ä").at(0), 
+                   			  QString::fromUtf8("ö").at(0), QString::fromUtf8("ü").at(0), QString::fromUtf8("ë").at(0), QString::fromUtf8("è").at(0), QString::fromUtf8("é").at(0), 
+                   			  '?', QString::fromUtf8("Ä").at(0), QString::fromUtf8("Ö").at(0), QString::fromUtf8("Ü").at(0), QString::fromUtf8("È").at(0), 
+                   			  QString::fromUtf8("É").at(0), QString::fromUtf8("ß").at(0), QString::fromUtf8("|").at(0), QString::fromUtf8("“").at(0), QString::fromUtf8("”").at(0), 
+                   			  QString::fromUtf8("’").at(0), QString::fromUtf8("‚").at(0),
+                              ' ', ' ', '?', '?', '?', '?', '?', '?', QString::fromUtf8("↑").at(0), QString::fromUtf8("↓").at(0), QString::fromUtf8("←").at(0), 
+                              QString::fromUtf8("→").at(0), QString::fromUtf8("↘").at(0), QString::fromUtf8("↙").at(0)
                               //¤↖↗⅔©˝̋̏῀‛„‟®
                           };
     for ( int n = 0; n < 142; n++ ) {

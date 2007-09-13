@@ -275,8 +275,7 @@ void LadspaFXProperties::updateControls()
             m_pInputControlLabel.push_back( pLCD );
 
             FaderName *pName = new FaderName( m_pFrame );
-            pName->setFixedHeight(174);
-            pName->resize(pName->width(), 174);
+            pName->setFixedHeight(180);
             pName->move( nInputControl_X + 3, 60 );
             pName->show();
             pName->setText( pControlPort->m_sName );
@@ -297,11 +296,10 @@ void LadspaFXProperties::updateControls()
             } else {
                 // fader
                 Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, NULL, Backend::IN, !pControlPort->m_bLogarithmic );
-                pFader->setFixedHeight(174);
-                pFader->resize(pFader->width(), 174);
+                pFader->setFixedHeight(195);
                 connect( pFader, SIGNAL( valueChanged(Fader*) ), this, SLOT( faderChanged(Fader*) ) );
                 m_pInputControlFaders.push_back( pFader );
-                pFader->move( nInputControl_X + 20, 60 );
+                pFader->move( nInputControl_X + 20, 56 );
                 pFader->show();
                 if (pControlPort->m_bLogarithmic) {
                     pFader->setDbMaxValue( pControlPort->m_fUpperBound );
@@ -349,8 +347,7 @@ void LadspaFXProperties::updateControls()
             m_pOutputControlLabel.push_back( pLCD );
 
             FaderName *pName = new FaderName( m_pFrame );
-            pName->setFixedHeight(174);
-            pName->resize(pName->width(), 174);
+            pName->setFixedHeight(180);
             pName->move( xPos + 3, 60 );
             pName->show();
             pName->setText( pControl->m_sName );
@@ -359,9 +356,8 @@ void LadspaFXProperties::updateControls()
 
             // fader
             Fader *pFader = new Fader( m_pFrame, false, true ); // without knob!
-            pFader->setFixedHeight(174);
-            pFader->resize(pFader->width(), 174);
-            pFader->move( xPos + 20, 60 );
+            pFader->setFixedHeight(195);
+            pFader->move( xPos + 20, 56 );
             //float fInterval = pControl->m_fUpperBound - pControl->m_fLowerBound;
             //float fValue = pControl->m_fControlValue / fInterval;
             pFader->show();

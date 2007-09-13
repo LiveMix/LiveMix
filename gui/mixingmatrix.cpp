@@ -292,7 +292,7 @@ void Widget::faderValueChange(Backend::ChannelType type, QString channel, QStrin
 {
     switch (type) {
     case Backend::IN: {
-            showMessage(trUtf8("Input '%1' fader value : %2.").arg(Backend::instance()->getInput(channel)->display_name).arg(p_fValue));
+            showMessage(trUtf8("Input “%1” fader value : %2.").arg(Backend::instance()->getInput(channel)->display_name).arg(p_fValue));
             break;
         }
     case Backend::OUT: {
@@ -300,15 +300,15 @@ void Widget::faderValueChange(Backend::ChannelType type, QString channel, QStrin
             break;
         }
     case Backend::PRE: {
-            showMessage(trUtf8("Pre fader aux '%1' value : %2.").arg(Backend::instance()->getPre(channel)->display_name).arg(p_fValue));
+            showMessage(trUtf8("Pre fader aux “%1” value : %2.").arg(Backend::instance()->getPre(channel)->display_name).arg(p_fValue));
             break;
         }
     case Backend::POST: {
-            showMessage(trUtf8("Post fader aux '%1' value : %2.").arg(Backend::instance()->getPost(channel)->display_name).arg(p_fValue));
+            showMessage(trUtf8("Post fader aux “%1” value : %2.").arg(Backend::instance()->getPost(channel)->display_name).arg(p_fValue));
             break;
         }
     case Backend::SUB: {
-            showMessage(trUtf8("Sub-groupe '%1' fader value : %2.").arg(Backend::instance()->getSub(channel)->display_name).arg(p_fValue));
+            showMessage(trUtf8("Sub-groupe “%1” fader value : %2.").arg(Backend::instance()->getSub(channel)->display_name).arg(p_fValue));
             break;
         }
     }
@@ -337,7 +337,7 @@ void Widget::doSelect(Backend::ChannelType type, QString channel)
 
     switch (m_eSelectType) {
     case Backend::IN: {
-            showMessage(trUtf8("Input '%1' selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
+            showMessage(trUtf8("Input “%1” selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getInEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
@@ -351,21 +351,21 @@ void Widget::doSelect(Backend::ChannelType type, QString channel)
             break;
         }
     case Backend::PRE: {
-            showMessage(trUtf8("Pre fader aux '%1' selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
+            showMessage(trUtf8("Pre fader aux “%1” selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPreEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case Backend::POST: {
-            showMessage(trUtf8("Post fader aux '%1' selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
+            showMessage(trUtf8("Post fader aux “%1” selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPostEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case Backend::SUB: {
-            showMessage(trUtf8("Sub-groupe '%1' selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
+            showMessage(trUtf8("Sub-groupe “%1” selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getSubEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
@@ -734,7 +734,7 @@ void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backen
         Wrapp* pWrapp = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
         if (!pWrapp->exec()) {
             m_pSelectedWrapper = (WrappVolume*)pWrapp;
-            showMessage(QString("Select %1 %2 on channel %3.").arg(displayElement(p_eElement)).arg(p_sReatedChannelName).arg(p_sChannelName));
+            showMessage(trUtf8("Select %1 %2 on channel %3.").arg(displayElement(p_eElement)).arg(p_sReatedChannelName).arg(p_sChannelName));
         } else {
             m_pSelectedWrapper = NULL;
         }

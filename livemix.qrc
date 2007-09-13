@@ -1,6 +1,6 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
-     <file>data/background_Jack.png</file>
+     <!--file>data/background_Jack.png</file-->
      <file>data/btn_edit_off.png</file>
      <file>data/btn_edit_on.png</file>
      <file>data/btn_edit_over.png</file>
@@ -22,11 +22,15 @@
      <file>data/bypass_off.png</file>
      <file>data/bypass_on.png</file>
      <file>data/bypass_over.png</file>
-     <file>data/cpuLoad_back.png</file>
-     <file>data/cpuLoad_leds.png</file>
-     <file>data/fader_background.png</file>
+     <file>data/cpuLoad_back.svg</file>
+     <file>data/cpuLoad_leds.svg</file>
+     <file>data/fader_bottom.svg</file>
+     <file>data/fader_top.svg</file>
+     <file>data/fader_background.svg</file>
+     <file>data/fader_leds.svg</file>
+     <!--file>data/fader_background.png</file-->
+     <!--file>data/fader_leds.png</file-->
      <file>data/fader_knob.png</file>
-     <file>data/fader_leds.png</file>
      <file>data/knob_images1.png</file>
      <file>data/knob_images.png</file>
      <file>data/LCDLargeFontSet.png</file>

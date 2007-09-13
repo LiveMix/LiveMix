@@ -54,17 +54,29 @@ Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString ch
 	m_fMousePressValue = m_fMinValue - 1;
 
     // Background image
-    QString background_path = ":/data/fader_background.png";
-    bool ok = m_back.load( background_path );
+    QString path = ":/data/fader_background.svg";
+    bool ok = m_back.load( path );
     if( ok == false ) {
-        qDebug() << "Fader: Error loading pixmap: " << ":/data/fader_background.png";
+        qDebug() << "Fader: Error loading pixmap: " << path;
+    }
+
+    path = ":/data/fader_top.svg";
+    ok = m_top.load( path );
+    if( ok == false ) {
+        qDebug() << "Fader: Error loading pixmap: " << path;
+    }
+
+    path = ":/data/fader_bottom.svg";
+    ok = m_bottom.load( path );
+    if( ok == false ) {
+        qDebug() << "Fader: Error loading pixmap: " << path;
     }
 
     // Leds image
-    QString leds_path = ":/data/fader_leds.png";
+    QString leds_path = ":/data/fader_leds.svg";
     ok = m_leds.load( leds_path );
     if( ok == false ) {
-        qDebug() << "Error loading pixmap: " << ":/data/fader_background.png";
+        qDebug() << "Error loading pixmap: " << ":/data/fader_background.svg";
     }
 
     // Knob image
@@ -301,27 +313,29 @@ void Fader::paintEvent( QPaintEvent *ev)
 
     // background
 // painter.drawPixmap( rect(), m_back, QRect( 0, 0, 23, height() ) );
-    painter.drawPixmap( ev->rect(), m_back, ev->rect() );
+    painter.drawPixmap( ev->rect(), m_back.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation), ev->rect() );
+    painter.drawPixmap( QRect(0, 0, width(), 15), m_top, QRect(0, 0, width(), 15) );
+    painter.drawPixmap( QRect(0, height() - 15, width(), 15), m_bottom, QRect(0, 0, width(), 15) );
 
     // peak leds
-    QPixmap leds = m_leds.scaled(m_leds.width(), height());
+    QPixmap leds = m_leds.scaled(m_leds.width(), height() - 30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     float realPeak_L = m_fPeakValue_L - m_fMinPeak;
     //int peak_L = height() - ( realPeak_L / fRange ) * height();
-    int peak_L = (int)(height() - ( realPeak_L / ( m_fMaxPeak - m_fMinPeak ) ) * height());
+    int peak_L = (int)(height() - 30 - ( realPeak_L / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
 
-    if ( peak_L > height() ) {
-        peak_L = height();
+    if (peak_L > height() - 30) {
+        peak_L = height() - 30;
     }
-    painter.drawPixmap( QRect( 0, peak_L, 11, height() - peak_L ), leds, QRect( 0, peak_L, 11, height() - peak_L ) );
+    painter.drawPixmap( QRect( 0, peak_L + 15, 11, height() - 30 - peak_L ), leds, QRect( 0, peak_L, 11, height() - 30 - peak_L ) );
 
 
     float realPeak_R = m_fPeakValue_R - m_fMinPeak;
-    int peak_R = (int)(height() - ( realPeak_R / ( m_fMaxPeak - m_fMinPeak ) ) * height());
-    if ( peak_R > height() ) {
-        peak_R = height();
+    int peak_R = (int)(height() - 30 - ( realPeak_R / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
+    if (peak_R > height() - 30) {
+        peak_R = height() - 30;
     }
-    painter.drawPixmap( QRect( 11, peak_R, 11, height() - peak_R ), leds, QRect( 11, peak_R, 11, height() - peak_R ) );
+    painter.drawPixmap( QRect( 11, peak_R + 15, 11, height() - 30 - peak_R ), leds, QRect( 11, peak_R, 11, height() - 30 - peak_R ) );
 
     if ( m_bWithoutKnob == false ) {
         // knob

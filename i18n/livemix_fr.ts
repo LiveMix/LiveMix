@@ -251,17 +251,17 @@
         <translation>[%1] Propriétés du module d&apos;effet LADSPA</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="426"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="422"/>
         <source>Deactivate</source>
         <translation>Désactive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="429"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="425"/>
         <source>Activate</source>
         <translation>Avitive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="381"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="377"/>
         <source>No plugin</source>
         <translation>Pas de module</translation>
     </message>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="295"/>
         <source>Input &apos;%1&apos; fader value : %2.</source>
-        <translation>Entrée &apos;%1&apos; valuer du fader : %2.</translation>
+        <translation type="obsolete">Entrée &apos;%1&apos; valuer du fader : %2.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="299"/>
@@ -491,22 +491,22 @@
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="303"/>
         <source>Pre fader aux &apos;%1&apos; value : %2.</source>
-        <translation>Valeur du pré-fader &apos;%1&apos; : %2.</translation>
+        <translation type="obsolete">Valeur du pré-fader &apos;%1&apos; : %2.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="307"/>
         <source>Post fader aux &apos;%1&apos; value : %2.</source>
-        <translation>Valeur du post-fader &apos;%1&apos; : %2.</translation>
+        <translation type="obsolete">Valeur du post-fader &apos;%1&apos; : %2.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="311"/>
         <source>Sub-groupe &apos;%1&apos; fader value : %2.</source>
-        <translation>Valeur du sous-groupe &apos;%1&apos; : %2.</translation>
+        <translation type="obsolete">Valeur du sous-groupe &apos;%1&apos; : %2.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="340"/>
         <source>Input &apos;%1&apos; selected.</source>
-        <translation>Entrée &apos;%1&apos; séléctionnée.</translation>
+        <translation type="obsolete">Entrée &apos;%1&apos; séléctionnée.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="347"/>
@@ -516,17 +516,17 @@
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="354"/>
         <source>Pre fader aux &apos;%1&apos; selected.</source>
-        <translation>Pré-fader &apos;%1&apos; séléctionné.</translation>
+        <translation type="obsolete">Pré-fader &apos;%1&apos; séléctionné.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="361"/>
         <source>Post fader aux &apos;%1&apos; selected.</source>
-        <translation>Post-fader &apos;%1&apos; séléctionné.</translation>
+        <translation type="obsolete">Post-fader &apos;%1&apos; séléctionné.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="368"/>
         <source>Sub-groupe &apos;%1&apos; selected.</source>
-        <translation>Sous-groupe &apos;%1&apos; séléctioné.</translation>
+        <translation type="obsolete">Sous-groupe &apos;%1&apos; séléctioné.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="583"/>
@@ -608,6 +608,51 @@
         <source>- %CPU used by LiveMix backend.
 - CPU load given by Jack.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="295"/>
+        <source>Input “%1” fader value : %2.</source>
+        <translation>Entrée « %1 » valuer du fader : %2.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="303"/>
+        <source>Pre fader aux “%1” value : %2.</source>
+        <translation>Valeur du pré-fader « %1 » : %2.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="307"/>
+        <source>Post fader aux “%1” value : %2.</source>
+        <translation>Valeur du post-fader « %1 » : %2.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="311"/>
+        <source>Sub-groupe “%1” fader value : %2.</source>
+        <translation>Valeur du sous-groupe « %1 » : %2.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="340"/>
+        <source>Input “%1” selected.</source>
+        <translation>Entrée « %1 » séléctionnée.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="354"/>
+        <source>Pre fader aux “%1” selected.</source>
+        <translation>Pré-fader « %1 » séléctionné.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="361"/>
+        <source>Post fader aux “%1” selected.</source>
+        <translation>Post-fader « %1 » séléctionné.</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../gui/mixingmatrix.cpp" line="368"/>
+        <source>Sub-groupe “%1” selected.</source>
+        <translation>Sous-groupe « %1 » séléctioné.</translation>
+    </message>
+    <message>
+        <location filename="../gui/mixingmatrix.cpp" line="737"/>
+        <source>Select %1 %2 on channel %3.</source>
+        <translation>Selectionne %1 %2 sur le cannal %3.</translation>
     </message>
 </context>
 <context>
