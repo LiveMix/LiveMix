@@ -31,4 +31,7 @@ sample.files = default.lm
 INSTALLS += target icon sample desktop
 #mime mime2 data
 
-
+#/usr/share/icons/gnome/48x48/mimetypes/gnome-mime-application-x-grisbi.png
+#/usr/share/application-registry/grisbi.applications
+#/usr/share/mime-info/grisbi.mime
+#/usr/share/mime-info/grisbi.keys
