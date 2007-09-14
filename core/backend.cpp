@@ -1108,7 +1108,6 @@ bool Backend::removeSub( QString name )
     subs_order.removeAll( name );
     sub* elem = subs[name];
     subs.remove( name );
-    qDebug() << (int)elem;
     removeOutput( elem->out_l, elem->out_r, name, "sub", elem->stereo );
     delete elem;
     return true;

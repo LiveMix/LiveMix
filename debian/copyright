@@ -24,11 +24,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 On Debian GNU/Linux systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL-2'.
 
-
 The Debian packaging is (C) 2007, Stéphane Brunner <stephane.brunner@gmail.com> and
 is licensed under the GPL, see `/usr/share/common-licenses/GPL-2'.
-
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
-

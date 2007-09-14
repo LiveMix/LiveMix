@@ -20,4 +20,10 @@ cd ../livemix
 lintian ../livemix_$1*.dsc
 linda ../livemix_$1*.dsc
 
+echo "For pbuilder"
+echo "sudo pbuilder create --distribution gusty --othermirror \"deb http://archive.ubuntu.com/ubuntu gutsy main universe multiverse\""
+echo "sudo pbuilder update --distribution gusty"
+echo "cp ../livemix_$1* /home/public"
+echo "sudo pbuilder build --distribution gusty /home/public/livemix_$1-0ubuntu1.dsc"
+echo "----"
 echo "To upload use: dput ../livemix_$1-1.0_source.changes"

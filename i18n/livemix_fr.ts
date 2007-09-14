@@ -53,7 +53,7 @@
     <message>
         <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="193"/>
         <source>Label:</source>
-        <translation>Labele :</translation>
+        <translation>Label :</translation>
     </message>
     <message>
         <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="194"/>
@@ -83,7 +83,7 @@
     <message>
         <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="199"/>
         <source>Maker:</source>
-        <translation>Marque :</translation>
+        <translation type="unfinished">Concepteur :</translation>
     </message>
     <message>
         <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="204"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="1339"/>
         <source>Main</source>
-        <translation type="unfinished">Main</translation>
+        <translation>Main</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="1343"/>
@@ -345,6 +345,239 @@
         <location filename="../gui/mixingmatrix.cpp" line="1366"/>
         <source>alf</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>LiveMix::MainWindow</name>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="93"/>
+        <source>No Channels available :-(</source>
+        <translation>Pas de canal disponible :-(</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="104"/>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="105"/>
+        <source>Open File...</source>
+        <translation>Ouvre le fichier...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="106"/>
+        <source>Save File...</source>
+        <translation>Enregister sous...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="108"/>
+        <source>&amp;Quit</source>
+        <translation>&amp;Quitter</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="110"/>
+        <source>&amp;Edit</source>
+        <translation>&amp;Edition</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="118"/>
+        <source>&amp;Input</source>
+        <translation>&amp;Entrée</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="155"/>
+        <source>Add &amp;Mono...</source>
+        <translation>Ajoute un cannal &amp;mono...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="122"/>
+        <source>Add &amp;Stereo ...</source>
+        <translation>Ajoute un cannal &amp;stéréo...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="161"/>
+        <source>&amp;Remove...</source>
+        <translation>&amp;Enlève...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="128"/>
+        <source>&amp;Pre</source>
+        <translation>&amp;Pré-fader</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="158"/>
+        <source>Add &amp;Stereo...</source>
+        <translation>Ajoute un cannal &amp;stéréo...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="138"/>
+        <source>P&amp;ost</source>
+        <translation>P&amp;ost-fader</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="139"/>
+        <source>Add Internal &amp;mono...</source>
+        <translation>Ajoute un canal &amp;mono interne...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="142"/>
+        <source>Add Internal &amp;stereo...</source>
+        <translation>Ajoute un canal &amp;stéréo interne...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="145"/>
+        <source>Add &amp;External mono...</source>
+        <translation>Ajoute un canal mono &amp;externe...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="148"/>
+        <source>Add External stereo...</source>
+        <translation>Ajoute un canal stéréo externe...</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="154"/>
+        <source>&amp;Sub</source>
+        <translation>&amp;Sous-groups</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="165"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Aide</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="166"/>
+        <source>About &amp;LiveMix</source>
+        <translation>A propos de &amp;LiveMix</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="167"/>
+        <source>About &amp;Qt</source>
+        <translation>A propos de &amp;Qt</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="370"/>
+        <source>LiveMix (*.lm)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="653"/>
+        <source>LiveMix: About LiveMix</source>
+        <translation>LiveMix : A propos de LiveMix</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="658"/>
+        <source>&lt;qt&gt;                         &lt;p&gt;Maintainer &lt;b&gt;St&amp;eacute;phane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;                         &lt;p&gt;LiveMix is a mixer application for live performance using Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) and LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Check out &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; for more information and new versions of LiveMix.&lt;/p&gt;                         &lt;p&gt;This application and all its components are licensed under the GPL.&lt;/p&gt;                         &lt;/qt&gt;</source>
+        <translation>&lt;qt&gt;&lt;p&gt;Maintenance : &lt;b&gt;Stéphane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;&lt;p&gt;LiveMix est une table de mixage logicielle pour utilisation en live. Elle utilise Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) et LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Voire aussi &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; pour plus d&apos;informations et les nouvele version de LiveMix.&lt;/p&gt;&lt;p&gt;Cette application ainsi que tous ces composant sont distribué avec la licence GPL.&lt;/p&gt;&lt;/qt&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="662"/>
+        <source>LiveMix: About Qt</source>
+        <translation>LiveMix : à propos de Qt</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="667"/>
+        <source>Mono in channel name</source>
+        <translation>Nom du canal mono</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="739"/>
+        <source>Channel name</source>
+        <translation>Nom du canal</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="740"/>
+        <source>(empty)</source>
+        <translation>(vide)</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="673"/>
+        <source>Stereo in channel name</source>
+        <translation>Nom du canal stéréo</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="685"/>
+        <source>Mono pre channel name</source>
+        <translation>Nom du pré-fader mono</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="691"/>
+        <source>Stereo pre channel name</source>
+        <translation>Nom du pré-fader stéréo</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="703"/>
+        <source>External mono post channel name</source>
+        <translation>Nom du post-fader mono, externe</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="709"/>
+        <source>External stereo post channel name</source>
+        <translation>Nom du post-fader stéréo, externe</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="715"/>
+        <source>Internal mono post channel name</source>
+        <translation>Nom du post-fader mono</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="721"/>
+        <source>Internal stereo post channel name</source>
+        <translation>Nom du post-fader stéréo</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="733"/>
+        <source>Mono sub channel name</source>
+        <translation>Nom du sous-group mono</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="739"/>
+        <source>Stereo sub channel name</source>
+        <translation>Nom du sous-group stéréo</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="753"/>
+        <source>Delete Input channels</source>
+        <translation>Enlève des entrées</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="753"/>
+        <source>Select the input channels for deletion:</source>
+        <translation>Selectionne les entrées à enlever :</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="775"/>
+        <source>Delete Pre channels</source>
+        <translation>Enlève des pré-fader</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="775"/>
+        <source>Select the pre channels for deletion:</source>
+        <translation>Selectionner le pré-fader à enlever :</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="797"/>
+        <source>Delete Post channels</source>
+        <translation>Enlève des post-fader</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="797"/>
+        <source>Select the post channels for deletion:</source>
+        <translation>Selectionne les post-fader à enlever :</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="819"/>
+        <source>Delete Sub channels</source>
+        <translation>Enlève des sous-groups </translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="819"/>
+        <source>Select the sub channels for deletion:</source>
+        <translation>Selectionne les sous-groups à enlever :</translation>
+    </message>
+    <message>
+        <location filename="../mainapp/mainwindow.cpp" line="842"/>
+        <source>LiveMix started.</source>
+        <translation>LiveMix démarré.</translation>
     </message>
 </context>
 <context>
@@ -607,7 +840,8 @@
         <location filename="../gui/mixingmatrix.cpp" line="145"/>
         <source>- %CPU used by LiveMix backend.
 - CPU load given by Jack.</source>
-        <translation type="unfinished"></translation>
+        <translation>- Pourcentage du CPU utilisé par le core de LiveMix.
+- CPU load fourni par Jack.</translation>
     </message>
     <message encoding="UTF-8">
         <location filename="../gui/mixingmatrix.cpp" line="295"/>
@@ -660,17 +894,17 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="92"/>
         <source>No Channels available :-(</source>
-        <translation>Pas de canal disponible :-(</translation>
+        <translation type="obsolete">Pas de canal disponible :-(</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="103"/>
         <source>&amp;File</source>
-        <translation>&amp;Fichier</translation>
+        <translation type="obsolete">&amp;Fichier</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="164"/>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation type="obsolete">&amp;Aide</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp~" line="165"/>
@@ -680,212 +914,207 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="166"/>
         <source>About &amp;Qt</source>
-        <translation>A propos de &amp;Qt</translation>
+        <translation type="obsolete">A propos de &amp;Qt</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="104"/>
         <source>Open File...</source>
-        <translation>Ouvre le fichier...</translation>
+        <translation type="obsolete">Ouvre le fichier...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="105"/>
         <source>Save File...</source>
-        <translation>Enregister sous...</translation>
+        <translation type="obsolete">Enregister sous...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="107"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Quitter</translation>
+        <translation type="obsolete">&amp;Quitter</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="109"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Edition</translation>
+        <translation type="obsolete">&amp;Edition</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="666"/>
         <source>Mono in channel name</source>
-        <translation>Nom du canal mono</translation>
+        <translation type="obsolete">Nom du canal mono</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="738"/>
         <source>Channel name</source>
-        <translation>Nom du canal</translation>
+        <translation type="obsolete">Nom du canal</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="739"/>
         <source>(empty)</source>
-        <translation>(vide)</translation>
+        <translation type="obsolete">(vide)</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="672"/>
         <source>Stereo in channel name</source>
-        <translation>Nom du canal stéréo</translation>
+        <translation type="obsolete">Nom du canal stéréo</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="684"/>
         <source>Mono pre channel name</source>
-        <translation>Nom du pré-fader mono</translation>
+        <translation type="obsolete">Nom du pré-fader mono</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="690"/>
         <source>Stereo pre channel name</source>
-        <translation>Nom du pré-fader stéréo</translation>
+        <translation type="obsolete">Nom du pré-fader stéréo</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="702"/>
         <source>External mono post channel name</source>
-        <translation>Nom du post-fader mono, externe</translation>
+        <translation type="obsolete">Nom du post-fader mono, externe</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="708"/>
         <source>External stereo post channel name</source>
-        <translation>Nom du post-fader stéréo, externe</translation>
+        <translation type="obsolete">Nom du post-fader stéréo, externe</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="732"/>
         <source>Mono sub channel name</source>
-        <translation>Nom du sous-group mono</translation>
+        <translation type="obsolete">Nom du sous-group mono</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="738"/>
         <source>Stereo sub channel name</source>
-        <translation>Nom du sous-group stéréo</translation>
+        <translation type="obsolete">Nom du sous-group stéréo</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="752"/>
         <source>Delete Input channels</source>
-        <translation>Enlève des entrées</translation>
+        <translation type="obsolete">Enlève des entrées</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="752"/>
         <source>Select the input channels for deletion:</source>
-        <translation>Selectionne les entrées à enlever :</translation>
+        <translation type="obsolete">Selectionne les entrées à enlever :</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="774"/>
         <source>Delete Pre channels</source>
-        <translation>Enlève des pré-fader</translation>
+        <translation type="obsolete">Enlève des pré-fader</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="774"/>
         <source>Select the pre channels for deletion:</source>
-        <translation>Selectionner le pré-fader à enlever :</translation>
+        <translation type="obsolete">Selectionner le pré-fader à enlever :</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="796"/>
         <source>Delete Post channels</source>
-        <translation>Enlève des post-fader</translation>
+        <translation type="obsolete">Enlève des post-fader</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="796"/>
         <source>Select the post channels for deletion:</source>
-        <translation>Selectionne les post-fader à enlever :</translation>
+        <translation type="obsolete">Selectionne les post-fader à enlever :</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="818"/>
         <source>Delete Sub channels</source>
-        <translation>Enlève des sous-groups </translation>
+        <translation type="obsolete">Enlève des sous-groups </translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="818"/>
         <source>Select the sub channels for deletion:</source>
-        <translation>Selectionne les sous-groups à enlever :</translation>
+        <translation type="obsolete">Selectionne les sous-groups à enlever :</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="117"/>
         <source>&amp;Input</source>
-        <translation>&amp;Entrée</translation>
+        <translation type="obsolete">&amp;Entrée</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="154"/>
         <source>Add &amp;Mono...</source>
-        <translation>Ajoute un cannal &amp;mono...</translation>
+        <translation type="obsolete">Ajoute un cannal &amp;mono...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="121"/>
         <source>Add &amp;Stereo ...</source>
-        <translation>Ajoute un cannal &amp;stéréo...</translation>
+        <translation type="obsolete">Ajoute un cannal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="160"/>
         <source>&amp;Remove...</source>
-        <translation>&amp;Enlève...</translation>
+        <translation type="obsolete">&amp;Enlève...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="127"/>
         <source>&amp;Pre</source>
-        <translation>&amp;Pré-fader</translation>
+        <translation type="obsolete">&amp;Pré-fader</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="157"/>
         <source>Add &amp;Stereo...</source>
-        <translation>Ajoute un cannal &amp;stéréo...</translation>
+        <translation type="obsolete">Ajoute un cannal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="137"/>
         <source>P&amp;ost</source>
-        <translation>P&amp;ost-fader</translation>
+        <translation type="obsolete">P&amp;ost-fader</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="144"/>
         <source>Add &amp;External mono...</source>
-        <translation>Ajoute un canal mono &amp;externe...</translation>
+        <translation type="obsolete">Ajoute un canal mono &amp;externe...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="147"/>
         <source>Add External stereo...</source>
-        <translation>Ajoute un canal stéréo externe...</translation>
+        <translation type="obsolete">Ajoute un canal stéréo externe...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="138"/>
         <source>Add Internal &amp;mono...</source>
-        <translation>Ajoute un canal &amp;mono interne...</translation>
+        <translation type="obsolete">Ajoute un canal &amp;mono interne...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="141"/>
         <source>Add Internal &amp;stereo...</source>
-        <translation>Ajoute un canal &amp;stéréo interne...</translation>
+        <translation type="obsolete">Ajoute un canal &amp;stéréo interne...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="153"/>
         <source>&amp;Sub</source>
-        <translation>&amp;Sous-groups</translation>
-    </message>
-    <message>
-        <location filename="../mainapp/mainwindow.cpp" line="369"/>
-        <source>LiveMix (*.lm)</source>
-        <translation></translation>
+        <translation type="obsolete">&amp;Sous-groups</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="661"/>
         <source>LiveMix: About Qt</source>
-        <translation>LiveMix : à propos de Qt</translation>
+        <translation type="obsolete">LiveMix : à propos de Qt</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="714"/>
         <source>Internal mono post channel name</source>
-        <translation>Nom du post-fader mono</translation>
+        <translation type="obsolete">Nom du post-fader mono</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="720"/>
         <source>Internal stereo post channel name</source>
-        <translation>Nom du post-fader stéréo</translation>
+        <translation type="obsolete">Nom du post-fader stéréo</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="841"/>
         <source>LiveMix started.</source>
-        <translation>LiveMix démarré.</translation>
+        <translation type="obsolete">LiveMix démarré.</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="165"/>
         <source>About &amp;LiveMix</source>
-        <translation>A propos de &amp;LiveMix</translation>
+        <translation type="obsolete">A propos de &amp;LiveMix</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="652"/>
         <source>LiveMix: About LiveMix</source>
-        <translation>LiveMix : A propos de LiveMix</translation>
+        <translation type="obsolete">LiveMix : A propos de LiveMix</translation>
     </message>
     <message encoding="UTF-8">
         <location filename="../mainapp/mainwindow.cpp" line="661"/>
@@ -893,11 +1122,6 @@
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Maintenance : &lt;b&gt;Stéphane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;
 &lt;p&gt;LiveMix est une table de mixage logicielle pour utilisation en live. Elle utilise Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) et LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Voire aussi &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; pour plus d&apos;informations et les nouvele version de LiveMix.&lt;/p&gt;
 &lt;p&gt;Cette application ainsi que tous ces composant sont distribué avec la licence GPL.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mainapp/mainwindow.cpp" line="657"/>
-        <source>&lt;qt&gt;                         &lt;p&gt;Maintainer &lt;b&gt;St&amp;eacute;phane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;                         &lt;p&gt;LiveMix is a mixer application for live performance using Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) and LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Check out &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; for more information and new versions of LiveMix.&lt;/p&gt;                         &lt;p&gt;This application and all its components are licensed under the GPL.&lt;/p&gt;                         &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

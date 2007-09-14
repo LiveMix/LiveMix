@@ -1,14 +1,6 @@
-livemix (0.45svn20070912-1.0) unstable; urgency=low
+livemix (0.45svn20070912-0ubuntu1) hardy; urgency=low
 
-  * Weekly snapshot
+  * Initial release (LP : # 138621)
 
  -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Wed, 12 Sep 2007 11:12:46 +0200
-
-
-livemix (0.45svn20070904-1.0) unstable; urgency=low
-
-  * Initial release
-  * To Solve bug https://bugs.launchpad.net/ubuntu/+bug/138621
-
- -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Tue,  4 Sep 2007 10:04:57 +0200
 

@@ -40,7 +40,8 @@
 
 #include <QtXml/QDomDocument>
 
-using namespace LiveMix;
+namespace LiveMix
+{
 
 MainWindow::MainWindow( QWidget* p ) : QMainWindow( p ), _initScheduled( true )
 {
@@ -847,3 +848,6 @@ void MainWindow::scheduleInit()
         _initScheduled = true;
     }
 }
+
+}
+; //LiveMix

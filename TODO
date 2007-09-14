@@ -18,22 +18,16 @@ V - implement logarithmic hint
 V - add first application icon
 V - effect before bal/pan on in channel
 V - better effect implementation on mono channel
+V - key assignement
+V - fix dump witout jack
+V - Translate in french
 
-- key assignement (see mail Mysth-R <mysthr21@gmail.com> of 4 september 2007) ? 
-V  - assign key
-V  - save key
-V  - load key
-V  - add status
-V  - use QLineEdit (remove set size)
-V  - fix core dump
-  - open key assignement of output !
 
-- test main
 - custum message for mono and phono.
 
 - add status for rotary changes
-- By default open default.lm.
-- fix dump witout jack
+- gain unwork
+- by default open default.lm.
 
 - fix hidden effect channel
 - display nb in - out
@@ -42,7 +36,7 @@ V  - fix core dump
 
 ==== 0.6 ====
 - add lash support (help welcome)
-- save jack connection
+- save jack connection ?
 - add possibility to change jack application name
 
 ==== 0.7 ====

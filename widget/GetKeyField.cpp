@@ -67,6 +67,11 @@ void GetKeyField::keyPressEvent(QKeyEvent * p_pEvent) {
 		case Qt::Key_PageDown:
 			setKeySequence(QKeySequence());
 			break;
+		case Qt::Key_Escape:
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+			p_pEvent->setAccepted(false);
+			break;
 		default:
 			setKeySequence(QKeySequence(p_pEvent->key()+p_pEvent->modifiers()));
 	}
