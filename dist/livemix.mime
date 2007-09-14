@@ -1,0 +1,1 @@
+application/livemix;livemix;description="LiveMix - Mix table";nametemplate=%s.lm;test=test "$DISPLAY" != "";priority=7
