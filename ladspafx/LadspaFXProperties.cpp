@@ -23,17 +23,17 @@
 #include "LadspaFXProperties.h"
 #include "LadspaFXSelector.h"
 
-#include "Effects.h"
+#include "effects.h"
 #include "FaderName.h"
 #include "backend.h"
 
-#include <QtGui/QPixmap>
-#include <QtCore/QTimer>
-#include <QtCore/QDebug>
-#include <QtGui/QLabel>
-#include <QtGui/QShowEvent>
-#include <QtGui/QFrame>
-#include <QtGui/QCloseEvent>
+#include <QPixmap>
+#include <QTimer>
+#include <QDebug>
+#include <QLabel>
+#include <QShowEvent>
+#include <QFrame>
+#include <QCloseEvent>
 
 namespace LiveMix
 {

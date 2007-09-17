@@ -20,20 +20,18 @@
  */
 
 #include "LadspaFXSelector.h"
-//#include "LadspaFXSelector.moc"
 
-#include "Effects.h"
-#include "globals.h"
+#include "effects.h"
 
-#include <QtCore/QString>
-#include <QtCore/QDebug>
-#include <QtGui/QPixmap>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtGui/QListWidget>
-#include <QtGui/QListWidgetItem>
+#include <QString>
+#include <QDebug>
+#include <QPixmap>
+#include <QLabel>
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 namespace LiveMix
 {

@@ -22,14 +22,13 @@
 #define BACKEND_INTERFACE_H
 
 #include "guiserver_interface.h"
+#include "channels.h"
 #ifdef LADSPA_SUPPORT
-#include "LadspaFX.h"
+#include "ladspa_fx.h"
 #endif
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtCore/QDebug>
+#include <QList>
+#include <QDebug>
 
 #include <jack/jack.h>
 
@@ -38,12 +37,6 @@ class QDomDocument;
 
 namespace LiveMix
 {
-
-#define MAIN "main"
-#define MONO "mono"
-#define PLF "plf/alf"
-
-class LadspaFXProperties;
 
 int process( ::jack_nframes_t, void* );
 

@@ -60,11 +60,6 @@ WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelT
     connect(p_pWidget, SIGNAL(displayValueChanged(QString)), this, SLOT(displayValueChanged(QString)));
 }
 void WrappVolume::displayValueChanged(QString p_sValue) {
-	QString elem = m_pMatrix->getDisplayElement(m_eElement);
-	if (m_sReatedChannelName.size() > 0) {
-		elem += " ";
-	}
-	
     switch (m_eType) {
     	case Backend::OUT:
             if (m_sChannelName == MAIN && m_sReatedChannelName == PLF) {
@@ -77,16 +72,17 @@ void WrappVolume::displayValueChanged(QString p_sValue) {
 	            m_pMatrix->showMessage(trUtf8("Main fader value: %1.").arg(p_sValue));
             }
             else {
-	            m_pMatrix->showMessage(trUtf8("Output %1 value: %2.").arg(elem).arg(p_sValue));
+	            m_pMatrix->showMessage(trUtf8("Output %1 value: %2.")
+	            		.arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, false)).arg(p_sValue));
             }
             break;
 	    case Backend::IN:
 	    case Backend::PRE:
     	case Backend::POST:
 	    case Backend::SUB:
-            m_pMatrix->showMessage(trUtf8("%1 \"%2\" %3%4 value: %5.").arg(m_pMatrix->getDisplayChannelType(m_eType))
-            		.arg(m_pMatrix->getDisplayNameOfChannel(m_eType, m_sChannelName)).arg(elem)
-            		.arg(m_sDisplayReatedChannelName).arg(p_sValue));
+            m_pMatrix->showMessage(trUtf8("%1 \"%2\" %3 value: %4.").arg(m_pMatrix->getDisplayChannelType(m_eType))
+            		.arg(m_pMatrix->getDisplayNameOfChannel(m_eType, m_sChannelName))
+            		.arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, false)).arg(p_sValue));
             break;
     }
 }

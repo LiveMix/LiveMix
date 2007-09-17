@@ -7,7 +7,7 @@ CONFIG += qt warn_on thread staticlib
 
 
 DESTDIR = ../libs
-INCLUDEPATH += ./objs ../widget ../core
+INCLUDEPATH += ./objs ../widget ../backend
 
 #PRECOMPILED_HEADER  = precompiled.h
 

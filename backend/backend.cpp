@@ -21,12 +21,9 @@
 
 #include "backend.h"
 
-#include "LadspaFX.h"
-#include "globals.h"
-
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QStringList>
+#include <QDebug>
 #include <sys/time.h>
 
 namespace LiveMix
@@ -141,11 +138,8 @@ bool Backend::addInput( jack_port_t** l, jack_port_t** r, QString name, QString 
     return false;
 }
 
-bool Backend::removeOutput( jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo )
+bool Backend::removeOutput( jack_port_t* l, jack_port_t* r, QString /*name*/, QString /*prefix*/, bool stereo )
 {
-    UNUSED(name);
-    UNUSED(prefix);
-
     if (stereo) {
         jack_port_unregister( client, l );
         jack_port_unregister( client, r );
@@ -154,11 +148,8 @@ bool Backend::removeOutput( jack_port_t* l, jack_port_t* r, QString name, QStrin
     }
     return true;
 }
-bool Backend::removeInput( jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo )
+bool Backend::removeInput( jack_port_t* l, jack_port_t* r, QString /*name*/, QString /*prefix*/, bool stereo )
 {
-    UNUSED(name);
-    UNUSED(prefix);
-
     if (stereo) {
         jack_port_unregister( client, l );
         jack_port_unregister( client, r );
@@ -1186,10 +1177,8 @@ effect::~effect()
     delete fx;
 //  if (gui != NULL) delete gui;
 }
-channel::channel(QString p_name, bool p_stereo, jack_nframes_t p_nframes)
+channel::channel(QString p_name, bool p_stereo, jack_nframes_t /*p_nframes*/)
 {
-    UNUSED(p_nframes);
-
     name = p_name;
     display_name = p_name;
     mute = false;

@@ -20,9 +20,24 @@
 #ifndef CHANNELSWIDGETS_H_
 #define CHANNELSWIDGETS_H_
 
+#include "mixingmatrix.h"
+
+#include "Rotary.h"
+#include "Fader.h"
+#include "FaderName.h"
+#include "Button.h"
+#include "ClickableLabel.h"
+
+#include <QWidget>
+#include <QString>
+#include <QMouseEvent>
+#include <QVBoxLayout>
+
 
 namespace LiveMix
 {
+
+class Widget;
 
 class InWidget : public QWidget
 {

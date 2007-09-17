@@ -6,7 +6,7 @@ CONFIG += qt warn_on thread staticlib
 # precompile_header
 
 DESTDIR = ../libs
-INCLUDEPATH += ../core ../widget ../ladspafx ../ladspafx/objs
+INCLUDEPATH += ../backend ../widget ../ladspafx ../ladspafx/objs
 
 #PRECOMPILED_HEADER  = precompiled.h
 

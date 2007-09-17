@@ -21,44 +21,36 @@
 #ifndef MIXINGMATRIX_H
 #define MIXINGMATRIX_H
 
+#include "ChannelsWidgets.h"
+#include "Wrapp.h"
+#include "KeyDo.h"
 #include "backend.h"
-#include "Rotary.h"
-#include "Fader.h"
-#include "FaderName.h"
-#include "Button.h"
-#include "ClickableLabel.h"
 #include "CpuLoadWidget.h"
+#include "LCD.h"
+#include "FaderName.h"
 
-#include <QtGui/QWidget>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QVBoxLayout>
+#include <QWidget>
+#include <QList>
+#include <QMap>
 #include <QScrollArea>
+#include <QHBoxLayout>
 
-
-#if ( QT_POINTER_SIZE == 8 )
-#define pint qint64
-#else
-#define pint qint32
-#endif
 
 namespace LiveMix
 {
 
-class KeyDo;
 class Wrapp;
 class WrappVolume;
 class InWidget;
+class OutWidget;
 class PreWidget;
 class PostWidget;
 class SubWidget;
 class MainWidget;
+class KeyDo;
+
 
 #define CHANNEL_WIDTH 50
-
-//typedef enum TargetType;
 
 class Widget : public QWidget
 {
@@ -84,14 +76,6 @@ public:
     // Create controls. return true on success
     bool createControl();
 
-    /// Layout
-// QSize sizeHint() const { return minimumSizeHint(); }
-
-    /// Mode
-// enum Mode { Normal, Select };
-// Mode mode() const { return _mode; }
-// void mode( Mode n ) { _mode=n; }
-
     void doSelect(Backend::ChannelType, QString channel);
     Backend::ChannelType getSelectedChanelType();
     QString getSetectedChannelName();
@@ -99,8 +83,12 @@ public:
     void showMessage( const QString& msg, int msec=5000 );
 
 	QString getDisplayNameOfChannel(Backend::ChannelType p_eType, QString p_sChannelName);
-	QString getDisplayChannelType(Backend::ChannelType p_eType);
-	QString getShortDisplayChannelType(Backend::ChannelType p_eType);
+	QString getDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst =true);
+	QString getShortDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst =true);
+	QString getDisplayFunction(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+	QString getDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo, bool p_bUpperFirst =true);
+	QString getShortDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
+//	QString getShortAbreviationDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo);
 
     void leftClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
     		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
@@ -116,12 +104,19 @@ public:
     void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
     		QString p_sReatedChannelName ="", QString p_sDisplayReatedChannelName ="");
  	void removeShurtCut(Backend::ChannelType p_eType, QString p_sChannelName);
-    
+
+/*    Fader* createFader(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue,
+    		QString p_sReatedChannelName ="");
+    Rotary* createRotary(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, 
+    		QString p_sReatedChannelName ="");
+    ToggleButton* addToggle(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, bool p_fValue, 
+    		bool p_bStereo, QString p_sReatedChannelName ="");*/
+
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
     void clearKeyToWrapp();
     void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
     
-    QString getDisplayElement(Backend::ElementType p_eElement);
+//    QString getDisplayElement(Backend::ElementType p_eElement);
 
 	bool isGainVisible() {return m_bShowGain; };
 	int getFaderHeight() {return m_iFaderHeight; };
@@ -129,6 +124,10 @@ public:
 	void setGainVisible(bool p_bVisible) {m_bShowGain = p_bVisible; };
 	void setFaderHeight(int p_iHeight);
 	void setEffectFaderHeight(int p_iHeight);
+
+	static void addLine(QVBoxLayout*, bool bold =false);
+	static void addLine(QHBoxLayout*, bool bold =false);
+	static void addSpacer(QVBoxLayout*);
 
 public slots:
     // Fills the empty nodes with 1to1-controls
@@ -183,10 +182,6 @@ private:
 	int m_iFaderHeight;
 	int m_iEffectFaderHeight;
 };
-
-void addLine(QVBoxLayout*, bool bold =false);
-void addLine(QHBoxLayout*, bool bold =false);
-void addSpacer(QVBoxLayout*);
 
 }
 ; // LiveMix

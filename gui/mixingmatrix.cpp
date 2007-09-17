@@ -22,23 +22,22 @@
 
 #include "LadspaFXProperties.h"
 #include "LadspaFXSelector.h"
-#include "globals.h"
 #include "AssigneToPannel.h"
 
-#include <QtCore/QMetaProperty>
-#include <QtCore/QDebug>
-#include <QtCore/QTimer>
-#include <QtGui/QRubberBand>
-#include <QtGui/QLayout>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QCursor>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QLabel>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QFont>
+#include <QMetaProperty>
+#include <QDebug>
+#include <QTimer>
+#include <QRubberBand>
+#include <QLayout>
+#include <QListWidget>
+#include <QPushButton>
+#include <QMenu>
+#include <QAction>
+#include <QCursor>
+#include <QContextMenuEvent>
+#include <QLabel>
+#include <QSpacerItem>
+#include <QFont>
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -523,7 +522,7 @@ void Widget::removesubchannel( QString name )
     }
 }
 
-QString Widget::getDisplayElement(Backend::ElementType p_eElement) {
+/*QString Widget::getDisplayElement(Backend::ElementType p_eElement, bool p_bUpperFirst) {
 	switch (p_eElement) {
 		case Backend::GAIN:
 			return trUtf8("gain");
@@ -551,7 +550,7 @@ QString Widget::getDisplayElement(Backend::ElementType p_eElement) {
 			return trUtf8("mute effect");
 	}
 	return "";
-}
+}*/
 
 void Widget::leftClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent*)
 {
@@ -579,57 +578,176 @@ QString Widget::getDisplayNameOfChannel(Backend::ChannelType p_eType, QString p_
     }
     return displayName;
 }
-QString Widget::getDisplayChannelType(Backend::ChannelType p_eType) {
+QString Widget::getDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst) {
 	QString displayName;
     switch (p_eType) {
    		case Backend::IN:
-            displayName = trUtf8("Input");
+            displayName = trUtf8("input");
             break;
 	    case Backend::OUT:
-            displayName = trUtf8("Output");
+            displayName = trUtf8("output");
             break;
     	case Backend::PRE:
-            displayName = trUtf8("Pre-fader");
+            displayName = trUtf8("pre-fader");
             break;
 	    case Backend::POST:
-            displayName = trUtf8("Post-fader");
+            displayName = trUtf8("post-fader");
             break;
     	case Backend::SUB:
-            displayName = trUtf8("Sub-group");
+            displayName = trUtf8("sub-group");
             break;
     }
-    return displayName;
+    return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
 }
-QString Widget::getShortDisplayChannelType(Backend::ChannelType p_eType) {
+QString Widget::getShortDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst) {
 	QString displayName;
     switch (p_eType) {
    		case Backend::IN:
-            displayName = trUtf8("In");
+            displayName = trUtf8("in");
             break;
 	    case Backend::OUT:
-            displayName = trUtf8("Out");
+            displayName = trUtf8("out");
             break;
     	case Backend::PRE:
-            displayName = trUtf8("Pre");
+            displayName = trUtf8("pre");
             break;
 	    case Backend::POST:
-            displayName = trUtf8("Post");
+            displayName = trUtf8("post");
             break;
     	case Backend::SUB:
-            displayName = trUtf8("Sub");
+            displayName = trUtf8("sub");
             break;
     }
-    return displayName;
+    return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
 }
 
-void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent* ev)
+QString Widget::getDisplayFunction(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst) {
+	bool stereo = false;
+    switch (p_eType) {
+   		case Backend::IN:
+            stereo = Backend::instance()->getInput(p_sChannelName)->stereo;
+            break;
+	    case Backend::OUT:
+            stereo = Backend::instance()->getOutput(p_sChannelName)->stereo;
+            break;
+    	case Backend::PRE:
+            stereo = Backend::instance()->getPre(p_sChannelName)->stereo;
+            break;
+	    case Backend::POST:
+            stereo = Backend::instance()->getPost(p_sChannelName)->stereo;
+            break;
+    	case Backend::SUB:
+            stereo = Backend::instance()->getSub(p_sChannelName)->stereo;
+            break;
+    }
+    return getDisplayFunction(p_eElement, p_sReatedChannelName, stereo, p_bUpperFirst);
+}
+QString Widget::getDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo, bool p_bUpperFirst) {
+	QString displayName;
+    switch (p_eElement) {
+    	case Backend::GAIN:
+    		displayName = trUtf8("gain");
+    		break;
+    	case Backend::MUTE_EFFECT:
+    	case Backend::MUTE:
+    		displayName = trUtf8("mute");
+    		break;
+    	case Backend::PAN_BAL:
+    		displayName = p_bStereo ? trUtf8("bal") : trUtf8("pan");
+    		break;
+    	case Backend::TO_PRE:
+    		displayName = trUtf8("pre-fader \"%1\"").arg(Backend::instance()->getPre(p_sReatedChannelName)->display_name);
+    		break;
+    	case Backend::TO_POST:
+    		displayName = trUtf8("post-fader \"%1\"").arg(Backend::instance()->getPost(p_sReatedChannelName)->display_name);
+    		break;
+    	case Backend::TO_SUB:
+    		displayName = trUtf8("sub-group \"%1\"").arg(Backend::instance()->getSub(p_sReatedChannelName)->display_name);
+    		break;
+    	case Backend::TO_MAIN:
+    		displayName = trUtf8("main");
+    		break;
+    	case Backend::FADER:
+    		if (p_sReatedChannelName == MAIN) {
+    			displayName = trUtf8("main volume");
+    		}
+    		else if (p_sReatedChannelName == PLF) {
+    			displayName = trUtf8("phone volume");
+    		}
+    		else if (p_sReatedChannelName == MONO) {
+    			displayName = trUtf8("mono volume");
+    		}
+    		else {
+    			displayName = trUtf8("volume");
+    		}
+    		break;
+    	case Backend::TO_ALF:
+    		displayName = trUtf8("alf");
+    		break;
+    	case Backend::TO_PLF:
+    		displayName = trUtf8("plf");
+    		break;
+    	case Backend::PRE_VOL:
+    		displayName = trUtf8("pre volume");
+    		break;
+    }
+    return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
+}
+QString Widget::getShortDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo) {
+	QString displayName;
+    switch (p_eElement) {
+    	case Backend::GAIN:
+    		displayName = trUtf8("gain");
+    		break;
+    	case Backend::MUTE_EFFECT:
+    	case Backend::MUTE:
+    		displayName = trUtf8("M");
+    		break;
+    	case Backend::PAN_BAL:
+    		displayName = p_bStereo ? trUtf8("bal") : trUtf8("pan");
+    		break;
+    	case Backend::TO_PRE:
+    		displayName = trUtf8("pre");
+    		break;
+    	case Backend::TO_POST:
+    		displayName = trUtf8("post");
+    		break;
+    	case Backend::TO_SUB:
+    		displayName = "";
+    		break;
+    	case Backend::TO_MAIN:
+    		displayName = trUtf8("LR");
+    		break;
+    	case Backend::FADER:
+    		if (p_sReatedChannelName == MAIN) {
+    			displayName = trUtf8("main");
+    		}
+    		else if (p_sReatedChannelName == PLF) {
+    			displayName = trUtf8("phone");
+    		}
+    		else if (p_sReatedChannelName == MONO) {
+    			displayName = trUtf8("mono");
+    		}
+    		else {
+    			displayName = trUtf8("volume");
+    		}
+    		break;
+    	case Backend::TO_ALF:
+    		displayName = trUtf8("alf");
+    		break;
+    	case Backend::TO_PLF:
+    		displayName = trUtf8("plf");
+    		break;
+    	case Backend::PRE_VOL:
+    		displayName = trUtf8("pre vol");
+    		break;
+    }
+    return displayName;	
+}
+
+void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
+		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent*)
 {
-    UNUSED(p_eType);
-    UNUSED(p_sChannelName);
-    UNUSED(p_eElement);
-    UNUSED(p_sReatedChannelName);
-    UNUSED(ev);
-
 	QKeySequence rActionOnChannelKeySequence;
 	QKeySequence rSelectChannelKeySequence;
 	QKeySequence rActionOnSelectedChannelKeySequence;
@@ -682,10 +800,10 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	// get displayName
 	QString displayName = getDisplayNameOfChannel(p_eType, p_sChannelName);
 	
-	QString displayElement = getDisplayElement(p_eElement);
-	if (p_sReatedChannelName != "") {
+	QString displayElement = getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false);
+/*	if (p_sReatedChannelName != "") {
 		displayElement += " " + p_sDisplayReatedChannelName;
-	}
+	}*/
 	
 	AssigneToPannel* panel = new AssigneToPannel(displayName, displayElement, volume, only_dirrect, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);;
 
@@ -750,7 +868,7 @@ void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Ba
 }
 
 void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName)
+		QString p_sReatedChannelName, QString /*p_sDisplayReatedChannelName*/)
 {
     if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)
             && (*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)
@@ -768,13 +886,13 @@ void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backen
 	            showMessage(trUtf8("Main fader selected."));
             }
             else {
-            	QString elem = getDisplayElement(p_eElement);
-            	elem = elem.left(1).toUpper() + elem.right(elem.size() - 1);
+            	QString elem = getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName);
+/*            	elem = elem.left(1).toUpper() + elem.right(elem.size() - 1);
             	if (p_sReatedChannelName.size() > 0) {
             		elem += " ";
-            	}
+            	}*/
 
-	            showMessage(trUtf8("%1%2 on channel %3 selected.").arg(elem).arg(p_sDisplayReatedChannelName)
+	            showMessage(trUtf8("%1 on channel %2 selected.").arg(elem)/*.arg(p_sDisplayReatedChannelName)*/
 	            		.arg(getDisplayNameOfChannel(p_eType, p_sChannelName)));
             }
         } else {
@@ -844,6 +962,8 @@ qDebug()<<1111;
 void Widget::addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
 		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName)
 {
+    p_pVolume->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
+
     if (!m_mShurtCut.contains(p_eType)) {
         m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
     }
@@ -872,6 +992,9 @@ void Widget::addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString 
 void Widget::addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
 		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName)
 {
+    p_pVolume->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
+    p_pVolume->setText(getShortDisplayFunction(p_eElement, p_sReatedChannelName));
+    
     if (!m_mShurtCut.contains(p_eType)) {
         m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
     }
@@ -1013,7 +1136,7 @@ void Widget::effectFaderHeight() {
 }
 
 
-void addLine(QVBoxLayout* layout, bool bold)
+void Widget::addLine(QVBoxLayout* layout, bool bold)
 {
     /* QFrame* line = new QFrame();
      line->setFrameShape(QFrame::HLine);
@@ -1028,7 +1151,7 @@ void addLine(QVBoxLayout* layout, bool bold)
     layout->addWidget(line);
 }
 
-void addLine(QHBoxLayout* layout, bool bold)
+void Widget::addLine(QHBoxLayout* layout, bool bold)
 {
     QWidget* line = new QWidget;
     QPalette defaultPalette;
@@ -1039,10 +1162,21 @@ void addLine(QHBoxLayout* layout, bool bold)
     layout->addWidget(line);
 }
 
-void addSpacer(QVBoxLayout* layout)
+void Widget::addSpacer(QVBoxLayout* layout)
 {
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
+
+/*Fader* Widget::createFader(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, QString p_sReatedChannelName) {
+}
+Rotary* Widget::createRotary(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, QString p_sReatedChannelName) {
+    rotary = new Rotary(0, p_eElement == PAN_BAL ? Rotary::TYPE_CENTER : Rotary::TYPE_NORMAL, getDisplayFunction(p_eElement, p_sReatedChannelName, false), false, true, p_sChannelName);
+    m_pMatrix->addVolume(rotary, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName);
+    rotary->setDbValue(value);
+    return rotary;
+}
+ToggleButton* Widget::addToggle(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, bool p_fValue, bool p_bStereo, QString p_sReatedChannelName) {
+}*/
 
 }
 ; //LiveMix

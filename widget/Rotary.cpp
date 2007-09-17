@@ -21,8 +21,6 @@
 
 #include "Rotary.h"
 
-#include "globals.h"
-
 #include <QtGui/QPainter>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -113,10 +111,8 @@ Rotary::~ Rotary()
 
 
 
-void Rotary::paintEvent( QPaintEvent* ev )
+void Rotary::paintEvent( QPaintEvent* )
 {
-    UNUSED(ev);
-
     QPainter painter(this);
 
     float fRange = m_fMax - m_fMin;

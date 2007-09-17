@@ -20,6 +20,8 @@
 #ifndef KEYDO_H_
 #define KEYDO_H_
 
+#include "mixingmatrix.h"
+
 
 namespace LiveMix
 {
@@ -29,7 +31,7 @@ class KeyDo
 public:
     virtual ~KeyDo();
     virtual void action() =0;
-    virtual QString name() =0;
+//    virtual QString name() =0;
 
 protected:
     KeyDo(Widget* p_pMatrix);
@@ -65,7 +67,7 @@ public:
     		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
     ~KeyDoDirectAction();
     void action();
-    QString name() {return "KeyDoDirectAction " + m_sChannelName + " " + m_sReatedChannelName + " " + m_pMatrix->getDisplayElement(m_eElement);};
+    QString name();
 
     Backend::ChannelType m_eType;
     QString m_sChannelName;

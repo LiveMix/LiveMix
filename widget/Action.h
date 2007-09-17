@@ -35,7 +35,6 @@ signals:
     void leftClick(QMouseEvent * p_pEvent);
     void rightClick(QMouseEvent * p_pEvent);
     void middleClick(QMouseEvent * p_pEvent);
-
 };
 
 class Volume : public Action

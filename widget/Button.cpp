@@ -19,14 +19,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <QtGui/QPainter>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtSvg/QSvgRenderer>
+#include <QPainter>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QSvgRenderer>
 
 #include "Button.h"
-
-#include "globals.h"
 
 namespace LiveMix
 {
@@ -120,17 +118,15 @@ void Button::setPressed(bool pressed)
 }
 
 
-void Button::enterEvent(QEvent *ev)
+void Button::enterEvent(QEvent*)
 {
-    UNUSED(ev);
     m_bMouseOver = true;
     update();
 }
 
 
-void Button::leaveEvent(QEvent *ev)
+void Button::leaveEvent(QEvent*)
 {
-    UNUSED(ev);
     m_bMouseOver = false;
     update();
 }

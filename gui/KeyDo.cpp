@@ -72,6 +72,10 @@ void KeyDoDirectAction::action()
 {
     m_pMatrix->action(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, m_sDisplayReatedChannelName);
 }
+//QString KeyDoDirectAction::name() {
+//	QString getDisplayFunction(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+//	return "KeyDoDirectAction " + m_sChannelName + " " + m_sReatedChannelName + " " + m_pMatrix->getDisplayElement(m_eElement);
+//}
 
 }
 ; // LiveMix

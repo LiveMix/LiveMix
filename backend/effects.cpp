@@ -18,17 +18,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <Effects.h>
+#include <effects.h>
 
 #ifdef LADSPA_SUPPORT
 
-#include <LadspaFX.h>
+#include <ladspa_fx.h>
 
-#include <QtCore/QDir>
-#include <QtCore/QLibrary>
-#include <QtCore/QDebug>
-#include <QtCore/QCharRef>
-#include <string>
+#include <QDir>
+#include <QLibrary>
+#include <QDebug>
+#include <QCharRef>
 
 #ifdef LRDF_SUPPORT
 #include <lrdf.h>

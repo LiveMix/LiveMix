@@ -21,14 +21,14 @@
 
 #ifdef LADSPA_SUPPORT
 
-#include "LadspaFX.h"
+#include "ladspa_fx.h"
 #include "backend.h"
 #include "db.h"
 
 #include <ladspa.h>
 
-#include <QtCore/QDir>
-#include <QtCore/QDebug>
+#include <QDir>
+#include <QDebug>
 
 #define LADSPA_IS_CONTROL_INPUT(x) (LADSPA_IS_PORT_INPUT(x) && LADSPA_IS_PORT_CONTROL(x))
 #define LADSPA_IS_AUDIO_INPUT(x) (LADSPA_IS_PORT_INPUT(x) && LADSPA_IS_PORT_AUDIO(x))

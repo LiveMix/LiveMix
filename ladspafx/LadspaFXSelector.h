@@ -24,7 +24,7 @@
 #define LADSPA_FX_SELECTOR_H
 
 #include "ui_LadspaFXSelector_UI.h"
-#include "LadspaFX.h"
+#include "ladspa_fx.h"
 
 #include <QtGui/QDialog>
 

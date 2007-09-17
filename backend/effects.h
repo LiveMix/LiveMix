@@ -25,8 +25,8 @@
 
 #ifdef LADSPA_SUPPORT
 
-#include <LadspaFX.h>
-#include <QtCore/QList>
+#include <ladspa_fx.h>
+#include <QList>
 
 namespace LiveMix
 {

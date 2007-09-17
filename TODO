@@ -3,9 +3,6 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 ==== 0.5 ====
 
-V - cut mixing matrix : action, wrapper !
-V - cut backend : channel !
-V - rename core to backend !
 - add : create volume, fader and toggle. (simplify i18n)
 - add channel display name
 - remove store of m_sDisplayReatedChannelName, should be calculated!

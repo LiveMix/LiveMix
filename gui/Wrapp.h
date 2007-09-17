@@ -20,14 +20,22 @@
 #ifndef WRAPP_H_
 #define WRAPP_H_
 
+#include "mixingmatrix.h"
+#include "backend.h"
+#include "Action.h"
+#include "Button.h"
+
 namespace LiveMix
 {
+
+class Widget;
 
 class Wrapp : public QObject
 {
     Q_OBJECT
 public:
-    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
+    		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
 
     virtual bool exec();
 
@@ -53,10 +61,12 @@ class WrappVolume : public Wrapp
 public:
     WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
     Volume* getVolume();
+
 private:
     Volume* m_pWidget;
+
 private slots:
-	void displayValueChanged(QString p_sValue); 
+    void displayValueChanged(QString p_sValue);
 };
 
 class WrappToggle : public Wrapp
@@ -66,6 +76,7 @@ public:
     WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
 
     bool exec();
+
 private:
     ToggleButton* m_pWidget;
 };
