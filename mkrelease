@@ -13,6 +13,7 @@ cp ../livemix-$1-bin.tar.bz2 ../OK
 ./mkdeb $1
 sudo dpkg -i ../livemix_$1-0ubuntu1_i386.deb
 cp ../livemix_$1-0ubuntu1_i386.deb ../OK
+gzip -c ../OK/livemix_$1-0ubuntu1_i386.deb > ../OK/livemix_$1-0ubuntu1_i386.deb.gz
 
 ./mkdebsrc $1
 

@@ -99,7 +99,7 @@ binary-arch: build install
 	dh_link
 	dh_strip
 	dh_compress
-	dh_iconcache
+#	dh_iconcache
 	dh_fixperms
 #	dh_perl
 #	dh_makeshlibs

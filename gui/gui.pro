@@ -19,6 +19,9 @@ HEADERS += \
 		graphicalguiserver.h \
 		mixingmatrix.h \
 		AssigneToPannel.h \
+		Wrapp.h \
+		ChannelsWidgets.h \
+		KeyDo.h \
 
 
 SOURCES += \
@@ -26,3 +29,6 @@ SOURCES += \
 		graphicalguiserver.cpp \
 		mixingmatrix.cpp \
 		AssigneToPannel.cpp \
+		Wrapp.cpp \
+		ChannelsWidgets.cpp \
+		KeyDo.cpp \

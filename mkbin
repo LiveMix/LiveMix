@@ -1,8 +1,8 @@
 #!/bin/bash
 
-prefix=/ ./configure
+prefix=../livemix-$1-bin ./configure
 make
-make INSTALL_ROOT=../livemix-$1-bin install
+make install
 cd ..
 tar -cvjf livemix-$1-bin.tar.bz2 livemix-$1-bin
 rm -rf livemix-$1-bin
