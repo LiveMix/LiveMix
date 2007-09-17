@@ -16,4 +16,5 @@ cp ../livemix_$1-0ubuntu1_i386.deb ../OK
 
 ./mkdebsrc $1
 
+echo "svn commit -m \"Commiting the $1 release of the 'livemix' project.\""
 echo "svn copy http://svn.codingteam.net/code/livemix/trunk http://svn.codingteam.net/code/livemix/tags/$1 -m \"Tagging the $1 release of the 'livemix' project.\""
