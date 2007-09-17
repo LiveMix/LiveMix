@@ -85,6 +85,7 @@ private slots:
     void scheduleInit();
 
 private:
+	void openDefault();
 
     void addInput( QString, bool );
 // void addOutput( QString, bool );
@@ -113,6 +114,7 @@ private:
     QAction *_add_stinchannel_action, *_add_stprechannel_action, *_add_stpostchannel_action, *_add_stsubchannel_action;
     QAction *_add_intpostchannel_action, *_add_stintpostchannel_action;
     QAction *_remove_inchannel_action, *_remove_prechannel_action, *_remove_postchannel_action, *_remove_subchannel_action;
+    QAction *m_pFaderHeight, *m_pEffectFaderHeight, *m_pShowGain;
     QAction *_debugPrint;
     bool _initScheduled;
 };

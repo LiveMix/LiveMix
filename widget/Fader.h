@@ -31,6 +31,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWheelEvent>
 #include <QtGui/QPaintEvent>
+#include <QSvgRenderer>
+
 
 namespace LiveMix
 {
@@ -43,7 +45,7 @@ class Fader : public Volume
     Q_OBJECT
 
 public:
-    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel =NULL, Backend::ChannelType p_type =Backend::IN, bool p_bLinDb =true );
+    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel =NULL, bool p_bLinDb =true );
     ~Fader();
 
     void setMinValue( float fMin );
@@ -104,17 +106,19 @@ public:
 	virtual void mouseDoubleClickEvent(QMouseEvent* ev);
 //    virtual void wheelEvent( QWheelEvent *ev );
     virtual void paintEvent(QPaintEvent *ev);
+    
+    virtual void setFixedHeight ( int h );
+    virtual void setFixedSize ( const QSize & s ); 
+    virtual void setFixedSize ( int w, int h );
 
 signals:
     void valueChanged(Fader*);
     void valueChanged(QString Channel, float value);
     // in fact the external value is standanrd and internal in dB
     void dbValueChanged(QString Channel, float value);
-    void displayValueChanged(Backend::ChannelType, QString Channel, QString value);
 
 private:
     QString _channel;
-    Backend::ChannelType m_type;
 
     float m_fMousePressValue;
     float m_fMousePressY;
@@ -132,10 +136,12 @@ private:
     float m_fMinValue;
     float m_fMaxValue;
 
-    QPixmap m_back;
+    QPixmap m_back_original;
+    QPixmap m_back_scaled;
     QPixmap m_top;
     QPixmap m_bottom;
-    QPixmap m_leds;
+    QPixmap m_leds_original;
+    QPixmap m_leds_scaled;
     QPixmap m_knob;
 };
 

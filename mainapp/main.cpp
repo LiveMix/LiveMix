@@ -141,8 +141,7 @@ int main( int argc, char** argv )
     if ( !file.isEmpty() )
         mw = new LiveMix::MainWindow( file );
     else
-        mw = new LiveMix::MainWindow();
-    mw->show();
+        mw = new LiveMix::MainWindow( QCoreApplication::applicationDirPath() + "/../share/livemix/sample/default.lm" );
 
     int ret = qapp->exec();
 

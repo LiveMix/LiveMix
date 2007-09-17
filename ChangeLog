@@ -1,3 +1,36 @@
+
+==== 0.45svn20070917 ====
+
+- extends LADSPA support
+- implement samplerate hint
+- rm nonreal time effect
+- replace scons with qmake
+- debug remove panel
+- implement toggle hint (better)
+- add LCD display to effect out
+- create a debian package
+- create auto packager for src and bin
+- change all jackmix to LiveMix
+- add sub menu in edit menu
+- implement logarithmic hint
+- add first application icon
+- effect before bal/pan on in channel
+- better effect implementation on mono out channel
+- key assignement
+- fix dump witout jack
+- Translate in french
+- custum message for mono and phono
+- add status for rotary changes
+- by default open default.lm
+- weel support
+- add availibility to ressize the fader, the effect, hide the gain.
+- display nb in - out
+- fix display problem on effect
+- fix effect selector first click
+- add effect cost (CPU use)
+- update wrapper for effect mute
+- desable add existing name
+
 ==== 0.4 ====
 First version of live mix, before il will be jackmix
 

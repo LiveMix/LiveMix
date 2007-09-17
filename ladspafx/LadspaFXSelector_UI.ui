@@ -16,7 +16,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle" >
-   <string>Form1</string>
+   <string/>
   </property>
   <widget class="QWidget" name="Layout33" >
    <property name="geometry" >
@@ -217,7 +217,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### fx name</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -256,7 +256,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### fx label</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -281,8 +281,11 @@
       <strikeout>false</strikeout>
      </font>
     </property>
+    <property name="toolTip" >
+     <string>Input / Output</string>
+    </property>
     <property name="text" >
-     <string>Type:</string>
+     <string>In / Out:</string>
     </property>
    </widget>
    <widget class="QLabel" name="textLabel1_2" >
@@ -318,7 +321,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### fx type</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -334,7 +337,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### fx ID</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -373,11 +376,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### FX maker
-1
-2
-3
-4</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -405,6 +404,9 @@
     <property name="text" >
      <string>Copyright:</string>
     </property>
+    <property name="openExternalLinks" >
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="m_pCopyrightLbl" >
     <property name="geometry" >
@@ -416,11 +418,7 @@
      </rect>
     </property>
     <property name="text" >
-     <string>### copyright
-1
-2
-3
-4</string>
+     <string/>
     </property>
     <property name="alignment" >
      <set>Qt::AlignTop</set>
@@ -429,7 +427,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="0" />
- <includes/>
  <resources/>
  <connections>
   <connection>

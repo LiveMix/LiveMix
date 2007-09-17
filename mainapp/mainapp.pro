@@ -7,7 +7,6 @@ CONFIG += qt warn_on thread
 # precompile_header
 
 LIBS += ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
-QT += xml
 
 PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
 

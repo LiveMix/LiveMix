@@ -32,6 +32,7 @@ public:
     virtual ~Action();
 
 signals:
+    void leftClick(QMouseEvent * p_pEvent);
     void rightClick(QMouseEvent * p_pEvent);
     void middleClick(QMouseEvent * p_pEvent);
 
@@ -50,6 +51,9 @@ public:
     virtual void setDbValue(float fValue) =0;
     virtual float getDbValue() =0;
     virtual void incValue(bool p_bDirection, int p_iStep =1) =0;
+signals:
+    void displayValueChanged(QString value);
+
 };
 
 }

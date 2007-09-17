@@ -178,6 +178,8 @@ void Rotary::setValue( float fValue, bool do_emit )
         float db = db2lin(m_fValue, m_fMin);
         emit dbValueChanged(_channel, db);
         emit dbValueChanged(_channel, _channel2, db);
+
+        emit displayValueChanged(displayDb(m_fValue, m_fMin));
     }
 }
 
@@ -209,6 +211,7 @@ void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 	    setCursor( QCursor( Qt::ArrowCursor ) );
 	    m_pValueToolTip->hide();
 	    m_fMousePressValue = m_fMin - 1;
+    	emit leftClick(ev);
     } else if (ev->button() == Qt::RightButton) {
     	emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {

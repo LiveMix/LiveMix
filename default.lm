@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jackmix versimute="0.4">
+<jackmix version="0.5" faderHeight="200" effectFaderHeight="150" gainVisible="no">
+<!-- => 869px / 900px -->
   <actionbinding>
     <afl key="A" />
     <bal key="B" />

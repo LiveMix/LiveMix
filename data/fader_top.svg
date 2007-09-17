@@ -6,7 +6,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
@@ -15,7 +14,7 @@
    width="23.008814"
    height="15"
    version="1.0"
-   sodipodi:docbase="/home/brunner/workspace/livemix/data"
+   sodipodi:docbase="/home/sbrunner/workspace/livemix/data"
    sodipodi:docname="fader_top.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
@@ -33,7 +32,7 @@
      id="defs5" />
   <sodipodi:namedview
      inkscape:window-height="1118"
-     inkscape:window-width="1600"
+     inkscape:window-width="1598"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      guidetolerance="10.0"
@@ -46,8 +45,8 @@
      inkscape:zoom="10.880749"
      inkscape:cx="-18.408085"
      inkscape:cy="-7.3896234"
-     inkscape:window-x="550"
-     inkscape:window-y="28"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:current-layer="svg2"
      height="106.58px"
      width="4.2751846px"
@@ -80,12 +79,4 @@
      height="2.9106686"
      x="11.142418"
      y="12.166084" />
-  <image
-     y="11.224208"
-     x="0.080082864"
-     id="image2167"
-     height="116"
-     width="23"
-     sodipodi:absref="/home/brunner/workspace/livemix/data/fader_background.png"
-     xlink:href="fader_background.png" />
 </svg>

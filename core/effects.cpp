@@ -207,20 +207,20 @@ QList<LadspaFXInfo*> Effects::getPluginList()
                         }
                     }
 //     if (pFX->m_nIAPorts >= 1 && pFX->m_nOAPorts >= 1) {
-                    if (pFX->m_nIAPorts <= 2 && pFX->m_nOAPorts <= 2) {
+//                    if (pFX->m_nIAPorts <= 2 && pFX->m_nOAPorts <= 2) {
                         m_pluginList.push_back( pFX );
-                    }
+//                    }
                     /*     if ( ( pFX->m_nIAPorts == 2 ) && ( pFX->m_nOAPorts == 2 ) ) { // Stereo plugin
                           m_pluginList.push_back( pFX );
                          }
                          else if ( ( pFX->m_nIAPorts == 1 ) && ( pFX->m_nOAPorts == 1 ) ) { // Mono plugin
                           m_pluginList.push_back( pFX );
                          }*/
-                    else { // not supported plugin
+/*                    else { // not supported plugin
                         qDebug() << QString("Plugin not supported: %1, Label: %2, nb in: %3, nb out: %4")
                         .arg(sPluginName).arg(pFX->m_sLabel).arg(pFX->m_nIAPorts).arg(pFX->m_nOAPorts);
                         delete pFX;
-                    }
+                    }*/
                 }
             } else {
                 qDebug() << "Error loading: " + sPluginName ;
@@ -236,7 +236,7 @@ QList<LadspaFXInfo*> Effects::getPluginList()
 
 LadspaFXGroup* Effects::getLadspaFXGroup()
 {
-    qDebug() << "[getLadspaFXGroup]";
+//    qDebug() << "[getLadspaFXGroup]";
 
 // LadspaFX::getPluginList(); // load the list
 

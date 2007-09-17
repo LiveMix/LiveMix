@@ -2,67 +2,36 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 
 ==== 0.5 ====
-V - extends LADSPA support
-V - implement samplerate hint
-V - rm nonreal time effect
-V - some LADSPA crash due activate never call !!
-V - replace cons with qmake
-V - debug remove panel
-V - implement toggle hint (better)
-V - add LCD display to effect out
-V - create a debian package
-V - create auto packager for src and bin
-V - change all jackmix to LiveMix
-V - add sub menu in edit menu
-V - implement logarithmic hint
-V - add first application icon
-V - effect before bal/pan on in channel
-V - better effect implementation on mono channel
-V - key assignement
-V - fix dump witout jack
-V - Translate in french
 
-
-- custum message for mono and phono.
-
-- add status for rotary changes
-- gain unwork
-- by default open default.lm.
-
-- fix hidden effect channel
-- display nb in - out
-- improve tooltip on effect label
-- add effect cost (CPU use)
+- cut mixing matrix : action, wrapper !
+- cut backend : channel !
+- rename core to backend !
+- add : create volume, fader and toggle. (simplify i18n)
+- add channel display name
+- remove store of m_sDisplayReatedChannelName, should be calculated!
 
 ==== 0.6 ====
 - add lash support (help welcome)
 - save jack connection ?
 - add possibility to change jack application name
+- add MIDI learn support (help welcome, I don't have hardware)
+- add special channel support for compressosr with external signal and crossfader.
+- create some needed effects like better multiBand EQ (+-12 db), white, red, brown noize.
+- add test button (can play a sound for each channel).
+- add confirm message on remove effect.
 
 ==== 0.7 ====
-- MIDI learn - middle click
-
-==== 0.8 ====
-- fix effect selector first click
 - add display name (LabelFader)
 - better GUI (add LabelRotary, LabelSwitch)
-- mv pre channel to out (LabelRotarySwitch)
 - center channel label
-
-==== 0.9 ====
-- display dB on the GUI (artwork welcome, in SVG if possible - to be tested)
-- add test button (can play a sound for each channel).
+- display dB on the GUI (artwork welcome, in SVG)
 
 ==== 1.0 ====
 - bug fix !
 
 ==== post 1.0 (or optional) ====
+- mv pre channel to out (LabelRotarySwitch) ?
 - add integrater player (help welcome)
 - add sound analising in monitor (FFT) (help welcome)
-- add MIDI support (help welcome, I don't have hardware)
 - add mute groupe
-- add possibility to hide some part of the gui (gain, sound analising, ...)
 - add lv2 support (help welcome)
-
-==== Idies ====
-- add crossfader (help to define it is welcone)

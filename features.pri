@@ -22,6 +22,9 @@ UI_HEADERS_DIR = objs
 UI_SOURCES_DIR = objs
 MOC_DIR = objs
 
+QT += svg
+QT += xml
+
 QMAKE_CXXFLAGS_RELEASE += -fpic -O2
 QMAKE_CXXFLAGS_DEBUG += -Wall -Werror -O2 -fpic
 

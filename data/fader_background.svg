@@ -12,7 +12,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    width="23.008814"
-   height="106.58163"
+   height="500"
    version="1.0"
    sodipodi:docbase="/home/sbrunner/workspace/livemix/data"
    sodipodi:docname="fader_background.svg"
@@ -42,9 +42,9 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
-     inkscape:zoom="8.1124759"
+     inkscape:zoom="1"
      inkscape:cx="8.3858932"
-     inkscape:cy="52.740196"
+     inkscape:cy="260.30895"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:current-layer="svg2"
@@ -55,27 +55,27 @@
      style="fill:#3a3e48;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3846"
      width="23.008814"
-     height="106.58"
+     height="499.99237"
      x="0"
-     y="0.00081132411" />
+     y="0.0037959756" />
   <rect
      style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3758"
      width="6.3774433"
-     height="106.58"
+     height="499.99237"
      x="2.9073639"
-     y="0.00081132411" />
+     y="0.0037959756" />
   <rect
      style="fill:#3a3e48;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect2273"
-     width="106.47845"
+     width="499.51596"
      height="4.2751846"
-     x="-106.53003"
+     x="-499.75797"
      y="-8.2336769"
      transform="matrix(0,-1,-1,0,0,0)" />
   <g
      id="g3522"
-     transform="translate(17.913112,63.887705)"
+     transform="matrix(1,0,0,4.6912402,17.913112,299.71257)"
      style="fill:#32353c;fill-opacity:1">
     <rect
        transform="matrix(0,-1,-1,0,0,0)"
@@ -370,20 +370,20 @@
      style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3678"
      width="6.3774433"
-     height="106.58"
+     height="499.99237"
      x="13.724007"
-     y="0.00081132411" />
+     y="0.0037959756" />
   <rect
      style="fill:#3a3e48;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3602"
-     width="106.47845"
+     width="499.51596"
      height="4.2751846"
-     x="-106.53003"
+     x="-499.75797"
      y="-19.050322"
      transform="matrix(0,-1,-1,0,0,0)" />
   <g
      id="g3604"
-     transform="translate(28.729756,63.887705)"
+     transform="matrix(1,0,0,4.6912402,28.729756,299.71257)"
      style="fill:#32353c;fill-opacity:1">
     <rect
        transform="matrix(0,-1,-1,0,0,0)"
@@ -678,36 +678,12 @@
      style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3844"
      width="0.8753354"
-     height="106.58"
+     height="499.99237"
      x="11.06674"
-     y="0.00081132411" />
-  <rect
-     style="fill:#b3b3b3;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect6244"
-     width="0.8753354"
-     height="2.0478001"
-     x="-27.211655"
-     y="0.87462759"
-     transform="matrix(0,-1,1,0,0,0)" />
-  <rect
-     style="fill:#b3b3b3;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect6246"
-     width="0.8753354"
-     height="2.0478001"
-     x="-53.814201"
-     y="0.87462759"
-     transform="matrix(0,-1,1,0,0,0)" />
-  <rect
-     style="fill:#b3b3b3;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect6248"
-     width="0.8753354"
-     height="2.0478001"
-     x="-80.416748"
-     y="0.87462759"
-     transform="matrix(0,-1,1,0,0,0)" />
+     y="0.0037959756" />
   <g
      id="g6299"
-     transform="translate(32,2)">
+     transform="matrix(1,0,0,4.6912402,32,9.3824773)">
     <path
        id="text6252"
        d="M 25.208998,-2.4614412 C 25.072278,-2.4614393 24.969251,-2.386244 24.899916,-2.2358553 C 24.830579,-2.0864396 24.795911,-1.8613422 24.795912,-1.5605623 C 24.795911,-1.2607569 24.830579,-1.0356594 24.899916,-0.88526937 C 24.969251,-0.73585504 25.072278,-0.66114809 25.208998,-0.66114828 C 25.346692,-0.66114809 25.449719,-0.73585504 25.51808,-0.88526937 C 25.587414,-1.0356594 25.622082,-1.2607569 25.622084,-1.5605623 C 25.622082,-1.8613422 25.587414,-2.0864396 25.51808,-2.2358553 C 25.449719,-2.386244 25.346692,-2.4614393 25.208998,-2.4614412 M 25.208998,-2.6958162 C 25.4297,-2.695814 25.598157,-2.5986462 25.714369,-2.4043123 C 25.830578,-2.2109512 25.888684,-1.9297015 25.888685,-1.5605623 C 25.888684,-1.1923976 25.830578,-0.91114784 25.714369,-0.71681234 C 25.598157,-0.52345291 25.4297,-0.42677332 25.208998,-0.42677328 C 24.988294,-0.42677332 24.819837,-0.52345291 24.703627,-0.71681234 C 24.587415,-0.91114784 24.52931,-1.1923976 24.52931,-1.5605623 C 24.52931,-1.9297015 24.587415,-2.2109512 24.703627,-2.4043123 C 24.819837,-2.5986462 24.988294,-2.695814 25.208998,-2.6958162"
@@ -726,7 +702,7 @@
   </g>
   <g
      id="g6276"
-     transform="translate(27.560458,1.2840612)">
+     transform="matrix(1,0,0,4.6912402,27.560458,6.0238373)">
     <text
        transform="matrix(0,1,-1,0,0,0)"
        sodipodi:linespacing="50%"

@@ -48,7 +48,7 @@ public:
     LCDDigit( QWidget *pParent, LCDType type );
     ~LCDDigit();
 
-    void set( char ch );
+    void set( QChar ch );
 
     void setSmallRed();
     void setSmallBlue();

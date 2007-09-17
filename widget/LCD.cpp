@@ -154,7 +154,7 @@ void LCDDigit::paintEvent(QPaintEvent *ev)
 }
 
 
-void LCDDigit::set( char ch )
+void LCDDigit::set( QChar ch )
 {
 	// remove unsupported accent
 	if (QString::fromUtf8("àáâ").contains(ch, Qt::CaseInsensitive)) {
@@ -193,6 +193,9 @@ void LCDDigit::set( char ch )
 	else if (QString::fromUtf8("ÝŸ").contains(ch, Qt::CaseInsensitive)) {
 		ch = 'Y';
 	}
+	else if (QString::fromUtf8("\"").contains(ch, Qt::CaseInsensitive)) {
+		ch = QString::fromUtf8("”").at(0);
+	}
     int MAXCOL = 66;
     const QChar keymap[] = {
                               'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ',
@@ -208,12 +211,13 @@ void LCDDigit::set( char ch )
                    			  '?', QString::fromUtf8("°").at(0), QString::fromUtf8("ê").at(0), '@', QString::fromUtf8("€").at(0), QString::fromUtf8("£").at(0), QString::fromUtf8("¥").at(0), 
                    			  QString::fromUtf8("½").at(0), QString::fromUtf8("⅓").at(0), QString::fromUtf8("¼").at(0), QString::fromUtf8("¾").at(0), QString::fromUtf8("ä").at(0), 
                    			  QString::fromUtf8("ö").at(0), QString::fromUtf8("ü").at(0), QString::fromUtf8("ë").at(0), QString::fromUtf8("è").at(0), QString::fromUtf8("é").at(0), 
-                   			  '?', QString::fromUtf8("Ä").at(0), QString::fromUtf8("Ö").at(0), QString::fromUtf8("Ü").at(0), QString::fromUtf8("È").at(0), 
+                   			  QString::fromUtf8("Ø").at(0), QString::fromUtf8("ç").at(0), QString::fromUtf8("Ç").at(0), QString::fromUtf8("Ä").at(0), QString::fromUtf8("Ö").at(0), QString::fromUtf8("Ü").at(0), QString::fromUtf8("È").at(0), 
                    			  QString::fromUtf8("É").at(0), QString::fromUtf8("ß").at(0), QString::fromUtf8("|").at(0), QString::fromUtf8("“").at(0), QString::fromUtf8("”").at(0), 
                    			  QString::fromUtf8("’").at(0), QString::fromUtf8("‚").at(0),
                               ' ', ' ', '?', '?', '?', '?', '?', '?', QString::fromUtf8("↑").at(0), QString::fromUtf8("↓").at(0), QString::fromUtf8("←").at(0), 
-                              QString::fromUtf8("→").at(0), QString::fromUtf8("↘").at(0), QString::fromUtf8("↙").at(0)
-                              //¤↖↗⅔©˝̋̏῀‛„‟®
+                              QString::fromUtf8("→").at(0), QString::fromUtf8("↘").at(0), QString::fromUtf8("↙").at(0), '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
+                              QString::fromUtf8("©").at(0), QString::fromUtf8("®").at(0)
+                              //¤↖↗⅔˝̋̏῀‛„‟
                           };
     for ( int n = 0; n < 142; n++ ) {
         if ( keymap[ n ] == ch ) {

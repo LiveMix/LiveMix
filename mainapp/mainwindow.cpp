@@ -48,32 +48,9 @@ MainWindow::MainWindow( QWidget* p ) : QMainWindow( p ), _initScheduled( true )
     qDebug() << "MainWindow::MainWindow()";
     Backend::init(new GraphicalGuiServer(this));
     init();
-    QStringList ins = QStringList() << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8";
-// QStringList pres = QStringList() << "pre1" << "pre2";
-// QStringList posts = QStringList() << "post1" << "post2";
-// QStringList subs = QStringList() << "sub1" << "sub2";
 
-    foreach( QString in, ins ) {
-        Backend::instance()->addInput( in, false );
-    }
-    Backend::instance()->addInput( "9-10", true );
-    Backend::instance()->addInput( "11-12", true );
-    Backend::instance()->addPre( "pre1", true );
-    Backend::instance()->addPre( "pre2", false );
-    Backend::instance()->addPost( "post1", true, true );
-    Backend::instance()->addPost( "post2", false, true );
-    Backend::instance()->addSub( "sub1", true );
-    Backend::instance()->addSub( "sub2", false );
-    /* foreach( QString pre, pres ) {
-      Backend::instance()->addPre( pre, false );
-     }
-     foreach( QString post, posts ) {
-      Backend::instance()->addPost( post, false, true );
-     }
-     foreach( QString sub, subs ) {
-      Backend::instance()->addSub( sub, false );
-     }*/
-
+	openDefault();
+		
     _initScheduled = false;
     scheduleInit();
 
@@ -162,11 +139,23 @@ void MainWindow::init()
     connect( _remove_subchannel_action, SIGNAL( triggered() ), this, SLOT( removeSub() ) );
     editSub->addAction( _remove_subchannel_action );
 
+    _mixerwidget = new Widget(this);
+
+    QMenu* preferances = _editmenu->addMenu(trUtf8("Pre&ferances"));
+    m_pShowGain = new QAction(trUtf8("Show/hide &gain"), this );
+    connect(m_pShowGain, SIGNAL(triggered()), _mixerwidget, SLOT(showGain()));
+    preferances->addAction(m_pShowGain);
+    m_pFaderHeight = new QAction(trUtf8("Set &fader height..."), this );
+    connect(m_pFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(faderHeight()));
+    preferances->addAction(m_pFaderHeight);
+    m_pEffectFaderHeight = new QAction(trUtf8("Set &effect fader height..."), this);
+    connect(m_pEffectFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(effectFaderHeight()));
+    preferances->addAction(m_pEffectFaderHeight);
+
     _helpmenu = menuBar()->addMenu(trUtf8("&Help"));
     _helpmenu->addAction(trUtf8("About &LiveMix"), this, SLOT( about() ) );
     _helpmenu->addAction(trUtf8("About &Qt"), this, SLOT( aboutQt() ) );
 
-    _mixerwidget = new Widget(this);
     setCentralWidget( _mixerwidget );
 }
 
@@ -219,11 +208,39 @@ QString MainWindow::fromBool( bool value )
 {
     return value ? "yes" : "no";
 }
+void MainWindow::openDefault() {
+    QStringList ins = QStringList() << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8";
+// QStringList pres = QStringList() << "pre1" << "pre2";
+// QStringList posts = QStringList() << "post1" << "post2";
+// QStringList subs = QStringList() << "sub1" << "sub2";
+
+    foreach( QString in, ins ) {
+        Backend::instance()->addInput( in, false );
+    }
+    Backend::instance()->addInput( "9-10", true );
+    Backend::instance()->addInput( "11-12", true );
+    Backend::instance()->addPre( "pre1", true );
+    Backend::instance()->addPre( "pre2", false );
+    Backend::instance()->addPost( "post1", true, true );
+    Backend::instance()->addPost( "post2", false, true );
+    Backend::instance()->addSub( "sub1", true );
+    Backend::instance()->addSub( "sub2", false );
+    /* foreach( QString pre, pres ) {
+      Backend::instance()->addPre( pre, false );
+     }
+     foreach( QString post, posts ) {
+      Backend::instance()->addPost( post, false, true );
+     }
+     foreach( QString sub, subs ) {
+      Backend::instance()->addSub( sub, false );
+     }*/
+}
 void MainWindow::openFile( QString path )
 {
     //qDebug() << "MainWindow::openFile(" << path << ")";
     Backend::instance()->run(false);
     if ( path.isEmpty() ) {
+    	openDefault();
         return;
     }
 
@@ -247,13 +264,17 @@ void MainWindow::openFile( QString path )
         }
         Backend::instance()->getOutEffects(MAIN)->clear();
 
-        QDomDocument doc( "bla" );
-        doc.setContent( &file );
+        QDomDocument doc("livemix");
+        doc.setContent(&file);
 
         QDomElement livemix = doc.documentElement();
         QString version = livemix.attribute( "version", "0.5" );
 
         if ( version == "0.5" || version == "0.4" ) {
+        	_mixerwidget->setFaderHeight(livemix.attribute("faderHeight", "200").toInt());
+        	_mixerwidget->setEffectFaderHeight(livemix.attribute("effectFaderHeight", "200").toInt());
+        	_mixerwidget->setGainVisible(toBool(livemix.attribute("gainVisible", "no")));
+        	
 			openActionBinding(livemix, Backend::IN, "", true);
 
             for ( QDomElement in = livemix.firstChildElement( "in" ); !in.isNull(); in = in.nextSiblingElement( "in" ) ) {
@@ -359,6 +380,10 @@ void MainWindow::openFile( QString path )
 
         file.close();
     }
+    else {
+    	openDefault();
+    }
+    
 
     _initScheduled = save_initScheduled;
     scheduleInit();
@@ -374,7 +399,10 @@ void MainWindow::saveFile()
     if ( ! path.endsWith( ".lm" ) )
         path += ".lm";
 
-    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<livemix versimute=\"0.5\">";
+    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    xml += QString("<livemix version=\"0.5\" faderHeight=\"%1\" effectFaderHeight=\"%2\" gainVisible=\"%3\">")
+    		.arg(_mixerwidget->getFaderHeight()).arg(_mixerwidget->getEffectFaderHeight()).arg(fromBool(_mixerwidget->isGainVisible()));
+    
     xml += QString( "  <actionbinding>" );
 	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
 		KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
@@ -572,7 +600,7 @@ void MainWindow::openActionBinding(const QDomElement& channel, const Backend::Ch
 		openActionBinding(binding, p_eType, p_sChannelName, "main", Backend::TO_MAIN, p_bMain);
 		openActionBinding(binding, p_eType, p_sChannelName, "afl", Backend::TO_ALF, p_bMain);
 		openActionBinding(binding, p_eType, p_sChannelName, "pfl", Backend::TO_PLF, p_bMain);
-		openActionBinding(binding, p_eType, p_sChannelName, "effect", Backend::MUTE_EFFECT, p_bMain);
+		openActionBindingList(binding, p_eType, p_sChannelName, "effect", Backend::MUTE_EFFECT, p_bMain);
     }
 }
 
@@ -580,20 +608,20 @@ void MainWindow::openActionBinding(const QDomElement& binding, const Backend::Ch
     QDomElement select = binding.firstChildElement(p_sTagName);
     if (!select.isNull()) {
     	if (p_bMain) {
-    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, select.attribute("sub")));
+    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, select.attribute("sub"), ""));
     	}
     	else {
-    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, binding.attribute("sub")));
+    		_mixerwidget->insertKeyToWrapp(QKeySequence(select.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, binding.attribute("sub"), ""));
     	}
     }
 }
 void MainWindow::openActionBindingList(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain) {
     for ( QDomElement attr = binding.firstChildElement(p_sTagName); !attr.isNull(); attr = attr.nextSiblingElement(p_sTagName) ) {
     	if (p_bMain) {
-	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, attr.attribute("sub")));
+	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoChannelAction(_mixerwidget, p_eElemetType, attr.attribute("sub"), ""));
     	}
     	else {
-	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, attr.attribute("sub")));
+	    	_mixerwidget->insertKeyToWrapp(QKeySequence(attr.attribute("key")), new KeyDoDirectAction(_mixerwidget, p_eType, p_sChannelName, p_eElemetType, attr.attribute("sub"), ""));
     	}
     }
 }
@@ -676,7 +704,10 @@ void MainWindow::addInputStereo()
 }
 void MainWindow::addInput( QString name, bool stereo )
 {
-    if ( Backend::instance()->addInput( name, stereo ) ) {
+	if (Backend::instance()->inchannels().contains(name)) {
+		QMessageBox::critical(this, trUtf8("Unable to add input channel"), trUtf8("The name \"%1\" allready exists").arg(name));
+	} 
+	else if ( Backend::instance()->addInput( name, stereo ) ) {
         _mixerwidget->addinchannel( name );
     }
 }
@@ -694,7 +725,10 @@ void MainWindow::addPreStereo()
 }
 void MainWindow::addPre( QString name, bool stereo )
 {
-    if ( Backend::instance()->addPre( name, stereo ) ) {
+	if (Backend::instance()->prechannels().contains(name)) {
+		QMessageBox::critical(this, trUtf8("Unable to add pre-fader channel"), trUtf8("The name \"%1\" allready exists").arg(name));
+	} 
+    else if ( Backend::instance()->addPre( name, stereo ) ) {
         _mixerwidget->addprechannel( name );
     }
 }
@@ -724,7 +758,10 @@ void MainWindow::addPostStereoInternal()
 }
 void MainWindow::addPost( QString name, bool stereo, bool external )
 {
-    if ( Backend::instance()->addPost( name, stereo, external ) ) {
+	if (Backend::instance()->postchannels().contains(name)) {
+		QMessageBox::critical(this, trUtf8("Unable to add post-fader channel"), trUtf8("The name \"%1\" allready exists").arg(name));
+	} 
+    else if ( Backend::instance()->addPost( name, stereo, external ) ) {
         _mixerwidget->addpostchannel( name );
     }
 }
@@ -742,7 +779,10 @@ void MainWindow::addSubStereo()
 }
 void MainWindow::addSub( QString name, bool stereo )
 {
-    if ( Backend::instance()->addSub( name, stereo ) ) {
+	if (Backend::instance()->subchannels().contains(name)) {
+		QMessageBox::critical(this, trUtf8("Unable to add sub-group channel"), trUtf8("The name \"%1\" allready exists").arg(name));
+	} 
+    else if ( Backend::instance()->addSub( name, stereo ) ) {
         _mixerwidget->addsubchannel( name );
     }
 }
@@ -840,6 +880,7 @@ void MainWindow::initMatrix()
     _mixerwidget->init();
     _initScheduled = false;
     _mixerwidget->showMessage(trUtf8("LiveMix started."));
+    show();
 }
 void MainWindow::scheduleInit()
 {

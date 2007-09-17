@@ -27,14 +27,14 @@
 #include <QtGui/QPainter>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
+#include <sys/time.h>
 
 namespace LiveMix
 {
 
-Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel, Backend::ChannelType p_type, bool p_bLinDb )
+Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel, bool p_bLinDb )
         : Volume( pParent )
         , _channel( channel )
-        , m_type(p_type)
         , m_bWithoutKnob( bWithoutKnob )
         , m_bUseIntSteps( bUseIntSteps )
         , m_bLinDb(p_bLinDb)
@@ -55,7 +55,7 @@ Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString ch
 
     // Background image
     QString path = ":/data/fader_background.svg";
-    bool ok = m_back.load( path );
+    bool ok = m_back_original.load( path );
     if( ok == false ) {
         qDebug() << "Fader: Error loading pixmap: " << path;
     }
@@ -74,7 +74,7 @@ Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString ch
 
     // Leds image
     QString leds_path = ":/data/fader_leds.svg";
-    ok = m_leds.load( leds_path );
+    ok = m_leds_original.load( leds_path );
     if( ok == false ) {
         qDebug() << "Error loading pixmap: " << ":/data/fader_background.svg";
     }
@@ -91,6 +91,21 @@ Fader::~Fader()
 // qDebug() << "[Destroy] Fader";
 }
 
+void Fader::setFixedHeight ( int h ) {
+	QWidget::setFixedHeight(h);
+    m_back_scaled = m_back_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_leds_scaled = m_leds_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+}
+void Fader::setFixedSize ( const QSize & s ) {
+	QWidget::setFixedSize(s);
+    m_back_scaled = m_back_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_leds_scaled = m_leds_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+} 
+void Fader::setFixedSize ( int w, int h ) {
+	QWidget::setFixedSize(w, h);
+    m_back_scaled = m_back_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_leds_scaled = m_leds_original.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+}
 
 void Fader::mouseMoveEvent( QMouseEvent *ev )
 {
@@ -128,6 +143,7 @@ void Fader::mouseReleaseEvent(QMouseEvent* ev)
     if (ev->button() == Qt::LeftButton) {
 	    setCursor( QCursor( Qt::ArrowCursor ) );
 	    m_fMousePressValue = m_fMinValue - 1;
+    	emit leftClick(ev);
     } else if (ev->button() == Qt::RightButton) {
     	emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
@@ -168,38 +184,11 @@ void Fader::incValue(bool p_bDirection, int p_iStep)
     }
 }
 
-/*void Fader::wheelEvent ( QWheelEvent *ev )
-{
-    ev->accept();
- 
-    if ( m_bUseIntSteps ) {
-        if ( ev->delta() > 0 ) {
-            setValue( m_fValue + 1, true );
-        } else {
-            setValue( m_fValue - 1, true );
-        }
-    } else {
-        float step = 0.5;
-        if (m_fMinValue != -60) {
-            step = ( m_fMaxValue - m_fMinValue ) / 50.0;
-        }
- 
-        if ( ev->delta() > 0 ) {
-            setValue( m_fValue + step, true );
-        } else {
-            setValue( m_fValue - step, true );
-        }
-    }
-}*/
-
-
 void Fader::setValue( float fVal, bool do_emit )
 {
     if ( fVal > m_fMaxValue ) {
-        //qDebug() <<  fVal << " > " << m_fMaxValue;
         fVal = m_fMaxValue;
     } else if ( fVal < m_fMinValue ) {
-        //qDebug() << fVal << " < " << m_fMinValue;
         fVal = m_fMinValue;
     }
 
@@ -208,7 +197,6 @@ void Fader::setValue( float fVal, bool do_emit )
     }
 
     if ( m_fValue != fVal ) {
-//  qDebug() << "new value: " << fVal;
         m_fValue = fVal;
         update();
     }
@@ -217,7 +205,7 @@ void Fader::setValue( float fVal, bool do_emit )
         emit valueChanged(this);
         emit valueChanged(_channel, m_fValue);
         emit dbValueChanged(_channel, m_bLinDb ? db2lin(m_fValue, m_fMinValue) : db2lin(m_fValue));
-        emit displayValueChanged(m_type, _channel, displayDb(m_fValue, m_fMinValue));
+        emit displayValueChanged(displayDb(m_fValue, m_fMinValue));
     }
 }
 
@@ -307,37 +295,76 @@ void Fader::setPeak_R( float fPeak )
 }
 
 
-void Fader::paintEvent( QPaintEvent *ev)
+void Fader::paintEvent(QPaintEvent* ev)
 {
+//struct timeval start;
+//gettimeofday(&start, NULL);
+
     QPainter painter(this);
 
+//struct timeval end;
+//gettimeofday(&end, NULL);
+//qDebug()<<(end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
     // background
-// painter.drawPixmap( rect(), m_back, QRect( 0, 0, 23, height() ) );
-    painter.drawPixmap( ev->rect(), m_back.scaled(width(), height()-30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation), ev->rect() );
+    painter.drawPixmap( ev->rect(), m_back_scaled, ev->rect() );
     painter.drawPixmap( QRect(0, 0, width(), 15), m_top, QRect(0, 0, width(), 15) );
     painter.drawPixmap( QRect(0, height() - 15, width(), 15), m_bottom, QRect(0, 0, width(), 15) );
 
     // peak leds
-    QPixmap leds = m_leds.scaled(m_leds.width(), height() - 30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
+	if (m_fMaxPeak > m_fMinPeak) {
+/*
+//    QSvgRenderer leds = m_leds;//.scaled(m_leds.width(), height() - 30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     float realPeak_L = m_fPeakValue_L - m_fMinPeak;
-    //int peak_L = height() - ( realPeak_L / fRange ) * height();
-    int peak_L = (int)(height() - 30 - ( realPeak_L / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
-
-    if (peak_L > height() - 30) {
-        peak_L = height() - 30;
+    int peak_L = (int)(realPeak_L / (m_fMaxPeak - m_fMinPeak) * 36);
+    if (peak_L > 36) {
+        peak_L = 36;
     }
-    painter.drawPixmap( QRect( 0, peak_L + 15, 11, height() - 30 - peak_L ), leds, QRect( 0, peak_L, 11, height() - 30 - peak_L ) );
-
+//    QRect viewport = painter.viewport();
+//    qDebug()<<m_leds.defaultSize().height()<<0<<peak_L<<m_leds.defaultSize().width() / 2<<m_leds.defaultSize().height() - peak_L;
+//    m_leds.setViewBox(QRectF(0, peak_L, m_leds.defaultSize().width() / 2, m_leds.defaultSize().height() - peak_L));
+//    peak_L = peak_L * (height()-30) / m_leds.defaultSize().height();
+//    qDebug()<<height()<<height() - 30 - peak_L;
+//    painter.setViewport(QRect(0, (int)peak_L + 15, width() / 2, height() - 30 - (int)peak_L));
+	for (int i = 0 ; i < peak_L ; i++) {
+		QRectF rect = m_leds.boundsOnElement(QString("l%1").arg(i+1));
+		rect.setY(rect.y() * (height()-30) / m_leds.defaultSize().height() + 15);
+		rect.setHeight(2 * (height()-30) / m_leds.defaultSize().height()); //2.1258144
+	    m_leds.render(&painter, QString("l%1").arg(i+1), rect);
+	}
+//    m_leds.render(&painter, QRectF(0, peak_L + 15, width() / 2, height() - 30 - peak_L));
 
     float realPeak_R = m_fPeakValue_R - m_fMinPeak;
-    int peak_R = (int)(height() - 30 - ( realPeak_R / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
-    if (peak_R > height() - 30) {
-        peak_R = height() - 30;
+    int peak_R = (int)(m_leds.defaultSize().height() - (realPeak_R / (m_fMaxPeak - m_fMinPeak)) * m_leds.defaultSize().height());
+    if (peak_R > m_leds.defaultSize().height()) {
+        peak_R = m_leds.defaultSize().height();
     }
-    painter.drawPixmap( QRect( 11, peak_R + 15, 11, height() - 30 - peak_R ), leds, QRect( 11, peak_R, 11, height() - 30 - peak_R ) );
+//    m_leds.setViewBox(QRectF(m_leds.defaultSize().width() / 2, peak_R, m_leds.defaultSize().width() / 2, m_leds.defaultSize().height() - peak_R));
+    peak_R = peak_R * (height()-30) / m_leds.defaultSize().height();
+//    painter.setViewport(QRect(0, (int)peak_R + 15, width() / 2, height() - 30 - (int)peak_R));
+//    m_leds.render(&painter, QRectF(width() / 2, peak_R + 15, width() / 2, height() - 30 - peak_R));
 
-    if ( m_bWithoutKnob == false ) {
+//    painter.setViewport(viewport);
+*/
+	    float realPeak_L = m_fPeakValue_L - m_fMinPeak;
+	    //int peak_L = height() - ( realPeak_L / fRange ) * height();
+	    int peak_L = (int)(height() - 30 - ( realPeak_L / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
+	    if (peak_L > height() - 30) {
+	        peak_L = height() - 30;
+	    }
+	    painter.drawPixmap( QRect( 0, peak_L + 15, width() / 2, height() - 30 - peak_L ), m_leds_scaled, 
+	    					QRect( 0, peak_L     , width() / 2, height() - 30 - peak_L ) );
+	
+	
+	    float realPeak_R = m_fPeakValue_R - m_fMinPeak;
+	    int peak_R = (int)(height() - 30 - ( realPeak_R / ( m_fMaxPeak - m_fMinPeak ) ) * (height() - 30));
+	    if (peak_R > height() - 30) {
+	        peak_R = height() - 30;
+	    }
+	    painter.drawPixmap( QRect( width() / 2, peak_R + 15, width() / 2, height() - 30 - peak_R ), m_leds_scaled, 
+	    					QRect( width() / 2, peak_R     , width() / 2, height() - 30 - peak_R ) );
+	}
+
+    if (!m_bWithoutKnob) {
         // knob
         static const uint knob_height = 29;
         static const uint knob_width = 15;

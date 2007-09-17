@@ -223,7 +223,8 @@ int process( jack_nframes_t nframes, void* arg )
 
         struct timeval start;
         bool calculate_pk = false;
-        if (++backend->count % ( 10000 / nframes ) == 0 ) {
+//        if (++backend->count % ( 5000 / nframes ) == 0  && backend->getCPULoad() < 95 && backend->count / backend->getCPULoad() > (300 / nframes)) {
+        if (backend->getCPULoad() < 95 && ++backend->count * (100 - backend->getCPULoad()) > (300000.0 / nframes)) {
             gettimeofday(&start, NULL);
             backend->count = 0;
             calculate_pk = true;
@@ -773,13 +774,13 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
                 }
             }
         }
-        if (p_bCalculatePk && pFX->m_iCount++ % 20 == 0) {
+        if (p_bCalculatePk && ++pFX->m_iCount % 5 == 0) {
             //  qDebug()<<pFX->fx->getPluginName()<<(int)left_channel<<(int)right_channel<<(pFX->fx->getPluginType() == LadspaFX::STEREO_FX);
             pFX->m_iCount = 0;
             struct timeval end;
             gettimeofday(&end, NULL);
             float time = (end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
-            pFX->m_fCpuUse = pFX->m_fCpuUse + (time / m_fMaxProcessTime) / 2;
+            pFX->m_fCpuUse = (pFX->m_fCpuUse + (time / m_fMaxProcessTime)) / 2;
         }
     }
 #endif

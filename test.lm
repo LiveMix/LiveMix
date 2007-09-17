@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jackmix version="0.5" faderHeight="500" effectFaderHeight="150" gainVisible="yes">
+  <in name="1" gain="0" volume="0">
+  </in>
+  <in name="2" gain="0.01" volume="0.01">
+  </in>
+  <in name="3" gain="0.1" volume="0.1">
+  </in>
+  <in name="4" gain="1" volume="1">
+  </in>
+  <in name="5" gain="10" volume="10">
+  </in>
+</jackmix>

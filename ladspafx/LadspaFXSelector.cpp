@@ -154,7 +154,7 @@ QString LadspaFXSelector::getSelectedFX()
 void LadspaFXSelector::pluginSelected()
 {
 #ifdef LADSPA_SUPPORT
-    qDebug() << "[pluginSelected]";
+//    qDebug() << "[pluginSelected]";
 
     if (!m_pPluginsListBox->selectedItems().isEmpty()) {
         m_sSelectedPluginName = m_pPluginsListBox->selectedItems().first()->text();
@@ -167,18 +167,19 @@ void LadspaFXSelector::pluginSelected()
                 m_nameLbl->setText(  nFxInfo->m_sName );
                 m_labelLbl->setText(  nFxInfo->m_sLabel );
 
-                if ( ( nFxInfo->m_nIAPorts == 2 ) && ( nFxInfo->m_nOAPorts == 2 ) ) {  // Stereo plugin
+				m_typeLbl->setText(QString("%1 / %2").arg(nFxInfo->m_nIAPorts).arg(nFxInfo->m_nOAPorts));
+/*                if ( ( nFxInfo->m_nIAPorts == 2 ) && ( nFxInfo->m_nOAPorts == 2 ) ) {  // Stereo plugin
                     m_typeLbl->setText( trUtf8("Stereo") );
                 } else if ( ( nFxInfo->m_nIAPorts == 1 ) && ( nFxInfo->m_nOAPorts == 1 ) ) { // Mono plugin
                     m_typeLbl->setText( trUtf8("Mono") );
                 } else {
                     // not supported
                     m_typeLbl->setText( trUtf8("Not supported") );
-                }
+                }*/
 
-                m_pIDLbl->setText(  QString("%1").arg(nFxInfo->m_sID) );
-                m_pMakerLbl->setText(  nFxInfo->m_sMaker );
-                m_pCopyrightLbl->setText(  nFxInfo->m_sCopyright );
+                m_pIDLbl->setText(QString("%1").arg(nFxInfo->m_sID));
+                m_pMakerLbl->setText(nFxInfo->m_sMaker);
+                m_pCopyrightLbl->setText(nFxInfo->m_sCopyright);
 
                 break;
             }
@@ -198,11 +199,10 @@ void LadspaFXSelector::pluginSelected()
 
 
 
-void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem * currentItem, QTreeWidgetItem * previous )
+void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem * currentItem, QTreeWidgetItem* /*previous*/ )
 {
-    UNUSED(previous);
 #ifdef LADSPA_SUPPORT
-    //qDebug() << "new selection: " + currentItem->text(0) );
+//qDebug() << "new selection: " + currentItem->text(0);
 
     m_pOkBtn->setEnabled(false);
     m_nameLbl->setText( "" );
@@ -212,11 +212,10 @@ void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem 
     m_pMakerLbl->setText( "" );
     m_pCopyrightLbl->setText( "" );
 
-    // nothing was selected
-    if ( m_pGroupsListView->selectedItems().size() == 0 ) {
-        return;
-    }
-
+    // nothing was selected => to early
+//    if ( m_pGroupsListView->selectedItems().size() == 0 ) {
+//        return;
+//    }
 
     QString itemText = currentItem->text( 0 );
 

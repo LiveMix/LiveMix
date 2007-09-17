@@ -21,13 +21,6 @@
 #ifndef MIXINGMATRIX_H
 #define MIXINGMATRIX_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QVBoxLayout>
-
 #include "backend.h"
 #include "Rotary.h"
 #include "Fader.h"
@@ -35,6 +28,15 @@
 #include "Button.h"
 #include "ClickableLabel.h"
 #include "CpuLoadWidget.h"
+
+#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtGui/QMenu>
+#include <QtGui/QAction>
+#include <QtGui/QVBoxLayout>
+#include <QScrollArea>
+
 
 #if ( QT_POINTER_SIZE == 8 )
 #define pint qint64
@@ -96,35 +98,55 @@ public:
 
     void showMessage( const QString& msg, int msec=5000 );
 
-    void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
-    void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+	QString getDisplayNameOfChannel(Backend::ChannelType p_eType, QString p_sChannelName);
+	QString getDisplayChannelType(Backend::ChannelType p_eType);
+	QString getShortDisplayChannelType(Backend::ChannelType p_eType);
 
-    void action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
-    void addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
-    void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName ="");
+    void leftClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
+    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
+    void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
+    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
+    void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
+    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
+
+    void action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
+    		QString p_sDisplayReatedChannelName);
+    void addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
+    		QString p_sReatedChannelName ="", QString p_sDisplayReatedChannelName ="");
+    void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
+    		QString p_sReatedChannelName ="", QString p_sDisplayReatedChannelName ="");
+ 	void removeShurtCut(Backend::ChannelType p_eType, QString p_sChannelName);
     
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
-    void clearKeyToWrapp() { return m_mKeyToWrapp.clear(); };
+    void clearKeyToWrapp();
     void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
     
-    QString displayElement(Backend::ElementType p_eElement);
+    QString getDisplayElement(Backend::ElementType p_eElement);
+
+	bool isGainVisible() {return m_bShowGain; };
+	int getFaderHeight() {return m_iFaderHeight; };
+	int getEffectFaderHeight() {return m_iEffectFaderHeight; };
+	void setGainVisible(bool p_bVisible) {m_bShowGain = p_bVisible; };
+	void setFaderHeight(int p_iHeight);
+	void setEffectFaderHeight(int p_iHeight);
 
 public slots:
     // Fills the empty nodes with 1to1-controls
     void init();
     void removeFX(LadspaFXProperties*, struct effect*);
 
+	void showGain();
+	void faderHeight();
+	void effectFaderHeight();
+
 private slots:
     void update();
     void select(Backend::ChannelType, QString channel);
     void addFX();
     void displayFX(struct effect *fx, Backend::ChannelType p_eType, QString p_sChannelName);
-    void faderValueChange(Backend::ChannelType type, QString channel, QString p_fValue);
     void onStatusTimerEvent();
 
 private:
-    FaderName *effectName;
-
     QHBoxLayout *in_layout;
     QHBoxLayout *pre_layout;
     QHBoxLayout *post_layout;
@@ -136,12 +158,14 @@ private:
     QMap<QString, PostWidget*> post;
     QMap<QString, SubWidget*> sub;
     MainWidget* main_widget;
+	QScrollArea *m_pEffectScrollArea;
 
     LCDDisplay* m_pStatusLabel;
     CpuLoadWidget *cpuLoad;
     QTimer *m_pStatusTimer;
 
 // EffectData effect;
+    FaderName *effectName;
     QWidget* m_pEffectStart;
 
     enum Backend::ChannelType m_eSelectType;
@@ -154,6 +178,10 @@ private:
 
     void keyPressEvent (QKeyEvent * p_pEvent);
     void wheelEvent (QWheelEvent *p_pEvent);
+
+	bool m_bShowGain;
+	int m_iFaderHeight;
+	int m_iEffectFaderHeight;
 };
 
 class KeyDo
@@ -181,64 +209,72 @@ public:
 class KeyDoChannelAction : public KeyDo
 {
 public:
-    KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
     ~KeyDoChannelAction();
     void action();
     QString name() {return "KeyDoChannelAction";};
 
     Backend::ElementType m_eElement;
     QString m_sReatedChannelName;
+    QString m_sDisplayReatedChannelName;
 };
 class KeyDoDirectAction : public KeyDo
 {
 public:
-    KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
+    		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
     ~KeyDoDirectAction();
     void action();
-    QString name() {return "KeyDoDirectAction " + m_sChannelName + " " + m_sReatedChannelName + " " + m_pMatrix->displayElement(m_eElement);};
+    QString name() {return "KeyDoDirectAction " + m_sChannelName + " " + m_sReatedChannelName + " " + m_pMatrix->getDisplayElement(m_eElement);};
 
     Backend::ChannelType m_eType;
     QString m_sChannelName;
     Backend::ElementType m_eElement;
     QString m_sReatedChannelName;
+    QString m_sDisplayReatedChannelName;
 };
 
 class Wrapp : public QObject
 {
     Q_OBJECT
 public:
-    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
 
     virtual bool exec();
 
 public slots:
+    void leftClick(QMouseEvent* p_ev);
     void middleClick(QMouseEvent* p_ev);
     void rightClick(QMouseEvent* p_ev);
 
-private:
+protected:
     Widget* m_pMatrix;
 
     Backend::ChannelType m_eType;
     QString m_sChannelName;
     Backend::ElementType m_eElement;
     QString m_sReatedChannelName;
+	QString m_sDisplayChannelName;
+	QString m_sDisplayReatedChannelName;
 };
 
 class WrappVolume : public Wrapp
 {
     Q_OBJECT
 public:
-    WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
     Volume* getVolume();
 private:
     Volume* m_pWidget;
+private slots:
+	void displayValueChanged(QString p_sValue); 
 };
 
 class WrappToggle : public Wrapp
 {
     Q_OBJECT
 public:
-    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName);
+    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
 
     bool exec();
 private:
@@ -365,20 +401,21 @@ public:
 
     void update();
 
-    Fader* fader;
-    Rotary *phone;
-    ToggleButton* mute;
-    Rotary *mono;
-    Rotary *bal;
-    ToggleButton* alf;
-
     void mouseReleaseEvent(QMouseEvent* ev);
+
+    Fader* fader;
 
 signals:
     void clicked(Backend::ChannelType, QString channel);
 
 private:
     Widget* m_pMatrix;
+
+    Rotary *phone;
+    ToggleButton* mute;
+    Rotary *mono;
+    Rotary *bal;
+    ToggleButton* alf;
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 

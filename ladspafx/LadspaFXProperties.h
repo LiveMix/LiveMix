@@ -52,6 +52,7 @@ public:
 
     static LadspaFX* getFXSelector(LadspaFX* oldFx);
     ToggleButton* getActivateButton() { return m_pActivateBtn; };
+    void setFaderHeight(int p_iHeight);
     
 public slots:
     void faderChanged(Fader * ref);
@@ -78,7 +79,6 @@ private:
     QList<LCDDisplay*> m_pOutputControlLabel;
 
     QScrollArea* m_pScrollArea;
-//  QFrame *m_pFrame;
     QWidget *m_pFrame;
 
 //  QPushButton *m_pSelectFXBtn;
@@ -86,6 +86,8 @@ private:
     Button *m_pRemoveBtn;
 
     QTimer *m_pTimer;
+
+	int m_iFaderHeight;
 };
 
 }

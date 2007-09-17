@@ -5,7 +5,6 @@ TEMPLATE = lib
 CONFIG += qt warn_on thread staticlib
 # precompile_header
 
-
 DESTDIR = ../libs
 INCLUDEPATH += ../core
 
