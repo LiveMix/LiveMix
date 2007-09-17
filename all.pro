@@ -1,7 +1,7 @@
 include(features.pri)
 
 TEMPLATE = subdirs
-SUBDIRS = core widget ladspafx gui mainapp
+SUBDIRS = backend widget ladspafx gui mainapp
 
 # installs the executable
 target.path = $$prefix/bin

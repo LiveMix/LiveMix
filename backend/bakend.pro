@@ -23,6 +23,7 @@ HEADERS += \
 		guiserver_interface.h \
 		LadspaFX.h \
 		db.h \
+		channels.h \
 
 
 SOURCES += \
