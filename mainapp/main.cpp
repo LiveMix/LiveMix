@@ -145,7 +145,7 @@ int main( int argc, char** argv )
 
     int ret = qapp->exec();
 
-    delete mw;
+//    delete mw;
 
     return ret;
 }

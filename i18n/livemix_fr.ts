@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr_FR">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -730,7 +729,7 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="144"/>
         <source>Pre&amp;ferances</source>
-        <translation>Tré&amp;férances</translation>
+        <translation>Pré&amp;férances</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="708"/>
@@ -1060,7 +1059,7 @@
         <location filename="../gui/mixingmatrix.cpp" line="351"/>
         <source>- %CPU used by LiveMix backend (%1 %).
 - CPU load given by Jack (%2 %).</source>
-        <translation type="unfinished">- Pourcentage du CPU utilisé par le core de LiveMix (%1 %).
+        <translation>- Pourcentage du CPU utilisé par le core de LiveMix (%1 %).
 - CPU load fourni par Jack (%2 %).</translation>
     </message>
     <message>

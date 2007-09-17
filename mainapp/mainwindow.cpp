@@ -186,7 +186,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent( QCloseEvent* e )
 {
-    qDebug() << "MainWindow::closeEvent( QCloseEvent " << e << " )";
+//    qDebug() << "MainWindow::closeEvent( QCloseEvent " << e << " )";
     e->accept();
 }
 

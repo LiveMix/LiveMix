@@ -31,4 +31,4 @@ echo "sudo pbuilder build --distribution gusty /home/public/livemix_$1-0ubuntu1.
 echo "sudo pbuilder build --distribution gusty ../livemix_$1-0ubuntu1.dsc"
 echo "sudo pbuilder build --distribution sid ../livemix_$1-0ubuntu1.dsc"
 echo "----"
-echo "To upload use: dput ../livemix_$1-1.0_source.changes"
+echo "To upload use: dput ../livemix_$1-0ubuntu1_source.changes"
