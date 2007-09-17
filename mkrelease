@@ -1,0 +1,17 @@
+#!/bin/bash
+
+sudo ls>/dev/null
+
+./mksrc $1
+cp ../livemix-$1.tar.bz2 ../OK
+
+cd ../livemix-$1
+
+./mkbin $1
+cp ../livemix-$1-bin.tar.bz2 ../OK
+
+./mkdeb $1
+sudo dpkg -i ../livemix-$1-0ubuntu1.deb
+cp ../livemix-$1-0ubuntu1.deb ../OK
+
+./mkdebsrc $1
