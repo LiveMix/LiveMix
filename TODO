@@ -1,15 +1,29 @@
 External code review welcome (it's my fist QP application and c++ application from long time ;-)
 
-
 ==== 0.5 ====
 
 - add : create volume, fader and toggle. (simplify i18n)
 - add channel display name
 - remove store of m_sDisplayReatedChannelName, should be calculated!
-- mv cannel from fader, button and rotary to wrapper.
+- mv cannel from fader, button and rotary to wrapper (if possible).
+  - should add in backend the pethode : channel getChannel(type, name)
+  - should add in channel the methode get/setAttribute(type, toChannel, value)
+- richtClick menu for rotary and fader:
+  - assigne key
+  - set to 0
+  - set all in line to 0
+- richtClick menu for toggle:
+  - assigne key
+  - enable all in line
+  - desable all in line
+- richtClick menu for effect fader:
+  - assigne key
+  - set to default
+  - set all the effect to default
+
+- add lash support
 
 ==== 0.6 ====
-- add lash support (help welcome)
 - save jack connection ?
 - add possibility to change jack application name
 - add MIDI learn support (help welcome, I don't have hardware)
