@@ -21,7 +21,7 @@
 #ifndef JACKMIX_MAINWINDOW_H
 #define JACKMIX_MAINWINDOW_H
 
-#include "LadspaFX.h"
+#include "ladspa_fx.h"
 #include "backend.h"
 
 #include <QtGui/QMainWindow>
@@ -98,10 +98,10 @@ private:
     LadspaFX* openEffect(const QDomElement& elem);
     void saveEffect(QString& xml, struct effect*);
     
-	void openActionBinding(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain =false);
-	void openActionBindingList(const QDomElement& binding, const Backend::ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const Backend::ElementType p_eElemetType, bool p_bMain =false);
-    void openActionBinding(const QDomElement& channel, const Backend::ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
-	QString saveActionBinding(const Backend::ChannelType p_eType, const QString& p_sChannelName);
+	void openActionBinding(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
+	void openActionBindingList(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
+    void openActionBinding(const QDomElement& channel, const ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
+	QString saveActionBinding(const ChannelType p_eType, const QString& p_sChannelName);
 
     bool toBool( QString );
     QString fromBool( bool );

@@ -21,8 +21,6 @@
 
 #include "FaderName.h"
 
-#include "globals.h"
-
 #include <QtGui/QPainter>
 #include <QtCore/QDebug>
 
@@ -88,16 +86,14 @@ QString FaderName::text()
 }
 
 
-void FaderName::mousePressEvent( QMouseEvent * e )
+void FaderName::mousePressEvent(QMouseEvent*)
 {
-    UNUSED(e);
     emit clicked();
 }
 
 
-void FaderName::mouseDoubleClickEvent( QMouseEvent * e )
+void FaderName::mouseDoubleClickEvent(QMouseEvent*)
 {
-    UNUSED(e);
     emit doubleClicked();
 }
 

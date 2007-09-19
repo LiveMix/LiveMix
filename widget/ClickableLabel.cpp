@@ -22,8 +22,6 @@
 
 #include "ClickableLabel.h"
 
-#include "globals.h"
-
 #include <QtGui/QLabel>
 #include <QtGui/QPalette>
 
@@ -43,9 +41,8 @@ ClickableLabel::ClickableLabel( QWidget *pParent )
 }
 
 
-void ClickableLabel::mousePressEvent( QMouseEvent * e )
+void ClickableLabel::mousePressEvent(QMouseEvent*)
 {
-    UNUSED(e);
     emit labelClicked( this );
 }
 

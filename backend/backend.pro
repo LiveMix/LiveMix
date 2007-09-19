@@ -31,4 +31,5 @@ SOURCES += \
 		effects.cpp \
 		ladspa_fx.cpp \
 		db.cpp \
+		channels.cpp \
 		

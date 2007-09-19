@@ -28,6 +28,10 @@
 #include "CpuLoadWidget.h"
 #include "LCD.h"
 #include "FaderName.h"
+#include "Action.h"
+#include "Button.h"
+#include "Fader.h"
+#include "Rotary.h"
 
 #include <QWidget>
 #include <QList>
@@ -76,47 +80,39 @@ public:
     // Create controls. return true on success
     bool createControl();
 
-    void doSelect(Backend::ChannelType, QString channel);
-    Backend::ChannelType getSelectedChanelType();
+    void doSelect(ChannelType, QString channel);
+    ChannelType getSelectedChanelType();
     QString getSetectedChannelName();
 
     void showMessage( const QString& msg, int msec=5000 );
 
-	QString getDisplayNameOfChannel(Backend::ChannelType p_eType, QString p_sChannelName);
-	QString getDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst =true);
-	QString getShortDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst =true);
-	QString getDisplayFunction(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
-	QString getDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo, bool p_bUpperFirst =true);
-	QString getShortDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
-//	QString getShortAbreviationDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo);
+	QString getDisplayNameOfChannel(ChannelType p_eType, QString p_sChannelName);
+	QString getDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
+	QString getShortDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
+	QString getDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+	QString getShortDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
+//	QString getShortAbreviationDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo);
 
-    void leftClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
-    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
-    void middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
-    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
-    void rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
-    		QString p_sDisplayReatedChannelName, QMouseEvent* ev);
+    void leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+    void middleClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+    void rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
 
-    void action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, 
-    		QString p_sDisplayReatedChannelName);
-    void addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-    		QString p_sReatedChannelName ="", QString p_sDisplayReatedChannelName ="");
-    void addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-    		QString p_sReatedChannelName ="", QString p_sDisplayReatedChannelName ="");
- 	void removeShurtCut(Backend::ChannelType p_eType, QString p_sChannelName);
-
-/*    Fader* createFader(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue,
+    void action(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
+    void addVolume(Volume* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
     		QString p_sReatedChannelName ="");
-    Rotary* createRotary(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, 
+    void addToggle(ToggleButton* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
     		QString p_sReatedChannelName ="");
-    ToggleButton* addToggle(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, bool p_fValue, 
-    		bool p_bStereo, QString p_sReatedChannelName ="");*/
+ 	void removeShurtCut(ChannelType p_eType, QString p_sChannelName);
+
+    Fader* createFader(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
+    Rotary* createRotary(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
+    ToggleButton* createToggle(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
 
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
     void clearKeyToWrapp();
     void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
     
-//    QString getDisplayElement(Backend::ElementType p_eElement);
+//    QString getDisplayElement(ElementType p_eElement);
 
 	bool isGainVisible() {return m_bShowGain; };
 	int getFaderHeight() {return m_iFaderHeight; };
@@ -140,9 +136,9 @@ public slots:
 
 private slots:
     void update();
-    void select(Backend::ChannelType, QString channel);
+    void select(ChannelType, QString channel);
     void addFX();
-    void displayFX(struct effect *fx, Backend::ChannelType p_eType, QString p_sChannelName);
+    void displayFX(struct effect *fx, ChannelType p_eType, QString p_sChannelName);
     void onStatusTimerEvent();
 
 private:
@@ -167,11 +163,11 @@ private:
     FaderName *effectName;
     QWidget* m_pEffectStart;
 
-    enum Backend::ChannelType m_eSelectType;
+    enum ChannelType m_eSelectType;
     QString m_sSelectChannel;
     QList<effect*> m_lVisibleEffect;
 
-    QMap<Backend::ChannelType, QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>*> m_mShurtCut;
+    QMap<ChannelType, QMap<QString, QMap<ElementType, QMap<QString, Wrapp*>*>*>*> m_mShurtCut;
     QMap<QKeySequence, KeyDo*> m_mKeyToWrapp;
     WrappVolume* m_pSelectedWrapper;
 

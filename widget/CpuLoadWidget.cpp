@@ -21,8 +21,6 @@
 
 #include "CpuLoadWidget.h"
 
-#include "globals.h"
-
 #include <QtCore/QTimer>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
@@ -73,12 +71,9 @@ CpuLoadWidget::CpuLoadWidget( QWidget *pParent )
 CpuLoadWidget::~CpuLoadWidget()
 {}
 
-
-void CpuLoadWidget::mousePressEvent(QMouseEvent *ev)
+void CpuLoadWidget::mousePressEvent(QMouseEvent*)
 {
-    UNUSED(ev);
 }
-
 
 void CpuLoadWidget::setValue(float newValue)
 {
@@ -94,12 +89,10 @@ void CpuLoadWidget::setValue(float newValue)
     }
 }
 
-
 float CpuLoadWidget::getValue()
 {
     return m_fValue;
 }
-
 
 void CpuLoadWidget::setValue2(float newValue)
 {
@@ -115,12 +108,10 @@ void CpuLoadWidget::setValue2(float newValue)
     }
 }
 
-
 float CpuLoadWidget::getValue2()
 {
     return m_fValue2;
 }
-
 
 void CpuLoadWidget::paintEvent( QPaintEvent*)
 {

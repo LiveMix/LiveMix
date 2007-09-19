@@ -49,9 +49,7 @@ public:
         const QString& sOffImg,
         const QString& sOverImg,
         QSize size,
-        bool use_skin_style,
-        QString channel ="",
-        QString channel2 =""
+        bool use_skin_style
     );
     virtual ~Button();
 
@@ -63,7 +61,7 @@ public:
 
     void setText( const QString& sText );
 
-    static Button* create(QWidget* =NULL, QString channel =NULL, QString channel2 =NULL);
+    static Button* create(QWidget* =NULL);
 
 signals:
     void clicked();
@@ -108,16 +106,10 @@ class ToggleButton : public Button
     Q_OBJECT
 
 public:
-    ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style, QString channel, QString channel2 ="" );
+    ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style);
     ~ToggleButton();
 
-    static ToggleButton* create(QWidget* =NULL, QString channel ="", QString channel2 ="");
-    static ToggleButton* createEdit(QWidget*, QString channel ="");
-    static ToggleButton* createMute(QWidget*, QString channel ="");
-    static ToggleButton* createNew(QWidget*, QString channel ="");
-    static ToggleButton* createPlay(QWidget*, QString channel ="");
-    static ToggleButton* createSolo(QWidget*, QString channel ="");
-    static ToggleButton* createByPass(QWidget*, QString channel ="");
+    static ToggleButton* create(QWidget* =NULL);
 
     bool getValue();
     void setValue(bool value);
@@ -126,8 +118,6 @@ public:
 
 signals:
     void valueChanged(ToggleButton* ref);
-    void valueChanged(QString channel, bool value);
-    void valueChanged(QString channel, QString channel2, bool value);
 
 private:
     void mouseReleaseEvent( QMouseEvent *ev );

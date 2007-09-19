@@ -23,6 +23,9 @@
 #include "LadspaFXProperties.h"
 #include "LadspaFXSelector.h"
 #include "AssigneToPannel.h"
+#include "Fader.h"
+#include "Button.h"
+#include "Rotary.h"
 
 #include <QMetaProperty>
 #include <QDebug>
@@ -142,7 +145,7 @@ Widget::Widget(QWidget* p)
     mix_layout->addWidget(sub);
     main_widget = new MainWidget(this);
     mix_layout->addWidget(main_widget);
-    connect( main_widget, SIGNAL( clicked(Backend::ChannelType, QString) ), this, SLOT( select(Backend::ChannelType, QString) ) );
+    connect( main_widget, SIGNAL( clicked(ChannelType, QString) ), this, SLOT( select(ChannelType, QString) ) );
 
     in_layout = new QHBoxLayout;
     pre_layout = new QHBoxLayout;
@@ -170,15 +173,31 @@ Widget::Widget(QWidget* p)
 Widget::~Widget()
 {}
 
-void Widget::displayFX(struct effect *fx, Backend::ChannelType p_eType, QString p_sChannelName)
+void Widget::displayFX(struct effect *fx, ChannelType p_eType, QString p_sChannelName)
 {
     if (fx->gui == NULL)
     {
         fx->gui = new LadspaFXProperties(NULL, fx);
         fx->gui->setFaderHeight(m_iEffectFaderHeight);
-	    addToggle(fx->gui->getActivateButton(), p_eType, p_sChannelName, Backend::MUTE_EFFECT, fx->fx->getPluginLabel(), fx->fx->getPluginName());
+	    addToggle(fx->gui->getActivateButton(), p_eType, p_sChannelName, MUTE_EFFECT, fx->fx->getPluginLabel());
         effect_layout->addWidget(fx->gui);
         connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, struct effect*)), this, SLOT(removeFX(LadspaFXProperties*, struct effect*)));
+
+	    channel* c = Backend::instance()->getChannel(p_eType, p_sChannelName);
+	    if (!c->effectsMap.contains(fx->fx->getPluginLabel())) {
+	    	c->effectsMap[fx->fx->getPluginLabel()] = fx;
+			fx->displayname = fx->fx->getPluginName();
+	    }
+	    else {
+	    	for (int i = 2 ; i < 100 ; i++) {
+				QString name = QString(fx->fx->getPluginLabel()) + QString("_%1").arg(i);
+			    if (!c->effectsMap.contains(name)) {
+			    	fx->displayname = QString(fx->fx->getPluginName()) + QString(" %1").arg(i);
+			    	c->effectsMap[name] = fx;
+				    break;
+			    }
+	    	}
+		}
     }
     fx->gui->show();
     m_lVisibleEffect << fx;
@@ -201,23 +220,23 @@ void Widget::removeFX(LadspaFXProperties* widget, struct effect* fx)
 
     switch (m_eSelectType)
     {
-    case Backend::IN: {
+    case IN: {
             Backend::instance()->removeInEffect(m_sSelectChannel, fx);
             break;
         }
-    case Backend::OUT: {
+    case OUT: {
             Backend::instance()->removeOutEffect(m_sSelectChannel, fx);
             break;
         }
-    case Backend::PRE: {
+    case PRE: {
             Backend::instance()->removePreEffect(m_sSelectChannel, fx);
             break;
         }
-    case Backend::POST: {
+    case POST: {
             Backend::instance()->removePostEffect(m_sSelectChannel, fx);
             break;
         }
-    case Backend::SUB: {
+    case SUB: {
             Backend::instance()->removeSubEffect(m_sSelectChannel, fx);
             break;
         }
@@ -233,23 +252,23 @@ void Widget::addFX()
     if (fx != NULL) {
         struct effect* elem = NULL;
         switch (m_eSelectType) {
-        case Backend::IN: {
+        case IN: {
                 elem = Backend::instance()->addInEffect(m_sSelectChannel, fx);
                 break;
             }
-        case Backend::OUT: {
+        case OUT: {
                 elem = Backend::instance()->addOutEffect(m_sSelectChannel, fx);
                 break;
             }
-        case Backend::PRE: {
+        case PRE: {
                 elem = Backend::instance()->addPreEffect(m_sSelectChannel, fx);
                 break;
             }
-        case Backend::POST: {
+        case POST: {
                 elem = Backend::instance()->addPostEffect(m_sSelectChannel, fx);
                 break;
             }
-        case Backend::SUB: {
+        case SUB: {
                 elem = Backend::instance()->addSubEffect(m_sSelectChannel, fx);
                 break;
             }
@@ -271,11 +290,11 @@ void Widget::onStatusTimerEvent()
     m_pStatusLabel->setText( "" );
 }
 
-void Widget::select(Backend::ChannelType type, QString channel)
+void Widget::select(ChannelType type, QString channel)
 {
     doSelect(type, channel);
 }
-void Widget::doSelect(Backend::ChannelType type, QString channel)
+void Widget::doSelect(ChannelType type, QString channel)
 {
 // effect = new struct effectData;
     if (m_eSelectType == type && m_sSelectChannel == channel) {
@@ -293,35 +312,35 @@ void Widget::doSelect(Backend::ChannelType type, QString channel)
     m_lVisibleEffect.clear();
 
     switch (m_eSelectType) {
-    case Backend::IN: {
+    case IN: {
             showMessage(trUtf8("Input \"%1\" selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getInEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
-    case Backend::OUT: {
+    case OUT: {
             showMessage(trUtf8("Output selected."));
             foreach (effect* elem, *(Backend::instance()->getOutEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
-    case Backend::PRE: {
+    case PRE: {
             showMessage(trUtf8("Pre fader aux \"%1\" selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPreEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
-    case Backend::POST: {
+    case POST: {
             showMessage(trUtf8("Post fader aux \"%1\" selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPostEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
-    case Backend::SUB: {
+    case SUB: {
             showMessage(trUtf8("Sub-groupe \"%1\" selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getSubEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
@@ -332,7 +351,7 @@ void Widget::doSelect(Backend::ChannelType type, QString channel)
     effect_layout->parentWidget()->resize(effect_layout->parentWidget()->minimumSize());
 }
 
-Backend::ChannelType Widget::getSelectedChanelType()
+ChannelType Widget::getSelectedChanelType()
 {
     return m_eSelectType;
 }
@@ -396,7 +415,7 @@ void Widget::init()
     foreach (QString name, Backend::instance()->subchannels()) {
         addsubchannel( name );
     }
-    doSelect(Backend::OUT, MAIN);
+    doSelect(OUT, MAIN);
 }
 
 void Widget::addinchannel( QString name, bool related )
@@ -404,7 +423,7 @@ void Widget::addinchannel( QString name, bool related )
     InWidget* elem = new InWidget(name, this);
     in_layout->addWidget(elem);
     in[name] = elem;
-    connect( elem, SIGNAL( clicked(Backend::ChannelType, QString) ), this, SLOT( select(Backend::ChannelType, QString) ) );
+    connect( elem, SIGNAL( clicked(ChannelType, QString) ), this, SLOT( select(ChannelType, QString) ) );
 
     if (related) {
         QMapIterator<QString, PreWidget *> iter_pre(pre);
@@ -431,7 +450,7 @@ void Widget::addprechannel( QString name )
     PreWidget* elem = new PreWidget(name, this);
     pre_layout->addWidget(elem);
     pre[name] = elem;
-    connect( elem, SIGNAL( clicked(Backend::ChannelType, QString) ), this, SLOT( select(Backend::ChannelType, QString) ) );
+    connect( elem, SIGNAL( clicked(ChannelType, QString) ), this, SLOT( select(ChannelType, QString) ) );
 
     QMapIterator<QString, InWidget *> iter(in);
     while (iter.hasNext()) {
@@ -444,7 +463,7 @@ void Widget::addpostchannel( QString name, bool related )
     PostWidget* elem = new PostWidget(name, this);
     post_layout->addWidget(elem);
     post[name] = elem;
-    connect( elem, SIGNAL( clicked(Backend::ChannelType, QString) ), this, SLOT( select(Backend::ChannelType, QString) ) );
+    connect( elem, SIGNAL( clicked(ChannelType, QString) ), this, SLOT( select(ChannelType, QString) ) );
 
     QMapIterator<QString, InWidget *> iter(in);
     while (iter.hasNext()) {
@@ -465,7 +484,7 @@ void Widget::addsubchannel( QString name )
     SubWidget* elem = new SubWidget(name, this);
     sub_layout->addWidget(elem);
     sub[name] = elem;
-    connect( elem, SIGNAL( clicked(Backend::ChannelType, QString) ), this, SLOT( select(Backend::ChannelType, QString) ) );
+    connect( elem, SIGNAL( clicked(ChannelType, QString) ), this, SLOT( select(ChannelType, QString) ) );
 
     QMapIterator<QString, InWidget *> iter_in(in);
     while (iter_in.hasNext()) {
@@ -522,152 +541,123 @@ void Widget::removesubchannel( QString name )
     }
 }
 
-/*QString Widget::getDisplayElement(Backend::ElementType p_eElement, bool p_bUpperFirst) {
-	switch (p_eElement) {
-		case Backend::GAIN:
-			return trUtf8("gain");
-		case Backend::PAN_BAL:
-			return trUtf8("pan/bal");
-		case Backend::TO_PRE:
-			return trUtf8("pre");
-		case Backend::TO_POST:
-			return trUtf8("post");
-		case Backend::FADER:
-			return trUtf8("fader");
-		case Backend::PRE_VOL:
-			return trUtf8("pre vol");
-		case Backend::MUTE:
-			return trUtf8("mute");
-		case Backend::TO_SUB:
-			return trUtf8("sub");
-		case Backend::TO_MAIN:
-			return trUtf8("main");
-		case Backend::TO_ALF:
-			return trUtf8("alf");
-		case Backend::TO_PLF:
-			return trUtf8("plf");
-		case Backend::MUTE_EFFECT:
-			return trUtf8("mute effect");
-	}
-	return "";
-}*/
-
-void Widget::leftClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent*)
+void Widget::leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent*)
 {
-	action(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, p_sDisplayReatedChannelName);
+	action(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName);
 }
 
-QString Widget::getDisplayNameOfChannel(Backend::ChannelType p_eType, QString p_sChannelName) {
+QString Widget::getDisplayNameOfChannel(ChannelType p_eType, QString p_sChannelName) {
 	QString displayName;
     switch (p_eType) {
-   		case Backend::IN:
+   		case IN:
             displayName = Backend::instance()->getInput(p_sChannelName)->display_name;
             break;
-	    case Backend::OUT:
+	    case OUT:
             displayName = Backend::instance()->getOutput(p_sChannelName)->display_name;
             break;
-    	case Backend::PRE:
+    	case PRE:
             displayName = Backend::instance()->getPre(p_sChannelName)->display_name;
             break;
-	    case Backend::POST:
+	    case POST:
             displayName = Backend::instance()->getPost(p_sChannelName)->display_name;
             break;
-    	case Backend::SUB:
+    	case SUB:
             displayName = Backend::instance()->getSub(p_sChannelName)->display_name;
             break;
     }
     return displayName;
 }
-QString Widget::getDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst) {
+QString Widget::getDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst) {
 	QString displayName;
     switch (p_eType) {
-   		case Backend::IN:
+   		case IN:
             displayName = trUtf8("input");
             break;
-	    case Backend::OUT:
+	    case OUT:
             displayName = trUtf8("output");
             break;
-    	case Backend::PRE:
+    	case PRE:
             displayName = trUtf8("pre-fader");
             break;
-	    case Backend::POST:
+	    case POST:
             displayName = trUtf8("post-fader");
             break;
-    	case Backend::SUB:
+    	case SUB:
             displayName = trUtf8("sub-group");
             break;
     }
     return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
 }
-QString Widget::getShortDisplayChannelType(Backend::ChannelType p_eType, bool p_bUpperFirst) {
+QString Widget::getShortDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst) {
 	QString displayName;
     switch (p_eType) {
-   		case Backend::IN:
+   		case IN:
             displayName = trUtf8("in");
             break;
-	    case Backend::OUT:
+	    case OUT:
             displayName = trUtf8("out");
             break;
-    	case Backend::PRE:
+    	case PRE:
             displayName = trUtf8("pre");
             break;
-	    case Backend::POST:
+	    case POST:
             displayName = trUtf8("post");
             break;
-    	case Backend::SUB:
+    	case SUB:
             displayName = trUtf8("sub");
             break;
     }
     return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
 }
 
-QString Widget::getDisplayFunction(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst) {
+QString Widget::getDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst) {
 	bool stereo = false;
     switch (p_eType) {
-   		case Backend::IN:
+   		case IN:
             stereo = Backend::instance()->getInput(p_sChannelName)->stereo;
             break;
-	    case Backend::OUT:
+	    case OUT:
             stereo = Backend::instance()->getOutput(p_sChannelName)->stereo;
             break;
-    	case Backend::PRE:
+    	case PRE:
             stereo = Backend::instance()->getPre(p_sChannelName)->stereo;
             break;
-	    case Backend::POST:
+	    case POST:
             stereo = Backend::instance()->getPost(p_sChannelName)->stereo;
             break;
-    	case Backend::SUB:
+    	case SUB:
             stereo = Backend::instance()->getSub(p_sChannelName)->stereo;
             break;
     }
-    return getDisplayFunction(p_eElement, p_sReatedChannelName, stereo, p_bUpperFirst);
-}
-QString Widget::getDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo, bool p_bUpperFirst) {
+
 	QString displayName;
     switch (p_eElement) {
-    	case Backend::GAIN:
+    	case GAIN:
     		displayName = trUtf8("gain");
     		break;
-    	case Backend::MUTE_EFFECT:
-    	case Backend::MUTE:
+    	case MUTE_EFFECT:
+    		displayName = trUtf8("mute effect \"%1\"").arg(Backend::instance()->getChannel(p_eType, p_sChannelName)->
+    				effectsMap[p_sReatedChannelName]->displayname);
+    		break;
+    	case MUTE:
     		displayName = trUtf8("mute");
     		break;
-    	case Backend::PAN_BAL:
-    		displayName = p_bStereo ? trUtf8("bal") : trUtf8("pan");
+    	case PAN_BAL:
+    		displayName = stereo ? trUtf8("bal") : trUtf8("pan");
     		break;
-    	case Backend::TO_PRE:
+    	case TO_PRE:
     		displayName = trUtf8("pre-fader \"%1\"").arg(Backend::instance()->getPre(p_sReatedChannelName)->display_name);
     		break;
-    	case Backend::TO_POST:
+    	case TO_POST:
     		displayName = trUtf8("post-fader \"%1\"").arg(Backend::instance()->getPost(p_sReatedChannelName)->display_name);
     		break;
-    	case Backend::TO_SUB:
+    	case TO_SUB:
     		displayName = trUtf8("sub-group \"%1\"").arg(Backend::instance()->getSub(p_sReatedChannelName)->display_name);
     		break;
-    	case Backend::TO_MAIN:
+    	case TO_MAIN:
     		displayName = trUtf8("main");
     		break;
-    	case Backend::FADER:
+    	case FADER:
     		if (p_sReatedChannelName == MAIN) {
     			displayName = trUtf8("main volume");
     		}
@@ -681,44 +671,44 @@ QString Widget::getDisplayFunction(Backend::ElementType p_eElement, QString p_sR
     			displayName = trUtf8("volume");
     		}
     		break;
-    	case Backend::TO_ALF:
+    	case TO_ALF:
     		displayName = trUtf8("alf");
     		break;
-    	case Backend::TO_PLF:
+    	case TO_PLF:
     		displayName = trUtf8("plf");
     		break;
-    	case Backend::PRE_VOL:
+    	case PRE_VOL:
     		displayName = trUtf8("pre volume");
     		break;
     }
     return p_bUpperFirst ? displayName.left(1).toUpper() + displayName.right(displayName.size() - 1) : displayName;
 }
-QString Widget::getShortDisplayFunction(Backend::ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo) {
+QString Widget::getShortDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo) {
 	QString displayName;
     switch (p_eElement) {
-    	case Backend::GAIN:
+    	case GAIN:
     		displayName = trUtf8("gain");
     		break;
-    	case Backend::MUTE_EFFECT:
-    	case Backend::MUTE:
+    	case MUTE_EFFECT:
+    	case MUTE:
     		displayName = trUtf8("M");
     		break;
-    	case Backend::PAN_BAL:
+    	case PAN_BAL:
     		displayName = p_bStereo ? trUtf8("bal") : trUtf8("pan");
     		break;
-    	case Backend::TO_PRE:
+    	case TO_PRE:
     		displayName = trUtf8("pre");
     		break;
-    	case Backend::TO_POST:
+    	case TO_POST:
     		displayName = trUtf8("post");
     		break;
-    	case Backend::TO_SUB:
+    	case TO_SUB:
     		displayName = "";
     		break;
-    	case Backend::TO_MAIN:
+    	case TO_MAIN:
     		displayName = trUtf8("LR");
     		break;
-    	case Backend::FADER:
+    	case FADER:
     		if (p_sReatedChannelName == MAIN) {
     			displayName = trUtf8("main");
     		}
@@ -732,21 +722,21 @@ QString Widget::getShortDisplayFunction(Backend::ElementType p_eElement, QString
     			displayName = trUtf8("volume");
     		}
     		break;
-    	case Backend::TO_ALF:
+    	case TO_ALF:
     		displayName = trUtf8("alf");
     		break;
-    	case Backend::TO_PLF:
+    	case TO_PLF:
     		displayName = trUtf8("plf");
     		break;
-    	case Backend::PRE_VOL:
+    	case PRE_VOL:
     		displayName = trUtf8("pre vol");
     		break;
     }
     return displayName;	
 }
 
-void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent*)
+void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+		QString p_sReatedChannelName, QMouseEvent*)
 {
 	QKeySequence rActionOnChannelKeySequence;
 	QKeySequence rSelectChannelKeySequence;
@@ -777,22 +767,22 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	bool volume = true;
 	bool only_dirrect = false;
 	switch (p_eElement) {
-		case Backend::FADER:
+		case FADER:
 			if (p_sChannelName == MAIN && p_sReatedChannelName != MAIN) {
 				only_dirrect = true;
 			}
-		case Backend::GAIN:
-		case Backend::PAN_BAL:
-		case Backend::TO_PRE:
-		case Backend::TO_POST:
-		case Backend::PRE_VOL:
+		case GAIN:
+		case PAN_BAL:
+		case TO_PRE:
+		case TO_POST:
+		case PRE_VOL:
 			break;
-		case Backend::MUTE:
-		case Backend::TO_SUB:
-		case Backend::TO_MAIN:
-		case Backend::TO_ALF:
-		case Backend::TO_PLF:
-		case Backend::MUTE_EFFECT:
+		case MUTE:
+		case TO_SUB:
+		case TO_MAIN:
+		case TO_ALF:
+		case TO_PLF:
+		case MUTE_EFFECT:
 			volume = false;
 			break;
 	}
@@ -817,7 +807,7 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	    			delete m_mKeyToWrapp[panel->getActionOnChannelKeySequence()];
 		    		m_mKeyToWrapp.remove(rActionOnChannelKeySequence);
 		    		m_mKeyToWrapp.insert(panel->getActionOnChannelKeySequence()
-		    				, new KeyDoDirectAction(this, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, p_sDisplayReatedChannelName));
+		    				, new KeyDoDirectAction(this, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
 	    		}
     		}
     	}
@@ -850,7 +840,7 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
 	    			delete m_mKeyToWrapp[panel->getActionOnSelectedChannelKeySequence()];
 			    	m_mKeyToWrapp.remove(rActionOnSelectedChannelKeySequence);
 		    		m_mKeyToWrapp.insert(panel->getActionOnSelectedChannelKeySequence(), new KeyDoChannelAction(this, p_eElement, 
-		    				p_sReatedChannelName, p_sDisplayReatedChannelName));
+		    				p_sReatedChannelName));
 	    		}
     		}
     	}
@@ -861,14 +851,14 @@ void Widget::middleClick(Backend::ChannelType p_eType, QString p_sChannelName, B
     }
 }
 
-void Widget::rightClick(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName, QMouseEvent* ev)
+void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+		QString p_sReatedChannelName, QMouseEvent* ev)
 {
-    middleClick(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, p_sDisplayReatedChannelName, ev);
+    middleClick(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, ev);
 }
 
-void Widget::action(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString /*p_sDisplayReatedChannelName*/)
+void Widget::action(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+		QString p_sReatedChannelName)
 {
     if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)
             && (*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)
@@ -959,71 +949,63 @@ qDebug()<<1111;
 	 
 }
 
-void Widget::addVolume(Volume* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName)
+void Widget::addVolume(Volume* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName)
 {
-    p_pVolume->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
-
     if (!m_mShurtCut.contains(p_eType)) {
-        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
+        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<ElementType, QMap<QString, Wrapp*>*>*>());
     }
     if (!m_mShurtCut[p_eType]->contains(p_sChannelName)) {
-        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<Backend::ElementType, QMap<QString, Wrapp*>*>());
+        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<ElementType, QMap<QString, Wrapp*>*>());
     }
     if (!(*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)) {
         (*m_mShurtCut[p_eType])[p_sChannelName]->insert(p_eElement, new QMap<QString, Wrapp*>());
     }
     if (!(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(p_sReatedChannelName)) {
 	    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(p_sReatedChannelName,
-	            new WrappVolume(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, p_sDisplayReatedChannelName));
+	            new WrappVolume(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
     }
     else {
     	for (int i = 2 ; i < 100 ; i++) {
     		QString name = QString(p_sReatedChannelName) + QString("_%1").arg(i);
 		    if (!(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(name)) {
-	    		QString displayname = QString(p_sDisplayReatedChannelName) + QString(" %1").arg(i);
 			    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(p_sReatedChannelName,
-			            new WrappVolume(this, p_pVolume, p_eType, p_sChannelName, p_eElement, name, displayname));
+			            new WrappVolume(this, p_pVolume, p_eType, p_sChannelName, p_eElement, name));
 			    break;
 		    }
     	}
     }
 }
-void Widget::addToggle(ToggleButton* p_pVolume, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName)
+void Widget::addToggle(ToggleButton* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+		QString p_sReatedChannelName)
 {
-    p_pVolume->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
-    p_pVolume->setText(getShortDisplayFunction(p_eElement, p_sReatedChannelName));
-    
     if (!m_mShurtCut.contains(p_eType)) {
-        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<Backend::ElementType, QMap<QString, Wrapp*>*>*>());
+        m_mShurtCut.insert(p_eType, new QMap<QString, QMap<ElementType, QMap<QString, Wrapp*>*>*>());
     }
     if (!m_mShurtCut[p_eType]->contains(p_sChannelName)) {
-        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<Backend::ElementType, QMap<QString, Wrapp*>*>());
+        m_mShurtCut[p_eType]->insert(p_sChannelName, new QMap<ElementType, QMap<QString, Wrapp*>*>());
     }
     if (!(*m_mShurtCut[p_eType])[p_sChannelName]->contains(p_eElement)) {
         (*m_mShurtCut[p_eType])[p_sChannelName]->insert(p_eElement, new QMap<QString, Wrapp*>());
     }
     if (!(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(p_sReatedChannelName)) {
 	    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(p_sReatedChannelName,
-    	        new WrappToggle(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, p_sDisplayReatedChannelName));
+    	        new WrappToggle(this, p_pVolume, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
     }
     else {
     	for (int i = 2 ; i < 100 ; i++) {
     		QString name = QString(p_sReatedChannelName) + QString("_%1").arg(i);
 		    if (!(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->contains(name)) {
-	    		QString displayname = QString(p_sDisplayReatedChannelName) + QString(" %1").arg(i);
 			    (*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement]->insert(name,
-		    	        new WrappToggle(this, p_pVolume, p_eType, p_sChannelName, p_eElement, name, displayname));
+		    	        new WrappToggle(this, p_pVolume, p_eType, p_sChannelName, p_eElement, name));
 		    	break;
 		    }
     	}
     }
 }
-void Widget::removeShurtCut(Backend::ChannelType p_eType, QString p_sChannelName)
+void Widget::removeShurtCut(ChannelType p_eType, QString p_sChannelName)
 {
     if (m_mShurtCut.contains(p_eType) && m_mShurtCut[p_eType]->contains(p_sChannelName)) {
-    	foreach(Backend::ElementType type, (*m_mShurtCut[p_eType])[p_sChannelName]->keys()) {
+    	foreach(ElementType type, (*m_mShurtCut[p_eType])[p_sChannelName]->keys()) {
 	    	foreach(QString sub, (*(*m_mShurtCut[p_eType])[p_sChannelName])[type]->keys()) {
 	    		delete (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[type])[sub];
 	    		(*(*m_mShurtCut[p_eType])[p_sChannelName])[type]->remove(sub);
@@ -1054,10 +1036,10 @@ void Widget::removeShurtCut(Backend::ChannelType p_eType, QString p_sChannelName
 }
 void Widget::showGain() {
 	m_bShowGain = !m_bShowGain;
-	foreach (Backend::ChannelType i, m_mShurtCut.keys()) {
+	foreach (ChannelType i, m_mShurtCut.keys()) {
 		foreach (QString j, m_mShurtCut[i]->keys()) {
-			if ((*m_mShurtCut[i])[j]->contains(Backend::GAIN) && (*(*m_mShurtCut[i])[j])[Backend::GAIN]->contains("")) {
-				((WrappVolume*)(*(*(*m_mShurtCut[i])[j])[Backend::GAIN])[""])->getVolume()->setVisible(m_bShowGain);
+			if ((*m_mShurtCut[i])[j]->contains(GAIN) && (*(*m_mShurtCut[i])[j])[GAIN]->contains("")) {
+				((WrappVolume*)(*(*(*m_mShurtCut[i])[j])[GAIN])[""])->getVolume()->setVisible(m_bShowGain);
 			}
 		}
 	}
@@ -1065,11 +1047,11 @@ void Widget::showGain() {
 void Widget::setFaderHeight(int p_iHeight) {
 	m_iFaderHeight = p_iHeight; 
 
-	foreach (Backend::ChannelType i, m_mShurtCut.keys()) {
+	foreach (ChannelType i, m_mShurtCut.keys()) {
 		foreach (QString j, m_mShurtCut[i]->keys()) {
-			foreach (QString sub, (*(*m_mShurtCut[i])[j])[Backend::FADER]->keys()) {
+			foreach (QString sub, (*(*m_mShurtCut[i])[j])[FADER]->keys()) {
 				if (sub != PLF && sub != MONO) {
-					Wrapp* w = (*(*(*m_mShurtCut[i])[j])[Backend::FADER])[sub];
+					Wrapp* w = (*(*(*m_mShurtCut[i])[j])[FADER])[sub];
 					((Fader*)((WrappVolume*)w)->getVolume())->setFixedHeight(m_iFaderHeight);
 				}
 			}
@@ -1167,16 +1149,47 @@ void Widget::addSpacer(QVBoxLayout* layout)
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
-/*Fader* Widget::createFader(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, QString p_sReatedChannelName) {
+Fader* Widget::createFader(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo) {
+    Fader* fader = new Fader(NULL, false, false, p_eType);
+    addVolume(fader, p_eType, p_sChannelName, p_eElement, p_rChannelTo);
+    fader->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
+    fader->setFixedSize(23, getFaderHeight());
+//    connect(fader, SIGNAL( dbValueChanged(QString, float) ), Backend::instance(), SLOT( setInVolume( QString, float ) ) );
+	if (p_eType == IN) {
+	    fader->setMaxValue(20);
+	    fader->setMaxPeak(20);
+	    fader->setMinValue(-60);
+	    fader->setMinPeak(-60);
+	}
+	else {
+	    fader->setMaxValue(0);
+	    fader->setMaxPeak(0);
+	    fader->setMinValue(-80);
+	    fader->setMinPeak(-80);
+	}
+    fader->setDbValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
+    return fader;
 }
-Rotary* Widget::createRotary(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, float p_fValue, QString p_sReatedChannelName) {
-    rotary = new Rotary(0, p_eElement == PAN_BAL ? Rotary::TYPE_CENTER : Rotary::TYPE_NORMAL, getDisplayFunction(p_eElement, p_sReatedChannelName, false), false, true, p_sChannelName);
-    m_pMatrix->addVolume(rotary, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName);
-    rotary->setDbValue(value);
+Rotary* Widget::createRotary(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo) {
+    Rotary* rotary = new Rotary(0, p_eElement == PAN_BAL ? Rotary::TYPE_CENTER : Rotary::TYPE_NORMAL, getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo), false, true);
+    addVolume(rotary, p_eType, p_sChannelName, p_eElement, p_rChannelTo);
+    if (p_eElement == PAN_BAL) {
+    	rotary->setValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
+    }
+    else {
+    	rotary->setDbValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
+    }
     return rotary;
 }
-ToggleButton* Widget::addToggle(Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, bool p_fValue, bool p_bStereo, QString p_sReatedChannelName) {
-}*/
+ToggleButton* Widget::createToggle(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo) {
+    ToggleButton* toggle = ToggleButton::create(0);
+    addToggle(toggle, p_eType, p_sChannelName, p_eElement, p_rChannelTo);
+    toggle->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
+    toggle->setText(getShortDisplayFunction(p_eElement, p_rChannelTo));
+//    connect(main_on, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInMain( QString, bool ) ) );
+    toggle->setValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
+    return toggle;
+}
 
 }
 ; //LiveMix

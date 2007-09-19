@@ -45,7 +45,7 @@ class Fader : public Volume
     Q_OBJECT
 
 public:
-    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel =NULL, bool p_bLinDb =true );
+    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true );
     ~Fader();
 
     void setMinValue( float fMin );
@@ -111,15 +111,7 @@ public:
     virtual void setFixedSize ( const QSize & s ); 
     virtual void setFixedSize ( int w, int h );
 
-signals:
-    void valueChanged(Fader*);
-    void valueChanged(QString Channel, float value);
-    // in fact the external value is standanrd and internal in dB
-    void dbValueChanged(QString Channel, float value);
-
 private:
-    QString _channel;
-
     float m_fMousePressValue;
     float m_fMousePressY;
 

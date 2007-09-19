@@ -275,7 +275,7 @@ void LadspaFXProperties::updateControls()
                 toggleChanged( pToggle );
             } else {
                 // fader
-                Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, NULL, !pControlPort->m_bLogarithmic );
+                Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic );
 		    	pFader->setFixedHeight(m_iFaderHeight);
                 connect( pFader, SIGNAL( valueChanged(Fader*) ), this, SLOT( faderChanged(Fader*) ) );
                 m_pInputControlFaders.push_back( pFader );

@@ -32,9 +32,8 @@
 namespace LiveMix
 {
 
-Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, QString channel, bool p_bLinDb )
+Fader::Fader( QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb )
         : Volume( pParent )
-        , _channel( channel )
         , m_bWithoutKnob( bWithoutKnob )
         , m_bUseIntSteps( bUseIntSteps )
         , m_bLinDb(p_bLinDb)
@@ -203,9 +202,6 @@ void Fader::setValue( float fVal, bool do_emit )
 
     if (do_emit) {
         emit valueChanged(this);
-        emit valueChanged(_channel, m_fValue);
-        emit dbValueChanged(_channel, m_bLinDb ? db2lin(m_fValue, m_fMinValue) : db2lin(m_fValue));
-        emit displayValueChanged(displayDb(m_fValue, m_fMinValue));
     }
 }
 

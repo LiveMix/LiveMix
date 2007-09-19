@@ -21,8 +21,6 @@
 
 #include "PixmapWidget.h"
 
-#include "globals.h"
-
 #include <QtGui/QPainter>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>

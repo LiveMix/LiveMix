@@ -18,7 +18,6 @@
     Boston, MA 02111-1307, USA.
 */
 
-
 #include "backend.h"
 
 #include <QString>
@@ -1105,7 +1104,23 @@ bool Backend::removeSub( QString name )
     return true;
 }
 
-const struct in* Backend::getInput( QString name )
+channel* Backend::getChannel(ChannelType p_eType, QString p_rName) {
+	switch (p_eType) {
+		case IN:
+		    return ins[p_rName];
+		case OUT:
+		    return outs[p_rName];
+		case PRE:
+		    return pres[p_rName];
+		case POST:
+		    return posts[p_rName];
+		case SUB:
+		    return subs[p_rName];
+		default:
+			return NULL;
+	}
+}
+const in* Backend::getInput( QString name )
 {
     return ins[ name ];
 }
@@ -1125,156 +1140,5 @@ const sub* Backend::getSub( QString name )
 {
     return subs[ name ];
 }
-
-effect::effect(LadspaFX *p_fx, jack_nframes_t p_nframes)
-        : fx(p_fx)
-        , gui(NULL)
-        , m_fCpuUse(0)
-{
-    switch (fx->getInputAudio()) {
-    case 2:
-        fx->m_pInBufferR = new float[p_nframes];
-    case 1:
-        fx->m_pInBufferL = new float[p_nframes];
-    }
-    switch (fx->getOutputAudio()) {
-    case 2:
-        fx->m_pOutBufferR = new float[p_nframes];
-    case 1:
-        fx->m_pOutBufferL = new float[p_nframes];
-    }
-    if (fx->getInputAudio() == 1 && fx->getOutputAudio() == 1) {
-        fx->m_pInBufferR = new float[p_nframes];
-        fx->m_pOutBufferR = new float[p_nframes];
-    }
-    for (unsigned i = 0; i < p_nframes; ++i) {
-        fx->m_pOutBufferL[i] = 0;
-        if (fx->m_pOutBufferR != NULL) fx->m_pOutBufferR[i] = 0;
-    }
-
-    fx->connectAudioPorts();
-    fx->activate();
-}
-effect::~effect()
-{
-    fx->deactivate();
-    switch (fx->getInputAudio()) {
-    case 2:
-        delete fx->m_pInBufferR;
-    case 1:
-        delete fx->m_pInBufferL;
-    }
-    switch (fx->getOutputAudio()) {
-    case 2:
-        delete fx->m_pOutBufferR;
-    case 1:
-        delete fx->m_pOutBufferL;
-    }
-    if (fx->getInputAudio() == 1 && fx->getOutputAudio() == 1) {
-        delete fx->m_pInBufferR;
-        delete fx->m_pOutBufferR;
-    }
-    delete fx;
-//  if (gui != NULL) delete gui;
-}
-channel::channel(QString p_name, bool p_stereo, jack_nframes_t /*p_nframes*/)
-{
-    name = p_name;
-    display_name = p_name;
-    mute = false;
-    stereo = p_stereo;
-}
-channel::~channel()
-{
-    while (effects.size() != 0) {
-        effect* fx = effects.takeLast();
-        effects.removeAll(fx);
-        delete fx;
-    }
-}
-in::in(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
-{
-    in_l = l;
-    in_r = r;
-    pre_l = new jack_default_audio_sample_t[p_nframes];
-    pre_r = new jack_default_audio_sample_t[p_nframes];
-    post_l = new jack_default_audio_sample_t[p_nframes];
-    post_r = new jack_default_audio_sample_t[p_nframes];
-    name = name;
-    gain = 1;
-    volume = 1;
-    bal = 0;
-    plf = false;
-    main = true;
-}
-in::~in()
-{
-    delete pre_l;
-    delete pre_r;
-    delete post_l;
-    delete post_r;
-}
-out::out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
-{
-    out_l = l;
-    out_r = r;
-    volume = 0.1;
-    alf = false;
-}
-out::~out()
-{}
-pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
-{
-    out_l = l;
-    out_r = r;
-    volume = 0.1;
-    bal = 0;
-    alf = false;
-}
-pre::~pre()
-{}
-post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nframes, jack_port_t* s_l, jack_port_t* s_r, jack_port_t* r_l, jack_port_t* r_r)
-        : channel(p_name, p_stereo, p_nframes)
-        , out_l(s_l)
-        , out_r(s_r)
-        , in_l(r_l)
-        , in_r(r_r)
-{
-    return_l = new jack_default_audio_sample_t[p_nframes];
-    return_r = new jack_default_audio_sample_t[p_nframes];
-    prevolume = 1;
-    postvolume = 1;
-    bal = 0;
-    plf = false;
-    alf = false;
-    main = true;
-    external = p_external;
-    if (!external) {
-        post_l = new jack_default_audio_sample_t[p_nframes];
-        post_r = new jack_default_audio_sample_t[p_nframes];
-        return_sample_l = post_l;
-        return_sample_r = post_r;
-    }
-}
-post::~post()
-{
-    delete return_l;
-    delete return_r;
-    if (!external) {
-        delete post_l;
-        delete post_r;
-    }
-}
-sub::sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)
-{
-    out_l = l;
-    out_r = r;
-    volume = 0.1;
-    bal = 0;
-    alf = false;
-    main = true;
-}
-sub::~sub()
-{}
 
 }; // LiveMix

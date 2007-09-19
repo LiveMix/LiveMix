@@ -59,7 +59,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
-    void clicked(Backend::ChannelType, QString channel);
+    void clicked(ChannelType, QString channel);
 
 private:
     QString m_Channel;
@@ -92,7 +92,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
-    void clicked(Backend::ChannelType, QString channel);
+    void clicked(ChannelType, QString channel);
 
 private:
     QString m_Channel;
@@ -116,7 +116,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
-    void clicked(Backend::ChannelType, QString channel);
+    void clicked(ChannelType, QString channel);
 
 private:
     QString m_Channel;
@@ -141,7 +141,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
-    void clicked(Backend::ChannelType, QString channel);
+    void clicked(ChannelType, QString channel);
 
 private:
     QString m_Channel;
@@ -164,7 +164,7 @@ public:
     Fader* fader;
 
 signals:
-    void clicked(Backend::ChannelType, QString channel);
+    void clicked(ChannelType, QString channel);
 
 private:
     Widget* m_pMatrix;

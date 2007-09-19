@@ -34,8 +34,8 @@ class Wrapp : public QObject
 {
     Q_OBJECT
 public:
-    Wrapp(Widget* p_pMatrix, Action* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-    		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+    		QString p_sReatedChannelName);
 
     virtual bool exec();
 
@@ -47,38 +47,39 @@ public slots:
 protected:
     Widget* m_pMatrix;
 
-    Backend::ChannelType m_eType;
+    ChannelType m_eType;
     QString m_sChannelName;
-    Backend::ElementType m_eElement;
+    ElementType m_eElement;
     QString m_sReatedChannelName;
-	QString m_sDisplayChannelName;
-	QString m_sDisplayReatedChannelName;
 };
 
 class WrappVolume : public Wrapp
 {
     Q_OBJECT
 public:
-    WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
     Volume* getVolume();
 
 private:
     Volume* m_pWidget;
 
 private slots:
-    void displayValueChanged(QString p_sValue);
+    void valueChanged(Volume* p_pVolume);
 };
 
 class WrappToggle : public Wrapp
 {
     Q_OBJECT
 public:
-    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
 
     bool exec();
 
 private:
     ToggleButton* m_pWidget;
+
+private slots:
+    void valueChanged(ToggleButton* p_pToggle);
 };
 
 }

@@ -6,12 +6,12 @@ TARGET = livemix
 CONFIG += qt warn_on thread
 # precompile_header
 
-LIBS += ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
+LIBS += ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libbackend.a
 
-PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libcore.a
+PRE_TARGETDEPS = ../libs/libgui.a ../libs/libwidget.a ../libs/libladspafx.a ../libs/libbackend.a
 
 DESTDIR = ..
-INCLUDEPATH += ../core ../gui ../widget
+INCLUDEPATH += ../backend ../gui ../widget
 
 contains(LMDEFINES, LRDF_SUPPORT ){
 	LIBS += -llrdf

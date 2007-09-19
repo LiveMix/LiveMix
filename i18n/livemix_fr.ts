@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr_FR">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -255,37 +254,37 @@
 <context>
     <name>LiveMix::AssigneToPannel</name>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="36"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="34"/>
         <source>Key to select the %2 of the channel %1</source>
         <translation>Raccourci pour sélectionner le %1 du cannal %2</translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="39"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="37"/>
         <source>Key to %2 the channel %1</source>
         <translation>Raccourci pour %2 le cannal %1</translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="43"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="41"/>
         <source>Key to select the channel %1</source>
         <translation>Raccourci pour selectionner le cannal %1</translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="46"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="44"/>
         <source>Key to select the %1 of selected channel</source>
         <translation>Raccourci pour selectionner le %1 du canal selectionné</translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="49"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="47"/>
         <source>Key to %1 the selected channel</source>
         <translation>Raccourci pour %1 le cannal selectionné</translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="58"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="56"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/AssigneToPannel.cpp" line="59"/>
+        <location filename="../gui/AssigneToPannel.cpp" line="57"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -410,7 +409,7 @@
 <context>
     <name>LiveMix::MainWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="420"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="324"/>
         <source>Phone</source>
         <translation>Casque</translation>
     </message>
@@ -420,7 +419,7 @@
         <translation type="obsolete">Volume du casque</translation>
     </message>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="429"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="330"/>
         <source>Main</source>
         <translation>Main</translation>
     </message>
@@ -711,7 +710,7 @@
 <context>
     <name>LiveMix::PostWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="278"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="222"/>
         <source>Return</source>
         <translation>Retour</translation>
     </message>
@@ -719,16 +718,6 @@
         <location filename="../gui/ChannelsWidgets.cpp" line="320"/>
         <source>Main</source>
         <translation type="obsolete">Sorties principales</translation>
-    </message>
-    <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="295"/>
-        <source>Bal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="295"/>
-        <source>Pan</source>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -738,26 +727,16 @@
         <source>Main</source>
         <translation type="obsolete">Sorties principales</translation>
     </message>
-    <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="377"/>
-        <source>Bal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="377"/>
-        <source>Pan</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>LiveMix::Widget</name>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="98"/>
+        <location filename="../gui/mixingmatrix.cpp" line="101"/>
         <source>A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="99"/>
+        <location filename="../gui/mixingmatrix.cpp" line="102"/>
         <source>Add effect</source>
         <translation>Ajoute un module d&apos;effet</translation>
     </message>
@@ -792,7 +771,7 @@
         <translation type="obsolete">Entrée &apos;%1&apos; séléctionnée.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="304"/>
+        <location filename="../gui/mixingmatrix.cpp" line="323"/>
         <source>Output selected.</source>
         <translation>Sorties séléctionnées.</translation>
     </message>
@@ -812,12 +791,12 @@
         <translation type="obsolete">Sous-groupe &apos;%1&apos; séléctioné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="710"/>
+        <location filename="../gui/mixingmatrix.cpp" line="700"/>
         <source>pre</source>
         <translation>pré</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="742"/>
+        <location filename="../gui/mixingmatrix.cpp" line="732"/>
         <source>pre vol</source>
         <translation>pré vol</translation>
     </message>
@@ -827,12 +806,12 @@
         <translation type="obsolete">désactive le module d&apos;effet</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="847"/>
+        <location filename="../gui/mixingmatrix.cpp" line="837"/>
         <source>Reassigne key</source>
         <translation>Réassigne les racourcis</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="814"/>
+        <location filename="../gui/mixingmatrix.cpp" line="804"/>
         <source>Does I reassigne the %1 key ?</source>
         <translation>Dois-je réassigner le rasourci %1 ?</translation>
     </message>
@@ -889,37 +868,37 @@
         <translation type="obsolete">Selectionne %1 %2 sur le cannal %3.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="880"/>
+        <location filename="../gui/mixingmatrix.cpp" line="870"/>
         <source>Phono selected.</source>
         <translation>Casque séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="883"/>
+        <location filename="../gui/mixingmatrix.cpp" line="873"/>
         <source>Mono selected.</source>
         <translation>Sortie mono séléctionnée.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="297"/>
+        <location filename="../gui/mixingmatrix.cpp" line="316"/>
         <source>Input &quot;%1&quot; selected.</source>
         <translation>Entrée « %1 » séléctionnée.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="311"/>
+        <location filename="../gui/mixingmatrix.cpp" line="330"/>
         <source>Pre fader aux &quot;%1&quot; selected.</source>
         <translation>Pré-fader « %1 » séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="318"/>
+        <location filename="../gui/mixingmatrix.cpp" line="337"/>
         <source>Post fader aux &quot;%1&quot; selected.</source>
         <translation>Post-fader « %1 » séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="325"/>
+        <location filename="../gui/mixingmatrix.cpp" line="344"/>
         <source>Sub-groupe &quot;%1&quot; selected.</source>
         <translation>Sous-groupe « %1 » séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="886"/>
+        <location filename="../gui/mixingmatrix.cpp" line="876"/>
         <source>Main fader selected.</source>
         <translation>Curseur principal séléctionné.</translation>
     </message>
@@ -934,44 +913,44 @@
         <translation type="obsolete">Pré</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="350"/>
+        <location filename="../gui/mixingmatrix.cpp" line="369"/>
         <source>- %CPU used by LiveMix backend (%1 %).
 - CPU load given by Jack (%2 %).</source>
         <translation>- Pourcentage du CPU utilisé par le core de LiveMix (%1 %).
 - CPU load fourni par Jack (%2 %).</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="700"/>
+        <location filename="../gui/mixingmatrix.cpp" line="690"/>
         <source>gain</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="713"/>
+        <location filename="../gui/mixingmatrix.cpp" line="703"/>
         <source>post</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="653"/>
+        <location filename="../gui/mixingmatrix.cpp" line="643"/>
         <source>mute</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="618"/>
+        <location filename="../gui/mixingmatrix.cpp" line="607"/>
         <source>sub</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="723"/>
+        <location filename="../gui/mixingmatrix.cpp" line="713"/>
         <source>main</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="736"/>
+        <location filename="../gui/mixingmatrix.cpp" line="726"/>
         <source>alf</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="739"/>
+        <location filename="../gui/mixingmatrix.cpp" line="729"/>
         <source>plf</source>
         <translation></translation>
     </message>
@@ -1001,139 +980,149 @@
         <translation type="obsolete">Sous-groupe</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="847"/>
+        <location filename="../gui/mixingmatrix.cpp" line="837"/>
         <source>Does I reassigne the %1 key</source>
         <translation>Dois-je réassigner le rasourci %1</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1081"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1063"/>
         <source>Change the fader height</source>
         <translation>Change la hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1081"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1063"/>
         <source>New fader height</source>
         <translation>Nouvelle hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1132"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1114"/>
         <source>Change the effect fader height</source>
         <translation>Change la hauter des curseurs d&apos;effets</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1132"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1114"/>
         <source>New effect fader height</source>
         <translation>Nouvelle hauteur des curseurs d&apos;effets</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="585"/>
+        <location filename="../gui/mixingmatrix.cpp" line="574"/>
         <source>input</source>
         <translation>entrée</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="588"/>
+        <location filename="../gui/mixingmatrix.cpp" line="577"/>
         <source>output</source>
         <translation>sortie</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="591"/>
+        <location filename="../gui/mixingmatrix.cpp" line="580"/>
         <source>pre-fader</source>
         <translation>pré-curseur</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="594"/>
+        <location filename="../gui/mixingmatrix.cpp" line="583"/>
         <source>post-fader</source>
         <translation>post-curseur</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="597"/>
+        <location filename="../gui/mixingmatrix.cpp" line="586"/>
         <source>sub-group</source>
         <translation>sous-groupe</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="707"/>
+        <location filename="../gui/mixingmatrix.cpp" line="697"/>
         <source>bal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="707"/>
+        <location filename="../gui/mixingmatrix.cpp" line="697"/>
         <source>pan</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="659"/>
+        <location filename="../gui/mixingmatrix.cpp" line="649"/>
         <source>pre-fader &quot;%1&quot;</source>
         <translation>pré-curseur « %1 »</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="662"/>
+        <location filename="../gui/mixingmatrix.cpp" line="652"/>
         <source>post-fader &quot;%1&quot;</source>
         <translation>post-curseur « %1 »</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="665"/>
+        <location filename="../gui/mixingmatrix.cpp" line="655"/>
         <source>sub-group &quot;%1&quot;</source>
         <translation>sous-groupe « %1 »</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="672"/>
+        <location filename="../gui/mixingmatrix.cpp" line="662"/>
         <source>main volume</source>
         <translation>volume principale</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="675"/>
+        <location filename="../gui/mixingmatrix.cpp" line="665"/>
         <source>phone volume</source>
         <translation>volume du casque</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="678"/>
         <source>mono Volume</source>
-        <translation>volume de la sortie mono</translation>
+        <translation type="obsolete">volume de la sortie mono</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="732"/>
+        <location filename="../gui/mixingmatrix.cpp" line="722"/>
         <source>volume</source>
         <translation>volume</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="691"/>
+        <location filename="../gui/mixingmatrix.cpp" line="681"/>
         <source>pre volume</source>
         <translation>pré volume</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="704"/>
+        <location filename="../gui/mixingmatrix.cpp" line="694"/>
         <source>M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="719"/>
+        <location filename="../gui/mixingmatrix.cpp" line="709"/>
         <source>LR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="726"/>
+        <location filename="../gui/mixingmatrix.cpp" line="716"/>
         <source>phone</source>
         <translation>casque</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="729"/>
+        <location filename="../gui/mixingmatrix.cpp" line="719"/>
         <source>mono</source>
         <translation>mono</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="895"/>
+        <location filename="../gui/mixingmatrix.cpp" line="885"/>
         <source>%1 on channel %2 selected.</source>
         <translation>%1 du channal %2 séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="606"/>
+        <location filename="../gui/mixingmatrix.cpp" line="595"/>
         <source>in</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="609"/>
+        <location filename="../gui/mixingmatrix.cpp" line="598"/>
         <source>out</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../gui/mixingmatrix.cpp" line="639"/>
+        <source>mute effect &quot;%1&quot;</source>
+        <translation>active/désactive le module d&apos;effet « %1 »</translation>
+    </message>
+    <message>
+        <location filename="../gui/mixingmatrix.cpp" line="668"/>
+        <source>mono volume</source>
+        <translation>volume de la sortie mono</translation>
     </message>
 </context>
 <context>
@@ -1141,22 +1130,22 @@
     <message>
         <location filename="../gui/Wrapp.cpp" line="66"/>
         <source>Phono value: %1.</source>
-        <translation>Volume du casque : %1.</translation>
+        <translation type="obsolete">Volume du casque : %1.</translation>
     </message>
     <message>
         <location filename="../gui/Wrapp.cpp" line="69"/>
         <source>Mono value: %1.</source>
-        <translation>Volume de la sortie mono : %1.</translation>
+        <translation type="obsolete">Volume de la sortie mono : %1.</translation>
     </message>
     <message>
         <location filename="../gui/Wrapp.cpp" line="72"/>
         <source>Main fader value: %1.</source>
-        <translation>Fader principale volume : %1.</translation>
+        <translation type="obsolete">Fader principale volume : %1.</translation>
     </message>
     <message>
         <location filename="../gui/Wrapp.cpp" line="76"/>
         <source>Output %1 value: %2.</source>
-        <translation>Sorite principale %1 valeur : %2.</translation>
+        <translation type="obsolete">Sorite principale %1 valeur : %2.</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="1061"/>
@@ -1184,9 +1173,14 @@
         <translation type="obsolete">%1 &quot;%2&quot; %3%4 valeur : %5.</translation>
     </message>
     <message>
-        <location filename="../gui/Wrapp.cpp" line="83"/>
+        <location filename="../gui/Wrapp.cpp" line="80"/>
         <source>%1 &quot;%2&quot; %3 value: %4.</source>
         <translation>%1 « %2 » %3 valeur : %4.</translation>
+    </message>
+    <message>
+        <location filename="../gui/Wrapp.cpp" line="67"/>
+        <source>%1 value: %2.</source>
+        <translation>%1 valeur : %2.</translation>
     </message>
 </context>
 <context>

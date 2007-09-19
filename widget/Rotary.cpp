@@ -64,10 +64,8 @@ QPixmap* Rotary::m_background_normal = NULL;
 QPixmap* Rotary::m_background_center = NULL;
 
 
-Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip, QString channel, QString channel2 )
+Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip)
         : Volume( parent )
-        , _channel(channel)
-        , _channel2(channel2)
         , m_bUseIntSteps( bUseIntSteps )
         , m_type( type )
         , m_fMin( type == TYPE_CENTER ? -1 : -60.0 )
@@ -167,15 +165,7 @@ void Rotary::setValue( float fValue, bool do_emit )
     }
 
     if (do_emit) {
-        emit valueChanged(_channel, m_fValue);
-        emit valueChanged(_channel, _channel2, m_fValue);
-
-        // from dB to value
-        float db = db2lin(m_fValue, m_fMin);
-        emit dbValueChanged(_channel, db);
-        emit dbValueChanged(_channel, _channel2, db);
-
-        emit displayValueChanged(displayDb(m_fValue, m_fMin));
+        emit valueChanged(this);
     }
 }
 
@@ -290,27 +280,27 @@ void Rotary::mouseMoveEvent( QMouseEvent *ev )
 }
 
 
-void Rotary::setMin( float fMin )
+void Rotary::setMinValue( float fMin )
 {
     m_fMin = fMin;
 	m_fMousePressValue = m_fMin - 1;
     update();
 }
 
-float Rotary::getMin()
+float Rotary::getMinValue()
 {
     return m_fMin;
 }
 
 
-void Rotary::setMax( float fMax )
+void Rotary::setMaxValue( float fMax )
 {
     m_fMax = fMax;
     update();
 }
 
 
-float Rotary::getMax()
+float Rotary::getMaxValue()
 {
     return m_fMax;
 }

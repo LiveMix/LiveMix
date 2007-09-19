@@ -17,9 +17,6 @@
  */
 
 #include "GetKeyField.h"
-#include "globals.h"
-
-#include "QDebug"
 
 namespace LiveMix
 {
@@ -76,8 +73,7 @@ void GetKeyField::keyPressEvent(QKeyEvent * p_pEvent) {
 			setKeySequence(QKeySequence(p_pEvent->key()+p_pEvent->modifiers()));
 	}
 }
-void GetKeyField::keyReleaseEvent(QKeyEvent * p_pEvent) {
-	UNUSED(p_pEvent);
+void GetKeyField::keyReleaseEvent(QKeyEvent */*p_pEvent*/) {
 	setKeySequence(m_pKeySequence);
 }
 

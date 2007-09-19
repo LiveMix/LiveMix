@@ -58,14 +58,14 @@ public:
         TYPE_CENTER
     };
 
-    Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip, QString channel, QString channel2 = "" );
+    Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip);
     ~Rotary();
 
-    void setMin( float fMin );
-    float getMin();
+    void setMinValue( float fMin );
+    float getMinValue();
 
-    void setMax( float fMax );
-    float getMax();
+    void setMaxValue( float fMax );
+    float getMaxValue();
 
     void setValue( float fValue, bool emit = false );
     float getValue()
@@ -88,18 +88,7 @@ public:
     }
     void incValue(bool p_bDirection, int p_iStep =1);
 
-signals:
-//  void valueChanged(Rotary *ref);
-    void valueChanged(QString channel, float value);
-    void valueChanged(QString channel, QString channel2, float value);
-    // in fact the external value is standanrd and internal in dB
-    void dbValueChanged(QString channel, float value);
-    void dbValueChanged(QString channel, QString channel2, float value);
-
 private:
-    QString _channel;
-    QString _channel2;
-
     bool m_bUseIntSteps;
     RotaryType m_type;
     static QPixmap* m_background_normal;

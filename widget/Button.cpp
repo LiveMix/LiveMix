@@ -29,10 +29,8 @@
 namespace LiveMix
 {
 
-Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, QSize size, bool use_skin_style, QString channel, QString channel2 )
+Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, QSize size, bool use_skin_style)
         : Action( pParent )
-        , _channel(channel)
-        , _channel2(channel2)
         , m_bPressed( false )
         , m_onPixmap( size )
         , m_offPixmap( size )
@@ -223,8 +221,8 @@ void Button::setText( const QString& sText )
 // :::::::::::::::::::::::::
 
 
-ToggleButton::ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style, QString channel, QString channel2 )
-        : Button( pParent, sOnImg, sOffImg, sOverImg, size, use_skin_style, channel, channel2 )
+ToggleButton::ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style)
+        : Button( pParent, sOnImg, sOffImg, sOverImg, size, use_skin_style)
 {}
 
 
@@ -245,8 +243,6 @@ void ToggleButton::mousePressEvent(QMouseEvent* ev)
 	    emit clicked();
 	    emit clicked(this);
 	    emit valueChanged(this);
-	    emit valueChanged(_channel, m_bPressed);
-	    emit valueChanged(_channel, _channel2, m_bPressed);
     }
 }
 
@@ -271,43 +267,13 @@ void ToggleButton::mouseReleaseEvent(QMouseEvent* ev)
     }
 }
 
-Button* Button::create(QWidget* pParent, QString channel, QString channel2)
+Button* Button::create(QWidget* pParent)
 {
-    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel, channel2 );
+    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
 }
-ToggleButton* ToggleButton::create(QWidget* pParent, QString channel, QString channel2)
+ToggleButton* ToggleButton::create(QWidget* pParent)
 {
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel, channel2 );
-}
-ToggleButton* ToggleButton::createEdit(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "btn_edit_on.png", "btn_edit_off.png", "btn_edit_over.png", QSize( 18, 13 ), true, channel );
-}
-ToggleButton* ToggleButton::createMute(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "btn_mute_on.png", "btn_mute_off.png", "btn_mute_over.png", QSize( 18, 13 ), true, channel );
-}
-ToggleButton* ToggleButton::createNew(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "btn_new_on.png", "btn_new_off.png", "btn_new_over.png", QSize( 18, 13 ), true, channel );
-}
-ToggleButton* ToggleButton::createPlay(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "btn_play_on.png", "btn_play_off.png", "btn_play_over.png", QSize( 18, 13 ), true, channel );
-}
-ToggleButton* ToggleButton::createSolo(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "btn_solo_on.png", "btn_solo_off.png", "btn_solo_over.png", QSize( 18, 13 ), true, channel );
-}
-ToggleButton* ToggleButton::createByPass(QWidget* pParent, QString channel)
-{
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true, channel );
-// return new ToggleButton(pParent, "bypass_on.png", "bypass_off.png", "bypass_over.png", QSize( 18, 13 ), true, channel );
+    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
 }
 
 }

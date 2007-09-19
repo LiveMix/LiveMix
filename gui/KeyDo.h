@@ -40,40 +40,38 @@ protected:
 class KeyDoSelectChannel : public KeyDo
 {
 public:
-    KeyDoSelectChannel(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName);
+    KeyDoSelectChannel(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName);
     ~KeyDoSelectChannel();
     void action();
     QString name() {return "KeyDoSelectChannel";};
 
-    Backend::ChannelType m_eType;
+    ChannelType m_eType;
     QString m_sChannelName;
 };
 class KeyDoChannelAction : public KeyDo
 {
 public:
-    KeyDoChannelAction(Widget* p_pMatrix, Backend::ElementType p_eElement, QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    KeyDoChannelAction(Widget* p_pMatrix, ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoChannelAction();
     void action();
     QString name() {return "KeyDoChannelAction";};
 
-    Backend::ElementType m_eElement;
+    ElementType m_eElement;
     QString m_sReatedChannelName;
-    QString m_sDisplayReatedChannelName;
 };
 class KeyDoDirectAction : public KeyDo
 {
 public:
-    KeyDoDirectAction(Widget* p_pMatrix, Backend::ChannelType p_eType, QString p_sChannelName, Backend::ElementType p_eElement, 
-    		QString p_sReatedChannelName, QString p_sDisplayReatedChannelName);
+    KeyDoDirectAction(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+    		QString p_sReatedChannelName);
     ~KeyDoDirectAction();
     void action();
     QString name();
 
-    Backend::ChannelType m_eType;
+    ChannelType m_eType;
     QString m_sChannelName;
-    Backend::ElementType m_eElement;
+    ElementType m_eElement;
     QString m_sReatedChannelName;
-    QString m_sDisplayReatedChannelName;
 };
 
 }

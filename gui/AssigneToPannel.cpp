@@ -1,7 +1,5 @@
 #include "AssigneToPannel.h"
 
-#include "globals.h"
-
 #import <QLabel>
 #import <QDebug>
 #include <QGridLayout>
@@ -69,12 +67,10 @@ AssigneToPannel::~AssigneToPannel()
 {
 }
 
-void AssigneToPannel::okClicked(bool p_bChecked) {
-	UNUSED(p_bChecked);
+void AssigneToPannel::okClicked(bool /*p_bChecked*/) {
 	done(QDialog::Accepted);
 }
-void AssigneToPannel::cancelClicked(bool p_bChecked) {
-	UNUSED(p_bChecked);
+void AssigneToPannel::cancelClicked(bool /*p_bChecked*/) {
 	done(QDialog::Rejected);
 }
 

@@ -21,8 +21,6 @@
 
 #include "LCD.h"
 
-#include "globals.h"
-
 #include <QtGui/QPainter>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -113,17 +111,14 @@ LCDDigit::~LCDDigit()
 }
 
 
-void LCDDigit::mouseReleaseEvent(QMouseEvent* ev)
+void LCDDigit::mouseReleaseEvent(QMouseEvent*)
 {
-    UNUSED(ev);
     emit digitClicked();
 }
 
 
-void LCDDigit::paintEvent(QPaintEvent *ev)
+void LCDDigit::paintEvent(QPaintEvent*)
 {
-    UNUSED(ev);
-
     int x = m_nCol * width();
     int y = m_nRow * height();
 
@@ -458,10 +453,8 @@ void LCDSpinBox::setValue( float nValue )
     }
 }
 
-void LCDSpinBox::displayClicked( LCDDisplay *pRef )
+void LCDSpinBox::displayClicked(LCDDisplay */*pRef*/)
 {
-    UNUSED(pRef);
-
     emit spinboxClicked();
 }
 

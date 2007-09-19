@@ -23,6 +23,8 @@
 
 #include "guiserver_interface.h"
 #include "channels.h"
+#include "types.h"
+
 #ifdef LADSPA_SUPPORT
 #include "ladspa_fx.h"
 #endif
@@ -51,9 +53,6 @@ class Backend : public QObject
 
     Q_OBJECT
 public:
-    enum ChannelType {IN, OUT, PRE, POST, SUB};
-    enum ElementType {GAIN, MUTE, PAN_BAL, TO_PRE, TO_POST, TO_SUB, TO_MAIN, FADER, TO_ALF, TO_PLF, PRE_VOL, MUTE_EFFECT};
-
     ~Backend();
 
     static Backend* instance();
@@ -78,6 +77,8 @@ public:
     const QList<QString>& postchannels();
     const QList<QString>& subchannels();
 
+	channel* getChannel(ChannelType p_eType, QString p_rName);
+	
     /**
      * @brief Get the peek of the named out node.
      */
