@@ -186,69 +186,112 @@
 <context>
     <name>LadspaFXSelector_UI</name>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="184"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="183"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="185"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="184"/>
         <source>Alt+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="186"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="185"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="187"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="186"/>
         <source>Alt+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="189"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="188"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="192"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="191"/>
         <source>Name:</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="194"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="193"/>
         <source>Label:</source>
         <translation>Label :</translation>
     </message>
     <message>
         <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="195"/>
         <source>Type:</source>
-        <translation type="obsolete">Type :</translation>
+        <translation type="unfinished">Type :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="198"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="196"/>
         <source>ID:</source>
         <translation>ID :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="201"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="199"/>
         <source>Maker:</source>
         <translation>Concepteur :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="203"/>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="205"/>
         <source>Copyright:</source>
         <translation>Copyright :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="196"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="285"/>
         <source>Input / Output</source>
         <translation>Entrée / Sorties</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="197"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="288"/>
         <source>In / Out:</source>
         <translation>E / S :</translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="182"/>
+        <source>Form1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="192"/>
+        <source>### fx name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="194"/>
+        <source>### fx label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="197"/>
+        <source>### fx type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="198"/>
+        <source>### fx ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="204"/>
+        <source>### FX maker
+1
+2
+3
+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="210"/>
+        <source>### copyright
+1
+2
+3
+4</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
