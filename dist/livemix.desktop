@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=LiveMix
 Comment=Mix table for live performances
 Comment[fr]=Table de mixage live
@@ -9,4 +8,4 @@ Icon=livemix
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=Application;AudioVideo;Audio;
+Categories=AudioVideo;Audio;

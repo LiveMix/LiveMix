@@ -8,7 +8,8 @@ target.path = $$prefix/bin
 target.files = livemix
 
 icon.path = $$prefix/share/pixmaps
-icon.files = dist/livemix.xpm dist/livemix-16.xpm
+icon.files = dist/livemix.xpm
+#dist/livemix-16.xpm
 
 desktop.path = $$prefix/share/applications
 desktop.files = dist/livemix.desktop

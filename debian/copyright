@@ -3,7 +3,10 @@ Tue,  4 Sep 2007 10:04:57 +0200.
 
 It was downloaded from http://livemix.codingteam.net/
 
-Upstream Author: Stéphane Brunner <stephane.brunner@gmail.com>
+Upstream Author:
+Copyright 2002 - 2007 Alex >Comix< Cominu
+Copyright 2004 - 2007 Arnold Krille
+Copyright 2007 Stéphane Brunner
 
 Copyright:
 
@@ -18,11 +21,33 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this package; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-02111-1307, USA.
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+MA 02110-1301, USA.
 
 On Debian GNU/Linux systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL-2'.
+
+---
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation;
+version 2 of the License.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+MA 02110-1301, USA.
+
+On Debian GNU/Linux systems, the complete text of the GNU Ligrary
+Public License can be found in `/usr/share/common-licenses/LGPL-2'.
+
+---
 
 The Debian packaging is (C) 2007, Stéphane Brunner <stephane.brunner@gmail.com> and
 is licensed under the GPL, see `/usr/share/common-licenses/GPL-2'.

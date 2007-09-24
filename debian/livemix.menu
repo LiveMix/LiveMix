@@ -1,2 +1,2 @@
-?package(livemix):needs="X11" section="Apps/Sound"\
+?package(livemix):needs="X11" section="Applications/Sound"\
   title="LiveMix" command="/usr/bin/livemix"
