@@ -1,0 +1,9 @@
+application/livemix:
+        description=LiveMix - Mix table
+        description[fr]=LiveMix - Table de mixage
+        icon_filename=livemix
+        default_action_type=application
+        default_application_id=livemix
+        short_list_application_user_additions=livemix
+	open=livemix %f
+	view=livemix %f
