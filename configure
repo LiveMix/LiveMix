@@ -21,7 +21,7 @@ Starting LiveMix configuration http://livemix.codingteam.net/
 
 # check prefix settings
 if test "x$prefix" = "x"; then
-	default_prefix=/usr/local
+	default_prefix=/usr/local/livemix
 	echo " * prefix is not set, using default $default_prefix"
 	prefix=$default_prefix
 fi
