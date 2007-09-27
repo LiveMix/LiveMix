@@ -26,6 +26,17 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 - add confirm message on remove effect.
 
+- add logs for remove effect button !
+- resolumtion max 768 ou 900 sans scroll !
+
+- add file new empty
+- add new default
+
+- fix add stereo input/pre/post/sub :(
+
+- every 10 segonds save tavle to ~/.livemix/table.lm
+
+
 ==== 0.6 ====
 - save jack connection ?
 - add MIDI learn support (help welcome, I don't have hardware)
