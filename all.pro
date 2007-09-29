@@ -17,17 +17,17 @@ desktop.files = dist/livemix.desktop
 sample.path = $$prefix/share/livemix/sample
 sample.files = default.lm
 
-application-registry.path = $$prefix/share/application-registry
-application-registry.files = dist/livemix.applications
+#application-registry.path = $$prefix/share/application-registry
+#application-registry.files = dist/livemix.applications
 
-mime.path = $$prefix/share/mime-info
-mime.files = dist/livemix.mime dist/livemix.keys
+#mime.path = $$prefix/share/mime-info
+#mime.files = dist/livemix.mime dist/livemix.keys
 
 # mime2
 #mime2.path = $$prefix/share/mime/packages
 #mime2.files = dist/livemix-mime.xml
 
 
-INSTALLS += target icon sample desktop application-registry mime
-#mime2 data
+INSTALLS += target icon sample desktop
+#mime2 data mime application-registry
 

@@ -76,7 +76,7 @@ void WrappVolume::valueChanged(Volume* p_pVolume) {
 	        value = tmp;
     	}
     	else {
-    		displayDb(p_pVolume->getValue(), p_pVolume->getMinValue());
+    		value = displayDb(p_pVolume->getValue(), p_pVolume->getMinValue());
     	}
         m_pMatrix->showMessage(trUtf8("%1 \"%2\" %3 value: %4.").arg(m_pMatrix->getDisplayChannelType(m_eType))
         		.arg(m_pMatrix->getDisplayNameOfChannel(m_eType, m_sChannelName))

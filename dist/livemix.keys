@@ -1,4 +1,4 @@
-application/livemix:
+application/x-livemix:
         description=LiveMix - Mix table
         description[fr]=LiveMix - Table de mixage
         icon_filename=livemix

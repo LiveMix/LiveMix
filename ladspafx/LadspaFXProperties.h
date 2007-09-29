@@ -42,7 +42,7 @@ class LadspaFXProperties : public QWidget
     Q_OBJECT
 
 public:
-    LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX);
+    LadspaFXProperties(QWidget* parent, effect *nLadspaFX);
     ~LadspaFXProperties();
 
     void updateControls();
@@ -55,7 +55,7 @@ public:
     void setFaderHeight(int p_iHeight);
     
 public slots:
-    void faderChanged(Fader * ref);
+    void faderChanged(Volume* ref);
     void toggleChanged(ToggleButton* ref);
 //  void selectFXBtnClicked();
     void activateBtnClicked();
@@ -63,10 +63,10 @@ public slots:
     void updateOutputControls();
 
 signals:
-    void removeClicked(LadspaFXProperties*, struct effect*);
+    void removeClicked(LadspaFXProperties*, effect*);
 
 private:
-    struct effect* m_nLadspaFX;
+    effect* m_nLadspaFX;
 
     QLabel *m_pNameLbl;
 

@@ -8,7 +8,9 @@ cd ..
 
 rm livemix_$1*
 
-tar --exclude=debian -cvhzf livemix_$1.orig.tar.gz livemix-$1
+tar --exclude=debian -chzf livemix_$1.orig.tar.gz livemix-$1
+
+echo "----"
 
 cd livemix-$1
 
@@ -20,6 +22,7 @@ cd ../livemix
 lintian ../livemix_$1*.dsc
 linda ../livemix_$1*.dsc
 
+echo "----"
 echo "For pbuilder"
 # sudo pbuilder create --distribution gutsy --othermirror "deb ftp://ch.archive.ubuntu.com/ubuntu/ gutsy main universe" --mirror ftp://ch.archive.ubuntu.com/ubuntu
 # sudo pbuilder create --distribution sid --othermirror "deb ftp://ch.debian.org/debian sid main" --mirror ftp://ch.debian.org/debian

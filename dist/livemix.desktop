@@ -1,7 +1,8 @@
 [Desktop Entry]
-Name=LiveMix
-Comment=Mix table for live performances
-Comment[fr]=Table de mixage live
+Name=Live Mixer
+Name[fr]=Table de mixage
+Comment=Mix your music tracks live
+Comment[fr]=Mixer vos pistes de musique en direct
 TryExec=livemix
 Exec=livemix
 Icon=livemix

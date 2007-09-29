@@ -128,7 +128,8 @@ public:
 public slots:
     // Fills the empty nodes with 1to1-controls
     void init();
-    void removeFX(LadspaFXProperties*, struct effect*);
+    void removeFX(LadspaFXProperties*, effect*);
+    void askRemoveFX(LadspaFXProperties*, effect*);
 
 	void showGain();
 	void faderHeight();
@@ -138,7 +139,7 @@ private slots:
     void update();
     void select(ChannelType, QString channel);
     void addFX();
-    void displayFX(struct effect *fx, ChannelType p_eType, QString p_sChannelName);
+    void displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName);
     void onStatusTimerEvent();
 
 private:

@@ -9,7 +9,7 @@ make clean
 make distclean
 
 rm -rf .settings
-rm gethydrogen.tar.gz linda lintian* .cdtproject .project
+rm config.h build-stamp config.guess config.sub .cdtproject .project
 find . -name .svn -print | while read f;
 do
    rm -rf $f
@@ -34,3 +34,5 @@ find . -name Makefile.am -print | while read f;
 do
    rm $f
 done
+
+echo "----"

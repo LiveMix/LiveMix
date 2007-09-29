@@ -18,13 +18,14 @@
     MA 02110-1301, USA.
 */
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTranslator>
-#include <QtCore/QLocale>
-#include <QtGui/QApplication>
-#include <QtGui/QIcon>
-#include <QtGui/QPushButton>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
+#include <QTranslator>
+#include <QLocale>
+#include <QApplication>
+#include <QIcon>
+#include <QPushButton>
 
 #include "mainwindow.h"
 
@@ -137,10 +138,20 @@ int main( int argc, char** argv )
     }
 
     LiveMix::MainWindow *mw;
-    if ( !file.isEmpty() )
+    if (!file.isEmpty()) {
         mw = new LiveMix::MainWindow( file );
-    else
-        mw = new LiveMix::MainWindow( QCoreApplication::applicationDirPath() + "/../share/livemix/sample/default.lm" );
+    }
+    else {
+		if (QFile(QDir::homePath().append("/.livemix/table.lm")).exists()) {
+	        mw = new LiveMix::MainWindow(QDir::homePath().append("/.livemix/table.lm"));
+		}
+		else if (QFile(QCoreApplication::applicationDirPath() + "/default.lm").exists()) {
+	        mw = new LiveMix::MainWindow(QCoreApplication::applicationDirPath() + "/default.lm");
+		}			
+		else {
+	        mw = new LiveMix::MainWindow(QCoreApplication::applicationDirPath() + "/../share/livemix/sample/default.lm");
+		}
+    }
 
     int ret = qapp->exec();
 

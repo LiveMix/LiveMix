@@ -53,6 +53,7 @@ public slots:
     void openFile();
     void openFile( QString path );
     void saveFile();
+	void saveFile(QString p_rPath);
 private slots:
     void closeEvent( QCloseEvent* );
 
@@ -83,8 +84,12 @@ private slots:
 
     void initMatrix();
     void scheduleInit();
+    
+    void openDefaultMenu();
+    void openEmpty();
 
 private:
+    void toEmpty();
 	void openDefault();
 
     void addInput( QString, bool );
@@ -96,7 +101,7 @@ private:
     void init();
 
     LadspaFX* openEffect(const QDomElement& elem);
-    void saveEffect(QString& xml, struct effect*);
+    void saveEffect(QString& xml, effect*);
     
 	void openActionBinding(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
 	void openActionBindingList(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
@@ -109,7 +114,7 @@ private:
     int config_restore_id;
     QMenu *_filemenu, *_editmenu, *_viewmenu, *_settingsmenu, *_helpmenu;
     Widget *_mixerwidget;
-// QAction *_select_action;
+	QAction *_new_empty, *_new_default;
     QAction *_add_inchannel_action, *_add_prechannel_action, *_add_postchannel_action, *_add_subchannel_action;
     QAction *_add_stinchannel_action, *_add_stprechannel_action, *_add_stpostchannel_action, *_add_stsubchannel_action;
     QAction *_add_intpostchannel_action, *_add_stintpostchannel_action;
@@ -117,6 +122,7 @@ private:
     QAction *m_pFaderHeight, *m_pEffectFaderHeight, *m_pShowGain;
     QAction *_debugPrint;
     bool _initScheduled;
+	void timerEvent( QTimerEvent* );
 };
 
 }

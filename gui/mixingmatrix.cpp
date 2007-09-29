@@ -173,7 +173,7 @@ Widget::Widget(QWidget* p)
 Widget::~Widget()
 {}
 
-void Widget::displayFX(struct effect *fx, ChannelType p_eType, QString p_sChannelName)
+void Widget::displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName)
 {
     if (fx->gui == NULL)
     {
@@ -181,7 +181,9 @@ void Widget::displayFX(struct effect *fx, ChannelType p_eType, QString p_sChanne
         fx->gui->setFaderHeight(m_iEffectFaderHeight);
 	    addToggle(fx->gui->getActivateButton(), p_eType, p_sChannelName, MUTE_EFFECT, fx->fx->getPluginLabel());
         effect_layout->addWidget(fx->gui);
-        connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, struct effect*)), this, SLOT(removeFX(LadspaFXProperties*, struct effect*)));
+qDebug() << "Connect remove effect 2";
+        connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, effect*)), this, SLOT(askRemoveFX(LadspaFXProperties*, effect*)));
+qDebug() << "Remove effect 2 connected";
 
 	    channel* c = Backend::instance()->getChannel(p_eType, p_sChannelName);
 	    if (!c->effectsMap.contains(fx->fx->getPluginLabel())) {
@@ -203,7 +205,15 @@ void Widget::displayFX(struct effect *fx, ChannelType p_eType, QString p_sChanne
     m_lVisibleEffect << fx;
 }
 
-void Widget::removeFX(LadspaFXProperties* widget, struct effect* fx)
+void Widget::askRemoveFX(LadspaFXProperties* widget, effect* fx)
+{
+    qDebug()<<"Effect remove clicked 2";
+	if (QMessageBox::question(this, trUtf8("Remove effect"), trUtf8("Are you shure that you want to remove en effect"), 
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+		removeFX(widget, fx);
+	}
+}
+void Widget::removeFX(LadspaFXProperties* widget, effect* fx)
 {
     m_lVisibleEffect.removeAll(fx);
     disconnect(widget, 0, 0, 0);
@@ -250,7 +260,7 @@ void Widget::addFX()
 #ifdef LADSPA_SUPPORT
     LadspaFX* fx = LadspaFXProperties::getFXSelector(NULL);
     if (fx != NULL) {
-        struct effect* elem = NULL;
+        effect* elem = NULL;
         switch (m_eSelectType) {
         case IN: {
                 elem = Backend::instance()->addInEffect(m_sSelectChannel, fx);
@@ -296,7 +306,7 @@ void Widget::select(ChannelType type, QString channel)
 }
 void Widget::doSelect(ChannelType type, QString channel)
 {
-// effect = new struct effectData;
+// effect = new effectData;
     if (m_eSelectType == type && m_sSelectChannel == channel) {
         return;
     }
@@ -306,7 +316,7 @@ void Widget::doSelect(ChannelType type, QString channel)
     effectName->setText(channel);
 //    m_pEffectStart->show();
 
-    foreach (struct effect* fx, m_lVisibleEffect) {
+    foreach (effect* fx, m_lVisibleEffect) {
         fx->gui->hide();
     }
     m_lVisibleEffect.clear();
@@ -1155,7 +1165,7 @@ Fader* Widget::createFader(ChannelType p_eType, QString p_sChannelName, ElementT
     fader->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
     fader->setFixedSize(23, getFaderHeight());
 //    connect(fader, SIGNAL( dbValueChanged(QString, float) ), Backend::instance(), SLOT( setInVolume( QString, float ) ) );
-	if (p_eType == IN) {
+	if (p_eType == IN || p_eType == POST) {
 	    fader->setMaxValue(20);
 	    fader->setMaxPeak(20);
 	    fader->setMinValue(-60);
@@ -1187,7 +1197,7 @@ ToggleButton* Widget::createToggle(ChannelType p_eType, QString p_sChannelName, 
     toggle->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
     toggle->setText(getShortDisplayFunction(p_eElement, p_rChannelTo));
 //    connect(main_on, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInMain( QString, bool ) ) );
-    toggle->setValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
+    toggle->setValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getBoolAttribute(p_eElement, p_rChannelTo));
     return toggle;
 }
 

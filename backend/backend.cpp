@@ -222,7 +222,7 @@ int process( jack_nframes_t nframes, void* arg )
 
 //  JackMix::ports_it it;
         //qDebug() << "Calculate pre and post in levels.";
-        foreach( struct in* elem, backend->ins ) {
+        foreach( in* elem, backend->ins ) {
             if (calculate_pk)
             {
                 elem->peak_l = 0;
@@ -351,7 +351,7 @@ int process( jack_nframes_t nframes, void* arg )
 
                 float vol_l = pre_elem->volume * (1-pre_elem->bal);
                 float vol_r = pre_elem->volume * (1+pre_elem->bal);
-                foreach( struct in* in_elem, backend->ins ) {
+                foreach( in* in_elem, backend->ins ) {
                     float volume = in_elem->pre[ pre_elem->name ];
                     float vl = volume * vol_l;
                     float vr = volume * vol_r;
@@ -385,7 +385,7 @@ int process( jack_nframes_t nframes, void* arg )
                 float vol_l = post_elem->prevolume;
                 float vol_r = post_elem->prevolume;
 
-                foreach( struct in* in_elem, backend->ins ) {
+                foreach( in* in_elem, backend->ins ) {
                     jack_default_audio_sample_t* inl = in_elem->post_l;
                     jack_default_audio_sample_t* inr = in_elem->post_r;
                     float volume = in_elem->post[ post_elem->name ];
@@ -451,7 +451,7 @@ int process( jack_nframes_t nframes, void* arg )
                 jack_default_audio_sample_t* outl = sub_elem->sub_l;
                 jack_default_audio_sample_t* outr = sub_elem->sub_r;
 
-                foreach( struct in* in_elem, backend->ins ) {
+                foreach( in* in_elem, backend->ins ) {
                     jack_default_audio_sample_t* inl = in_elem->post_l;
                     jack_default_audio_sample_t* inr = in_elem->post_r;
                     bool on = in_elem->sub[ sub_elem->name ];
@@ -517,7 +517,7 @@ int process( jack_nframes_t nframes, void* arg )
                 jack_default_audio_sample_t* main_l = main_elem->out_s_l;
                 jack_default_audio_sample_t* main_r = main_elem->out_s_r;
                 // in
-                foreach( struct in* in_elem, backend->ins ) {
+                foreach( in* in_elem, backend->ins ) {
                     jack_default_audio_sample_t* inl = in_elem->post_l;
                     jack_default_audio_sample_t* inr = in_elem->post_r;
                     if (in_elem->main)
@@ -595,7 +595,7 @@ int process( jack_nframes_t nframes, void* arg )
         jack_default_audio_sample_t* plf_r = plf_elem->out_s_r;
         bool plfOn = false;
         // in
-        foreach( struct in* in_elem, backend->ins ) {
+        foreach( in* in_elem, backend->ins ) {
             jack_default_audio_sample_t* inl = in_elem->pre_l;
             jack_default_audio_sample_t* inr = in_elem->pre_r;
             if (in_elem->plf)
@@ -1058,7 +1058,7 @@ bool Backend::addSub( QString name, bool stereo )
 bool Backend::removeInput( QString name )
 {
     ins_order.removeAll( name );
-    struct in* elem = ins[name];
+    in* elem = ins[name];
     ins.remove( name );
     removeInput( elem->in_l, elem->in_r, name, "in", elem->stereo );
     delete elem;

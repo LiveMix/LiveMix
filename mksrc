@@ -3,5 +3,5 @@
 ./copysrc $1
 
 cd ..
-tar -cvjf livemix-$1.tar.bz2 livemix-$1
+tar -cjf livemix-$1.tar.bz2 livemix-$1
 cd livemix

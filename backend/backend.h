@@ -169,35 +169,35 @@ public:
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const struct out* getOutput( QString );
+    const out* getOutput( QString );
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const struct in* getInput( QString );
+    const in* getInput( QString );
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const struct pre* getPre( QString );
+    const pre* getPre( QString );
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const struct post* getPost( QString );
+    const post* getPost( QString );
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const struct sub* getSub( QString );
+    const sub* getSub( QString );
 
 
     // should be in mixingmatrix !

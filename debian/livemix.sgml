@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="iso8859-1"?>
 <!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 
 <!-- Process this file with docbook-to-man to generate an nroff manual
@@ -9,24 +9,22 @@
 manpage.1: manpage.sgml
 	docbook-to-man $< > $@
 
-    
 	The docbook-to-man binary is found in the docbook-to-man package.
 	Please remember that if you create the nroff version in one of the
 	debian/rules file targets (such as build), you will need to include
 	docbook-to-man in your Build-Depends control field.
-
   -->
 
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
-  <!ENTITY dhfirstname "<firstname>StÃ©phane</firstname>">
+  <!ENTITY dhfirstname "<firstname>Stéphane</firstname>">
   <!ENTITY dhsurname   "<surname>Brunner</surname>">
   <!-- Please adjust the date whenever revising the manpage. -->
-  <!ENTITY dhdate      "<date>septembre  4, 2007</date>">
+  <!ENTITY dhdate      "<date>septembre 4, 2007</date>">
   <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
        allowed: see man(7), man(1). -->
   <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
   <!ENTITY dhemail     "<email>stephane.brunner@gmail.com</email>">
-  <!ENTITY dhusername  "StÃ©phane Brunner">
+  <!ENTITY dhusername  "Stéphane Brunner">
   <!ENTITY dhucpackage "<refentrytitle>LIVEMIX</refentrytitle>">
   <!ENTITY dhpackage   "livemix">
 
@@ -118,5 +116,3 @@ sgml-local-catalogs:nil
 sgml-local-ecat-files:nil
 End:
 -->
-
-

@@ -34,11 +34,12 @@
 #include <QShowEvent>
 #include <QFrame>
 #include <QCloseEvent>
+#include <QMessageBox>
 
 namespace LiveMix
 {
 
-LadspaFXProperties::LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX)
+LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX)
         : QWidget(parent)
 {
 // qDebug() << "INIT";
@@ -81,7 +82,9 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, struct effect *nLadspaFX
     m_pRemoveBtn = Button::create(this);
     m_pRemoveBtn->setText(trUtf8("X"));
     m_pRemoveBtn->setToolTip(trUtf8("Remove"));
+    qDebug()<<"Connect effect remove";
     connect(m_pRemoveBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
+    qDebug()<<"Effect remove Conected";
 
     m_pTimer = new QTimer( this );
     connect(m_pTimer, SIGNAL( timeout() ), this, SLOT( updateOutputControls() ) );
@@ -119,17 +122,17 @@ void LadspaFXProperties::toggleChanged(ToggleButton* ref)
 #endif
 }
 
-void LadspaFXProperties::faderChanged( Fader * ref )
+void LadspaFXProperties::faderChanged(Volume* ref)
 {
-    ref->setPeak_L( ref->getValue() );
-    ref->setPeak_R( ref->getValue() );
+    ((Fader*)ref)->setPeak_L( ref->getValue() );
+    ((Fader*)ref)->setPeak_R( ref->getValue() );
 
 #ifdef LADSPA_SUPPORT
     for ( int i = 0; i < m_pInputControlFaders.size(); i++ ) {
         if (ref == m_pInputControlFaders[ i ] ) {
             LadspaControlPort *pControl = m_nLadspaFX->fx->inputControlPorts[ i ];
 
-            pControl->m_fControlValue = ref->getLinDb() ? ref->getValue() : ref->getDbValue();
+            pControl->m_fControlValue = ((Fader*)ref)->getLinDb() ? ref->getValue() : ref->getDbValue();
             //float fInterval = pControl->fUpperBound - pControl->fLowerBound;
             //pControl->fControlValue = pControl->fLowerBound + fValue * fInterval;
 
@@ -277,7 +280,7 @@ void LadspaFXProperties::updateControls()
                 // fader
                 Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic );
 		    	pFader->setFixedHeight(m_iFaderHeight);
-                connect( pFader, SIGNAL( valueChanged(Fader*) ), this, SLOT( faderChanged(Fader*) ) );
+                connect( pFader, SIGNAL( valueChanged(Volume*) ), this, SLOT( faderChanged(Volume*) ) );
                 m_pInputControlFaders.push_back( pFader );
                 pFader->move( nInputControl_X + 20, 56 );
                 pFader->show();
@@ -461,6 +464,7 @@ void LadspaFXProperties::updateOutputControls()
 
 void LadspaFXProperties::removeBtnClicked()
 {
+    qDebug()<<"Effect mute clicked";
     emit removeClicked(this, m_nLadspaFX);
 }
 

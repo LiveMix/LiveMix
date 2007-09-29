@@ -1,4 +1,19 @@
 
+==== 0.45svn20070929 ====
+
+- remove store of m_sDisplayReatedChannelName, should be calculated!
+- add : create volume, fader and toggle. (simplify i18n)
+- mv cannel from fader, button and rotary to wrapper.
+- in backend the methode : channel getChannel(type, name)
+- in channel the methode get/setAttribute(type, toChannel, value)
+- fix add stereo input/pre/post/sub :(
+- every segond save tavle to ~/.livemix/table.lm
+- add confirm message on remove effect.
+- add logs for remove effect button !
+- add file new empty
+- add new default
+- update debian package with cesare.tirabassi@gmail.com revu comment.
+
 ==== 0.45svn20070917 ====
 
 - extends LADSPA support

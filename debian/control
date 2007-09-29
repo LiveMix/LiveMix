@@ -1,7 +1,7 @@
 Source: livemix
 Section: sound
 Priority: extra
-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
+Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
 Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk
 Standards-Version: 3.7.2
@@ -12,12 +12,12 @@ Depends: ${shlibs:Depends}
 Recommends: swh-plugins
 Suggests: cmt, tap-plugins, ladspa-plugin
 Description: Simple mixer for live performances
-Based on Jack and LADSPA.
-Features :
-- In, pre fader, post fader, sub-groups customisable channel.
-- All-in is stereo-in internally.
-- LADSPA effects.
-- PK meters.
-- CPU meters.
-- Hydrogen GUI.
-Homepage: http://livemix.codingteam.net/
+ Based on Jack and LADSPA.
+ Features :
+  - In, pre fader, post fader, sub-groups customisable channel.
+  - All-in is stereo-in internally.
+  - LADSPA effects.
+  - PK meters.
+  - CPU meters.
+  - Hydrogen GUI.
+ Homepage: http://livemix.codingteam.net/
