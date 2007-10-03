@@ -1,1 +1,1 @@
-application/x-livemix; livemix %s; test=test "$DISPLAY" != ""; priority=7
+application/x-livemix; livemix %s; test=test -n "$DISPLAY"; priority=7

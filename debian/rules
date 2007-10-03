@@ -86,7 +86,7 @@ binary-arch: build install
 #	dh_installinit
 #	dh_installcron
 #	dh_installinfo
-#	dh_desktop # since you register your mime with .mime and .sharedmimeinfo I don’t think calling dh_desktop is strictly necessary (it could be good to keep it for future compatibility though).
+	dh_desktop
 	dh_installman
 	dh_link
 	dh_strip
