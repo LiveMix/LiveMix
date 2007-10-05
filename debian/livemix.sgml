@@ -16,7 +16,7 @@ manpage.1: manpage.sgml
   -->
 
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
-  <!ENTITY dhfirstname "<firstname>Stéphane</firstname>">
+  <!ENTITY dhfirstname "<firstname>Stphane</firstname>">
   <!ENTITY dhsurname   "<surname>Brunner</surname>">
   <!-- Please adjust the date whenever revising the manpage. -->
   <!ENTITY dhdate      "<date>septembre 4, 2007</date>">
@@ -24,7 +24,7 @@ manpage.1: manpage.sgml
        allowed: see man(7), man(1). -->
   <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
   <!ENTITY dhemail     "<email>stephane.brunner@gmail.com</email>">
-  <!ENTITY dhusername  "Stéphane Brunner">
+  <!ENTITY dhusername  "Stphane Brunner">
   <!ENTITY dhucpackage "<refentrytitle>LIVEMIX</refentrytitle>">
   <!ENTITY dhpackage   "livemix">
 
@@ -56,7 +56,7 @@ manpage.1: manpage.sgml
   <refnamediv>
     <refname>&dhpackage;</refname>
 
-    <refpurpose>live mix table</refpurpose>
+    <refpurpose>live mixer table</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
@@ -68,14 +68,14 @@ manpage.1: manpage.sgml
   <refsect1>
     <title>DESCRIPTION</title>
 
-    <para><command>&dhpackage;</command> is a mix table desine for live performances based on Jack and LADSPA.</para>
+    <para><command>&dhpackage;</command> is a mixer table designed for live performances based on Jack and LADSPA.</para>
 
     <variablelist>
       <varlistentry>
         <term><option>file</option>
         </term>
         <listitem>
-          <para>The file describe the table to open.</para>
+          <para>Optional file containing a mixer table configuration.</para>
         </listitem>
       </varlistentry>
     </variablelist>

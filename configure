@@ -12,6 +12,11 @@ rm -f all.mak
 rm `find . | grep Makefile`
 
 
+cd i18n
+./updateTranslations.sh
+cd ..
+
+
 echo "
 
 -----------------------------------------------------------------
@@ -19,7 +24,32 @@ Starting LiveMix configuration http://livemix.codingteam.net/
 -----------------------------------------------------------------
 "
 
+echo ac_option;
 # check prefix settings
+ac_prev=
+for ac_option
+do
+  # If the previous option needs an argument, assign it.
+  if test -n "$ac_prev"; then
+    eval $ac_prev=\$ac_option
+    ac_prev=
+    continue
+  fi
+
+  case $ac_option in
+  *=*)	ac_optarg=`expr "X$ac_option" : '[^=]*=\(.*\)'` ;;
+  *)	ac_optarg=yes ;;
+  esac
+
+  case $ac_option in
+    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+      ac_prev=prefix ;;
+
+    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+      prefix=$ac_optarg ;
+  esac
+done
+
 if test "x$prefix" = "x"; then
 	default_prefix=/usr/local/livemix
 	echo " * prefix is not set, using default $default_prefix"
@@ -95,15 +125,11 @@ echo "
 LiveMix is now configured for building. Just run 'make'.
 Once everything is built, you must run 'make install'.
 
-lIVEmIX will be installed in $prefix
+liveMix will be installed in $prefix
 
 You can override this setting with:
-prefix=/your/prefix ./configure
+./configure --prefix=/your/prefix
 
 -----------------------------------------------------------------
 
 "
-
-cd i18n
-./updateTranslations.sh
-cd ..

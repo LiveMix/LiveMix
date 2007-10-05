@@ -172,7 +172,7 @@ void in::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChann
 			mute = p_fValue;
 			break;
 		case TO_SUB:
-			sub[p_rToChannel];
+			sub[p_rToChannel] = p_fValue;
 			break;
 		case TO_MAIN:
 			main = p_fValue;

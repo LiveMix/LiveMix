@@ -36,7 +36,7 @@ class PixmapWidget : public QWidget
     Q_OBJECT
 
 public:
-    PixmapWidget( QWidget *pParent);
+    PixmapWidget(QWidget *pParent);
     ~PixmapWidget();
 
     void setPixmap( QString sPixmapPath, bool expand_horiz = false );

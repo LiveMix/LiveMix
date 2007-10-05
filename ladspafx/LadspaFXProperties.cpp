@@ -82,9 +82,7 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX)
     m_pRemoveBtn = Button::create(this);
     m_pRemoveBtn->setText(trUtf8("X"));
     m_pRemoveBtn->setToolTip(trUtf8("Remove"));
-    qDebug()<<"Connect effect remove";
     connect(m_pRemoveBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
-    qDebug()<<"Effect remove Conected";
 
     m_pTimer = new QTimer( this );
     connect(m_pTimer, SIGNAL( timeout() ), this, SLOT( updateOutputControls() ) );
@@ -464,7 +462,6 @@ void LadspaFXProperties::updateOutputControls()
 
 void LadspaFXProperties::removeBtnClicked()
 {
-    qDebug()<<"Effect mute clicked";
     emit removeClicked(this, m_nLadspaFX);
 }
 

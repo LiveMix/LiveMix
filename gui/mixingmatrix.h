@@ -45,6 +45,7 @@ namespace LiveMix
 
 class Wrapp;
 class WrappVolume;
+class InfoWidget;
 class InWidget;
 class OutWidget;
 class PreWidget;
@@ -90,6 +91,7 @@ public:
 	QString getDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
 	QString getShortDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
 	QString getDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+	QString getMediumDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
 	QString getShortDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
 //	QString getShortAbreviationDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo);
 
@@ -114,15 +116,15 @@ public:
     
 //    QString getDisplayElement(ElementType p_eElement);
 
-	bool isGainVisible() {return m_bShowGain; };
+	bool isVisible(ElementType p_eElement, QString p_rChannelTo ="");
 	int getFaderHeight() {return m_iFaderHeight; };
 	int getEffectFaderHeight() {return m_iEffectFaderHeight; };
-	void setGainVisible(bool p_bVisible) {m_bShowGain = p_bVisible; };
+	void setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
 	void setFaderHeight(int p_iHeight);
 	void setEffectFaderHeight(int p_iHeight);
 
-	static void addLine(QVBoxLayout*, bool bold =false);
-	static void addLine(QHBoxLayout*, bool bold =false);
+//	static void addLine(QVBoxLayout*, bool bold =false);
+//	static void addLine(QHBoxLayout*, bool bold =false);
 	static void addSpacer(QVBoxLayout*);
 
 public slots:
@@ -131,7 +133,7 @@ public slots:
     void removeFX(LadspaFXProperties*, effect*);
     void askRemoveFX(LadspaFXProperties*, effect*);
 
-	void showGain();
+//	void showGain();
 	void faderHeight();
 	void effectFaderHeight();
 
@@ -143,6 +145,8 @@ private slots:
     void onStatusTimerEvent();
 
 private:
+	InfoWidget *info_widget;
+	
     QHBoxLayout *in_layout;
     QHBoxLayout *pre_layout;
     QHBoxLayout *post_layout;
@@ -175,7 +179,7 @@ private:
     void keyPressEvent (QKeyEvent * p_pEvent);
     void wheelEvent (QWheelEvent *p_pEvent);
 
-	bool m_bShowGain;
+	QMap<ElementType, QMap<QString, bool>*> m_bVisible;
 	int m_iFaderHeight;
 	int m_iEffectFaderHeight;
 };

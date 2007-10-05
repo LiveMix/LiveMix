@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jackmix version="0.5" faderHeight="200" effectFaderHeight="150" gainVisible="no">
+<livemix version="0.5" faderHeight="200" effectFaderHeight="150" gainVisible="no">
 <!-- => 869px / 900px -->
+<!-- 872 -->
   <actionbinding>
     <afl key="A" />
     <bal key="B" />
@@ -206,4 +207,4 @@
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </sub>
-</jackmix>
+</livemix>

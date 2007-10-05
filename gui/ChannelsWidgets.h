@@ -40,6 +40,59 @@ namespace LiveMix
 
 class Widget;
 
+class InfoWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    InfoWidget(Widget* p_pMatrix);
+    ~InfoWidget();
+
+    void addPre(QString channelPre);
+    void addPost(QString channelPre);
+    void addSub(QString channelPre);
+
+    void removePre(QString channelPre);
+    void removePost(QString channelPost);
+    void removeSub(QString channelSub);
+
+	void setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
+
+private:
+	void createToggleButton(ElementType p_eElement, QString p_rChannelTo ="");
+	void createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
+
+	QMap<ElementType, QMap<QString, ToggleButton*> > m_rToggleButtons;
+	QMap<ElementType, QMap<QString, QLabel*> > m_rLabels;
+/*	ToggleButton *gain_tb;
+	ToggleButton *mute_tb;
+	ToggleButton *plf_tb;
+	ToggleButton *bal_tb;
+	ToggleButton *main_on_tb;
+	QLabel *gain;
+	QLabel *mute;
+	QLabel *plf;
+	QLabel *bal;
+	QLabel *main_on;
+
+    QMap<QString, ToggleButton*> pre_tb;
+    QMap<QString, ToggleButton*> post_tb;
+    QMap<QString, ToggleButton*> sub_tb;
+    QMap<QString, QLabel*> pre;
+    QMap<QString, QLabel*> post;
+    QMap<QString, QLabel*> sub;*/
+    
+private:
+	QLabel* label(QString);
+    Widget* m_pMatrix;
+
+    QWidget* wPre;
+    QWidget* wPost;
+    QWidget* wSub;
+
+    QVBoxLayout* lPre;
+    QVBoxLayout* lPost;
+    QVBoxLayout* lSub;
+};
 class InWidget : public QWidget
 {
     Q_OBJECT
@@ -73,6 +126,10 @@ private:
     QVBoxLayout* lPre;
     QVBoxLayout* lPost;
     QVBoxLayout* lSub;
+
+    QMap<QString, PixmapWidget*> pre_tb;
+    QMap<QString, PixmapWidget*> post_tb;
+    QMap<QString, PixmapWidget*> sub_tb;
 
     QMap<QString, Rotary*> pre;
     QMap<QString, Rotary*> post;
@@ -125,6 +182,7 @@ private:
 
     QWidget* wSub;
     QVBoxLayout* lSub;
+    QMap<QString, PixmapWidget*> sub_tb;
     QMap<QString, ToggleButton*> sub;
 
 // QMap<QWidget*, Wrapp*> m_mWrapps;

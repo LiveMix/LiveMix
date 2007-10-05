@@ -54,6 +54,9 @@
      <file>data/mixerline_text_background.png</file>
      <file>data/rotary_center_images.png</file>
      <file>data/rotary_images.png</file>
+     <file>data/separator.svg</file>
+	 <file>data/intro-open.svg</file>
+	 <file>data/intro-close.svg</file>
      <file>i18n/livemix_fr.qm</file>
  </qresource>
  </RCC>
