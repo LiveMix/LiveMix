@@ -27,6 +27,8 @@ External code review welcome (it's my fist QP application and c++ application fr
 - add possibility to change jack application name
 - save jack connection ?
 
+- move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/ ?
+
 ==== 0.6 ====
 - add MIDI learn support (help welcome, I don't have hardware)
 - add special channel support for compressosr with external signal and crossfader.

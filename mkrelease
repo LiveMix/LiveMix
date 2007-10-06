@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo ls>/dev/null
-
 ./mksrc $1
 cp ../livemix-$1.tar.bz2 ../OK
 

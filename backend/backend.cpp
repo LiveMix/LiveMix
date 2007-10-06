@@ -48,7 +48,8 @@ Backend::Backend( GuiServer_Interface* g ) :  gui( g )
         << ", buffer size:" << ::jack_get_buffer_size(client) << ", sample rate:" << ::jack_get_sample_rate(client);
     } else {
         qWarning() << "\n No jack-connection! :(\n\n";
-        gui->message( "No Jack-connection :-(", "<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it and try JackMix again.</p><p>If you don't know what I am talking about, than JackMix might not be the program you want...</p></qt>" );
+        gui->message(gui->trUtf8("No Jack-connection :-("), 
+        		gui->trUtf8("<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it (for example by using QJackCtl) and try LiveMix again.</p></qt>"));
         exit(-1);
     }
     addOutput( MAIN, true );
