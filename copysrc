@@ -27,13 +27,5 @@ do
    rm $f
 done
 
-?      data/fader_background_1.svg
-?      data/fader_leds1.svg
-?      data/intro-close_1.svg
-?      data/intro-open_1.svg
-?      data/fader_top_1.svg
-?      data/fader_leds_1.svg
-?      i18n/livemix_fr.qm
-
 
 echo "----"
