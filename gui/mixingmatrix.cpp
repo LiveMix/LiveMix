@@ -759,7 +759,7 @@ QString Widget::getMediumDisplayFunction(ChannelType p_eType, QString p_sChannel
     		displayName = trUtf8("post %1").arg(p_sReatedChannelName);
     		break;
     	case TO_SUB:
-    		displayName = trUtf8("sub %1").arg(p_sReatedChannelName);
+    		displayName = trUtf8("%1").arg(p_sReatedChannelName);
     		break;
     	case TO_MAIN:
     		displayName = trUtf8("main");

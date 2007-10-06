@@ -37,16 +37,6 @@ TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType
 	connect(p_pButton, SIGNAL(clicked()), this, SLOT(clicked()));
 }
 
-QLabel* InfoWidget::label(QString p_rName) {
-	QLabel *l = new QLabel(p_rName);
-	l->setToolTip(p_rName);
-	l->setWordWrap(true);
-	QFont font;
-	font.setPixelSize(11);
-	font.setStretch(QFont::SemiCondensed);
- 	l->setFont(font);
- 	return l; 
-}
 InfoWidget::InfoWidget(Widget* p_pMatrix)
         : QWidget()
         , m_pMatrix(p_pMatrix)
@@ -123,7 +113,14 @@ ToggleButton* InfoWidget::createToggleButton(Widget* p_pMatrix, ElementType p_eT
 	return tb;
 }
 QLabel* InfoWidget::createLabel(int p_iHeight, ElementType p_eType, QString p_rRefChannel) {
-	QLabel* lab = label(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+	QLabel *lab = new QLabel(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+	lab->setToolTip(m_pMatrix->getDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+	lab->setWordWrap(true);
+	QFont font;
+	font.setPixelSize(11);
+	font.setStretch(QFont::SemiCondensed);
+ 	lab->setFont(font);
+
     if (!m_rLabels.contains(p_eType)) {
 	    m_rLabels.insert(p_eType, new QMap<QString, QLabel*>);
     }

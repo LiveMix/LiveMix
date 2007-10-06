@@ -479,7 +479,7 @@
 <context>
     <name>LiveMix::MainWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="563"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="560"/>
         <source>Phone</source>
         <translation>Casque</translation>
     </message>
@@ -489,7 +489,7 @@
         <translation type="obsolete">Volume du casque</translation>
     </message>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="569"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="566"/>
         <source>Main</source>
         <translation>Main</translation>
     </message>
@@ -810,7 +810,7 @@
 <context>
     <name>LiveMix::PostWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="453"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="450"/>
         <source>Return</source>
         <translation>Retour</translation>
     </message>
@@ -1257,7 +1257,12 @@
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="762"/>
         <source>sub %1</source>
-        <translation>s-gr %1</translation>
+        <translation type="obsolete">s-gr %1</translation>
+    </message>
+    <message>
+        <location filename="../gui/mixingmatrix.cpp" line="762"/>
+        <source>%1</source>
+        <translation>%1</translation>
     </message>
 </context>
 <context>

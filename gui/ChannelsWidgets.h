@@ -98,7 +98,6 @@ private:
     QMap<QString, QLabel*> sub;*/
     
 private:
-	QLabel* label(QString);
     Widget* m_pMatrix;
 
     QWidget* wPre;
