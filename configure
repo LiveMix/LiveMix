@@ -12,9 +12,9 @@ rm -f all.mak
 rm `find . | grep Makefile`
 
 
-#cd i18n
-#./updateTranslations.sh
-#cd ..
+cd i18n
+./updateTranslations.sh
+cd ..
 
 
 echo "
