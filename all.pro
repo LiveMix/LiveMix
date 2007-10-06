@@ -17,7 +17,7 @@ desktop.files = dist/livemix.desktop
 sample.path = $$prefix/share/livemix/sample
 sample.files = default.lm
 
-mimelnk.path = $$prefix/share/mimelnk/application/
+mimelnk.path = $$prefix/share/mimelnk/application
 mimelnk.files = dist/x-livemix.desktop
 
 #application-registry.path = $$prefix/share/application-registry
