@@ -1,22 +1,22 @@
 /*
-    Copyright 2004 - 2007 Arnold Krille <arnold@arnoldarts.de>
-    Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
- 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation;
-    version 2 of the License.
- 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
- 
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-    MA 02110-1301, USA.
-*/
+ * Copyright 2004 - 2006 Arnold Krille <arnold@arnoldarts.de>
+ * Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
 
 #include "mixingmatrix.h"
 
@@ -72,6 +72,7 @@ Widget::Widget(QWidget* p)
 {
     QVBoxLayout *main_layout = new QVBoxLayout;
     main_layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+	main_layout->setSizeConstraint(QLayout::SetMinimumSize);
 
 #ifdef LADSPA_SUPPORT
     m_pEffectScrollArea = new ScrollArea;
@@ -524,6 +525,8 @@ void Widget::removeprechannel( QString name )
     pre.remove(name);
     delete elem;
 
+	m_bVisible[TO_PRE]->remove(name);
+
 	info_widget->removePre(name);
     for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
         i.value()->removePre(i.key(), name);
@@ -535,6 +538,8 @@ void Widget::removepostchannel( QString name )
     post_layout->removeWidget(elem);
     post.remove(name);
     delete elem;
+
+	m_bVisible[TO_POST]->remove(name);
 
 	info_widget->removePost(name);
     for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
@@ -548,6 +553,8 @@ void Widget::removesubchannel( QString name )
     sub.remove(name);
     delete elem;
 
+	m_bVisible[TO_SUB]->remove(name);
+
 	info_widget->removeSub(name);
     for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
@@ -555,6 +562,13 @@ void Widget::removesubchannel( QString name )
     for (QMap<QString, PostWidget*>::iterator i = post.begin() ; i != post.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
     }
+}
+
+void Widget::clearAll() {
+	typedef QMap<QString, bool>* Map; 
+	foreach (Map map, m_bVisible.values()) {
+		map->empty();
+	}
 }
 
 void Widget::leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent*)
@@ -679,7 +693,7 @@ QString Widget::getDisplayFunction(ChannelType p_eType, QString p_sChannelName, 
     		if (p_sReatedChannelName == MAIN) {
     			displayName = trUtf8("main volume");
     		}
-    		else if (p_sReatedChannelName == PLF) {
+    		else if (p_sReatedChannelName == PFL) {
     			displayName = trUtf8("phone volume");
     		}
     		else if (p_sReatedChannelName == MONO) {
@@ -689,10 +703,10 @@ QString Widget::getDisplayFunction(ChannelType p_eType, QString p_sChannelName, 
     			displayName = trUtf8("volume");
     		}
     		break;
-    	case TO_ALF:
+    	case TO_AFL:
     		displayName = trUtf8("alf");
     		break;
-    	case TO_PLF:
+    	case TO_PFL:
     		displayName = trUtf8("plf");
     		break;
     	case PRE_VOL:
@@ -754,7 +768,7 @@ QString Widget::getMediumDisplayFunction(ChannelType p_eType, QString p_sChannel
     		if (p_sReatedChannelName == MAIN) {
     			displayName = trUtf8("main volume");
     		}
-    		else if (p_sReatedChannelName == PLF) {
+    		else if (p_sReatedChannelName == PFL) {
     			displayName = trUtf8("phone volume");
     		}
     		else if (p_sReatedChannelName == MONO) {
@@ -764,10 +778,10 @@ QString Widget::getMediumDisplayFunction(ChannelType p_eType, QString p_sChannel
     			displayName = trUtf8("volume");
     		}
     		break;
-    	case TO_ALF:
+    	case TO_AFL:
     		displayName = trUtf8("alf");
     		break;
-    	case TO_PLF:
+    	case TO_PFL:
     		displayName = trUtf8("plf");
     		break;
     	case PRE_VOL:
@@ -805,7 +819,7 @@ QString Widget::getShortDisplayFunction(ElementType p_eElement, QString p_sReate
     		if (p_sReatedChannelName == MAIN) {
     			displayName = trUtf8("main");
     		}
-    		else if (p_sReatedChannelName == PLF) {
+    		else if (p_sReatedChannelName == PFL) {
     			displayName = trUtf8("phone");
     		}
     		else if (p_sReatedChannelName == MONO) {
@@ -815,10 +829,10 @@ QString Widget::getShortDisplayFunction(ElementType p_eElement, QString p_sReate
     			displayName = trUtf8("volume");
     		}
     		break;
-    	case TO_ALF:
+    	case TO_AFL:
     		displayName = trUtf8("alf");
     		break;
-    	case TO_PLF:
+    	case TO_PFL:
     		displayName = trUtf8("plf");
     		break;
     	case PRE_VOL:
@@ -873,8 +887,8 @@ void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementTyp
 		case MUTE:
 		case TO_SUB:
 		case TO_MAIN:
-		case TO_ALF:
-		case TO_PLF:
+		case TO_AFL:
+		case TO_PFL:
 		case MUTE_EFFECT:
 			volume = false;
 			break;
@@ -959,7 +973,7 @@ void Widget::action(ChannelType p_eType, QString p_sChannelName, ElementType p_e
         Wrapp* pWrapp = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
         if (!pWrapp->exec()) {
             m_pSelectedWrapper = (WrappVolume*)pWrapp;
-            if (p_sChannelName == MAIN && p_sReatedChannelName == PLF) {
+            if (p_sChannelName == MAIN && p_sReatedChannelName == PFL) {
 	            showMessage(trUtf8("Phono selected."));
             }
             else if (p_sChannelName == MAIN && p_sReatedChannelName == MONO) {
@@ -1155,6 +1169,36 @@ void Widget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChan
 			}
 		}
 	}
+	if (p_eElement == TO_PFL) {
+		foreach (ChannelType i, m_mShurtCut.keys()) {
+			foreach (QString j, m_mShurtCut[i]->keys()) {
+				if ((*m_mShurtCut[i])[j]->contains(TO_AFL) && (*(*m_mShurtCut[i])[j])[TO_AFL]->contains(p_rChannelTo)) {
+					((WrappVolume*)(*(*(*m_mShurtCut[i])[j])[TO_AFL])[p_rChannelTo])->getVolume()->setVisible(p_bVisible);
+				}
+			}
+		}
+	}
+/*qDebug()<<this->parentWidget()->minimumHeight();
+this->parentWidget()->updateGeometry();
+qDebug()<<this->parentWidget()->minimumHeight();
+this->parentWidget()->layout()->update();
+qDebug()<<this->parentWidget()->minimumHeight();
+qDebug()<<this->parentWidget()->layout()->activate();
+qDebug()<<this->parentWidget()->minimumHeight();
+qDebug()<<this->parentWidget()->layout()->minimumSize();
+this->parentWidget()->layout()->invalidate();
+qDebug()<<this->parentWidget()->minimumHeight();
+qDebug()<<this->parentWidget()->layout()->minimumSize();
+qDebug()<<this->parentWidget()->layout()->activate();
+qDebug()<<this->parentWidget()->minimumHeight();
+qDebug()<<this->parentWidget()->layout()->minimumSize();*/
+//	this->parentWidget()->layout()->invalidate();
+//qDebug()<<1111;
+//qDebug()<<this->parentWidget()->height();
+//qDebug()<<this->parentWidget()->minimumHeight();
+//	this->parentWidget()->setBaseSize(this->parentWidget()->minimumHeight(), this->parentWidget()->width());
+//	this->parentWidget()->resize(this->parentWidget()->minimumHeight(), this->parentWidget()->width());
+//	this->parentWidget()->setFixedHeight(this->parentWidget()->minimumHeight());
 }
 //void Widget::showGain() {
 //	setGainVisible(!m_bShowGain);
@@ -1165,7 +1209,7 @@ void Widget::setFaderHeight(int p_iHeight) {
 	foreach (ChannelType i, m_mShurtCut.keys()) {
 		foreach (QString j, m_mShurtCut[i]->keys()) {
 			foreach (QString sub, (*(*m_mShurtCut[i])[j])[FADER]->keys()) {
-				if (sub != PLF && sub != MONO) {
+				if (sub != PFL && sub != MONO) {
 					Wrapp* w = (*(*(*m_mShurtCut[i])[j])[FADER])[sub];
 					((Fader*)((WrappVolume*)w)->getVolume())->setFixedHeight(m_iFaderHeight);
 				}
@@ -1267,6 +1311,9 @@ Rotary* Widget::createRotary(ChannelType p_eType, QString p_sChannelName, Elemen
     else {
     	rotary->setDbValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
     }
+    if (!isVisible(p_eElement == TO_AFL ? TO_PFL : p_eElement, p_rChannelTo)) {
+		rotary->setVisible(false);
+    }
     return rotary;
 }
 ToggleButton* Widget::createToggle(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo) {
@@ -1276,6 +1323,9 @@ ToggleButton* Widget::createToggle(ChannelType p_eType, QString p_sChannelName, 
     toggle->setText(getShortDisplayFunction(p_eElement, p_rChannelTo));
 //    connect(main_on, SIGNAL( valueChanged(QString, bool) ), Backend::instance(), SLOT( setInMain( QString, bool ) ) );
     toggle->setValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getBoolAttribute(p_eElement, p_rChannelTo));
+    if (!isVisible(p_eElement, p_rChannelTo)) {
+		toggle->setVisible(false);
+    }
     return toggle;
 }
 

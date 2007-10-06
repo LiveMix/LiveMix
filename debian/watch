@@ -6,4 +6,4 @@ version=3
 
 # Uncomment to examine a Webpage 
 # <Webpage URL> <string match>
-http://www.codingteam.net/livemix-down.html compte.php\?ida=http://www.codingteam.net/upload/(.*)-livemix-(.*)\.tar\.bz2&amp;idb=livemix
+http://www.codingteam.net/livemix-down.html compte.php\?ida=http://www.codingteam.net/upload/.*-livemix-([0-9.svn]*)\.tar\.bz2&amp;idb=livemix

@@ -91,7 +91,7 @@ public:
     float gain;
     float volume;
     float bal;
-    bool plf;
+    bool pfl;
     bool main;
     QMap<QString, float> pre;
     QMap<QString, float> post;
@@ -119,7 +119,7 @@ public:
 	
     float volume;
     float bal;
-    bool alf;
+    bool afl;
 // wrorking data:
     jack_port_t* out_l;
     jack_port_t* out_r;
@@ -139,7 +139,7 @@ public:
 	
     float volume;
     float bal;
-    bool alf;
+    bool afl;
 // wrorking data:
     jack_port_t* out_l;
     jack_port_t* out_r;
@@ -160,8 +160,8 @@ public:
     float prevolume;
     float postvolume;
     float bal;
-    bool plf;
-    bool alf;
+    bool pfl;
+    bool afl;
     bool main;
     bool external;
     QMap<QString, bool> sub;
@@ -190,7 +190,7 @@ public:
 	
     float volume;
     float bal;
-    bool alf;
+    bool afl;
     bool main;
     QList<effect*> effects;
 // wrorking data:

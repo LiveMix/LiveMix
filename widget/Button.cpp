@@ -137,20 +137,39 @@ void Button::paintEvent( QPaintEvent* ev)
 
     // background
     if (m_bPressed) {
-        if (__use_skin_style) {
-            static int w = 5;
-            static int h = m_onPixmap.height();
+        if (m_bMouseOver) {
+            if (__use_skin_style) {
+                static int w = 5;
+                static int h = m_offPixmap.height();
 
-            // central section, scaled
-            painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_onPixmap, QRect(10, 0, w, h) );
+                // central section, scaled
+                painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_offPixmap, QRect(10, 0, w, h) );
 
-            // left side
-            painter.drawPixmap( QRect(0, 0, w, h), m_onPixmap, QRect(0, 0, w, h) );
+                // left side
+                painter.drawPixmap( QRect(0, 0, w, h), m_offPixmap, QRect(0, 0, w, h) );
 
-            // right side
-            painter.drawPixmap( QRect(width() - w, 0, w, h), m_onPixmap, QRect(m_onPixmap.width() - w, 0, w, h) );
-        } else {
-            painter.drawPixmap( ev->rect(), m_onPixmap, ev->rect() );
+                // right side
+                painter.drawPixmap( QRect(width() - w, 0, w, h), m_offPixmap, QRect(m_offPixmap.width() - w, 0, w, h) );
+            } else {
+                painter.drawPixmap( ev->rect(), m_offPixmap, ev->rect() );
+            }
+        }
+        else {
+	        if (__use_skin_style) {
+	            static int w = 5;
+	            static int h = m_onPixmap.height();
+	
+	            // central section, scaled
+	            painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_onPixmap, QRect(10, 0, w, h) );
+	
+	            // left side
+	            painter.drawPixmap( QRect(0, 0, w, h), m_onPixmap, QRect(0, 0, w, h) );
+	
+	            // right side
+	            painter.drawPixmap( QRect(width() - w, 0, w, h), m_onPixmap, QRect(m_onPixmap.width() - w, 0, w, h) );
+	        } else {
+	            painter.drawPixmap( ev->rect(), m_onPixmap, ev->rect() );
+	        }
         }
     } else {
         if (m_bMouseOver) {

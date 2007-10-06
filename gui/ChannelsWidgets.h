@@ -40,6 +40,22 @@ namespace LiveMix
 
 class Widget;
 
+class TbWrapp : public QWidget
+{
+    Q_OBJECT
+public:
+	TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel);
+
+	ToggleButton *m_pButton;
+
+public slots:
+	void clicked();
+	
+private:
+	ElementType m_eType;
+	QString m_rRefChannel;
+	Widget *m_pMatrix;
+};
 class InfoWidget : public QWidget
 {
     Q_OBJECT
@@ -58,19 +74,19 @@ public:
 	void setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
 
 private:
-	void createToggleButton(ElementType p_eElement, QString p_rChannelTo ="");
-	void createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
+	ToggleButton* createToggleButton(Widget* p_pMatrix, ElementType p_eElement, QString p_rChannelTo ="");
+	QLabel* createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
 
-	QMap<ElementType, QMap<QString, ToggleButton*> > m_rToggleButtons;
-	QMap<ElementType, QMap<QString, QLabel*> > m_rLabels;
+	QMap<ElementType, QMap<QString, TbWrapp*>*> m_rToggleButtons;
+	QMap<ElementType, QMap<QString, QLabel*>*> m_rLabels;
 /*	ToggleButton *gain_tb;
 	ToggleButton *mute_tb;
-	ToggleButton *plf_tb;
+	ToggleButton *pfl_tb;
 	ToggleButton *bal_tb;
 	ToggleButton *main_on_tb;
 	QLabel *gain;
 	QLabel *mute;
-	QLabel *plf;
+	QLabel *pfl;
 	QLabel *bal;
 	QLabel *main_on;
 
@@ -232,7 +248,7 @@ private:
     ToggleButton* mute;
     Rotary *mono;
     Rotary *bal;
-    ToggleButton* alf;
+    ToggleButton* afl;
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 

@@ -25,7 +25,7 @@ MOC_DIR = objs
 QT += svg
 QT += xml
 
-QMAKE_CXXFLAGS_RELEASE += -O2
+QMAKE_CXXFLAGS_RELEASE += -g -O3
 QMAKE_CXXFLAGS_DEBUG += -Werror -O2
 
 

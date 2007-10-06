@@ -25,6 +25,18 @@
 namespace LiveMix
 {
 
+void TbWrapp::clicked() {
+	m_pMatrix->setVisible(!m_pMatrix->isVisible(m_eType, m_rRefChannel), m_eType, m_rRefChannel);
+}
+TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel) 
+ : m_pButton(p_pButton)
+ , m_eType(p_eType)
+ , m_rRefChannel(p_rRefChannel)
+ , m_pMatrix(p_pMatrix)
+{
+	connect(p_pButton, SIGNAL(clicked()), this, SLOT(clicked()));
+}
+
 QLabel* InfoWidget::label(QString p_rName) {
 	QLabel *l = new QLabel(p_rName);
 	l->setToolTip(p_rName);
@@ -51,34 +63,14 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
     	layout->addWidget(w);
 	}
 
-    layout->addWidget(createToggleButton(GAIN));
-    layout->addWidget(26, createLabel(GAIN));
+    layout->addWidget(createToggleButton(m_pMatrix, GAIN));
+    layout->addWidget(createLabel(26, GAIN));
 
-    layout->addWidget(createToggleButton(GAIN));
-    layout->addWidget(26, createLabel(GAIN));
+    layout->addWidget(createToggleButton(m_pMatrix, MUTE));
+    layout->addWidget(createLabel(16, MUTE));
 
-	{
-	    mute_tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		mute_tb->setValue(true);
-//		connect(gain_tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    layout->addWidget(mute_tb);
-	}
-	mute = label(m_pMatrix->getMediumDisplayFunction(IN, "", MUTE, "", true));
-	mute->setFixedSize(20, 16);
-    layout->addWidget(mute);
-
-	{
-	    plf_tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		plf_tb->setValue(m_pMatrix->isGainVisible());
-//		connect(plf_tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    layout->addWidget(plf_tb);
-	}
-	plf = label(m_pMatrix->getMediumDisplayFunction(IN, "", TO_PLF, "", true));
-	plf->setFixedSize(20, 16);
-    layout->addWidget(plf);
-
+    layout->addWidget(createToggleButton(m_pMatrix, TO_PFL));
+    layout->addWidget(createLabel(16, TO_PFL));
 
     wPre = new QWidget;
     lPre = new QVBoxLayout;
@@ -108,149 +100,110 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
     wSub->setLayout(lSub);
     layout->addWidget(wSub);
 
-	{
-	    bal_tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		bal_tb->setValue(m_pMatrix->isGainVisible());
-//		connect(bal_tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    layout->addWidget(bal_tb);
-	}
-	bal = label(m_pMatrix->getMediumDisplayFunction(IN, "", PAN_BAL, "", true));
-	bal->setFixedSize(20, 26);
-    layout->addWidget(bal);
+    layout->addWidget(createToggleButton(m_pMatrix, PAN_BAL));
+    layout->addWidget(createLabel(26, PAN_BAL));
 
-	{
-	    main_on_tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		bal_tb->setValue(m_pMatrix->isGainVisible());
-//		connect(bal_tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    layout->addWidget(bal_tb);
-	}
-	main_on = label(m_pMatrix->getMediumDisplayFunction(IN, "", TO_MAIN, "", true));
-	main_on->setFixedSize(20, 16);
-    layout->addWidget(main_on);
+    layout->addWidget(createToggleButton(m_pMatrix, TO_MAIN));
+    layout->addWidget(createLabel(16, TO_MAIN));
 
     Widget::addSpacer(layout);
 }
 InfoWidget::~InfoWidget()
 {
 }
-void InfoWidget::createToggleButton(ElementType p_eType, String p_rRefChannel) {
-    ToggleButton tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
+ToggleButton* InfoWidget::createToggleButton(Widget* p_pMatrix, ElementType p_eType, QString p_rRefChannel) {
+    ToggleButton *tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
+    TbWrapp *wrapp = new TbWrapp(p_pMatrix, tb, p_eType, p_rRefChannel);
     if (!m_rToggleButtons.contains(p_eType)) {
-    	m_rToggleButtons.insert(p_eType, new QMap<QString, ToggleButton>);
+    	m_rToggleButtons.insert(p_eType, new QMap<QString, TbWrapp*>);
     }
-    m_rToggleButtons[p_eType]->insert(p_rRefChannel, tb);
+    m_rToggleButtons[p_eType]->insert(p_rRefChannel, wrapp);
     tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
 	tb->setValue(m_pMatrix->isVisible(p_eType, p_rRefChannel));
-//	connect(gain_tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain())); // TODO wrapp
+	return tb;
 }
-void InfoWidget::createLabel(int p_iHeight, ElementType p_eType, String p_rRefChannel) {
-	QLabel gain = label(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
-    if (!m_rLabel.contains(p_eType)) {
-	    m_rLabel.insert(p_eType, new QMap<QString, ToggleButton>);
+QLabel* InfoWidget::createLabel(int p_iHeight, ElementType p_eType, QString p_rRefChannel) {
+	QLabel* lab = label(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+    if (!m_rLabels.contains(p_eType)) {
+	    m_rLabels.insert(p_eType, new QMap<QString, QLabel*>);
     }
-    m_rLabel[p_eType]->insert(p_rRefChannel, tb);
-	gain->setFixedSize(20, p_iHeight);
-	gain->setVisible(m_pMatrix->isVisible(p_eType, p_rRefChannel));
+    m_rLabels[p_eType]->insert(p_rRefChannel, lab);
+	lab->setFixedSize(20, p_iHeight);
+	if (!m_pMatrix->isVisible(p_eType, p_rRefChannel)) {
+		lab->setVisible(false);
+	}
+	return lab;
 }
 void InfoWidget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo) {
-	info_widget->gain->setVisible(p_bVisible);
-	info_widget->gain_tb->setValue(p_bVisible);
+    if (m_rToggleButtons.contains(p_eElement) && m_rToggleButtons[p_eElement]->contains(p_rChannelTo)) {
+    	(*m_rToggleButtons[p_eElement])[p_rChannelTo]->m_pButton->setValue(p_bVisible);
+    }
+    if (m_rLabels.contains(p_eElement) && m_rLabels[p_eElement]->contains(p_rChannelTo)) {
+    	(*m_rLabels[p_eElement])[p_rChannelTo]->setVisible(p_bVisible);
+    }
 }
 void InfoWidget::addPre(QString channelPre)
 {
-	{
-	    ToggleButton *tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		tb->setValue(m_pMatrix->isGainVisible());
-//		connect(tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    lPre->addWidget(tb);
-	    pre_tb[channelPre] = tb;
-	}
-
-	QLabel *elem = label(channelPre);
-	elem->setToolTip(m_pMatrix->getDisplayFunction(IN, "", TO_PRE, channelPre, true));
-	elem->setFixedSize(20, 26);
-    lPre->addWidget(elem);
-    pre[channelPre] = elem;
+    lPre->addWidget(createToggleButton(m_pMatrix, TO_PRE, channelPre));
+    lPre->addWidget(createLabel(26, TO_PRE, channelPre));
 }
 void InfoWidget::addPost(QString channelPost)
 {
-	{
-	    ToggleButton *tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		tb->setValue(m_pMatrix->isGainVisible());
-//		connect(tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    lPost->addWidget(tb);
-	    post_tb[channelPost] = tb;
-	}
-
-	QLabel *elem = label(channelPost);
-	elem->setToolTip(m_pMatrix->getDisplayFunction(IN, "", TO_POST, channelPost, true));
-	elem->setFixedSize(20, 26);
-    lPost->addWidget(elem);
-    post[channelPost] = elem;
+    lPost->addWidget(createToggleButton(m_pMatrix, TO_POST, channelPost));
+    lPost->addWidget(createLabel(26, TO_POST, channelPost));
 }
 void InfoWidget::addSub(QString channelSub)
 {
-	{
-	    ToggleButton *tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-open.svg", QSize(20, 5), false);
-//	    gain_tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", GAIN, "", true));
-//		tb->setValue(m_pMatrix->isGainVisible());
-//		connect(tb, SIGNAL(clicked()), m_pMatrix, SLOT(showGain()));
-	    lSub->addWidget(tb);
-	    sub_tb[channelSub] = tb;
-	}
-
-	QLabel *elem = label(channelSub);
-	elem->setToolTip(m_pMatrix->getDisplayFunction(IN, "", TO_SUB, channelSub, true));
-	elem->setFixedSize(20, 16);
-    elem->setToolTip(channelSub);
-    lSub->addWidget(elem);
-    sub[channelSub] = elem;
+    lSub->addWidget(createToggleButton(m_pMatrix, TO_SUB, channelSub));
+    lSub->addWidget(createLabel(16, TO_SUB, channelSub));
 }
 void InfoWidget::removePre(QString channelPre)
 {
-	{
-	    ToggleButton *elem = pre_tb[channelPre];
-	    lPre->removeWidget(elem);
-	    pre_tb.remove(channelPre);
+    if (m_rToggleButtons.contains(TO_PRE) && m_rToggleButtons[TO_PRE]->contains(channelPre)) {
+	    TbWrapp *elem = (*m_rToggleButtons[TO_PRE])[channelPre];
+	    lPre->removeWidget(elem->m_pButton);
+	    m_rToggleButtons[TO_PRE]->remove(channelPre);
+	    delete elem->m_pButton;
 	    delete elem;
-	}
-
-    QWidget *elem = pre[channelPre];
-    lPre->removeWidget(elem);
-    pre.remove(channelPre);
-    delete elem;
+    }
+    if (m_rLabels.contains(TO_PRE) && m_rLabels[TO_PRE]->contains(channelPre)) {
+    	QWidget *elem = (*m_rLabels[TO_PRE])[channelPre];
+	    lPre->removeWidget(elem);
+	    m_rLabels[TO_PRE]->remove(channelPre);
+	    delete elem;
+    }
 }
 void InfoWidget::removePost(QString channelPost)
 {
-	{
-	    ToggleButton *elem = post_tb[channelPost];
-	    lPost->removeWidget(elem);
-	    post_tb.remove(channelPost);
+    if (m_rToggleButtons.contains(TO_POST) && m_rToggleButtons[TO_POST]->contains(channelPost)) {
+	    TbWrapp *elem = (*m_rToggleButtons[TO_POST])[channelPost];
+	    lPost->removeWidget(elem->m_pButton);
+	    m_rToggleButtons[TO_POST]->remove(channelPost);
+	    delete elem->m_pButton;
 	    delete elem;
-	}
-
-    QWidget *elem = post[channelPost];
-    lPost->removeWidget(elem);
-    post.remove(channelPost);
-    delete elem;
+    }
+    if (m_rLabels.contains(TO_POST) && m_rLabels[TO_POST]->contains(channelPost)) {
+    	QWidget *elem = (*m_rLabels[TO_POST])[channelPost];
+	    lPost->removeWidget(elem);
+	    m_rLabels[TO_POST]->remove(channelPost);
+	    delete elem;
+    }
 }
 void InfoWidget::removeSub(QString channelSub)
 {
-	{
-	    ToggleButton *elem = pre_tb[channelSub];
-	    lSub->removeWidget(elem);
-	    sub_tb.remove(channelSub);
+    if (m_rToggleButtons.contains(TO_SUB) && m_rToggleButtons[TO_SUB]->contains(channelSub)) {
+	    TbWrapp *elem = (*m_rToggleButtons[TO_SUB])[channelSub];
+	    lPost->removeWidget(elem->m_pButton);
+	    m_rToggleButtons[TO_SUB]->remove(channelSub);
+	    delete elem->m_pButton;
 	    delete elem;
-	}
-
-    QWidget *elem = sub[channelSub];
-    lSub->removeWidget(elem);
-    sub.remove(channelSub);
-    delete elem;
+    }
+    if (m_rLabels.contains(TO_SUB) && m_rLabels[TO_SUB]->contains(channelSub)) {
+    	QWidget *elem = (*m_rLabels[TO_SUB])[channelSub];
+	    lPost->removeWidget(elem);
+	    m_rLabels[TO_SUB]->remove(channelSub);
+	    delete elem;
+    }
 }
 
 
@@ -274,7 +227,6 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 	    layout->addWidget(pw);
 	}
     Rotary *gain = m_pMatrix->createRotary(IN, p_sChannel, GAIN);
-	gain->setVisible(m_pMatrix->isGainVisible());
     layout->addWidget(gain);
 
 	{
@@ -292,9 +244,8 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, 5);
 	    layout->addWidget(pw);
 	}
-    ToggleButton* plf = m_pMatrix->createToggle(IN, p_sChannel, TO_PLF);
-    layout->addWidget(plf);
-
+    ToggleButton* pfl = m_pMatrix->createToggle(IN, p_sChannel, TO_PFL);
+    layout->addWidget(pfl);
 
     wPre = new QWidget;
     lPre = new QVBoxLayout;
@@ -453,8 +404,8 @@ PreWidget::PreWidget(QString channel, Widget* p_pMatrix)
     ToggleButton* mute = m_pMatrix->createToggle(PRE, channel, MUTE);
     layout->addWidget(mute);
 
-    ToggleButton* alf = m_pMatrix->createToggle(PRE, channel, TO_ALF);
-    layout->addWidget(alf);
+    ToggleButton* afl = m_pMatrix->createToggle(PRE, channel, TO_AFL);
+    layout->addWidget(afl);
 
     Widget::addSpacer(layout);
 
@@ -494,14 +445,14 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
     ToggleButton* mute = m_pMatrix->createToggle(POST, channel, MUTE);
     layout->addWidget(mute);
 
-    ToggleButton* alf = m_pMatrix->createToggle(POST, channel, TO_ALF);
-    layout->addWidget(alf);
+    ToggleButton* afl = m_pMatrix->createToggle(POST, channel, TO_AFL);
+    layout->addWidget(afl);
 
     Widget::addSpacer(layout);
 
     layout->addWidget(new QLabel(trUtf8("Return")));
-    ToggleButton* plf = m_pMatrix->createToggle(POST, channel, TO_PLF);
-    layout->addWidget(plf);
+    ToggleButton* pfl = m_pMatrix->createToggle(POST, channel, TO_PFL);
+    layout->addWidget(pfl);
 
     wSub = new QWidget;
     lSub = new QVBoxLayout;
@@ -580,20 +531,11 @@ SubWidget::SubWidget(QString channel, Widget* p_pMatrix)
     layout->setMargin(0);
 
     layout->addWidget(new QLabel(channel));
-
-    ToggleButton* mute = m_pMatrix->createToggle(SUB, channel, MUTE);
-    layout->addWidget(mute);
-
-    ToggleButton* alf = m_pMatrix->createToggle(SUB, channel, TO_ALF);
-    layout->addWidget(alf);
-
+    layout->addWidget(m_pMatrix->createToggle(SUB, channel, MUTE));
+    layout->addWidget(m_pMatrix->createToggle(SUB, channel, TO_AFL));
     Widget::addSpacer(layout);
-
-    Rotary *bal = m_pMatrix->createRotary(SUB, channel, PAN_BAL);
-    layout->addWidget(bal);
-
-    ToggleButton* main_on = m_pMatrix->createToggle(SUB, channel, TO_MAIN);
-    layout->addWidget(main_on);
+    layout->addWidget(m_pMatrix->createRotary(SUB, channel, PAN_BAL));
+    layout->addWidget(m_pMatrix->createToggle(SUB, channel, TO_MAIN));
 
     fader = m_pMatrix->createFader(SUB, channel, FADER);
     layout->addWidget(fader);
@@ -620,7 +562,7 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
 
     layout->addWidget(new QLabel(trUtf8("Phone")));
 
-    phone = m_pMatrix->createRotary(OUT, MAIN, FADER, PLF);
+    phone = m_pMatrix->createRotary(OUT, MAIN, FADER, PFL);
     layout->addWidget(phone);
 
     Widget::addSpacer(layout);
@@ -629,17 +571,29 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
     mute = m_pMatrix->createToggle(OUT, MAIN, MUTE);
     layout->addWidget(mute);
 //    Widget::addLine(layout);
+	{
+		PixmapWidget *pw = new PixmapWidget(NULL);
+		pw->setPixmap("separator.svg");
+		pw->setFixedSize(CHANNEL_WIDTH, 5);
+	    layout->addWidget(pw);
+	}
 
     mono = m_pMatrix->createRotary(OUT, MAIN, FADER, MONO);
     layout->addWidget(mono);
     
 //    Widget::addLine(layout);
+	{
+		PixmapWidget *pw = new PixmapWidget(NULL);
+		pw->setPixmap("separator.svg");
+		pw->setFixedSize(CHANNEL_WIDTH, 5);
+	    layout->addWidget(pw);
+	}
 
     bal = m_pMatrix->createRotary(OUT, MAIN, PAN_BAL);
     layout->addWidget(bal);
 
-    alf = m_pMatrix->createToggle(OUT, MAIN, TO_ALF);
-    layout->addWidget(alf);
+    afl = m_pMatrix->createToggle(OUT, MAIN, TO_AFL);
+    layout->addWidget(afl);
 
     fader = m_pMatrix->createFader(OUT, MAIN, FADER, MAIN);
     layout->addWidget(fader);
@@ -650,11 +604,11 @@ MainWidget::~MainWidget()
 }
 void MainWidget::update()
 {
-    phone->setDbValue(Backend::instance()->getOutput(PLF)->volume);
+    phone->setDbValue(Backend::instance()->getOutput(PFL)->volume);
     mute->setValue(Backend::instance()->getOutput(MAIN)->mute);
     mono->setDbValue(Backend::instance()->getOutput(MONO)->volume);
     bal->setValue(Backend::instance()->getOutput(MAIN)->bal);
-    alf->setValue(Backend::instance()->getOutput(MAIN)->alf);
+    afl->setValue(Backend::instance()->getOutput(MAIN)->afl);
     fader->setDbValue(Backend::instance()->getOutput(MAIN)->volume);
 }
 void MainWidget::mouseReleaseEvent(QMouseEvent* ev)

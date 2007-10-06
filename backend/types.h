@@ -25,11 +25,11 @@ namespace LiveMix
 {
 
 enum ChannelType {IN, OUT, PRE, POST, SUB};
-enum ElementType {GAIN, MUTE, PAN_BAL, TO_PRE, TO_POST, TO_SUB, TO_MAIN, FADER, TO_ALF, TO_PLF, PRE_VOL, MUTE_EFFECT};
+enum ElementType {GAIN, MUTE, PAN_BAL, TO_PRE, TO_POST, TO_SUB, TO_MAIN, FADER, TO_AFL, TO_PFL, PRE_VOL, MUTE_EFFECT};
 
 #define MAIN "main"
 #define MONO "mono"
-#define PLF "plf/alf"
+#define PFL "pfl/afl"
 
 }
 ; // LiveMix

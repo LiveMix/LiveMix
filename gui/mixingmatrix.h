@@ -1,22 +1,22 @@
 /*
-    Copyright 2004 - 2007 Arnold Krille <arnold@arnoldarts.de>
-    Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
- 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation;
-    version 2 of the License.
- 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
- 
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-    MA 02110-1301, USA.
-*/
+ * Copyright 2004 - 2006 Arnold Krille <arnold@arnoldarts.de>
+ * Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
 
 #ifndef MIXINGMATRIX_H
 #define MIXINGMATRIX_H
@@ -113,7 +113,7 @@ public:
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
     void clearKeyToWrapp();
     void insertKeyToWrapp(QKeySequence p_rKey, KeyDo* p_pDo) { m_mKeyToWrapp.insert(p_rKey,p_pDo); };
-    
+
 //    QString getDisplayElement(ElementType p_eElement);
 
 	bool isVisible(ElementType p_eElement, QString p_rChannelTo ="");
@@ -126,6 +126,8 @@ public:
 //	static void addLine(QVBoxLayout*, bool bold =false);
 //	static void addLine(QHBoxLayout*, bool bold =false);
 	static void addSpacer(QVBoxLayout*);
+	
+	void clearAll();
 
 public slots:
     // Fills the empty nodes with 1to1-controls

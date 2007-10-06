@@ -1,22 +1,22 @@
 /*
-    Copyright 2004 - 2007 Arnold Krille <arnold@arnoldarts.de>
-    Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
- 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation;
-    version 2 of the License.
- 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
- 
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-    MA 02110-1301, USA.
-*/
+ * Copyright 2004 - 2006 Arnold Krille <arnold@arnoldarts.de>
+ * Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
 
 #include "backend.h"
 
@@ -53,7 +53,7 @@ Backend::Backend( GuiServer_Interface* g ) :  gui( g )
     }
     addOutput( MAIN, true );
     addOutput( MONO, false );
-    addOutput( PLF, true );
+    addOutput( PFL, true );
 
     _run = true;
     qDebug() << "JackBackend::JackBackend() finished";
@@ -589,92 +589,92 @@ int process( jack_nframes_t nframes, void* arg )
             }
         }
         //qDebug() << "plf / alf";
-        out* plf_elem = backend->outs[PLF];
+        out* pfl_elem = backend->outs[PFL];
 
-        jack_default_audio_sample_t* plf_l = plf_elem->out_s_l;
-        jack_default_audio_sample_t* plf_r = plf_elem->out_s_r;
-        bool plfOn = false;
+        jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
+        jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
+        bool pflOn = false;
         // in
         foreach( in* in_elem, backend->ins ) {
             jack_default_audio_sample_t* inl = in_elem->pre_l;
             jack_default_audio_sample_t* inr = in_elem->pre_r;
-            if (in_elem->plf)
+            if (in_elem->pfl)
             {
-                plfOn = true;
+                pflOn = true;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
         }
         //qDebug() << 25;
         // pre
         foreach( pre* elem, backend->pres ) {
-            if (elem->alf) {
+            if (elem->afl) {
                 jack_default_audio_sample_t* inl = elem->pre_l;
                 jack_default_audio_sample_t* inr = elem->pre_r;
-                plfOn = true;
+                pflOn = true;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
         }
         //qDebug() << 26;
         // post return
         foreach( post* elem, backend->posts ) {
-            if (elem->alf) {
-                plfOn = true;
+            if (elem->afl) {
+                pflOn = true;
                 jack_default_audio_sample_t* inl = elem->post_l;
                 jack_default_audio_sample_t* inr = elem->post_r;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
             //qDebug() << 27;
-            if (elem->plf) {
-                plfOn = true;
+            if (elem->pfl) {
+                pflOn = true;
                 jack_default_audio_sample_t* inl = elem->return_l;
                 jack_default_audio_sample_t* inr = elem->return_r;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
         }
         //qDebug() << 28;
         // sub
         foreach( sub* elem, backend->subs ) {
-            if (elem->alf) {
-                plfOn = true;
+            if (elem->afl) {
+                pflOn = true;
                 jack_default_audio_sample_t* inl = elem->sub_l;
                 jack_default_audio_sample_t* inr = elem->sub_r;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
         }
         //qDebug() << 29;
         // main
         {
-            if ((!plfOn) || main_elem->alf) {
+            if ((!pflOn) || main_elem->afl) {
                 jack_default_audio_sample_t* inl = main_elem->out_s_l;
                 jack_default_audio_sample_t* inr = main_elem->out_s_r;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] += inl[ n ];
-                    plf_r[ n ] += inr[ n ];
+                    pfl_l[ n ] += inl[ n ];
+                    pfl_r[ n ] += inr[ n ];
                 }
             }
             //qDebug() << 30;
 
             /// Adjust outlevels.
             {
-                float volume = plf_elem->volume;
+                float volume = pfl_elem->volume;
                 for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    plf_l[ n ] *= volume;
-                    plf_r[ n ] *= volume;
+                    pfl_l[ n ] *= volume;
+                    pfl_r[ n ] *= volume;
                 }
             }
         }
@@ -812,9 +812,9 @@ void Backend::setInMute( QString ch, bool mute )
 {
     ins[ ch ]->mute = mute;
 }
-void Backend::setInPlf( QString ch, bool plf )
+void Backend::setInPfl( QString ch, bool pfl )
 {
-    ins[ ch ]->plf = plf;
+    ins[ ch ]->pfl = pfl;
 }
 void Backend::setInMain( QString ch, bool main )
 {
@@ -861,9 +861,9 @@ void Backend::setOutMute( QString ch, bool mute )
 {
     outs[ ch ]->mute = mute;
 }
-void Backend::setOutAlf( QString ch, bool alf )
+void Backend::setOutAfl( QString ch, bool afl )
 {
-    outs[ ch ]->alf = alf;
+    outs[ ch ]->afl = afl;
 }
 effect* Backend::addOutEffect( QString ch, LadspaFX* fx )
 {
@@ -892,9 +892,9 @@ void Backend::setPreMute( QString ch, bool mute )
 {
     pres[ ch ]->mute = mute;
 }
-void Backend::setPreAlf( QString ch, bool alf )
+void Backend::setPreAfl( QString ch, bool afl )
 {
-    pres[ ch ]->alf = alf;
+    pres[ ch ]->afl = afl;
 }
 effect* Backend::addPreEffect( QString ch, LadspaFX* fx )
 {
@@ -927,13 +927,13 @@ void Backend::setPostMute( QString ch, bool mute )
 {
     posts[ ch ]->mute = mute;
 }
-void Backend::setPostPlf( QString ch, bool plf )
+void Backend::setPostPfl( QString ch, bool pfl )
 {
-    posts[ ch ]->plf = plf;
+    posts[ ch ]->pfl = pfl;
 }
-void Backend::setPostAlf( QString ch, bool alf )
+void Backend::setPostAfl( QString ch, bool afl )
 {
-    posts[ ch ]->alf = alf;
+    posts[ ch ]->afl = afl;
 }
 void Backend::setPostMain( QString ch, bool main )
 {
@@ -970,9 +970,9 @@ void Backend::setSubMute( QString ch, bool mute )
 {
     subs[ ch ]->mute = mute;
 }
-void Backend::setSubAlf( QString ch, bool alf )
+void Backend::setSubAfl( QString ch, bool afl )
 {
-    subs[ ch ]->alf = alf;
+    subs[ ch ]->afl = afl;
 }
 void Backend::setSubMain( QString ch, bool main )
 {

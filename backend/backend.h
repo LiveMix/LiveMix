@@ -1,22 +1,22 @@
 /*
-    Copyright 2005 - 2007 Arnold Krille <arnold@arnoldarts.de>
-    Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
- 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation;
-    version 2 of the License.
- 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
- 
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-    MA 02110-1301, USA.
-*/
+ * Copyright 2004 - 2006 Arnold Krille <arnold@arnoldarts.de>
+ * Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
 
 #ifndef BACKEND_INTERFACE_H
 #define BACKEND_INTERFACE_H
@@ -210,7 +210,7 @@ public slots:
     void setInGain( QString, float );
     void setInBal( QString, float );
     void setInMute( QString, bool );
-    void setInPlf( QString, bool );
+    void setInPfl( QString, bool );
     void setInMain( QString, bool );
     void setInPreVolume( QString, QString, float );
     void setInPostVolume( QString, QString, float );
@@ -227,7 +227,7 @@ public slots:
     void setOutVolume( QString, float );
     void setOutBal( QString, float );
     void setOutMute( QString, bool );
-    void setOutAlf( QString, bool );
+    void setOutAfl( QString, bool );
     effect* addOutEffect( QString, LadspaFX* fx );
     void removeOutEffect( QString, effect* );
     QList<effect*>* getOutEffects( QString );
@@ -240,7 +240,7 @@ public slots:
     void setPreVolume( QString, float );
     void setPreBal( QString, float );
     void setPreMute( QString, bool );
-    void setPreAlf( QString, bool );
+    void setPreAfl( QString, bool );
     effect* addPreEffect( QString, LadspaFX* fx );
     void removePreEffect( QString, effect* );
     QList<effect*>* getPreEffects( QString );
@@ -254,8 +254,8 @@ public slots:
     void setPostPostVolume( QString, float );
     void setPostBal( QString, float );
     void setPostMute( QString, bool );
-    void setPostPlf( QString, bool );
-    void setPostAlf( QString, bool );
+    void setPostPfl( QString, bool );
+    void setPostAfl( QString, bool );
     void setPostMain( QString, bool );
     void setPostSub( QString, QString, bool );
     effect* addPostEffect( QString, LadspaFX* fx );
@@ -270,7 +270,7 @@ public slots:
     void setSubVolume( QString, float );
     void setSubBal( QString, float );
     void setSubMute( QString, bool );
-    void setSubAlf( QString, bool );
+    void setSubAfl( QString, bool );
     void setSubMain( QString, bool );
     effect* addSubEffect( QString, LadspaFX* fx );
     void removeSubEffect( QString, effect* );

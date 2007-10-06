@@ -105,7 +105,7 @@ in::in(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, 
     gain = 1;
     volume = 1;
     bal = 0;
-    plf = false;
+    pfl = false;
     main = true;
 }
 in::~in()
@@ -160,8 +160,8 @@ bool in::getBoolAttribute(ElementType p_eType, QString p_rToChannel) {
 			return sub[p_rToChannel];
 		case TO_MAIN:
 			return main;
-		case TO_PLF:
-			return plf;
+		case TO_PFL:
+			return pfl;
 		default:
 			return false;
 	}
@@ -177,8 +177,8 @@ void in::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChann
 		case TO_MAIN:
 			main = p_fValue;
 			break;
-		case TO_PLF:
-			plf = p_fValue;
+		case TO_PFL:
+			pfl = p_fValue;
 			break;
 		default:
 			break;
@@ -191,7 +191,7 @@ out::out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     out_l = l;
     out_r = r;
     volume = 0.1;
-    alf = false;
+    afl = false;
 }
 out::~out()
 {}
@@ -203,8 +203,8 @@ float out::getFloatAttribute(ElementType p_eType, QString p_rToChannel) {
 			if (p_rToChannel == MONO) {
 				return Backend::instance()->getOutput(MONO)->volume;
 			}
-			else if (p_rToChannel == PLF) {
-				return Backend::instance()->getOutput(PLF)->volume;
+			else if (p_rToChannel == PFL) {
+				return Backend::instance()->getOutput(PFL)->volume;
 			}
 			else {
 				return volume;
@@ -222,8 +222,8 @@ void out::setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToCh
 			if (p_rToChannel == MONO) {
 				Backend::instance()->setOutVolume(MONO, p_fValue);
 			}
-			else if (p_rToChannel == PLF) {
-				Backend::instance()->setOutVolume(PLF, p_fValue);
+			else if (p_rToChannel == PFL) {
+				Backend::instance()->setOutVolume(PFL, p_fValue);
 			}
 			else {
 				volume = p_fValue;
@@ -237,8 +237,8 @@ bool out::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
 	switch (p_eType) {
 		case MUTE:
 			return mute;
-		case TO_ALF:
-			return alf;
+		case TO_AFL:
+			return afl;
 		default:
 			return false;
 	}
@@ -248,8 +248,8 @@ void out::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToCh
 		case MUTE:
 			mute = p_fValue;
 			break;
-		case TO_ALF:
-			alf = p_fValue;
+		case TO_AFL:
+			afl = p_fValue;
 			break;
 		default:
 			break;
@@ -263,7 +263,7 @@ pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     out_r = r;
     volume = 0.1;
     bal = 0;
-    alf = false;
+    afl = false;
 }
 pre::~pre()
 {}
@@ -293,8 +293,8 @@ bool pre::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
 	switch (p_eType) {
 		case MUTE:
 			return mute;
-		case TO_ALF:
-			return alf;
+		case TO_AFL:
+			return afl;
 		default:
 			return false;
 	}
@@ -304,8 +304,8 @@ void pre::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToCh
 		case MUTE:
 			mute = p_fValue;
 			break;
-		case TO_ALF:
-			alf = p_fValue;
+		case TO_AFL:
+			afl = p_fValue;
 			break;
 		default:
 			break;
@@ -325,8 +325,8 @@ post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nfra
     prevolume = 1;
     postvolume = 1;
     bal = 0;
-    plf = false;
-    alf = false;
+    pfl = false;
+    afl = false;
     main = true;
     external = p_external;
     if (!external) {
@@ -380,10 +380,10 @@ bool post::getBoolAttribute(ElementType p_eType, QString p_rToChannel) {
 			return sub[p_rToChannel];
 		case TO_MAIN:
 			return main;
-		case TO_ALF:
-			return alf;
-		case TO_PLF:
-			return plf;
+		case TO_AFL:
+			return afl;
+		case TO_PFL:
+			return pfl;
 		default:
 			return false;
 	}
@@ -399,11 +399,11 @@ void post::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToCha
 		case TO_MAIN:
 			main = p_fValue;
 			break;
-		case TO_ALF:
-			alf = p_fValue;
+		case TO_AFL:
+			afl = p_fValue;
 			break;
-		case TO_PLF:
-			plf = p_fValue;
+		case TO_PFL:
+			pfl = p_fValue;
 			break;
 		default:
 			break;
@@ -417,7 +417,7 @@ sub::sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
     out_r = r;
     volume = 0.1;
     bal = 0;
-    alf = false;
+    afl = false;
     main = true;
 }
 sub::~sub()
@@ -450,8 +450,8 @@ bool sub::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
 			return mute;
 		case TO_MAIN:
 			return main;
-		case TO_ALF:
-			return alf;
+		case TO_AFL:
+			return afl;
 		default:
 			return false;
 	}
@@ -464,8 +464,8 @@ void sub::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToCh
 		case TO_MAIN:
 			main = p_fValue;
 			break;
-		case TO_ALF:
-			alf = p_fValue;
+		case TO_AFL:
+			afl = p_fValue;
 			break;
 		default:
 			break;

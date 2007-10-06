@@ -1,22 +1,22 @@
 /*
-    Copyright 2004 - 2007 Arnold Krille <arnold@arnoldarts.de>
-    Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
- 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation;
-    version 2 of the License.
- 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
- 
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-    MA 02110-1301, USA.
-*/
+ * Copyright 2004 - 2006 Arnold Krille <arnold@arnoldarts.de>
+ * Copyright 2007 Stéphane Brunner <stephane.brunner@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
 
 #include "mainwindow.h"
 
@@ -77,6 +77,7 @@ MainWindow::MainWindow( QString filename, QWidget* p ) : QMainWindow( p ), _init
 
 void MainWindow::init()
 {
+	layout()->setSizeConstraint(QLayout::SetMinimumSize);
 
     _filemenu = menuBar()->addMenu(trUtf8("&File"));
 //    _filemenu->addAction(trUtf8("Open File..."), this, SLOT( openFile() ), Qt::CTRL+Qt::Key_O );
@@ -147,9 +148,9 @@ void MainWindow::init()
     _mixerwidget = new Widget(this);
 
     QMenu* preferances = _editmenu->addMenu(trUtf8("Pre&ferances"));
-    m_pShowGain = new QAction(trUtf8("Show/hide &gain"), this );
-    connect(m_pShowGain, SIGNAL(triggered()), _mixerwidget, SLOT(showGain()));
-    preferances->addAction(m_pShowGain);
+//    m_pShowGain = new QAction(trUtf8("Show/hide &gain"), this );
+//    connect(m_pShowGain, SIGNAL(triggered()), _mixerwidget, SLOT(showGain()));
+//    preferances->addAction(m_pShowGain);
     m_pFaderHeight = new QAction(trUtf8("Set &fader height..."), this );
     connect(m_pFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(faderHeight()));
     preferances->addAction(m_pFaderHeight);
@@ -222,22 +223,24 @@ void MainWindow::openDefaultMenu() {
 	}	
 }
 void MainWindow::toEmpty() {
-        while ( Backend::instance()->inchannels().size() > 0 ) {
-            removeInput( Backend::instance()->inchannels()[ 0 ] );
-        }
-        while ( Backend::instance()->prechannels().size() > 0 ) {
-            removePre( Backend::instance()->prechannels()[ 0 ] );
-        }
-        while ( Backend::instance()->postchannels().size() > 0 ) {
-            removePost( Backend::instance()->postchannels()[ 0 ] );
-        }
-        while ( Backend::instance()->subchannels().size() > 0 ) {
-            removeSub( Backend::instance()->subchannels()[ 0 ] );
-        }
-        while ( Backend::instance()->getOutEffects(MAIN)->size() > 0 ) {
-        	effect *fx = (*Backend::instance()->getOutEffects(MAIN))[0];
-        	_mixerwidget->removeFX(fx->gui, fx);
-        }
+    while ( Backend::instance()->inchannels().size() > 0 ) {
+        removeInput( Backend::instance()->inchannels()[ 0 ] );
+    }
+    while ( Backend::instance()->prechannels().size() > 0 ) {
+        removePre( Backend::instance()->prechannels()[ 0 ] );
+    }
+    while ( Backend::instance()->postchannels().size() > 0 ) {
+        removePost( Backend::instance()->postchannels()[ 0 ] );
+    }
+    while ( Backend::instance()->subchannels().size() > 0 ) {
+        removeSub( Backend::instance()->subchannels()[ 0 ] );
+    }
+    while ( Backend::instance()->getOutEffects(MAIN)->size() > 0 ) {
+    	effect *fx = (*Backend::instance()->getOutEffects(MAIN))[0];
+    	_mixerwidget->removeFX(fx->gui, fx);
+    }
+    
+    _mixerwidget->clearAll();
 }
 void MainWindow::openEmpty() {
 	if (QMessageBox::question(this, trUtf8("New mix table"), trUtf8("Are you shure that you want to lost the actual mix table"), 
@@ -298,7 +301,23 @@ void MainWindow::openFile( QString path )
         if ( version == "0.5" || version == "0.4" ) {
         	_mixerwidget->setFaderHeight(livemix.attribute("faderHeight", "200").toInt());
         	_mixerwidget->setEffectFaderHeight(livemix.attribute("effectFaderHeight", "200").toInt());
-        	_mixerwidget->setGainVisible(toBool(livemix.attribute("gainVisible", "no")));
+        	_mixerwidget->setVisible(toBool(livemix.attribute("gainVisible", "yes")), GAIN);
+        	_mixerwidget->setVisible(toBool(livemix.attribute("muteVisible", "yes")), MUTE);
+        	_mixerwidget->setVisible(toBool(livemix.attribute("pflVisible", "yes")), TO_PFL);
+        	_mixerwidget->setVisible(toBool(livemix.attribute("toMainVisible", "yes")), TO_MAIN);
+        	_mixerwidget->setVisible(toBool(livemix.attribute("balVisible", "yes")), PAN_BAL);
+            for ( QDomElement visible = livemix.firstChildElement( "preVisible" ); !visible.isNull(); visible = visible.nextSiblingElement( "preVisible" ) ) {
+                QString name = visible.attribute( "name" );
+	        	_mixerwidget->setVisible(toBool(visible.attribute("visible", "yes")), TO_PRE, name);
+            }
+            for ( QDomElement visible = livemix.firstChildElement( "postVisible" ); !visible.isNull(); visible = visible.nextSiblingElement( "postVisible" ) ) {
+                QString name = visible.attribute( "name" );            	
+	        	_mixerwidget->setVisible(toBool(visible.attribute("visible", "yes")), TO_POST, name);
+            }
+            for ( QDomElement visible = livemix.firstChildElement( "subVisible" ); !visible.isNull(); visible = visible.nextSiblingElement( "subVisible" ) ) {
+                QString name = visible.attribute( "name" );            	
+	        	_mixerwidget->setVisible(toBool(visible.attribute("visible", "yes")), TO_SUB, name);
+            }
         	
 			openActionBinding(livemix, IN, "", true);
 
@@ -310,7 +329,7 @@ void MainWindow::openFile( QString path )
                 Backend::instance()->setInVolume( name, in.attribute( "volume" ).toFloat() );
                 Backend::instance()->setInBal( name, in.attribute( "bal" ).toFloat() );
                 Backend::instance()->setInMute( name, toBool( in.attribute( "mute" ) ) );
-                Backend::instance()->setInPlf( name, toBool( in.attribute( "plf" ) ) );
+                Backend::instance()->setInPfl( name, toBool( in.attribute( "pfl" ) ) );
                 Backend::instance()->setInMain( name, toBool( in.attribute( "main" ) ) );
                 for ( QDomElement pre = in.firstChildElement( "pre" ); !pre.isNull(); pre = pre.nextSiblingElement( "pre" ) ) {
                     Backend::instance()->setInPreVolume( name, pre.attribute( "name" ), pre.attribute( "volume" ).toFloat() );
@@ -338,15 +357,15 @@ void MainWindow::openFile( QString path )
 					openActionBinding(binding, OUT, MAIN, "bal", PAN_BAL);
 					openActionBindingList(binding, OUT, MAIN, "fader", FADER);
 					openActionBinding(binding, OUT, MAIN, "mute", MUTE);
-					openActionBinding(binding, OUT, MAIN, "afl", TO_ALF);
+					openActionBinding(binding, OUT, MAIN, "afl", TO_AFL);
 					openActionBinding(binding, OUT, MAIN, "effect", MUTE_EFFECT);
 			    }
                 Backend::instance()->setOutVolume( MAIN, out.attribute( "volume" ).toDouble() );
                 Backend::instance()->setOutMute( MAIN, toBool( out.attribute( "mute" ) ) );
-                Backend::instance()->setOutAlf( MAIN, toBool( out.attribute( "alf" ) ) );
+                Backend::instance()->setOutAfl( MAIN, toBool( out.attribute( "afl" ) ) );
                 Backend::instance()->setOutBal( MAIN, out.attribute( "bal" ).toDouble() );
                 Backend::instance()->setOutVolume( MONO, out.attribute( "monovolume" ).toDouble() );
-                Backend::instance()->setOutVolume( PLF, out.attribute( "phonevolume" ).toDouble() );
+                Backend::instance()->setOutVolume( PFL, out.attribute( "phonevolume" ).toDouble() );
 
                 for ( QDomElement effect = out.firstChildElement( "effect" ); !effect.isNull(); effect = effect.nextSiblingElement( "effect" ) ) {
                     Backend::instance()->addOutEffect( MAIN, openEffect(effect) );
@@ -359,7 +378,7 @@ void MainWindow::openFile( QString path )
                 Backend::instance()->addPre( name, toBool( pre.attribute( "stereo" ) ) );
                 Backend::instance()->setPreVolume( name, pre.attribute( "volume" ).toDouble() );
                 Backend::instance()->setPreMute( name, toBool( pre.attribute( "mute" ) ) );
-                Backend::instance()->setPreAlf( name, toBool( pre.attribute( "alf" ) ) );
+                Backend::instance()->setPreAfl( name, toBool( pre.attribute( "afl" ) ) );
 
                 for ( QDomElement effect = pre.firstChildElement( "effect" ); !effect.isNull(); effect = effect.nextSiblingElement( "effect" ) ) {
                     Backend::instance()->addPreEffect( name, openEffect(effect) );
@@ -374,8 +393,8 @@ void MainWindow::openFile( QString path )
                 Backend::instance()->setPostPostVolume( name, post.attribute( "post-volume" ).toDouble() );
                 Backend::instance()->setPostMute( name, toBool( post.attribute( "mute" ) ) );
                 Backend::instance()->setPostBal( name, post.attribute( "bal" ).toFloat() );
-                Backend::instance()->setPostAlf( name, toBool( post.attribute( "alf" ) ) );
-                Backend::instance()->setPostPlf( name, toBool( post.attribute( "plf" ) ) );
+                Backend::instance()->setPostAfl( name, toBool( post.attribute( "afl" ) ) );
+                Backend::instance()->setPostPfl( name, toBool( post.attribute( "pfl" ) ) );
                 Backend::instance()->setPostMain( name, toBool( post.attribute( "main" ) ) );
 
                 for ( QDomElement sub = post.firstChildElement( "sub" ); !sub.isNull(); sub = sub.nextSiblingElement( "sub" ) ) {
@@ -393,7 +412,7 @@ void MainWindow::openFile( QString path )
                 Backend::instance()->addSub( name, toBool( sub.attribute( "stereo" ) ) );
                 Backend::instance()->setSubVolume( name, sub.attribute( "volume" ).toDouble() );
                 Backend::instance()->setSubMute( name, toBool( sub.attribute( "mute" ) ) );
-                Backend::instance()->setSubAlf( name, toBool( sub.attribute( "alf" ) ) );
+                Backend::instance()->setSubAfl( name, toBool( sub.attribute( "afl" ) ) );
                 Backend::instance()->setSubMain( name, toBool( sub.attribute( "main" ) ) );
                 Backend::instance()->setSubBal( name, sub.attribute( "bal" ).toFloat() );
 
@@ -405,7 +424,7 @@ void MainWindow::openFile( QString path )
 
         file.close();
         // force update
-        _mixerwidget->doSelect(OUT, PLF);
+        _mixerwidget->doSelect(OUT, PFL);
         _mixerwidget->doSelect(OUT, MAIN);
     }
     else {
@@ -436,8 +455,20 @@ void MainWindow::saveFile()
 void MainWindow::saveFile(QString p_rPath)
 {
     QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    xml += QString("<livemix version=\"0.5\" faderHeight=\"%1\" effectFaderHeight=\"%2\" gainVisible=\"%3\">")
-    		.arg(_mixerwidget->getFaderHeight()).arg(_mixerwidget->getEffectFaderHeight()).arg(fromBool(_mixerwidget->isGainVisible()));
+    xml += QString("<livemix version=\"0.5\" faderHeight=\"%1\" effectFaderHeight=\"%2\" gainVisible=\"%3\" muteVisible=\"%4\" pflVisible=\"%5\" toMainVisible=\"%6\" balVisible=\"%7\">")
+    		.arg(_mixerwidget->getFaderHeight()).arg(_mixerwidget->getEffectFaderHeight()).arg(fromBool(_mixerwidget->isVisible(GAIN)))
+    		.arg(fromBool(_mixerwidget->isVisible(MUTE))).arg(fromBool(_mixerwidget->isVisible(TO_PFL)))
+    		.arg(fromBool(_mixerwidget->isVisible(TO_MAIN))).arg(fromBool(_mixerwidget->isVisible(PAN_BAL)));
+
+    foreach(QString name, Backend::instance()->prechannels()) {
+	    xml += QString("  <preVisible name=\"%1\" visible=\"%2\"/>").arg(name).arg(fromBool(_mixerwidget->isVisible(TO_PRE, name)));
+    }
+    foreach(QString name, Backend::instance()->postchannels()) {
+	    xml += QString("  <postVisible name=\"%1\" visible=\"%2\"/>").arg(name).arg(fromBool(_mixerwidget->isVisible(TO_POST, name)));
+    }
+    foreach(QString name, Backend::instance()->subchannels()) {
+	    xml += QString("  <subVisible name=\"%1\" visible=\"%2\"/>").arg(name).arg(fromBool(_mixerwidget->isVisible(TO_SUB, name)));
+    }
     
     xml += QString( "  <actionbinding>" );
 	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
@@ -455,8 +486,8 @@ void MainWindow::saveFile(QString p_rPath)
 				case MUTE: tagname = "mute"; break;
 				case TO_SUB: tagname = "sub"; break;
 				case TO_MAIN: tagname = "main"; break;
-				case TO_ALF: tagname = "afl"; break;
-				case TO_PLF: tagname = "pfl"; break;
+				case TO_AFL: tagname = "afl"; break;
+				case TO_PFL: tagname = "pfl"; break;
 				case MUTE_EFFECT: tagname = "effect"; break;
 			}
 			if (pKD->m_sReatedChannelName == "") {
@@ -471,8 +502,8 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->inchannels() ) {    	
         const in* elem = Backend::instance()->getInput( name );
-        xml += QString( "  <in name=\"%1\" gain=\"%2\" volume=\"%3\" mute=\"%4\" plf=\"%5\" bal=\"%6\" stereo=\"%7\" main=\"%8\">" )
-               .arg( name ).arg( elem->gain ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->plf ) )
+        xml += QString( "  <in name=\"%1\" gain=\"%2\" volume=\"%3\" mute=\"%4\" pfl=\"%5\" bal=\"%6\" stereo=\"%7\" main=\"%8\">" )
+               .arg( name ).arg( elem->gain ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->pfl ) )
                .arg( elem->bal ).arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) );
 		xml += saveActionBinding(IN, name);
 
@@ -496,9 +527,9 @@ void MainWindow::saveFile(QString p_rPath)
 
     {
         const out* elem = Backend::instance()->getOutput( MAIN );
-        xml += QString( "  <out volume=\"%1\" mute=\"%2\" alf=\"%3\" bal=\"%4\" monovolume=\"%5\" phonevolume=\"%6\">" )
-               .arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( elem->bal )
-               .arg( Backend::instance()->getOutput( MONO )->volume ).arg( Backend::instance()->getOutput( PLF )->volume );
+        xml += QString( "  <out volume=\"%1\" mute=\"%2\" afl=\"%3\" bal=\"%4\" monovolume=\"%5\" phonevolume=\"%6\">" )
+               .arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) ).arg( elem->bal )
+               .arg( Backend::instance()->getOutput( MONO )->volume ).arg( Backend::instance()->getOutput( PFL )->volume );
         xml += QString( "    <actionbinding>" );
     	foreach (QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
 			KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];
@@ -516,7 +547,7 @@ void MainWindow::saveFile(QString p_rPath)
 						case PAN_BAL: tagname = "bal"; break;
 						case FADER: tagname = "fader"; break;
 						case MUTE: tagname = "mute"; break;
-						case TO_ALF: tagname = "afl"; break;
+						case TO_AFL: tagname = "afl"; break;
 						case MUTE_EFFECT: tagname = "effect"; break;
 						default: break;
 					}
@@ -541,8 +572,8 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->prechannels() ) {
         const pre* elem = Backend::instance()->getPre( name );
-        xml += QString( "  <pre name=\"%1\" volume=\"%2\" mute=\"%3\" alf=\"%4\" stereo=\"%5\">" )
-               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( fromBool( elem->stereo ) );
+        xml += QString( "  <pre name=\"%1\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\">" )
+               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) ).arg( fromBool( elem->stereo ) );
 		xml += saveActionBinding(PRE, name);
 
         for (QList<effect *>::const_iterator effect = elem->effects.begin();
@@ -555,9 +586,9 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->postchannels() ) {
         const post* elem = Backend::instance()->getPost( name );
-        xml += QString( "  <post name=\"%1\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" alf=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" plf=\"%10\">" )
-               .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) )
-               .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) ).arg( fromBool( elem->plf ) );
+        xml += QString( "  <post name=\"%1\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" afl=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" pfl=\"%10\">" )
+               .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) )
+               .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) ).arg( fromBool( elem->pfl ) );
 		xml += saveActionBinding(POST, name);
 
         foreach( QString sub, Backend::instance()->subchannels() ) {
@@ -574,8 +605,8 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->subchannels() ) {
         const sub* elem = Backend::instance()->getSub( name );
-        xml += QString( "  <sub name=\"%1\" volume=\"%2\" mute=\"%3\" alf=\"%4\" stereo=\"%5\" main=\"%6\" bal=\"%7\">" )
-               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->alf ) ).arg( fromBool( elem->stereo ) )
+        xml += QString( "  <sub name=\"%1\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\" main=\"%6\" bal=\"%7\">" )
+               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) ).arg( fromBool( elem->stereo ) )
                .arg( fromBool( elem->main ) ).arg( elem->bal );
 		xml += saveActionBinding(SUB, name);
 
@@ -634,8 +665,8 @@ void MainWindow::openActionBinding(const QDomElement& channel, const ChannelType
 		openActionBinding(binding, p_eType, p_sChannelName, "mute", MUTE, p_bMain);
 		openActionBindingList(binding, p_eType, p_sChannelName, "sub", TO_SUB, p_bMain);
 		openActionBinding(binding, p_eType, p_sChannelName, "main", TO_MAIN, p_bMain);
-		openActionBinding(binding, p_eType, p_sChannelName, "afl", TO_ALF, p_bMain);
-		openActionBinding(binding, p_eType, p_sChannelName, "pfl", TO_PLF, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "afl", TO_AFL, p_bMain);
+		openActionBinding(binding, p_eType, p_sChannelName, "pfl", TO_PFL, p_bMain);
 		openActionBindingList(binding, p_eType, p_sChannelName, "effect", MUTE_EFFECT, p_bMain);
     }
 }
@@ -685,8 +716,8 @@ QString MainWindow::saveActionBinding(ChannelType p_eType, const QString& p_sCha
 						case MUTE: tagname = "mute"; break;
 						case TO_SUB: tagname = "sub"; break;
 						case TO_MAIN: tagname = "main"; break;
-						case TO_ALF: tagname = "afl"; break;
-						case TO_PLF: tagname = "pfl"; break;
+						case TO_AFL: tagname = "afl"; break;
+						case TO_PFL: tagname = "pfl"; break;
 						case MUTE_EFFECT: tagname = "effect"; break;
 					}
 					if (pKD->m_sReatedChannelName == "") {

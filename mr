@@ -6,4 +6,4 @@ cd i18n
 ./updateTranslations.sh
 cd ..
 
-qmake-qt4 all.pro&&make qmake&&make&&./livemix $1
+qmake-qt4 all.pro -Wall -config debug&&make qmake&&make&&./livemix $1
