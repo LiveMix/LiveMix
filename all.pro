@@ -9,7 +9,10 @@ target.files = livemix
 
 icon.path = $$prefix/share/pixmaps
 icon.files = dist/livemix.xpm
-#dist/livemix-16.xpm
+#dist/livemix.png
+
+icong.path = $$prefix/share/icons/gnome/32x32/mimetypes/
+icong.files = dist/gnome-mime-application-x-livemix.png
 
 desktop.path = $$prefix/share/applications
 desktop.files = dist/livemix.desktop
@@ -31,6 +34,6 @@ mime.files = dist/livemix.mime dist/livemix.keys
 #mime2.files = dist/livemix-mime.xml
 
 
-INSTALLS += target icon sample desktop mimelnk mime
+INSTALLS += target icon sample desktop mimelnk mime icong
 #mime2 data mime application-registry
 

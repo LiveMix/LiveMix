@@ -1,7 +1,6 @@
 application/x-livemix:
         description=LiveMix - Mixer table
         description[fr]=LiveMix - Table de mixage
-        icon_filename=/usr/share/pixmaps/livemix.xpm
         default_action_type=application
         default_application_id=livemix
         short_list_application_user_additions=livemix
