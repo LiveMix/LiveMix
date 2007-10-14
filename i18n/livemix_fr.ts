@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr_FR">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -365,12 +364,12 @@
     <message>
         <location filename="../backend/backend.cpp" line="51"/>
         <source>No Jack-connection :-(</source>
-        <translation>Pas de connexion Jack :-(</translation>
+        <translation type="obsolete">Pas de connexion Jack :-(</translation>
     </message>
     <message>
         <location filename="../backend/backend.cpp" line="51"/>
         <source>&lt;qt&gt;&lt;p&gt;Sorry, I couldn&apos;t connect to Jack. This probably means that &lt;b&gt;no jackd is running&lt;/b&gt;. Please start it and try JackMix again.&lt;/p&gt;&lt;p&gt;If you don&apos;t know what I am talking about, than JackMix might not be the program you want...&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Désoler, je n&apos;ai pas réussi à me connecter à Jack. Cela veut probablement dir que &lt;b&gt;jackd n&apos;est pas démarer&lt;/b&gt;. Démarer le (par example avec QJackCtl) et essayez de rédémarrer LiveMix.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Désoler, je n&apos;ai pas réussi à me connecter à Jack. Cela veut probablement dir que &lt;b&gt;jackd n&apos;est pas démarer&lt;/b&gt;. Démarer le (par example avec QJackCtl) et essayez de rédémarrer LiveMix.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -1583,6 +1582,16 @@
         <location filename="../backend/effects.cpp" line="282"/>
         <source>Categorized (LRDF)</source>
         <translation>Cétégories (LRDF)</translation>
+    </message>
+    <message>
+        <location filename="../backend/backend.cpp" line="51"/>
+        <source>No Jack-connection :-(</source>
+        <translation type="unfinished">Pas de connexion Jack :-(</translation>
+    </message>
+    <message>
+        <location filename="../backend/backend.cpp" line="52"/>
+        <source>&lt;qt&gt;&lt;p&gt;Sorry, I couldn&apos;t connect to Jack. This probably means that &lt;b&gt;no jackd is running&lt;/b&gt;. Please start it (for example by using QJackCtl) and try LiveMix again.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -2,6 +2,7 @@
 <livemix version="0.5" faderHeight="200" effectFaderHeight="150" gainVisible="no">
 <!-- => 869px / 900px -->
 <!-- 872 -->
+<!-- Fast lookahead limiter -->
   <actionbinding>
     <afl key="A" />
     <bal key="B" />

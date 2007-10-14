@@ -746,7 +746,7 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
             if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
                 for ( unsigned i = 0; i < nframes; ++i) {
                     left_channel[i] = pFX->fx->m_pOutBufferL[i];
-                    right_channel[i] = pFX->fx->m_pOutBufferL[i];
+                    right_channel[i] = pFX->fx->m_pOutBufferR[i];
                 }
             } else {
                 for ( unsigned i = 0; i < nframes; ++i) {
