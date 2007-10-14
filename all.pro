@@ -8,7 +8,7 @@ target.path = $$prefix/bin
 target.files = livemix
 
 icon.path = $$prefix/share/pixmaps
-icon.files = data/livemix.svg data/application-x-livemix.svg
+icon.files = data/livemix.png data/application-x-livemix.png
 
 icong.path = $$prefix/share/icons/gnome/32x32/mimetypes/
 icong.files = data/gnome-mime-application-x-livemix.png
