@@ -4,4 +4,5 @@ application/x-livemix:
         default_action_type=application
         default_application_id=livemix
         short_list_application_user_additions=livemix
-	open=livemix %f
+        icon_filename=gnome-mime-application-x-livemix
+        open=livemix %f

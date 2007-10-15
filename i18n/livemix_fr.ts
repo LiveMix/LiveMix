@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr_FR">
+<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -1586,12 +1587,12 @@
     <message>
         <location filename="../backend/backend.cpp" line="51"/>
         <source>No Jack-connection :-(</source>
-        <translation type="unfinished">Pas de connexion Jack :-(</translation>
+        <translation>Pas de connexion Jack :-(</translation>
     </message>
     <message>
         <location filename="../backend/backend.cpp" line="52"/>
         <source>&lt;qt&gt;&lt;p&gt;Sorry, I couldn&apos;t connect to Jack. This probably means that &lt;b&gt;no jackd is running&lt;/b&gt;. Please start it (for example by using QJackCtl) and try LiveMix again.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Désoler je ne peut pas me connecter à Jack. C&apos;est probablement que &lt;b&gt;jackd n&apos;est pas démaré&lt;/b&gt;. Démarer le (en utilisanr par example QJackCtl) et essayer à nouveau LiveMix.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
