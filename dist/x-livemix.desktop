@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=MimeType
 MimeType=application/x-livemix
-Icon=application-x-livemix
+Icon=kde-mime-application-x-livemix
 Patterns=*.lm;
 Comment=LiveMix - Mixer table
 Comment[en]=LiveMix - Mixer table
