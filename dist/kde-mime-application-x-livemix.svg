@@ -16,9 +16,9 @@
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    version="1.0"
-   sodipodi:docname="application-x-livemix.svg"
+   sodipodi:docname="kde-mime-application-x-livemix.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:docbase="/home/sbrunner/workspace/livemix/data"
+   sodipodi:docbase="/home/brunner/workspace/livemix/dist"
    inkscape:export-filename="/home/sbrunner/workspace/livemix/data/application-x-livemix.png"
    inkscape:export-xdpi="25.200001"
    inkscape:export-ydpi="25.200001">
@@ -1282,9 +1282,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="63.894445"
-     inkscape:cy="73.240566"
+     inkscape:zoom="3.5362467"
+     inkscape:cx="63.379346"
+     inkscape:cy="62.627812"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="128px"
@@ -1298,8 +1298,8 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="1016"
      inkscape:window-height="692"
-     inkscape:window-x="1"
-     inkscape:window-y="1"
+     inkscape:window-x="353"
+     inkscape:window-y="131"
      objecttolerance="10000" />
   <metadata
      id="metadata2611">
@@ -1316,22 +1316,25 @@
      inkscape:label="Livello 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <path
-       style="opacity:0.5;fill:#000000;fill-opacity:1;filter:url(#filter2770)"
-       d="M 16,8 L 16,120 C 16,120 79.15625,120 79.15625,120 L 79.1875,120 C 79.187503,120 91.09375,110.09375 96.59375,104.59375 C 102.09375,99.09375 112,87.1875 112,87.1875 L 112,87.15625 L 112,8 L 16,8 z"
-       id="path7865"
-       sodipodi:nodetypes="csccscccc"
-       transform="matrix(1.0416667,0,0,1.0267857,-2.6666667,-1.2142891)" />
-    <path
-       style="fill:#ffffff;fill-opacity:1"
-       d="M 16.000001,8 L 16,120 C 16,120 79.146418,120 79.146418,120 L 112,87.14642 L 112,8 L 16.000001,8 z"
-       id="path34"
-       sodipodi:nodetypes="cccccc" />
-    <path
-       style="fill:url(#radialGradient9437);fill-opacity:1"
-       d="M 18.000002,9.0000034 C 17.449002,9.0000034 17.000002,9.4488534 17.000002,9.9996684 L 17.000002,117.96352 C 17.000002,118.51533 17.449002,118.96318 18.000002,118.96318 L 77.171999,118.96318 C 77.434999,118.96318 79.934679,119.08131 80.12068,118.89438 L 110.707,88.094202 C 110.894,87.907264 111,85.40942 111,85.146508 L 111,9.9996684 C 111,9.4488534 110.552,9.0000034 110,9.0000034 L 18.000002,9.0000034 z"
-       id="path59"
-       sodipodi:nodetypes="ccccccccccc" />
+    <g
+       id="g3440">
+      <path
+         transform="matrix(1.0416667,0,0,1.0267857,-2.6666667,-1.2142891)"
+         sodipodi:nodetypes="csccscccc"
+         id="path7865"
+         d="M 16,8 L 16,120 C 16,120 79.15625,120 79.15625,120 L 79.1875,120 C 79.187503,120 91.09375,110.09375 96.59375,104.59375 C 102.09375,99.09375 112,87.1875 112,87.1875 L 112,87.15625 L 112,8 L 16,8 z"
+         style="opacity:0.5;fill:#000000;fill-opacity:1;filter:url(#filter2770)" />
+      <path
+         sodipodi:nodetypes="cccccc"
+         id="path34"
+         d="M 16.000001,8 L 16,120 C 16,120 79.146418,120 79.146418,120 L 112,87.14642 L 112,8 L 16.000001,8 z"
+         style="fill:#ffffff;fill-opacity:1" />
+      <path
+         sodipodi:nodetypes="ccccccccccc"
+         id="path59"
+         d="M 18.000002,9.0000034 C 17.449002,9.0000034 17.000002,9.4488534 17.000002,9.9996684 L 17.000002,117.96352 C 17.000002,118.51533 17.449002,118.96318 18.000002,118.96318 L 77.171999,118.96318 C 77.434999,118.96318 79.934679,119.08131 80.12068,118.89438 L 110.707,88.094202 C 110.894,87.907264 111,85.40942 111,85.146508 L 111,9.9996684 C 111,9.4488534 110.552,9.0000034 110,9.0000034 L 18.000002,9.0000034 z"
+         style="fill:url(#radialGradient9437);fill-opacity:1" />
+    </g>
     <g
        id="g3412"
        transform="translate(-10,0)">
@@ -1350,7 +1353,7 @@
     </g>
     <g
        id="g2606"
-       transform="matrix(0.3750028,0,0,0.3750028,41.99988,34.999927)">
+       transform="matrix(0.5312523,0,0,0.5312523,29.999858,21.999706)">
       <g
          id="layer2"
          inkscape:label="bg"
