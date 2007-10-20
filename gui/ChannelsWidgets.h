@@ -71,7 +71,7 @@ public:
     void removePost(QString channelPost);
     void removeSub(QString channelSub);
 
-	void setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
+	int setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
 
 private:
 	ToggleButton* createToggleButton(Widget* p_pMatrix, ElementType p_eElement, QString p_rChannelTo ="");

@@ -30,12 +30,13 @@
 namespace LiveMix
 {
 
-Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, QSize size, bool use_skin_style)
+Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, const QString& sOffOverImage, QSize size, bool use_skin_style)
         : Action( pParent )
         , m_bPressed( false )
         , m_onPixmap( size )
         , m_offPixmap( size )
         , m_overPixmap( size )
+        , m_offOverPixmap( size )
         , m_bMouseOver( false )
         , __use_skin_style(use_skin_style)
 {
@@ -56,6 +57,10 @@ Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffI
 
     if ( loadImage( sOverImage, m_overPixmap ) == false ) {
         m_overPixmap.fill( QColor( 0, 180, 0 ) );
+    }
+
+    if ( loadImage( sOffOverImage, m_offOverPixmap ) == false ) {
+        m_offOverPixmap.fill( QColor( 0, 180, 0 ) );
     }
 
     // default text font
@@ -131,79 +136,41 @@ void Button::leaveEvent(QEvent*)
 }
 
 
-void Button::paintEvent( QPaintEvent* ev)
+void Button::draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap) {
+    if (__use_skin_style) {
+        static int w = 5;
+        static int h = pixmap.height();
+
+        // central section, scaled
+        painter.drawPixmap( QRect(w, 0, width() - w * 2, h), pixmap, QRect(10, 0, w, h) );
+
+        // left side
+        painter.drawPixmap( QRect(0, 0, w, h), pixmap, QRect(0, 0, w, h) );
+
+        // right side
+        painter.drawPixmap( QRect(width() - w, 0, w, h), pixmap, QRect(pixmap.width() - w, 0, w, h) );
+    } else {
+        painter.drawPixmap( ev->rect(), pixmap, ev->rect() );
+    }
+}
+
+void Button::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
 
     // background
     if (m_bPressed) {
         if (m_bMouseOver) {
-            if (__use_skin_style) {
-                static int w = 5;
-                static int h = m_offPixmap.height();
-
-                // central section, scaled
-                painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_offPixmap, QRect(10, 0, w, h) );
-
-                // left side
-                painter.drawPixmap( QRect(0, 0, w, h), m_offPixmap, QRect(0, 0, w, h) );
-
-                // right side
-                painter.drawPixmap( QRect(width() - w, 0, w, h), m_offPixmap, QRect(m_offPixmap.width() - w, 0, w, h) );
-            } else {
-                painter.drawPixmap( ev->rect(), m_offPixmap, ev->rect() );
-            }
+        	draw(ev, painter, m_overPixmap);
         }
         else {
-	        if (__use_skin_style) {
-	            static int w = 5;
-	            static int h = m_onPixmap.height();
-	
-	            // central section, scaled
-	            painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_onPixmap, QRect(10, 0, w, h) );
-	
-	            // left side
-	            painter.drawPixmap( QRect(0, 0, w, h), m_onPixmap, QRect(0, 0, w, h) );
-	
-	            // right side
-	            painter.drawPixmap( QRect(width() - w, 0, w, h), m_onPixmap, QRect(m_onPixmap.width() - w, 0, w, h) );
-	        } else {
-	            painter.drawPixmap( ev->rect(), m_onPixmap, ev->rect() );
-	        }
+        	draw(ev, painter, m_onPixmap);
         }
     } else {
         if (m_bMouseOver) {
-            if (__use_skin_style) {
-                static int w = 5;
-                static int h = m_overPixmap.height();
-
-                // central section, scaled
-                painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_overPixmap, QRect(10, 0, w, h) );
-
-                // left side
-                painter.drawPixmap( QRect(0, 0, w, h), m_overPixmap, QRect(0, 0, w, h) );
-
-                // right side
-                painter.drawPixmap( QRect(width() - w, 0, w, h), m_overPixmap, QRect(m_overPixmap.width() - w, 0, w, h) );
-            } else {
-                painter.drawPixmap( ev->rect(), m_overPixmap, ev->rect() );
-            }
+        	draw(ev, painter, m_offOverPixmap);
         } else {
-            if (__use_skin_style) {
-                static int w = 5;
-                static int h = m_offPixmap.height();
-
-                // central section, scaled
-                painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_offPixmap, QRect(10, 0, w, h) );
-
-                // left side
-                painter.drawPixmap( QRect(0, 0, w, h), m_offPixmap, QRect(0, 0, w, h) );
-
-                // right side
-                painter.drawPixmap( QRect(width() - w, 0, w, h), m_offPixmap, QRect(m_offPixmap.width() - w, 0, w, h) );
-            } else {
-                painter.drawPixmap( ev->rect(), m_offPixmap, ev->rect() );
-            }
+        	draw(ev, painter, m_offPixmap);
         }
     }
 
@@ -225,9 +192,7 @@ void Button::paintEvent( QPaintEvent* ev)
         // text
         painter.setPen( text );
         painter.drawText( 0, 0, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter,  m_sText );
-
     }
-
 }
 
 
@@ -241,8 +206,8 @@ void Button::setText( const QString& sText )
 // :::::::::::::::::::::::::
 
 
-ToggleButton::ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style)
-        : Button( pParent, sOnImg, sOffImg, sOverImg, size, use_skin_style)
+ToggleButton::ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style)
+        : Button( pParent, sOnImg, sOffImg, sOverImg, sOffOverImg, size, use_skin_style)
 {}
 
 
@@ -289,11 +254,11 @@ void ToggleButton::mouseReleaseEvent(QMouseEvent* ev)
 
 Button* Button::create(QWidget* pParent)
 {
-    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
+    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
 }
 ToggleButton* ToggleButton::create(QWidget* pParent)
 {
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
+    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
 }
 
 }

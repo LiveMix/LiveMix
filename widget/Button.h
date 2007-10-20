@@ -48,6 +48,7 @@ public:
         const QString& sOnImg,
         const QString& sOffImg,
         const QString& sOverImg,
+        const QString& sOffOverImg,
         QSize size,
         bool use_skin_style
     );
@@ -81,6 +82,7 @@ protected:
     QPixmap m_onPixmap;
     QPixmap m_offPixmap;
     QPixmap m_overPixmap;
+    QPixmap m_offOverPixmap;
 
 private:
     bool m_bMouseOver;
@@ -92,7 +94,8 @@ private:
     void leaveEvent(QEvent *ev);
     void paintEvent( QPaintEvent* ev);
 
-    bool loadImage( const QString& sFilename, QPixmap& pixmap );
+	void draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap);
+    bool loadImage(const QString &sFilename, QPixmap &pixmap);
 };
 
 
@@ -106,7 +109,7 @@ class ToggleButton : public Button
     Q_OBJECT
 
 public:
-    ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, QSize size, bool use_skin_style);
+    ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style);
     ~ToggleButton();
 
     static ToggleButton* create(QWidget* =NULL);

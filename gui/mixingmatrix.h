@@ -56,6 +56,8 @@ class KeyDo;
 
 
 #define CHANNEL_WIDTH 50
+#define SEPARATOR_HEIGHT 10
+#define INFO_WIDTH 30
 
 class Widget : public QWidget
 {

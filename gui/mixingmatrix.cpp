@@ -1160,8 +1160,8 @@ void Widget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChan
 	}
 	m_bVisible[p_eElement]->insert(p_rChannelTo, p_bVisible);
 	
-	info_widget->setVisible(p_bVisible, p_eElement, p_rChannelTo);
-	
+	int height = info_widget->setVisible(p_bVisible, p_eElement, p_rChannelTo);
+
 	foreach (ChannelType i, m_mShurtCut.keys()) {
 		foreach (QString j, m_mShurtCut[i]->keys()) {
 			if ((*m_mShurtCut[i])[j]->contains(p_eElement) && (*(*m_mShurtCut[i])[j])[p_eElement]->contains(p_rChannelTo)) {
@@ -1178,6 +1178,8 @@ void Widget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChan
 			}
 		}
 	}
+	
+	parentWidget()->setGeometry(parentWidget()->x(), parentWidget()->y(), parentWidget()->width(), parentWidget()->height() + height);
 /*qDebug()<<this->parentWidget()->minimumHeight();
 this->parentWidget()->updateGeometry();
 qDebug()<<this->parentWidget()->minimumHeight();

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fr_FR">
-<defaultcodec></defaultcodec>
 <context>
     <name>@default</name>
     <message>
@@ -493,7 +492,7 @@
 <context>
     <name>LiveMix::MainWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="560"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="566"/>
         <source>Phone</source>
         <translation>Casque</translation>
     </message>
@@ -503,7 +502,7 @@
         <translation type="obsolete">Volume du casque</translation>
     </message>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="566"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="572"/>
         <source>Main</source>
         <translation>Main</translation>
     </message>
@@ -824,7 +823,7 @@
 <context>
     <name>LiveMix::PostWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="450"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="456"/>
         <source>Return</source>
         <translation>Retour</translation>
     </message>
@@ -1099,22 +1098,22 @@
         <translation>Dois-je réassigner le rasourci %1</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1222"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1224"/>
         <source>Change the fader height</source>
         <translation>Change la hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1222"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1224"/>
         <source>New fader height</source>
         <translation>Nouvelle hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1273"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1275"/>
         <source>Change the effect fader height</source>
         <translation>Change la hauter des curseurs d&apos;effets</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1273"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1275"/>
         <source>New effect fader height</source>
         <translation>Nouvelle hauteur des curseurs d&apos;effets</translation>
     </message>

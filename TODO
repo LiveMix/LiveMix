@@ -2,14 +2,18 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 ==== 0.5 ====
 
-- Verify CPU usage
+- Some fix for info pannel
 
-- resolumtion max 768 ou 900 sans scroll !
 
+- fix toggle button
 
 - add pseudo channel the hide section !
 
+- avalabilit to change effect order
+
 - add channel display name
+- multiple add in channels
+
 - richtClick menu for rotary and fader:
   - assigne key
   - set to 0
