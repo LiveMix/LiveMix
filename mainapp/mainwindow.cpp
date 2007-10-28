@@ -592,9 +592,9 @@ void MainWindow::saveFile(QString p_rPath)
     foreach( QString name, Backend::instance()->postchannels() ) {
         const post* elem = Backend::instance()->getPost( name );
         xml += QString( "  <post name=\"%1\" display=\"%11\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" afl=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" pfl=\"%10\">" )
-               .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) )
+               .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->m_bAfl ) )
                .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) )
-               .arg( fromBool( elem->pfl ) ).arg(elem->display_name);
+               .arg( fromBool( elem->m_bPfl ) ).arg(elem->display_name);
 		xml += saveActionBinding(POST, name);
 
         foreach( QString sub, Backend::instance()->subchannels() ) {
