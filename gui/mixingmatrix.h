@@ -241,6 +241,9 @@ class RWidget : public VWidget
 public:
     RWidget(ElementType p_eElement, QString p_rToolTip);
     Rotary* getRotary();
+private:
+    void paintEvent(QPaintEvent* p_pEvent);
+    QPixmap* m_pBackground;
 };
 
 class FWidget : public VWidget

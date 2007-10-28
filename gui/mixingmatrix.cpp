@@ -45,6 +45,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QAction>
+#include <QPainter>
 
 
 namespace LiveMix
@@ -1016,10 +1017,10 @@ void Widget::resetAllTheLine() {
                 Volume* vol = ((WrappVolume*)(*(*(*m_mShurtCut[i])[j])[m_eSelectedElement])[m_sSelectedReatedChannelName])->getVolume();
                 switch (m_eSelectedElement) {
                     case PAN_BAL:
-                        vol->setValue(0);
+                        vol->setValue(0, true);
                         break;
                     default:
-                        vol->setValue(vol->getMinValue());
+                        vol->setValue(vol->getMinValue(), true);
                 }
             }
         }
@@ -1030,7 +1031,7 @@ void Widget::enableAllTheLine() {
         foreach (QString j, m_mShurtCut[i]->keys()) {
             if ((*m_mShurtCut[i])[j]->contains(m_eSelectedElement) && (*(*m_mShurtCut[i])[j])[m_eSelectedElement]->contains(m_sSelectedReatedChannelName)) {
                 Toggle* vol = ((WrappToggle*)(*(*(*m_mShurtCut[i])[j])[m_eSelectedElement])[m_sSelectedReatedChannelName])->getToggle();
-                vol->setValue(true);
+                vol->setValue(true, true);
             }
         }
     }
@@ -1040,7 +1041,7 @@ void Widget::desableAllTheLine() {
         foreach (QString j, m_mShurtCut[i]->keys()) {
             if ((*m_mShurtCut[i])[j]->contains(m_eSelectedElement) && (*(*m_mShurtCut[i])[j])[m_eSelectedElement]->contains(m_sSelectedReatedChannelName)) {
                 Toggle* vol = ((WrappToggle*)(*(*(*m_mShurtCut[i])[j])[m_eSelectedElement])[m_sSelectedReatedChannelName])->getToggle();
-                vol->setValue(false);
+                vol->setValue(false, true);
             }
         }
     }
@@ -1480,6 +1481,25 @@ RWidget::RWidget(ElementType p_eElement, QString p_rToolTip)
     m_pVolume = new Rotary(this, p_eElement == PAN_BAL ? Rotary::TYPE_CENTER : Rotary::TYPE_NORMAL, p_rToolTip, false, true);
     setFixedSize(CHANNEL_WIDTH, 26);
     m_pVolume->move((CHANNEL_WIDTH - 28) / 2, 0);
+    if (p_eElement == PAN_BAL) {
+        m_pBackground = new QPixmap();
+        if (!m_pBackground->load( ":/data/bal_background.png")) {
+            qDebug() << "Error loading image: 'bal_background.png'";
+            m_pBackground = NULL;
+        }
+    }
+    else {
+        m_pBackground = NULL;
+    }
+}
+void RWidget::paintEvent(QPaintEvent *p_pEvent)
+{
+    QPainter painter(this);
+
+    // background
+    if (m_pBackground != NULL) {
+        painter.drawPixmap(p_pEvent->rect(), *m_pBackground, p_pEvent->rect());
+    }
 }
 Rotary* RWidget::getRotary() {
 	return (Rotary*)m_pVolume;

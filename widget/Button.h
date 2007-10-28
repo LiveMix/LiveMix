@@ -96,7 +96,7 @@ private:
     void mouseReleaseEvent(QMouseEvent *ev);
     void enterEvent(QEvent *ev);
     void leaveEvent(QEvent *ev);
-    void paintEvent( QPaintEvent* ev);
+    void paintEvent(QPaintEvent* ev);
 
 	void draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap);
     bool loadImage(const QString &sFilename, QPixmap &pixmap);

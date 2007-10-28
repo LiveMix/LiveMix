@@ -58,5 +58,6 @@
 	 <file>data/intro-open.svg</file>
 	 <file>data/intro-close.svg</file>
      <file>i18n/livemix_fr.qm</file>
+     <file>data/bal_background.png</file>
  </qresource>
  </RCC>
