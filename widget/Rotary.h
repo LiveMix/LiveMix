@@ -27,11 +27,12 @@
 #include "db.h"
 #include "Action.h"
 
-#include <QtGui/QWidget>
-#include <QtGui/QPixmap>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWheelEvent>
-#include <QtGui/QPaintEvent>
+#include <QWidget>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QDebug>
 
 namespace LiveMix
 {
@@ -61,6 +62,7 @@ public:
 
     Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip);
     ~Rotary();
+    virtual QWidget* getWidget();
 
     void setMinValue( float fMin );
     float getMinValue();
@@ -82,10 +84,10 @@ public:
     float getDbValue()
     {
         if ( m_bUseIntSteps ) {
-            int val = (int)lin2db( m_fValue, m_fMin );
+            int val = (int)db2lin( m_fValue, m_fMin );
             return val;
         } else
-            return lin2db( m_fValue, m_fMin );
+            return db2lin( m_fValue, m_fMin );
     }
     void incValue(bool p_bDirection, int p_iStep =1);
 

@@ -325,6 +325,7 @@ void MainWindow::openFile( QString path )
                 QString name = in.attribute( "name" );
 				openActionBinding(in, IN, name);
                 Backend::instance()->addInput( name, toBool(in.attribute( "stereo" ) ) );
+                Backend::instance()->getChannel(IN, name)->display_name = in.attribute("display");
                 Backend::instance()->setInGain( name, in.attribute( "gain" ).toFloat() );
                 Backend::instance()->setInVolume( name, in.attribute( "volume" ).toFloat() );
                 Backend::instance()->setInBal( name, in.attribute( "bal" ).toFloat() );
@@ -376,6 +377,7 @@ void MainWindow::openFile( QString path )
                 QString name = pre.attribute( "name" );
 				openActionBinding(pre, PRE, name);
                 Backend::instance()->addPre( name, toBool( pre.attribute( "stereo" ) ) );
+                Backend::instance()->getChannel(PRE, name)->display_name = pre.attribute("display");
                 Backend::instance()->setPreVolume( name, pre.attribute( "volume" ).toDouble() );
                 Backend::instance()->setPreMute( name, toBool( pre.attribute( "mute" ) ) );
                 Backend::instance()->setPreAfl( name, toBool( pre.attribute( "afl" ) ) );
@@ -389,6 +391,7 @@ void MainWindow::openFile( QString path )
                 QString name = post.attribute( "name" );
 				openActionBinding(post, POST, name);
                 Backend::instance()->addPost( name, toBool( post.attribute( "stereo" ) ), toBool( post.attribute( "external" ) ) );
+                Backend::instance()->getChannel(POST, name)->display_name = post.attribute("display");
                 Backend::instance()->setPostPreVolume( name, post.attribute( "pre-volume" ).toDouble() );
                 Backend::instance()->setPostPostVolume( name, post.attribute( "post-volume" ).toDouble() );
                 Backend::instance()->setPostMute( name, toBool( post.attribute( "mute" ) ) );
@@ -410,6 +413,7 @@ void MainWindow::openFile( QString path )
                 QString name = sub.attribute( "name" );
 				openActionBinding(sub, SUB, name);
                 Backend::instance()->addSub( name, toBool( sub.attribute( "stereo" ) ) );
+                Backend::instance()->getChannel(SUB, name)->display_name = sub.attribute("display");
                 Backend::instance()->setSubVolume( name, sub.attribute( "volume" ).toDouble() );
                 Backend::instance()->setSubMute( name, toBool( sub.attribute( "mute" ) ) );
                 Backend::instance()->setSubAfl( name, toBool( sub.attribute( "afl" ) ) );
@@ -502,9 +506,9 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->inchannels() ) {    	
         const in* elem = Backend::instance()->getInput( name );
-        xml += QString( "  <in name=\"%1\" gain=\"%2\" volume=\"%3\" mute=\"%4\" pfl=\"%5\" bal=\"%6\" stereo=\"%7\" main=\"%8\">" )
+        xml += QString( "  <in name=\"%1\" display=\"%9\" gain=\"%2\" volume=\"%3\" mute=\"%4\" pfl=\"%5\" bal=\"%6\" stereo=\"%7\" main=\"%8\">" )
                .arg( name ).arg( elem->gain ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->pfl ) )
-               .arg( elem->bal ).arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) );
+               .arg( elem->bal ).arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg(elem->display_name);
 		xml += saveActionBinding(IN, name);
 
         foreach( QString pre, Backend::instance()->prechannels() ) {
@@ -572,8 +576,9 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->prechannels() ) {
         const pre* elem = Backend::instance()->getPre( name );
-        xml += QString( "  <pre name=\"%1\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\">" )
-               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) ).arg( fromBool( elem->stereo ) );
+        xml += QString( "  <pre name=\"%1\" display=\"%6\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\">" )
+               .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) )
+               .arg( fromBool( elem->stereo ) ).arg(elem->display_name);
 		xml += saveActionBinding(PRE, name);
 
         for (QList<effect *>::const_iterator effect = elem->effects.begin();
@@ -586,9 +591,10 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->postchannels() ) {
         const post* elem = Backend::instance()->getPost( name );
-        xml += QString( "  <post name=\"%1\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" afl=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" pfl=\"%10\">" )
+        xml += QString( "  <post name=\"%1\" display=\"%11\" pre-volume=\"%2\" post-volume=\"%3\" mute=\"%4\" afl=\"%5\" stereo=\"%6\" main=\"%7\" bal=\"%8\" external=\"%9\" pfl=\"%10\">" )
                .arg( name ).arg( elem->prevolume ).arg( elem->postvolume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) )
-               .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) ).arg( fromBool( elem->pfl ) );
+               .arg( fromBool( elem->stereo ) ).arg( fromBool( elem->main ) ).arg( elem->bal ).arg( fromBool( elem->external ) )
+               .arg( fromBool( elem->pfl ) ).arg(elem->display_name);
 		xml += saveActionBinding(POST, name);
 
         foreach( QString sub, Backend::instance()->subchannels() ) {
@@ -605,9 +611,9 @@ void MainWindow::saveFile(QString p_rPath)
 
     foreach( QString name, Backend::instance()->subchannels() ) {
         const sub* elem = Backend::instance()->getSub( name );
-        xml += QString( "  <sub name=\"%1\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\" main=\"%6\" bal=\"%7\">" )
+        xml += QString( "  <sub name=\"%1\" display=\"%8\" volume=\"%2\" mute=\"%3\" afl=\"%4\" stereo=\"%5\" main=\"%6\" bal=\"%7\">" )
                .arg( name ).arg( elem->volume ).arg( fromBool( elem->mute ) ).arg( fromBool( elem->afl ) ).arg( fromBool( elem->stereo ) )
-               .arg( fromBool( elem->main ) ).arg( elem->bal );
+               .arg( fromBool( elem->main ) ).arg( elem->bal ).arg(elem->display_name);
 		xml += saveActionBinding(SUB, name);
 
         for (QList<effect *>::const_iterator effect = elem->effects.begin();
@@ -801,25 +807,25 @@ void MainWindow::addPre( QString name, bool stereo )
 }
 void MainWindow::addPostMonoExternal()
 {
-    QString tmp = QInputDialog::getText( this, trUtf8("External mono post channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
+    QString tmp = QInputDialog::getText( this, trUtf8("External mono post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
     if ( tmp != trUtf8("(empty)"))
         addPost( tmp, false, true );
 }
 void MainWindow::addPostStereoExternal()
 {
-    QString tmp = QInputDialog::getText( this, trUtf8("External stereo post channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
+    QString tmp = QInputDialog::getText( this, trUtf8("External stereo post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
     if ( tmp != trUtf8("(empty)"))
         addPost( tmp, true, true );
 }
 void MainWindow::addPostMonoInternal()
 {
-    QString tmp = QInputDialog::getText( this, trUtf8("Internal mono post channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
+    QString tmp = QInputDialog::getText( this, trUtf8("Internal mono post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
     if ( tmp != trUtf8("(empty)"))
         addPost( tmp, false, false );
 }
 void MainWindow::addPostStereoInternal()
 {
-    QString tmp = QInputDialog::getText( this, trUtf8("Internal stereo post channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
+    QString tmp = QInputDialog::getText( this, trUtf8("Internal stereo post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
     if ( tmp != trUtf8("(empty)"))
         addPost( tmp, true, false );
 }

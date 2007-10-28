@@ -325,8 +325,8 @@ post::post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nfra
     prevolume = 1;
     postvolume = 1;
     bal = 0;
-    pfl = false;
-    afl = false;
+    m_bPfl = false;
+    m_bAfl = false;
     main = true;
     external = p_external;
     if (!external) {
@@ -381,9 +381,9 @@ bool post::getBoolAttribute(ElementType p_eType, QString p_rToChannel) {
 		case TO_MAIN:
 			return main;
 		case TO_AFL:
-			return afl;
+			return m_bAfl;
 		case TO_PFL:
-			return pfl;
+			return m_bPfl;
 		default:
 			return false;
 	}
@@ -400,10 +400,10 @@ void post::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToCha
 			main = p_fValue;
 			break;
 		case TO_AFL:
-			afl = p_fValue;
+			m_bAfl = p_fValue;
 			break;
 		case TO_PFL:
-			pfl = p_fValue;
+			m_bPfl = p_fValue;
 			break;
 		default:
 			break;

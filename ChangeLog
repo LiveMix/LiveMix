@@ -1,4 +1,12 @@
 
+==== 0.45svn20071028 ====
+- some fix for info pannel
+- fix toggle buttons
+- add contextual menu
+- add channel display name
+- add grafical resize fader
+- add livemix files icon (kde4, gnome)
+
 ==== 0.45svn20071006 ====
 - add an information panel, can by this hide some part of the GUI
 - fix sub-group don't work (GUI)

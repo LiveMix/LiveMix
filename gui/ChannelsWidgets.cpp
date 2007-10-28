@@ -25,9 +25,6 @@
 namespace LiveMix
 {
 
-
-
-
 void TbWrapp::clicked() {
 	m_pMatrix->setVisible(!m_pMatrix->isVisible(m_eType, m_rRefChannel), m_eType, m_rRefChannel);
 }
@@ -38,6 +35,22 @@ TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType
  , m_pMatrix(p_pMatrix)
 {
 	connect(p_pButton, SIGNAL(clicked()), this, SLOT(clicked()));
+}
+
+IFWidget::IFWidget(Widget *p_pWidget) 
+: m_pWidget(p_pWidget)
+{
+    setCursor(QCursor(Qt::SizeVerCursor));
+}
+void IFWidget::mousePressEvent(QMouseEvent *p_pEvent) {
+    if (p_pEvent->button() == Qt::LeftButton) {
+        m_fMousePressY = p_pEvent->y();
+    }
+}
+void IFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent) {
+    if (p_pEvent->button() == Qt::LeftButton) {
+        m_pWidget->setFaderHeight(m_pWidget->getFaderHeight() - m_fMousePressY + p_pEvent->y());
+    }
 }
 
 InfoWidget::InfoWidget(Widget* p_pMatrix)
@@ -99,7 +112,8 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
     layout->addWidget(createToggleButton(m_pMatrix, TO_MAIN));
     layout->addWidget(createLabel(16, TO_MAIN));
 
-    Widget::addSpacer(layout);
+    m_pFader = new IFWidget(p_pMatrix);
+    layout->addWidget(m_pFader);
 }
 InfoWidget::~InfoWidget()
 {
@@ -221,7 +235,10 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(p_sChannel));
+    QLabel* label = new QLabel(p_sChannel);
+    label->setFixedWidth(CHANNEL_WIDTH);
+    label->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(label);
 
 	{
 		PixmapWidget *pw = new PixmapWidget(NULL);
@@ -229,7 +246,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    Rotary *gain = m_pMatrix->createRotary(IN, p_sChannel, GAIN);
+    QWidget *gain = m_pMatrix->createRotary(IN, p_sChannel, GAIN);
     layout->addWidget(gain);
 
 	{
@@ -238,7 +255,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    ToggleButton* mute = m_pMatrix->createToggle(IN, p_sChannel, MUTE);
+    Toggle* mute = m_pMatrix->createToggle(IN, p_sChannel, MUTE);
     layout->addWidget(mute);
 
 	{
@@ -247,7 +264,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    ToggleButton* pfl = m_pMatrix->createToggle(IN, p_sChannel, TO_PFL);
+    Toggle* pfl = m_pMatrix->createToggle(IN, p_sChannel, TO_PFL);
     layout->addWidget(pfl);
 
     wPre = new QWidget;
@@ -284,7 +301,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    Rotary *bal = m_pMatrix->createRotary(IN, p_sChannel, PAN_BAL);
+    QWidget *bal = m_pMatrix->createRotary(IN, p_sChannel, PAN_BAL);
     layout->addWidget(bal);
 
 	{
@@ -293,7 +310,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    ToggleButton* main_on = m_pMatrix->createToggle(IN, p_sChannel, TO_MAIN);
+    Toggle* main_on = m_pMatrix->createToggle(IN, p_sChannel, TO_MAIN);
     layout->addWidget(main_on);
 
     fader = m_pMatrix->createFader(IN, p_sChannel, FADER);
@@ -318,7 +335,7 @@ void InWidget::addPre(QString channelIn, QString channelPre)
 	    lPre->addWidget(pw);
 	    pre_tb[channelPre] = pw;
 	}
-    Rotary *elem = m_pMatrix->createRotary(IN, channelIn, TO_PRE, channelPre);
+    VWidget *elem = m_pMatrix->createRotary(IN, channelIn, TO_PRE, channelPre);
     lPre->addWidget(elem);
     pre[channelPre] = elem;
 }
@@ -331,7 +348,7 @@ void InWidget::addPost(QString channelIn, QString channelPost)
 	    lPost->addWidget(pw);
 	    post_tb[channelPost] = pw;
 	}
-    Rotary *elem = m_pMatrix->createRotary(IN, channelIn, TO_POST, channelPost);
+    VWidget *elem = m_pMatrix->createRotary(IN, channelIn, TO_POST, channelPost);
     lPost->addWidget(elem);
     post[channelPost] = elem;
 }
@@ -344,7 +361,7 @@ void InWidget::addSub(QString channelIn, QString channelSub)
 	    lSub->addWidget(pw);
 	    sub_tb[channelSub] = pw;
 	}
-    ToggleButton* elem = m_pMatrix->createToggle(IN, channelIn, TO_SUB, channelSub);
+    TWidget* elem = m_pMatrix->createToggle(IN, channelIn, TO_SUB, channelSub);
     elem->setToolTip(channelSub);
     lSub->addWidget(elem);
     sub[channelSub] = elem;
@@ -358,7 +375,7 @@ void InWidget::removePre(QString /*channelIn*/, QString channelPre)
 	    delete elem;
 	}
 
-    Rotary *elem = pre[channelPre];
+    VWidget *elem = pre[channelPre];
     lPre->removeWidget(elem);
     pre.remove(channelPre);
     delete elem;
@@ -372,7 +389,7 @@ void InWidget::removePost(QString /*channelIn*/, QString channelPost)
 	    delete elem;
 	}
 
-    Rotary *elem = post[channelPost];
+    VWidget *elem = post[channelPost];
     lPost->removeWidget(elem);
     post.remove(channelPost);
     delete elem;
@@ -386,7 +403,7 @@ void InWidget::removeSub(QString /*channelIn*/, QString channelSub)
 	    delete elem;
 	}
 
-    ToggleButton *elem = sub[channelSub];
+    TWidget *elem = sub[channelSub];
     lSub->removeWidget(elem);
     sub.remove(channelSub);
     delete elem;
@@ -402,18 +419,21 @@ PreWidget::PreWidget(QString channel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(channel));
+    QLabel* label = new QLabel(channel);
+    label->setFixedWidth(CHANNEL_WIDTH);
+    label->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(label);
 
-    ToggleButton* mute = m_pMatrix->createToggle(PRE, channel, MUTE);
+    Toggle* mute = m_pMatrix->createToggle(PRE, channel, MUTE);
     layout->addWidget(mute);
 
-    ToggleButton* afl = m_pMatrix->createToggle(PRE, channel, TO_AFL);
+    Toggle* afl = m_pMatrix->createToggle(PRE, channel, TO_AFL);
     layout->addWidget(afl);
 
     Widget::addSpacer(layout);
 
     if (Backend::instance()->getPre(channel)->stereo) {
-        Rotary *bal = m_pMatrix->createRotary(PRE, channel, PAN_BAL);
+        QWidget *bal = m_pMatrix->createRotary(PRE, channel, PAN_BAL);
         layout->addWidget(bal);
     }
 
@@ -440,22 +460,32 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(channel));
+    {
+        QLabel* label = new QLabel(channel);
+        label->setFixedWidth(CHANNEL_WIDTH);
+        label->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(label);
+    }
 
-    Rotary *prevol = m_pMatrix->createRotary(POST, channel, PRE_VOL);
+    QWidget *prevol = m_pMatrix->createRotary(POST, channel, PRE_VOL);
     layout->addWidget(prevol);
 
-    ToggleButton* mute = m_pMatrix->createToggle(POST, channel, MUTE);
+    Toggle* mute = m_pMatrix->createToggle(POST, channel, MUTE);
     layout->addWidget(mute);
 
-    ToggleButton* afl = m_pMatrix->createToggle(POST, channel, TO_AFL);
-    layout->addWidget(afl);
+    Toggle* pfl = m_pMatrix->createToggle(POST, channel, TO_PFL);
+    layout->addWidget(pfl);
 
     Widget::addSpacer(layout);
 
-    layout->addWidget(new QLabel(trUtf8("Return")));
-    ToggleButton* pfl = m_pMatrix->createToggle(POST, channel, TO_PFL);
-    layout->addWidget(pfl);
+    {
+        QLabel* label = new QLabel(trUtf8("Return"));
+        label->setFixedWidth(CHANNEL_WIDTH);
+        label->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(label);
+    }
+    Toggle* afl = m_pMatrix->createToggle(POST, channel, TO_AFL);
+    layout->addWidget(afl);
 
     wSub = new QWidget;
     lSub = new QVBoxLayout;
@@ -470,7 +500,7 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    Rotary *bal = m_pMatrix->createRotary(POST, channel, PAN_BAL);
+    QWidget *bal = m_pMatrix->createRotary(POST, channel, PAN_BAL);
     layout->addWidget(bal);
 
 	{
@@ -479,7 +509,7 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
 		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
 	    layout->addWidget(pw);
 	}
-    ToggleButton* main_on = m_pMatrix->createToggle(POST, channel, TO_MAIN);
+    Toggle* main_on = m_pMatrix->createToggle(POST, channel, TO_MAIN);
     layout->addWidget(main_on);
 
     fader = m_pMatrix->createFader(POST, channel, FADER);
@@ -504,7 +534,7 @@ void PostWidget::addSub(QString channelPost, QString channelSub)
 	    lSub->addWidget(pw);
 	    sub_tb[channelSub] = pw;
 	}
-    ToggleButton* elem = m_pMatrix->createToggle(POST, channelPost, TO_SUB, channelSub);
+    TWidget* elem = m_pMatrix->createToggle(POST, channelPost, TO_SUB, channelSub);
     lSub->addWidget(elem);
     sub[channelSub] = elem;
 }
@@ -517,7 +547,7 @@ void PostWidget::removeSub(QString /*channelPost*/, QString channelSub)
 	    delete elem;
 	}
 
-    ToggleButton *elem = sub[channelSub];
+    TWidget *elem = sub[channelSub];
     lSub->removeWidget(elem);
     sub.remove(channelSub);
     delete elem;
@@ -533,7 +563,11 @@ SubWidget::SubWidget(QString channel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(channel));
+    QLabel* label = new QLabel(channel);
+    label->setFixedWidth(CHANNEL_WIDTH);
+    label->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(label);
+
     layout->addWidget(m_pMatrix->createToggle(SUB, channel, MUTE));
     layout->addWidget(m_pMatrix->createToggle(SUB, channel, TO_AFL));
     Widget::addSpacer(layout);
@@ -563,13 +597,23 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    layout->addWidget(new QLabel(trUtf8("Phone")));
+    {
+        QLabel* label = new QLabel(trUtf8("Phone"));
+        label->setFixedWidth(CHANNEL_WIDTH);
+        label->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(label);
+    }
 
     phone = m_pMatrix->createRotary(OUT, MAIN, FADER, PFL);
     layout->addWidget(phone);
 
-    Widget::addSpacer(layout);
-    layout->addWidget(new QLabel(trUtf8("Main")));
+    {
+        Widget::addSpacer(layout);
+        QLabel* label = new QLabel(trUtf8("Main"));
+        label->setFixedWidth(CHANNEL_WIDTH);
+        label->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(label);
+    }
 
     mute = m_pMatrix->createToggle(OUT, MAIN, MUTE);
     layout->addWidget(mute);

@@ -34,8 +34,6 @@ namespace LiveMix
 
 float db2lin(float db)
 {
-// qDebug() << "db2lin" << db << exp(0.115129254649702 * db);
-// return exp(0.115129254649702 * db);
     return pow( 10, db / 20.0 );
 };
 
@@ -80,12 +78,7 @@ QString displayDb(float db, float min)
         return QString(tmp) + " db";
     } else {
         float milli = db2lin(db, min) * 1000;
-//  if (milli > 0.1) {
         return QString("%1 milli").arg(milli, 0, 'f', 2);
-//  }
-//  else {
-//   return QString("%1 micro").arg((int)(milli * 1000));
-//  }
     }
 };
 
@@ -97,12 +90,7 @@ QString displayDbShort(float db, float min)
         return QString(tmp);
     } else {
         float milli = db2lin(db, min) * 1000;
-//  if (milli > 0.1) {
         return QString("%1m").arg(milli, 0, 'f', 2);
-//  }
-//  else {
-//   return QString("%1u").arg((int)(milli * 1000));
-//  }
     }
 };
 

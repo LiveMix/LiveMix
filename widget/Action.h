@@ -32,6 +32,8 @@ public:
     Action(QWidget* p_pParent =NULL);
     virtual ~Action();
 
+    virtual QWidget* getWidget() =0;
+
 signals:
     void leftClick(QMouseEvent * p_pEvent);
     void rightClick(QMouseEvent * p_pEvent);
@@ -57,6 +59,17 @@ public:
 signals:
     void valueChanged(Volume* p_pVolume);
 
+};
+
+class Toggle : public Action
+{
+    Q_OBJECT
+public:
+    Toggle(QWidget* p_pParent =NULL);
+    virtual ~Toggle();
+
+    virtual bool getValue() =0;
+    virtual void setValue(bool p_bValue, bool p_bEmit = false) =0;
 };
 
 }

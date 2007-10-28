@@ -35,4 +35,11 @@ Volume::Volume(QWidget* p_pParent) : Action(p_pParent)
 Volume::~Volume()
 {}
 
+
+Toggle::Toggle(QWidget* p_pParent) : Action(p_pParent)
+{}
+
+Toggle::~Toggle()
+{}
+
 }; // LiveMix

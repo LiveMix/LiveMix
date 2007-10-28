@@ -48,6 +48,7 @@ class Fader : public Volume
 public:
     Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true );
     ~Fader();
+    virtual QWidget* getWidget();
 
     void setMinValue( float fMin );
     void setMaxValue( float fMax );

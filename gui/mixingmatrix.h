@@ -38,6 +38,7 @@
 #include <QMap>
 #include <QScrollArea>
 #include <QHBoxLayout>
+#include <QContextMenuEvent>
 
 
 namespace LiveMix
@@ -53,6 +54,10 @@ class PostWidget;
 class SubWidget;
 class MainWidget;
 class KeyDo;
+class VWidget;
+class RWidget;
+class TWidget;
+class FWidget;
 
 
 #define CHANNEL_WIDTH 50
@@ -89,12 +94,12 @@ public:
 
     void showMessage( const QString& msg, int msec=5000 );
 
-	QString getDisplayNameOfChannel(ChannelType p_eType, QString p_sChannelName);
-	QString getDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
-	QString getShortDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
-	QString getDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
-	QString getMediumDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
-	QString getShortDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
+	static QString getDisplayNameOfChannel(ChannelType p_eType, QString p_sChannelName);
+	static QString getDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
+	static QString getShortDisplayChannelType(ChannelType p_eType, bool p_bUpperFirst =true);
+	static QString getDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+	static QString getMediumDisplayFunction(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bUpperFirst =true);
+	static QString getShortDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo = false);
 //	QString getShortAbreviationDisplayFunction(ElementType p_eElement, QString p_sReatedChannelName, bool p_bStereo);
 
     void leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
@@ -104,13 +109,13 @@ public:
     void action(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
     void addVolume(Volume* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
     		QString p_sReatedChannelName ="");
-    void addToggle(ToggleButton* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+    void addToggle(Toggle* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
     		QString p_sReatedChannelName ="");
  	void removeShurtCut(ChannelType p_eType, QString p_sChannelName);
 
-    Fader* createFader(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
-    Rotary* createRotary(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
-    ToggleButton* createToggle(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
+    FWidget* createFader(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
+    VWidget* createRotary(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
+    TWidget* createToggle(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_rChannelTo ="");
 
     const QMap<QKeySequence, KeyDo*>* getKeyToWrapp() { return &m_mKeyToWrapp; };
     void clearKeyToWrapp();
@@ -148,6 +153,11 @@ private slots:
     void displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName);
     void onStatusTimerEvent();
 
+    void assigneKey();
+    void resetAllTheLine();
+    void enableAllTheLine();
+    void desableAllTheLine();
+
 private:
 	InfoWidget *info_widget;
 	
@@ -174,6 +184,8 @@ private:
 
     enum ChannelType m_eSelectType;
     QString m_sSelectChannel;
+    ElementType m_eSelectedElement; 
+    QString m_sSelectedReatedChannelName;
     QList<effect*> m_lVisibleEffect;
 
     QMap<ChannelType, QMap<QString, QMap<ElementType, QMap<QString, Wrapp*>*>*>*> m_mShurtCut;
@@ -186,6 +198,65 @@ private:
 	QMap<ElementType, QMap<QString, bool>*> m_bVisible;
 	int m_iFaderHeight;
 	int m_iEffectFaderHeight;
+};
+
+class TWidget : public Toggle
+{
+    Q_OBJECT
+public:
+	TWidget();
+	ToggleButton* getToggle();
+    virtual QWidget* getWidget();
+
+    virtual bool getValue();
+    virtual void setValue(bool value, bool emit = false);
+
+protected:
+	ToggleButton* m_pToggle;
+};
+
+class VWidget : public Volume
+{
+    Q_OBJECT
+public:
+	VWidget();
+	Volume* getVolume();
+    virtual QWidget* getWidget();
+
+    virtual void setValue(float fValue, bool emit = false);
+    virtual float getValue();
+    virtual void setDbValue(float fValue);
+    virtual float getDbValue();
+    virtual float getMinValue();
+    virtual float getMaxValue();
+    virtual void incValue(bool p_bDirection, int p_iStep =1);
+
+protected:
+	Volume* m_pVolume;
+};
+
+class RWidget : public VWidget
+{
+    Q_OBJECT
+public:
+    RWidget(ElementType p_eElement, QString p_rToolTip);
+    Rotary* getRotary();
+};
+
+class FWidget : public VWidget
+{
+    Q_OBJECT
+public:
+    FWidget(int p_fFaderHeignt, ChannelType p_eType, QString p_sChannelName);
+    Fader* getFader();
+    FaderName* getLabelFader();
+    virtual void setFixedHeight(int y);
+protected:
+    FaderName* m_pLabelFader;
+    ChannelType m_eType; 
+    QString m_sChannelName;
+protected slots:
+    void changeName();
 };
 
 }

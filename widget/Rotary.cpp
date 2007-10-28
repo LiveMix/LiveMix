@@ -101,14 +101,14 @@ Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseInt
 // m_temp.resize( m_nWidgetWidth, m_nWidgetHeight );
 }
 
-
-
-Rotary::~ Rotary()
+Rotary::~Rotary()
 {
     delete m_pValueToolTip;
 }
 
-
+QWidget* Rotary::getWidget() {
+    return this;
+}
 
 void Rotary::paintEvent( QPaintEvent* )
 {
@@ -143,7 +143,6 @@ void Rotary::paintEvent( QPaintEvent* )
 }
 
 
-
 void Rotary::setDbValue( float val )
 {
     setValue(lin2db(val, m_fMin));
@@ -170,7 +169,6 @@ void Rotary::setValue( float fValue, bool do_emit )
     }
 }
 
-
 void Rotary::mousePressEvent(QMouseEvent *ev)
 {
 	if (ev->button() == Qt::LeftButton) {
@@ -191,7 +189,6 @@ void Rotary::mousePressEvent(QMouseEvent *ev)
 	}
 }
 
-
 void Rotary::mouseReleaseEvent( QMouseEvent *ev )
 {
 	if (ev->button() == Qt::LeftButton) {
@@ -205,7 +202,6 @@ void Rotary::mouseReleaseEvent( QMouseEvent *ev )
     	emit middleClick(ev);
     }
 }
-
 
 void Rotary::incValue(bool p_bDirection, int p_iStep)
 {
@@ -280,7 +276,6 @@ void Rotary::mouseMoveEvent( QMouseEvent *ev )
     }
 }
 
-
 void Rotary::setMinValue( float fMin )
 {
     m_fMin = fMin;
@@ -293,13 +288,11 @@ float Rotary::getMinValue()
     return m_fMin;
 }
 
-
 void Rotary::setMaxValue( float fMax )
 {
     m_fMax = fMax;
     update();
 }
-
 
 float Rotary::getMaxValue()
 {

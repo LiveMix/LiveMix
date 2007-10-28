@@ -72,12 +72,13 @@ class WrappToggle : public Wrapp
 {
     Q_OBJECT
 public:
-    WrappToggle(Widget* p_pMatrix, ToggleButton* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
+    WrappToggle(Widget* p_pMatrix, Toggle* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
+    Toggle* getToggle();
 
     bool exec();
 
 private:
-    ToggleButton* m_pWidget;
+    Toggle* m_pWidget;
 
 private slots:
     void valueChanged(ToggleButton* p_pToggle);

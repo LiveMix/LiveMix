@@ -2,47 +2,32 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 ==== 0.5 ====
 
-- Some fix for info pannel
+- open default table ...!
 
+- add context menu to effect
+  - assigne key
+  - set all the effect to default
 
-- fix toggle button
-
-- add pseudo channel the hide section !
-
-- avalabilit to change effect order
-
-- add channel display name
+- avalability to change effect order
 - multiple add in channels
 
-- richtClick menu for rotary and fader:
-  - assigne key
-  - set to 0
-  - set all in line to 0
-- richtClick menu for toggle:
-  - assigne key
-  - enable all in line
-  - desable all in line
-- richtClick menu for effect fader:
-  - assigne key
-  - set to default
-  - set all the effect to default
 
 - add lash support
 - add possibility to change jack application name
 - save jack connection ?
 
+- add MIDI learn support (help welcome, I don't have hardware)
+
 - move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/ ?
 
-==== 0.6 ====
-- add MIDI learn support (help welcome, I don't have hardware)
-- add special channel support for compressosr with external signal and crossfader.
-- create some needed effects like better multiBand EQ (+-12 db), white, red, brown noize.
-- add test button (can play a sound for each channel).
-
-==== 0.7 ====
 - add display name (LabelFader)
 - better GUI (add LabelRotary, LabelSwitch)
 - center channel label
+
+==== 0.6 ====
+- add special channel support for compressosr with external signal and crossfader.
+- create some needed effects like better multiBand EQ (+-12 db), white, red, brown noize.
+- add test button (can play a sound for each channel).
 - display dB on the GUI (artwork welcome, in SVG)
 
 ==== 1.0 ====

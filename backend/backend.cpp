@@ -624,7 +624,7 @@ int process( jack_nframes_t nframes, void* arg )
         //qDebug() << 26;
         // post return
         foreach( post* elem, backend->posts ) {
-            if (elem->afl) {
+            if (elem->m_bPfl) {
                 pflOn = true;
                 jack_default_audio_sample_t* inl = elem->post_l;
                 jack_default_audio_sample_t* inr = elem->post_r;
@@ -634,7 +634,7 @@ int process( jack_nframes_t nframes, void* arg )
                 }
             }
             //qDebug() << 27;
-            if (elem->pfl) {
+            if (elem->m_bAfl) {
                 pflOn = true;
                 jack_default_audio_sample_t* inl = elem->return_l;
                 jack_default_audio_sample_t* inr = elem->return_r;
@@ -930,11 +930,11 @@ void Backend::setPostMute( QString ch, bool mute )
 }
 void Backend::setPostPfl( QString ch, bool pfl )
 {
-    posts[ ch ]->pfl = pfl;
+    posts[ ch ]->m_bPfl = pfl;
 }
 void Backend::setPostAfl( QString ch, bool afl )
 {
-    posts[ ch ]->afl = afl;
+    posts[ ch ]->m_bAfl = afl;
 }
 void Backend::setPostMain( QString ch, bool main )
 {

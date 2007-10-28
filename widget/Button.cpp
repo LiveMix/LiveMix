@@ -31,7 +31,7 @@ namespace LiveMix
 {
 
 Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, const QString& sOffOverImage, QSize size, bool use_skin_style)
-        : Action( pParent )
+        : Toggle( pParent )
         , m_bPressed( false )
         , m_onPixmap( size )
         , m_offPixmap( size )
@@ -67,13 +67,11 @@ Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffI
     m_textFont.setPointSize( 9 );
 // m_textFont.setBold( true );
 }
-
-
-
 Button::~Button()
 {}
-
-
+QWidget* Button::getWidget() {
+    return this;
+}
 
 bool Button::loadImage( const QString& sFilename, QPixmap& pixmap )
 {
@@ -235,10 +233,16 @@ bool ToggleButton::getValue()
 {
     return m_bPressed;
 }
-void ToggleButton::setValue(bool value)
+void ToggleButton::setValue(bool p_bValue, bool p_bEmit)
 {
-    m_bPressed = value;
+    m_bPressed = p_bValue;
     update();
+    
+    if (p_bEmit) {
+        emit clicked();
+        emit clicked(this);
+        emit valueChanged(this);
+    }
 }
 
 

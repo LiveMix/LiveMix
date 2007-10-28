@@ -160,8 +160,8 @@ public:
     float prevolume;
     float postvolume;
     float bal;
-    bool pfl;
-    bool afl;
+    bool m_bPfl;
+    bool m_bAfl;
     bool main;
     bool external;
     QMap<QString, bool> sub;

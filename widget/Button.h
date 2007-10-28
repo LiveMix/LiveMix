@@ -38,7 +38,7 @@ namespace LiveMix
 /**
  * Generic Button with pixmaps and text.
  */
-class Button : public Action
+class Button : public Toggle
 {
     Q_OBJECT
 
@@ -53,6 +53,7 @@ public:
         bool use_skin_style
     );
     virtual ~Button();
+    virtual QWidget* getWidget();
 
     bool isPressed()
     {
@@ -63,6 +64,9 @@ public:
     void setText( const QString& sText );
 
     static Button* create(QWidget* =NULL);
+
+    virtual bool getValue() {return false;};
+    virtual void setValue(bool, bool = false) {};
 
 signals:
     void clicked();
@@ -100,7 +104,6 @@ private:
 
 
 
-
 /**
  * A ToggleButton (On/Off).
  */
@@ -114,8 +117,8 @@ public:
 
     static ToggleButton* create(QWidget* =NULL);
 
-    bool getValue();
-    void setValue(bool value);
+    virtual bool getValue();
+    virtual void setValue(bool p_bValue, bool p_bEmit = false);
 
     void mousePressEvent( QMouseEvent *ev );
 

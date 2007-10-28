@@ -271,7 +271,7 @@ void LadspaFXProperties::updateControls()
                 m_pInputControlFaders.push_back( pToggle );
                 pToggle->move(nInputControl_X + 20, m_iFaderHeight + 23);
                 pToggle->show();
-                pToggle->setValue( (bool)pControlPort->m_fControlValue );
+                pToggle->setValue((bool)pControlPort->m_fControlValue);
 
                 toggleChanged( pToggle );
             } else {

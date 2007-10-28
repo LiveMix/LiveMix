@@ -1,6 +1,6 @@
-livemix (0.45svn20071006-0ubuntu1) hardy; urgency=low
+livemix (0.45svn20071028-0ubuntu1) hardy; urgency=low
 
   * Initial release (LP: #138621)
 
- -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sat,  6 Oct 2007 14:31:44 +0200
+ -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sun, 28 Oct 2007 15:08:10 +0100
 

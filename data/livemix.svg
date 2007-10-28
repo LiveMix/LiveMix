@@ -9,11 +9,11 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="11.249965"
-   inkscape:export-xdpi="11.249965"
-   inkscape:export-filename="/home/brunner/workspace/livemix/debian/livemix-16.xpm"
-   sodipodi:docname="icon.svg"
-   sodipodi:docbase="/home/brunner/workspace/livemix/debian"
+   inkscape:export-ydpi="44.999802"
+   inkscape:export-xdpi="44.999802"
+   inkscape:export-filename="/home/sbrunner/workspace/livemix/dist/livemix.png"
+   sodipodi:docname="livemix.svg"
+   sodipodi:docbase="/home/sbrunner/workspace/livemix/data"
    inkscape:version="0.45.1"
    sodipodi:version="0.32"
    id="svg2"
@@ -145,7 +145,7 @@
          sodipodi:role="line"
          id="tspan2176"
          x="-20.190315"
-         y="25.411367"></tspan></text>
+         y="25.411367" /></text>
     <text
        xml:space="preserve"
        style="font-size:79.36806488px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#314277;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"

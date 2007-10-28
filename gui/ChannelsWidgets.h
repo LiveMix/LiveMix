@@ -39,6 +39,10 @@ namespace LiveMix
 {
 
 class Widget;
+class VWidget;
+class TWidget;
+class FWidget;
+class IFWidget;
 
 class TbWrapp : public QWidget
 {
@@ -73,12 +77,15 @@ public:
 
 	int setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
 
+    IFWidget* m_pFader;
+
 private:
 	ToggleButton* createToggleButton(Widget* p_pMatrix, ElementType p_eElement, QString p_rChannelTo ="");
 	QLabel* createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
 
 	QMap<ElementType, QMap<QString, TbWrapp*>*> m_rToggleButtons;
 	QMap<ElementType, QMap<QString, QLabel*>*> m_rLabels;
+
 /*	ToggleButton *gain_tb;
 	ToggleButton *mute_tb;
 	ToggleButton *pfl_tb;
@@ -123,7 +130,7 @@ public:
     void removePost(QString channelIn, QString channelPost);
     void removeSub(QString channelIn, QString channelSub);
 
-    Fader* fader;
+    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -146,9 +153,9 @@ private:
     QMap<QString, PixmapWidget*> post_tb;
     QMap<QString, PixmapWidget*> sub_tb;
 
-    QMap<QString, Rotary*> pre;
-    QMap<QString, Rotary*> post;
-    QMap<QString, ToggleButton*> sub;
+    QMap<QString, VWidget*> pre;
+    QMap<QString, VWidget*> post;
+    QMap<QString, TWidget*> sub;
 
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
@@ -160,7 +167,7 @@ public:
     PreWidget(QString channel, Widget* p_pMatrix);
     ~PreWidget();
 
-    Fader* fader;
+    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -184,7 +191,7 @@ public:
     void addSub(QString channelPost, QString channelSub);
     void removeSub(QString channelIn, QString channelSub);
 
-    Fader* fader;
+    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -198,7 +205,7 @@ private:
     QWidget* wSub;
     QVBoxLayout* lSub;
     QMap<QString, PixmapWidget*> sub_tb;
-    QMap<QString, ToggleButton*> sub;
+    QMap<QString, TWidget*> sub;
 
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
@@ -210,7 +217,7 @@ public:
     SubWidget(QString channel, Widget* p_pMatrix);
     ~SubWidget();
 
-    Fader* fader;
+    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -235,7 +242,7 @@ public:
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
-    Fader* fader;
+    FWidget* fader;
 
 signals:
     void clicked(ChannelType, QString channel);
@@ -243,15 +250,24 @@ signals:
 private:
     Widget* m_pMatrix;
 
-    Rotary *phone;
-    ToggleButton* mute;
-    Rotary *mono;
-    Rotary *bal;
-    ToggleButton* afl;
-// QMap<QWidget*, Wrapp*> m_mWrapps;
+    VWidget *phone;
+    Toggle *mute;
+    VWidget *mono;
+    VWidget *bal;
+    Toggle *afl;
 };
 
-}
-; // LiveMix
+class IFWidget : public QWidget {
+    public:
+        IFWidget(Widget *p_pWidget);
+        virtual void mousePressEvent(QMouseEvent *p_pEvent);
+        virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
+
+    private:
+        int m_fMousePressY;
+        Widget *m_pWidget;
+};
+
+}; // LiveMix
 
 #endif /*CHANNELSWIDGETS_H_*/

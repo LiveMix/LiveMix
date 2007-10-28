@@ -16,7 +16,7 @@
     <post sub="ext" key="Ctrl+E" />
     <post sub="reverb" key="Ctrl+R" />
   </actionbinding>
-  <in name="1" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="1" display="1" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="1" />
     </actionbinding>
@@ -33,7 +33,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="2" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="2" display="2" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="2" />
     </actionbinding>
@@ -50,7 +50,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="3" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="3" display="3" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="3" />
     </actionbinding>
@@ -67,7 +67,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="4" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="4" display="4" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="4" />
     </actionbinding>
@@ -84,7 +84,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="5" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="5" display="5" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="5" />
     </actionbinding>
@@ -101,7 +101,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="6" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="6" display="6" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="6" />
     </actionbinding>
@@ -118,7 +118,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="7" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="7" display="7" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="7" />
     </actionbinding>
@@ -135,7 +135,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="8" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
+  <in name="8" display="8" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="no" main="yes">
     <actionbinding>
       <select key="8" />
     </actionbinding>
@@ -152,7 +152,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="9-10" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
+  <in name="9-10" display="9-10" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
     <actionbinding>
       <select key="9" />
     </actionbinding>
@@ -161,7 +161,7 @@
     <effect name="gate" filename="/usr/lib/ladspa/gate_1410.so" enabled="no" >
     </effect>
   </in>
-  <in name="11-12" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
+  <in name="11-12" display="11-12" gain="1" volume="1" mute="no" plf="no" bal="0" stereo="yes" main="yes">
     <actionbinding>
       <select key="0" />
     </actionbinding>
@@ -175,18 +175,18 @@
       <fader sub="main" key="Space" />
       <select key="P" />
     </actionbinding>
-    <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
+    <effect name="mbeq" display="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </out>
-  <pre name="r1" volume="0.1" mute="no" alf="no" stereo="no">
+  <pre name="r1" display="Retour 1" volume="0.1" mute="no" alf="no" stereo="no">
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </pre>
-  <pre name="r2" volume="0.1" mute="no" alf="no" stereo="no">
+  <pre name="r2" display="Retour 2" volume="0.1" mute="no" alf="no" stereo="no">
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </pre>
-  <post name="reverb" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="no" plf="no">
+  <post name="rev" display="Reverb" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="no" plf="no">
     <effect name="gverb" filename="/usr/lib/ladspa/gverb_1216.so" enabled="no" >
     </effect>
     <effect name="freeverb3" filename="/usr/lib/ladspa/cmt.so" enabled="no" >
@@ -194,17 +194,17 @@
     <effect name="plate" filename="/usr/lib/ladspa/plate_1423.so" enabled="no" >
     </effect>
   </post>
-  <post name="corus" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="no" plf="no">
+  <post name="cor" display="Corus" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="no" plf="no">
     <effect name="multivoiceChorus" filename="/usr/lib/ladspa/multivoice_chorus_1201.so" enabled="no" >
     </effect>
   </post>
-  <post name="ext" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="yes" plf="no">
+  <post name="ext" display="External" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="yes" plf="no">
   </post>
-  <sub name="1-2" volume="0.1" mute="no" alf="no" stereo="yes" main="yes" bal="0">
+  <sub name="1-2" display="1-2" volume="0.1" mute="no" alf="no" stereo="yes" main="yes" bal="0">
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </sub>
-  <sub name="3-4" volume="0.1" mute="no" alf="no" stereo="yes" main="yes" bal="0">
+  <sub name="3-4" display="3-4" volume="0.1" mute="no" alf="no" stereo="yes" main="yes" bal="0">
     <effect name="mbeq" filename="/usr/lib/ladspa/mbeq_1197.so" enabled="no" >
     </effect>
   </sub>
