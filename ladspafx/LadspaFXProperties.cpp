@@ -84,6 +84,16 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX)
     m_pRemoveBtn->setToolTip(trUtf8("Remove"));
     connect(m_pRemoveBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
 
+    m_pLeftBtn = Button::create(this);
+    m_pLeftBtn->setText(trUtf8("<"));
+    m_pLeftBtn->setToolTip(trUtf8("Move left"));
+    connect(m_pLeftBtn, SIGNAL(clicked()), this, SLOT(leftBtnClicked()));
+
+    m_pRightBtn = Button::create(this);
+    m_pRightBtn->setText(trUtf8(">"));
+    m_pRightBtn->setToolTip(trUtf8("Move right"));
+    connect(m_pRightBtn, SIGNAL(clicked()), this, SLOT(rightBtnClicked()));
+
     m_pTimer = new QTimer( this );
     connect(m_pTimer, SIGNAL( timeout() ), this, SLOT( updateOutputControls() ) );
 }
@@ -208,6 +218,8 @@ void LadspaFXProperties::updateControls()
 	    m_pFrame->resize( width(), height() - 5 );
         m_pActivateBtn->move(nControlsFrameWidth - 51, 6 );
         m_pRemoveBtn->move(nControlsFrameWidth - 27, 6 );
+        m_pLeftBtn->move(nControlsFrameWidth - 99, 6 );
+        m_pRightBtn->move(nControlsFrameWidth - 75, 6 );
         m_pNameLbl->resize(nControlsFrameWidth - 17, 24 );
 
 //  m_pActivateBtn->setEnabled(true);
@@ -459,12 +471,10 @@ void LadspaFXProperties::updateOutputControls()
 #endif
 }
 
-
 void LadspaFXProperties::removeBtnClicked()
 {
     emit removeClicked(this, m_nLadspaFX);
 }
-
 
 void LadspaFXProperties::activateBtnClicked()
 {
@@ -473,6 +483,16 @@ void LadspaFXProperties::activateBtnClicked()
         m_nLadspaFX->fx->setEnabled( !m_nLadspaFX->fx->isEnabled() );
     }
 #endif
+}
+
+void LadspaFXProperties::leftBtnClicked()
+{
+    emit leftClicked(this, m_nLadspaFX);
+}
+
+void LadspaFXProperties::rightBtnClicked()
+{
+    emit rightClicked(this, m_nLadspaFX);
 }
 
 void LadspaFXProperties::setFaderHeight(int p_iHeight) { //195

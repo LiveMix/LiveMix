@@ -1142,4 +1142,16 @@ const sub* Backend::getSub( QString name )
     return subs[ name ];
 }
 
+bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect, bool p_bLeft)
+{
+    channel *ch = getChannel(p_eType, p_rName);
+    int index = ch->effects.indexOf(p_pEffect);
+    int indexTo = index + (p_bLeft ? -1 : 1);
+    if (indexTo >= 0 && indexTo < ch->effects.size()) {
+        ch->effects.move(index, indexTo);
+        return true;
+    }
+    return false;
+}
+
 }; // LiveMix

@@ -246,7 +246,7 @@ void MainWindow::openEmpty() {
 	if (QMessageBox::question(this, trUtf8("New mix table"), trUtf8("Are you shure that you want to lost the actual mix table"), 
 			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
 		toEmpty();
-        _mixerwidget->doSelect(OUT, MAIN);
+        _mixerwidget->doSelect(OUT, MAIN, false);
 	}	
 }
 void MainWindow::openDefault() {
@@ -272,7 +272,7 @@ void MainWindow::openDefault() {
 	    Backend::instance()->addPost( "post2", false, true );
 	    Backend::instance()->addSub( "sub1", true );
 	    Backend::instance()->addSub( "sub2", false );
-	    _mixerwidget->doSelect(OUT, MAIN);
+	    _mixerwidget->doSelect(OUT, MAIN, false);
 	}
 }
 void MainWindow::openFile( QString path )
@@ -428,8 +428,8 @@ void MainWindow::openFile( QString path )
 
         file.close();
         // force update
-        _mixerwidget->doSelect(OUT, PFL);
-        _mixerwidget->doSelect(OUT, MAIN);
+        _mixerwidget->doSelect(OUT, PFL, false);
+        _mixerwidget->doSelect(OUT, MAIN, false);
     }
     else {
     	openDefault();

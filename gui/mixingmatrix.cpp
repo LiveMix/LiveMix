@@ -105,7 +105,7 @@ Widget::Widget(QWidget* p)
     select->setToolTip(trUtf8("Add effect"));
     effect_start_layout->addWidget(select);
     addSpacer(effect_start_layout);
-    effectName = new FaderName();
+    effectName = new LFWidget(this);
     {
         QFont font = effectName->font();
         font.setPixelSize(16);
@@ -189,6 +189,8 @@ void Widget::displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName)
 	    addToggle(fx->gui->getActivateButton(), p_eType, p_sChannelName, MUTE_EFFECT, fx->fx->getPluginLabel());
         effect_layout->addWidget(fx->gui);
         connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, effect*)), this, SLOT(askRemoveFX(LadspaFXProperties*, effect*)));
+        connect(fx->gui, SIGNAL(leftClicked(LadspaFXProperties*, effect*)), this, SLOT(askLeftFX(LadspaFXProperties*, effect*)));
+        connect(fx->gui, SIGNAL(rightClicked(LadspaFXProperties*, effect*)), this, SLOT(askRightFX(LadspaFXProperties*, effect*)));
 
 	    channel* c = Backend::instance()->getChannel(p_eType, p_sChannelName);
 	    if (!c->effectsMap.contains(fx->fx->getPluginLabel())) {
@@ -210,6 +212,20 @@ void Widget::displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName)
     m_lVisibleEffect << fx;
 }
 
+void Widget::askLeftFX(LadspaFXProperties*, effect* p_pFX)
+{
+    if (Backend::instance()->moveEffect(m_eSelectType, m_sSelectChannel, p_pFX, true)) {
+        doSelect(m_eSelectType, m_sSelectChannel, true);
+    }
+}
+
+void Widget::askRightFX(LadspaFXProperties*, effect* p_pFX)
+{
+    if (Backend::instance()->moveEffect(m_eSelectType, m_sSelectChannel, p_pFX, false)) {
+        doSelect(m_eSelectType, m_sSelectChannel, true);
+    }
+}
+
 void Widget::askRemoveFX(LadspaFXProperties* widget, effect* fx)
 {
 	if (QMessageBox::question(this, trUtf8("Remove effect"), trUtf8("Are you shure that you want to remove en effect"), 
@@ -221,14 +237,11 @@ void Widget::removeFX(LadspaFXProperties* widget, effect* fx)
 {
     m_lVisibleEffect.removeAll(fx);
     disconnect(widget, 0, 0, 0);
-// disconnect(0, 0, widget, 0);
     widget->hide();
     effect_layout->removeWidget(widget);
 
     // workaround
-// QSize size(effect_layout->parentWidget()->width() - widget->width() - 10, effect_layout->parentWidget()->height());
     QSize size(50, effect_layout->parentWidget()->height());
-//    QSize size(50, m_iEffectHeight);
     effect_layout->parentWidget()->setMinimumSize(size);
     effect_layout->parentWidget()->adjustSize();
 
@@ -308,54 +321,63 @@ void Widget::select(ChannelType type, QString channel)
 {
     doSelect(type, channel);
 }
-void Widget::doSelect(ChannelType type, QString channel)
+void Widget::doSelect(ChannelType type, QString channel, bool p_bForce)
 {
 // effect = new effectData;
-    if (m_eSelectType == type && m_sSelectChannel == channel) {
+    if (!p_bForce && m_eSelectType == type && m_sSelectChannel == channel) {
         return;
     }
     m_eSelectType = type;
     m_sSelectChannel = channel;
 
-    effectName->setText(channel);
+    if (p_eType == OUT) {
+        effectName->setText(trUtf8("Main output"));        
+    }
+    else {
+        effectName->setText(Backend::instance()->getChannel(type, channel)->display_name);
+    }
 //    m_pEffectStart->show();
 
     foreach (effect* fx, m_lVisibleEffect) {
         fx->gui->hide();
+        if (p_bForce) {
+            delete fx->gui;
+            fx->gui = NULL;
+        }
     }
     m_lVisibleEffect.clear();
 
     switch (m_eSelectType) {
     case IN: {
-            showMessage(trUtf8("Input \"%1\" selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
+            if (!p_bForce) showMessage(trUtf8("Input \"%1\" selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getInEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case OUT: {
-            showMessage(trUtf8("Output selected."));
+            if (!p_bForce) showMessage(trUtf8("Output selected."));
             foreach (effect* elem, *(Backend::instance()->getOutEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case PRE: {
-            showMessage(trUtf8("Pre fader aux \"%1\" selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
+            if (!p_bForce) showMessage(trUtf8("Pre fader aux \"%1\" selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPreEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case POST: {
-            showMessage(trUtf8("Post fader aux \"%1\" selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
+            if (!p_bForce) showMessage(trUtf8("Post fader aux \"%1\" selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getPostEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
             break;
         }
     case SUB: {
-            showMessage(trUtf8("Sub-groupe \"%1\" selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
+            if (!p_bForce) showMessage(trUtf8("Sub-groupe \"%1\" selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
             foreach (effect* elem, *(Backend::instance()->getSubEffects(m_sSelectChannel))) {
                 displayFX(elem, m_eSelectType, m_sSelectChannel);
             }
@@ -1330,6 +1352,9 @@ void Widget::faderHeight() {
 
 void Widget::setEffectFaderHeight(int p_iHeight) {
 	m_iEffectFaderHeight = p_iHeight;
+    if (p_iHeight < 150) {
+        p_iHeight = 150;
+    }
 
     m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
     m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
@@ -1547,6 +1572,22 @@ TWidget* Widget::createToggle(ChannelType p_eType, QString p_sChannelName, Eleme
 		toggle->setVisible(false);
     }
     return toggle;
+}
+
+LFWidget::LFWidget(Widget *p_pWidget) 
+: m_pWidget(p_pWidget)
+{
+    setCursor(QCursor(Qt::SizeVerCursor));
+}
+void LFWidget::mousePressEvent(QMouseEvent *p_pEvent) {
+    if (p_pEvent->button() == Qt::LeftButton) {
+        m_fMousePressY = p_pEvent->y();
+    }
+}
+void LFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent) {
+    if (p_pEvent->button() == Qt::LeftButton) {
+        m_pWidget->setEffectFaderHeight(m_pWidget->getEffectFaderHeight() - m_fMousePressY + p_pEvent->y());
+    }
 }
 
 }

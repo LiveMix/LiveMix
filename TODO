@@ -2,28 +2,28 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 ==== 0.45 ====
 
-- open default table ...!
+- add pan/bal background
+- new logo
+- avalability to change effect order
+
+
+- add lock on channel add/remove effect add/remove, change effect order
 
 - add context menu to effect
   - assigne key
   - set all the effect to default
 
-- avalability to change effect order
-
 - multiple add in channels
-
+- add selected chanel LED, element (or highlight channel label) 
 
 - add lash support
   - add possibility to change jack application name
   - save jack connection ?
 
-
 - move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/ ?
 
-- add selected chanel LED, element ?
-- add pan/bal background
-
 ==== 0.5 ====
+
 - add MIDI learn support (help welcome, I don't have hardware)
 
 - add test button (can play a sound for each channel) (plock, left, right, white noize, pink noize, brown noize).

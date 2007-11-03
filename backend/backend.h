@@ -199,7 +199,8 @@ public:
      */
     const sub* getSub( QString );
 
-
+    bool moveEffect(ChannelType p_eType, QString p_rName, effect *p_pEffect, bool p_bLeft);
+    
     // should be in mixingmatrix !
 
 public slots:

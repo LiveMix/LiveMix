@@ -24,10 +24,10 @@
 #define LADSPA_FX_PROPERTIES_H
 
 
-#include <QtGui/QWidget>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QScrollArea>
+#include <QWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
 
 #include "Fader.h"
 #include "FaderName.h"
@@ -61,9 +61,13 @@ public slots:
     void activateBtnClicked();
     void removeBtnClicked();
     void updateOutputControls();
+    void leftBtnClicked();
+    void rightBtnClicked();
 
 signals:
     void removeClicked(LadspaFXProperties*, effect*);
+    void leftClicked(LadspaFXProperties*, effect*);
+    void rightClicked(LadspaFXProperties*, effect*);
 
 private:
     effect* m_nLadspaFX;
@@ -84,6 +88,8 @@ private:
 //  QPushButton *m_pSelectFXBtn;
     ToggleButton *m_pActivateBtn;
     Button *m_pRemoveBtn;
+    Button *m_pLeftBtn;
+    Button *m_pRightBtn;
 
     QTimer *m_pTimer;
 

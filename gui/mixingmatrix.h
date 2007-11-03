@@ -64,6 +64,17 @@ class FWidget;
 #define SEPARATOR_HEIGHT 10
 #define INFO_WIDTH 30
 
+class LFWidget : public FaderName {
+    public:
+        LFWidget(Widget *p_pWidget);
+        virtual void mousePressEvent(QMouseEvent *p_pEvent);
+        virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
+
+    private:
+        int m_fMousePressY;
+        Widget *m_pWidget;
+};
+
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -88,7 +99,7 @@ public:
     // Create controls. return true on success
     bool createControl();
 
-    void doSelect(ChannelType, QString channel);
+    void doSelect(ChannelType, QString channel, bool p_bForce =false);
     ChannelType getSelectedChanelType();
     QString getSetectedChannelName();
 
@@ -141,6 +152,8 @@ public slots:
     void init();
     void removeFX(LadspaFXProperties*, effect*);
     void askRemoveFX(LadspaFXProperties*, effect*);
+    void askLeftFX(LadspaFXProperties*, effect*);
+    void askRightFX(LadspaFXProperties*, effect*);
 
 //	void showGain();
 	void faderHeight();
@@ -179,8 +192,8 @@ private:
     QTimer *m_pStatusTimer;
 
 // EffectData effect;
-    FaderName *effectName;
-    QWidget* m_pEffectStart;
+    LFWidget *effectName;
+    QWidget *m_pEffectStart;
 
     enum ChannelType m_eSelectType;
     QString m_sSelectChannel;
