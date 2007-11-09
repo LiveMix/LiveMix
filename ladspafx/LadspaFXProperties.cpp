@@ -518,6 +518,14 @@ void LadspaFXProperties::setFaderHeight(int p_iHeight) { //195
 	    fader->setFixedHeight(p_iHeight);
     }
 }
-
+void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
+        QString p_sReatedChannelName, QMouseEvent* p_pEvent)
+{
+    QMenu menu(this);
+    
+    QAction* assigne = new QAction(trUtf8("Assigne key"), this);
+    connect(assigne, SIGNAL(triggered()), this, SLOT(assigneKey()));
+    menu.addAction(assigne);
+}
 }
 ; //LiveMix

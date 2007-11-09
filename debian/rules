@@ -18,10 +18,17 @@
 
 config.status: configure
 	dh_testdir
+
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+
 	# Add here commands to configure the package.
 	qmake-qt4 all.pro prefix=/usr -config release
 	cd i18n&&./updateTranslations.sh
-#	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs"
 
 
 build: build-stamp
@@ -42,13 +49,6 @@ clean:
 
 	# Add here commands to clean up after the build process.
 	[ ! -f Makefile ] || $(MAKE) distclean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-
 
 	dh_clean 
 
@@ -59,8 +59,6 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/livemix.
-#	$(MAKE) prefix=$(CURDIR)/debian/livemix/usr install
-#	$(MAKE) install
 	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/livemix install
 
 
@@ -74,28 +72,14 @@ binary-arch: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog
 	dh_installdocs
-#	dh_installexamples
-#	dh_install
 	dh_installmenu
-#	dh_installdebconf	
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
 	dh_installmime
-#	dh_python
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
 	dh_desktop
 	dh_installman
 	dh_link
 	dh_strip
 	dh_compress
-#	dh_icons
-#	dh_iconcache
 	dh_fixperms
-#	dh_perl
-#	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

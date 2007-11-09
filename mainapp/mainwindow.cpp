@@ -876,7 +876,7 @@ void MainWindow::removeInput( QString n )
 	            _mixerwidget->removeFX(fx->gui, fx);
 	        }
 	    }
-	    if ( Backend::instance()->removeInput( n ) ) {
+	    if (Backend::instance()->removeInput(n)) {
 	        _mixerwidget->removeinchannel( n );
 	    }
     }

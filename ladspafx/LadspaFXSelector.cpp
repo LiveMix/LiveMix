@@ -82,16 +82,13 @@ LadspaFXSelector::LadspaFXSelector(LadspaFX* nLadspaFX)
 #endif
 
     connect( m_pPluginsListBox, SIGNAL( itemSelectionChanged () ), this, SLOT( pluginSelected() ) );
+    connect( m_pPluginsListBox, SIGNAL( itemDoubleClicked (QListWidgetItem *) ), this, SLOT( accept() ) );
 }
-
-
 
 LadspaFXSelector::~LadspaFXSelector()
 {
     //qDebug() << "DESTROY" );
 }
-
-
 
 void LadspaFXSelector::buildLadspaGroups()
 {

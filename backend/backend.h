@@ -30,7 +30,9 @@
 #endif
 
 #include <QList>
-#include <QDebug>
+#include <QHash>
+//#include <QDebug>
+#include <QMutex>
 
 #include <jack/jack.h>
 
@@ -289,6 +291,7 @@ private:
     GuiServer_Interface* gui;
     int count;
     bool _run;
+    QMutex _lock;
     ::jack_client_t *client;
 
     QHash<QString, in*> ins;

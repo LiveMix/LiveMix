@@ -211,6 +211,14 @@ int process( jack_nframes_t nframes, void* arg )
     Backend* backend = static_cast<Backend*>( arg );
 
     if (backend->_run) {
+        backend->_lock.lock();
+        
+        out* pfl_elem = backend->outs[PFL];
+
+        // init listner
+        jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
+        jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
+        bool pflOn = false;
 
         struct timeval start;
         bool calculate_pk = false;
@@ -229,7 +237,7 @@ int process( jack_nframes_t nframes, void* arg )
                 elem->peak_l = 0;
                 elem->peak_r = 0;
             }
-            if (!elem->mute)
+            if (!elem->mute || elem->pfl)
             {
                 elem->sample_l = (jack_default_audio_sample_t*) jack_port_get_buffer(elem->in_l, nframes);
                 elem->sample_r = elem->stereo ? (jack_default_audio_sample_t*) jack_port_get_buffer(
@@ -398,6 +406,18 @@ int process( jack_nframes_t nframes, void* arg )
                         outr[ n ] += inr[ n ] * vr;
                     }
                 }
+                
+                // plf
+                if (post_elem->m_bPfl) {
+                    pflOn = true;
+                    jack_default_audio_sample_t* inl = post_elem->post_l;
+                    jack_default_audio_sample_t* inr = post_elem->post_r;
+                    for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                        pfl_l[ n ] += inl[ n ];
+                        pfl_r[ n ] += inr[ n ];
+                    }
+                }
+                 
                 /// Effect.
                 foreach (effect* effect, post_elem->effects) {
                     backend->prossesLadspaFX(effect, outl, outr, nframes, calculate_pk);
@@ -590,11 +610,6 @@ int process( jack_nframes_t nframes, void* arg )
             }
         }
         //qDebug() << "plf / alf";
-        out* pfl_elem = backend->outs[PFL];
-
-        jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
-        jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
-        bool pflOn = false;
         // in
         foreach( in* in_elem, backend->ins ) {
             jack_default_audio_sample_t* inl = in_elem->pre_l;
@@ -602,12 +617,25 @@ int process( jack_nframes_t nframes, void* arg )
             if (in_elem->pfl)
             {
                 pflOn = true;
-                for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    pfl_l[ n ] += inl[ n ];
-                    pfl_r[ n ] += inr[ n ];
+                if (in_elem->mute) {
+                    for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                        pfl_l[ n ] += inl[ n ];
+                        pfl_r[ n ] += inr[ n ];
+                        inl[n] = 0;
+                        inr[n] = 0;
+                    }
+                    in_elem->peak_l = 0;
+                    in_elem->peak_r = 0;
+                }
+                else {
+                    for ( jack_nframes_t n=0; n<nframes; n++ ) {
+                        pfl_l[ n ] += inl[ n ];
+                        pfl_r[ n ] += inr[ n ];
+                    }
                 }
             }
         }
+        
         //qDebug() << 25;
         // pre
         foreach( pre* elem, backend->pres ) {
@@ -624,15 +652,6 @@ int process( jack_nframes_t nframes, void* arg )
         //qDebug() << 26;
         // post return
         foreach( post* elem, backend->posts ) {
-            if (elem->m_bPfl) {
-                pflOn = true;
-                jack_default_audio_sample_t* inl = elem->post_l;
-                jack_default_audio_sample_t* inr = elem->post_r;
-                for ( jack_nframes_t n=0; n<nframes; n++ ) {
-                    pfl_l[ n ] += inl[ n ];
-                    pfl_r[ n ] += inr[ n ];
-                }
-            }
             //qDebug() << 27;
             if (elem->m_bAfl) {
                 pflOn = true;
@@ -712,6 +731,7 @@ int process( jack_nframes_t nframes, void* arg )
            emit backend->xrun();
           }*/
 
+        backend->_lock.unlock();
     }
     return 0;
 }
@@ -836,12 +856,16 @@ void Backend::setInSub( QString ch, QString sub, bool on)
 effect* Backend::addInEffect( QString ch, LadspaFX* fx )
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
+    _lock.lock();
     ins[ ch ]->effects << e;
+    _lock.unlock();
     return e;
 }
 void Backend::removeInEffect( QString ch, effect* eff)
 {
+    _lock.lock();
     ins[ ch ]->effects.removeAll( eff );
+    _lock.unlock();
 }
 QList<effect*>* Backend::getInEffects( QString ch )
 {
@@ -869,12 +893,16 @@ void Backend::setOutAfl( QString ch, bool afl )
 effect* Backend::addOutEffect( QString ch, LadspaFX* fx )
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
+    _lock.lock();
     outs[ ch ]->effects << e;
+    _lock.unlock();
     return e;
 }
 void Backend::removeOutEffect( QString ch, effect* eff )
 {
+    _lock.lock();
     outs[ ch ]->effects.removeAll( eff );
+    _lock.unlock();
 }
 QList<effect*>* Backend::getOutEffects( QString ch )
 {
@@ -900,12 +928,16 @@ void Backend::setPreAfl( QString ch, bool afl )
 effect* Backend::addPreEffect( QString ch, LadspaFX* fx )
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
+    _lock.lock();
     pres[ ch ]->effects << e;
+    _lock.unlock();
     return e;
 }
 void Backend::removePreEffect( QString ch, effect* eff )
 {
+    _lock.lock();
     pres[ ch ]->effects.removeAll( eff );
+    _lock.unlock();
 }
 QList<effect*>* Backend::getPreEffects( QString ch )
 {
@@ -947,12 +979,16 @@ void Backend::setPostSub( QString ch, QString sub, bool on)
 effect* Backend::addPostEffect( QString ch, LadspaFX* fx )
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
+    _lock.lock();
     posts[ ch ]->effects << e;
+    _lock.unlock();
     return e;
 }
 void Backend::removePostEffect( QString ch, effect* eff )
 {
+    _lock.lock();
     posts[ ch ]->effects.removeAll( eff );
+    _lock.unlock();
 }
 QList<effect*>* Backend::getPostEffects( QString ch )
 {
@@ -982,12 +1018,16 @@ void Backend::setSubMain( QString ch, bool main )
 effect* Backend::addSubEffect( QString ch, LadspaFX* fx )
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
+    _lock.lock();
     subs[ ch ]->effects << e;
+    _lock.unlock();
     return e;
 }
 void Backend::removeSubEffect( QString ch, effect* eff )
 {
+    _lock.lock();
     subs[ ch ]->effects.removeAll( eff );
+    _lock.unlock();
 }
 QList<effect*>* Backend::getSubEffects( QString ch )
 {
@@ -1000,8 +1040,10 @@ bool Backend::addInput( QString name, bool stereo )
     jack_port_t** r = new jack_port_t*;
     bool result = addInput( l, r, name, "in", stereo );
     if (result) {
+        _lock.lock();
         ins[ name ] = new in(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         ins_order << name;
+        _lock.unlock();
     }
     return result;
 }
@@ -1011,8 +1053,10 @@ bool Backend::addOutput( QString name, bool stereo )
     jack_port_t** r = new jack_port_t*;
     bool result = addOutput( l, r, name, "out", stereo );
     if (result) {
+        _lock.lock();
         outs[ name ] = new out(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         outs_order << name;
+        _lock.unlock();
     }
     return result;
 }
@@ -1022,8 +1066,10 @@ bool Backend::addPre( QString name, bool stereo )
     jack_port_t** r = new jack_port_t*;
     bool result = addOutput( l, r, name, "pre", stereo );
     if (result) {
+        _lock.lock();
         pres[ name ] = new pre(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         pres_order << name;
+        _lock.unlock();
     }
     return result;
 }
@@ -1039,8 +1085,10 @@ bool Backend::addPost( QString name, bool stereo, bool external )
         result &= addInput( r_l, r_r, name, "return", stereo );
     }
     if (result) {
+        _lock.lock();
         posts[ name ] = new post(name, stereo, external, ::jack_get_buffer_size(client), *s_l, *s_r, *r_l, *r_r);
         posts_order << name;
+        _lock.unlock();
     }
     return result;
 }
@@ -1050,44 +1098,56 @@ bool Backend::addSub( QString name, bool stereo )
     jack_port_t** r = new jack_port_t*;
     bool result = addOutput( l, r, name, "sub", stereo );
     if (result) {
+        _lock.lock();
         subs[ name ] = new sub(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         subs_order << name;
+        _lock.unlock();
     }
     return result;
 }
 
 bool Backend::removeInput( QString name )
 {
+    _lock.lock();
     ins_order.removeAll( name );
     in* elem = ins[name];
     ins.remove( name );
+    _lock.unlock();
     removeInput( elem->in_l, elem->in_r, name, "in", elem->stereo );
     delete elem;
     return true;
 }
+
 bool Backend::removeOutput( QString name )
 {
+    _lock.lock();
     outs_order.removeAll( name );
     out* elem = outs[name];
     outs.remove( name );
+    _lock.unlock();
     removeOutput( elem->out_l, elem->out_r, name, "out", elem->stereo );
     delete elem;
     return true;
 }
+
 bool Backend::removePre( QString name )
 {
+    _lock.lock();
     pres_order.removeAll( name );
     pre* elem = pres[name];
     pres.remove( name );
+    _lock.unlock();
     removeOutput( elem->out_l, elem->out_r, name, "pre", elem->stereo );
     delete elem;
     return true;
 }
 bool Backend::removePost( QString name )
 {
+    _lock.lock();
     posts_order.removeAll( name );
     post* elem = posts[name];
     posts.remove( name );
+    _lock.unlock();
     if (elem->external) {
         removeOutput( elem->out_l, elem->out_r, name, "post", elem->stereo );
         removeInput( elem->in_l, elem->in_r, name, "return", elem->stereo );
@@ -1097,9 +1157,11 @@ bool Backend::removePost( QString name )
 }
 bool Backend::removeSub( QString name )
 {
+    _lock.lock();
     subs_order.removeAll( name );
     sub* elem = subs[name];
     subs.remove( name );
+    _lock.unlock();
     removeOutput( elem->out_l, elem->out_r, name, "sub", elem->stereo );
     delete elem;
     return true;
@@ -1148,7 +1210,9 @@ bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect
     int index = ch->effects.indexOf(p_pEffect);
     int indexTo = index + (p_bLeft ? -1 : 1);
     if (indexTo >= 0 && indexTo < ch->effects.size()) {
+        _lock.lock();
         ch->effects.move(index, indexTo);
+        _lock.unlock();
         return true;
     }
     return false;

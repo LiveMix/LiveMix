@@ -330,8 +330,8 @@ void Widget::doSelect(ChannelType type, QString channel, bool p_bForce)
     m_eSelectType = type;
     m_sSelectChannel = channel;
 
-    if (p_eType == OUT) {
-        effectName->setText(trUtf8("Main output"));        
+    if (type == OUT) {
+        effectName->setText(trUtf8("Main output"));
     }
     else {
         effectName->setText(Backend::instance()->getChannel(type, channel)->display_name);
@@ -1351,10 +1351,10 @@ void Widget::faderHeight() {
 }
 
 void Widget::setEffectFaderHeight(int p_iHeight) {
-	m_iEffectFaderHeight = p_iHeight;
     if (p_iHeight < 150) {
         p_iHeight = 150;
     }
+    m_iEffectFaderHeight = p_iHeight;
 
     m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
     m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
@@ -1514,7 +1514,11 @@ RWidget::RWidget(ElementType p_eElement, QString p_rToolTip)
         }
     }
     else {
-        m_pBackground = NULL;
+        m_pBackground = new QPixmap();
+        if (!m_pBackground->load( ":/data/rotary_background.png")) {
+            qDebug() << "Error loading image: 'rotary_background.png'";
+            m_pBackground = NULL;
+        }
     }
 }
 void RWidget::paintEvent(QPaintEvent *p_pEvent)
