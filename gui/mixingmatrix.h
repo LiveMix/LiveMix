@@ -172,6 +172,8 @@ private slots:
     void desableAllTheLine();
 
 private:
+    float getNewValue(float p_fOld, float p_fNew);
+
 	InfoWidget *info_widget;
 	
     QHBoxLayout *in_layout;

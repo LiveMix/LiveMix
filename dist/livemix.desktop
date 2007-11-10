@@ -8,6 +8,6 @@ Exec=livemix
 Icon=livemix
 Terminal=false
 Type=Application
-MimeType=application/x-livemix
+MimeType=application/x-livemix;
 StartupNotify=true
 Categories=AudioVideo;Audio;

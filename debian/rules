@@ -19,16 +19,9 @@
 config.status: configure
 	dh_testdir
 
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-
 	# Add here commands to configure the package.
 	qmake-qt4 all.pro prefix=/usr -config release
-	cd i18n&&./updateTranslations.sh
+  cd i18n&&./updateTranslations.sh
 
 
 build: build-stamp

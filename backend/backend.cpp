@@ -213,13 +213,6 @@ int process( jack_nframes_t nframes, void* arg )
     if (backend->_run) {
         backend->_lock.lock();
         
-        out* pfl_elem = backend->outs[PFL];
-
-        // init listner
-        jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
-        jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
-        bool pflOn = false;
-
         struct timeval start;
         bool calculate_pk = false;
 //        if (++backend->count % ( 5000 / nframes ) == 0  && backend->getCPULoad() < 95 && backend->count / backend->getCPULoad() > (300 / nframes)) {
@@ -344,6 +337,13 @@ int process( jack_nframes_t nframes, void* arg )
             for ( jack_nframes_t n=0; n<nframes; n++ ) elem->out_s_l[ n ] = 0;
             for ( jack_nframes_t n=0; n<nframes; n++ ) elem->out_s_r[ n ] = 0;
         }
+
+        out* pfl_elem = backend->outs[PFL];
+
+        // init listner
+        jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
+        jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
+        bool pflOn = false;
 
         //qDebug() << "The actual pre.";
         //qDebug() << "Adjust prelevels.";

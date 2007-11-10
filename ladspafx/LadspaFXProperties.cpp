@@ -35,6 +35,7 @@
 #include <QFrame>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QMenu>
 
 namespace LiveMix
 {
@@ -188,11 +189,11 @@ void LadspaFXProperties::updateControls()
         m_pInputControlFaders.clear();
     }
 
-    if ( m_pOutputControlFaders.size() != 0 ) {
-        for (int i = 0; i < m_pOutputControlFaders.size(); i++) {
-            delete m_pOutputControlFaders[ i ];
+    if ( m_pOutputControlLabel.size() != 0 ) {
+        for (int i = 0; i < m_pOutputControlLabel.size(); i++) {
+            delete m_pOutputControlLabel[ i ];
         }
-        m_pOutputControlFaders.clear();
+        m_pOutputControlLabel.clear();
     }
     if ( m_pOutputControlNames.size() != 0 ) {
         for (int i = 0; i < m_pOutputControlNames.size(); i++) {
@@ -289,6 +290,7 @@ void LadspaFXProperties::updateControls()
             } else {
                 // fader
                 Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic );
+                connect(pFader, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 		    	pFader->setFixedHeight(m_iFaderHeight);
                 connect( pFader, SIGNAL( valueChanged(Volume*) ), this, SLOT( faderChanged(Volume*) ) );
                 m_pInputControlFaders.push_back( pFader );
@@ -518,14 +520,24 @@ void LadspaFXProperties::setFaderHeight(int p_iHeight) { //195
 	    fader->setFixedHeight(p_iHeight);
     }
 }
-void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
-        QString p_sReatedChannelName, QMouseEvent* p_pEvent)
+void LadspaFXProperties::contextMenu(const QPoint &p_rPos)
 {
     QMenu menu(this);
     
-    QAction* assigne = new QAction(trUtf8("Assigne key"), this);
-    connect(assigne, SIGNAL(triggered()), this, SLOT(assigneKey()));
-    menu.addAction(assigne);
+//    QAction* assigne = new QAction(trUtf8("Assigne key"), this);
+//    connect(assigne, SIGNAL(triggered()), this, SLOT(assigneKey()));
+//    menu.addAction(assigne);
+    
+    QAction* reset = new QAction(trUtf8("Reset the effect"), this);
+    connect(reset, SIGNAL(triggered()), this, SLOT(reset()));
+    menu.addAction(reset);
+    
+    menu.exec(p_rPos);
 }
+void LadspaFXProperties::reset() 
+{
+
+}
+
 }
 ; //LiveMix

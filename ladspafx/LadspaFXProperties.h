@@ -63,6 +63,8 @@ public slots:
     void updateOutputControls();
     void leftBtnClicked();
     void rightBtnClicked();
+    void contextMenu(const QPoint &p_rPos);
+    void reset();
 
 signals:
     void removeClicked(LadspaFXProperties*, effect*);

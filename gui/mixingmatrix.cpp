@@ -397,44 +397,51 @@ QString Widget::getSetectedChannelName()
     return m_sSelectChannel;
 }
 
+float Widget::getNewValue(float p_fOld, float p_fNew) {
+    #define FACTOR 0.5
+    return (p_fOld * FACTOR + p_fNew) / (1 + FACTOR);
+}
 void Widget::update()
 {
-    cpuLoad->setValue(Backend::instance()->getProcessTime() / Backend::instance()->getMaxProcessTime());
-    cpuLoad->setValue2(Backend::instance()->getCPULoad() / 100.0);
-    cpuLoad->setToolTip(trUtf8("- %CPU used by LiveMix backend (%1 %).\n- CPU load given by Jack (%2 %).")
-    		.arg((int)(Backend::instance()->getProcessTime() / Backend::instance()->getMaxProcessTime() * 100))
-    		.arg((int)Backend::instance()->getCPULoad()));
+    {
+        float value1 = getNewValue(cpuLoad->getValue(), Backend::instance()->getProcessTime() / Backend::instance()->getMaxProcessTime());
+        float value2 = getNewValue(cpuLoad->getValue2(), Backend::instance()->getCPULoad() / 100.0);
+        cpuLoad->setValue(value1);
+        cpuLoad->setValue2(value2);
+        cpuLoad->setToolTip(trUtf8("- %CPU used by LiveMix backend (%1 %).\n- CPU load given by Jack (%2 %).")
+        		.arg((int)value1).arg((int)value2));
+    }
     
     foreach (QString in_name, Backend::instance()->inchannels()) {
         if (in[in_name] != NULL) {
             FWidget* fader = in[in_name]->fader;
-            fader->getFader()->setDbPeak_L(Backend::instance()->getInPeak(in_name, true));
-            fader->getFader()->setDbPeak_R(Backend::instance()->getInPeak(in_name, false));
+            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getInPeak(in_name, true)));
+            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getInPeak(in_name, false)));
         }
     }
     foreach (QString pre_name, Backend::instance()->prechannels()) {
         if (pre[pre_name] != NULL) {
             FWidget* fader = pre[pre_name]->fader;
-            fader->getFader()->setDbPeak_L(Backend::instance()->getPrePeak(pre_name, true));
-            fader->getFader()->setDbPeak_R(Backend::instance()->getPrePeak(pre_name, false));
+            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getPrePeak(pre_name, true)));
+            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getPrePeak(pre_name, false)));
         }
     }
     foreach (QString post_name, Backend::instance()->postchannels()) {
         if (post[post_name] != NULL) {
             FWidget* fader = post[post_name]->fader;
-            fader->getFader()->setDbPeak_L(Backend::instance()->getPostPeak(post_name, true));
-            fader->getFader()->setDbPeak_R(Backend::instance()->getPostPeak(post_name, false));
+            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getPostPeak(post_name, true)));
+            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getPostPeak(post_name, false)));
         }
     }
     foreach (QString sub_name, Backend::instance()->subchannels()) {
         if (sub[sub_name] != NULL) {
             FWidget* fader = sub[sub_name]->fader;
-            fader->getFader()->setDbPeak_L(Backend::instance()->getSubPeak(sub_name, true));
-            fader->getFader()->setDbPeak_R(Backend::instance()->getSubPeak(sub_name, false));
+            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getSubPeak(sub_name, true)));
+            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getSubPeak(sub_name, false)));
         }
     }
-    main_widget->fader->getFader()->setDbPeak_L(Backend::instance()->getOutPeak(MAIN, true));
-    main_widget->fader->getFader()->setDbPeak_R(Backend::instance()->getOutPeak(MAIN, false));
+    main_widget->fader->getFader()->setDbPeak_L(getNewValue(main_widget->fader->getFader()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, true)));
+    main_widget->fader->getFader()->setDbPeak_R(getNewValue(main_widget->fader->getFader()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, false)));
 }
 void Widget::init()
 {
@@ -1559,6 +1566,9 @@ VWidget* Widget::createRotary(ChannelType p_eType, QString p_sChannelName, Eleme
     else {
     	rotary->setDbValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
     }
+    if (p_eElement == GAIN) {
+        rotary->getRotary()->setMaxValue(40);
+    }
     if (!isVisible(p_eElement == TO_AFL ? TO_PFL : p_eElement, p_rChannelTo)) {
 		rotary->setVisible(false);
     }
@@ -1590,7 +1600,7 @@ void LFWidget::mousePressEvent(QMouseEvent *p_pEvent) {
 }
 void LFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent) {
     if (p_pEvent->button() == Qt::LeftButton) {
-        m_pWidget->setEffectFaderHeight(m_pWidget->getEffectFaderHeight() - m_fMousePressY + p_pEvent->y());
+        m_pWidget->setEffectFaderHeight(m_pWidget->getEffectFaderHeight() + m_fMousePressY - p_pEvent->y());
     }
 }
 

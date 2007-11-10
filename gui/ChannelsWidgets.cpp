@@ -49,7 +49,7 @@ void IFWidget::mousePressEvent(QMouseEvent *p_pEvent) {
 }
 void IFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent) {
     if (p_pEvent->button() == Qt::LeftButton) {
-        m_pWidget->setFaderHeight(m_pWidget->getFaderHeight() - m_fMousePressY + p_pEvent->y());
+        m_pWidget->setFaderHeight(m_pWidget->getFaderHeight() + m_fMousePressY - p_pEvent->y());
     }
 }
 

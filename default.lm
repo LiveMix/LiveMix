@@ -12,7 +12,6 @@
     <pfl key="L" />
     <pre sub="r1" key="Ctrl+1" />
     <pre sub="r2" key="Ctrl+2" />
-    <post sub="corus" key="Ctrl+C" />
     <post sub="ext" key="Ctrl+E" />
     <post sub="reverb" key="Ctrl+R" />
   </actionbinding>
@@ -192,10 +191,6 @@
     <effect name="freeverb3" filename="/usr/lib/ladspa/cmt.so" enabled="no" >
     </effect>
     <effect name="plate" filename="/usr/lib/ladspa/plate_1423.so" enabled="no" >
-    </effect>
-  </post>
-  <post name="cor" display="Corus" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="no" plf="no">
-    <effect name="multivoiceChorus" filename="/usr/lib/ladspa/multivoice_chorus_1201.so" enabled="no" >
     </effect>
   </post>
   <post name="ext" display="External" pre-volume="1" post-volume="1" mute="no" alf="no" stereo="yes" main="yes" bal="0" external="yes" plf="no">
