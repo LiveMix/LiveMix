@@ -45,7 +45,6 @@ LadspaFXGroup::LadspaFXGroup( const QString& sName )
     m_sName = sName;
 }
 
-
 LadspaFXGroup::~LadspaFXGroup()
 {
 // qDebug() << "DESTROY - " + m_sName );
@@ -55,22 +54,17 @@ LadspaFXGroup::~LadspaFXGroup()
     }
 }
 
-
-
 void LadspaFXGroup::addLadspaInfo(LadspaFXInfo *pInfo)
 {
     m_ladspaList.push_back( pInfo );
 }
-
 
 void LadspaFXGroup::addChild( LadspaFXGroup *pChild )
 {
     m_childGroups.push_back( pChild );
 }
 
-
 ////////////////
-
 
 LadspaFXInfo::LadspaFXInfo( const QString& sName )
 {
@@ -84,22 +78,17 @@ LadspaFXInfo::LadspaFXInfo( const QString& sName )
     m_nOAPorts = 0;
 }
 
-
 LadspaFXInfo::~LadspaFXInfo()
 {
 // qDebug() << "DESTROY " + m_sName );
 }
 
-
 ///////////////////
-
-
 
 // ctor
 LadspaFX::LadspaFX( const QString& sLibraryPath, const QString& sPluginLabel )
 //, m_nBufferSize( 0 )
-        :
-        m_pInBufferL(NULL)
+        : m_pInBufferL(NULL)
         , m_pInBufferR(NULL)
         , m_pOutBufferL(NULL)
         , m_pOutBufferR(NULL)
@@ -118,7 +107,6 @@ LadspaFX::LadspaFX( const QString& sLibraryPath, const QString& sPluginLabel )
 // qDebug() << "INIT - " + sLibraryPath + " - " + sPluginLabel;
 }
 
-
 // dtor
 LadspaFX::~LadspaFX()
 {
@@ -126,16 +114,6 @@ LadspaFX::~LadspaFX()
 // qDebug() << "DESTROY - " + m_sLibraryPath + " - " + m_sLabel;
 
     if (m_d) {
-        /*  if (m_d->deactivate) {
-        //    qDebug() << "deactivate";
-           if ( m_handle ) {
-            m_d->deactivate( m_handle );
-           }
-           if ( m_handleBis ) {
-            m_d->deactivate( m_handleBis );
-           }
-          }*/
-
         if (m_d->cleanup) {
 //    qDebug() << "Cleanup";
             if ( m_handle ) {
@@ -155,7 +133,6 @@ LadspaFX::~LadspaFX()
         delete outputControlPorts[i];
     }
 }
-
 
 // Static
 LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLabel, long nSampleRate )
@@ -203,12 +180,6 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
         return NULL;
     }
 
-    /* if ( ( pFX->m_nIAPorts == 2 ) && ( pFX->m_nOAPorts == 2 ) ) {  // Stereo plugin
-      pFX->m_pluginType = STEREO_FX;
-     }
-     else if ( ( pFX->m_nIAPorts == 1 ) && ( pFX->m_nOAPorts == 1 ) ) { // Mono plugin
-      pFX->m_pluginType = MONO_FX;
-     }*/
     if (pFX->m_nIAPorts <= 2 || pFX->m_nOAPorts <= 2) {}
     else {
         qDebug() << "Wrong number of ports";
@@ -304,27 +275,12 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
                 }
             }
 
-            /*qDebug()<<sName<<LADSPA_IS_HINT_BOUNDED_BELOW( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_BOUNDED_ABOVE( rangeHints.HintDescriptor )
-            <<111<<LADSPA_IS_HINT_TOGGLED( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_SAMPLE_RATE( rangeHints.HintDescriptor )
-            <<222<<LADSPA_IS_HINT_LOGARITHMIC( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_INTEGER( rangeHints.HintDescriptor )
-            <<333<<LADSPA_IS_HINT_HAS_DEFAULT( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_DEFAULT_MINIMUM( rangeHints.HintDescriptor )
-            <<444<<LADSPA_IS_HINT_DEFAULT_LOW( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_DEFAULT_MIDDLE( rangeHints.HintDescriptor )
-            <<555<<LADSPA_IS_HINT_DEFAULT_HIGH( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_DEFAULT_MAXIMUM( rangeHints.HintDescriptor )
-            <<666<<LADSPA_IS_HINT_DEFAULT_0( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_DEFAULT_1( rangeHints.HintDescriptor )
-            <<777<<LADSPA_IS_HINT_DEFAULT_100( rangeHints.HintDescriptor )<<LADSPA_IS_HINT_DEFAULT_440( rangeHints.HintDescriptor );
-             
-            qDebug()<<sName
-            <<QString("%1").arg((pFX->m_d->PortRangeHints[ nPort ] ).LowerBound)
-            <<QString("%1").arg(( pFX->m_d->PortRangeHints[ nPort ] ).UpperBound)
-            <<QString("%1").arg(fMin)<<QString("%1").arg(fMax)<<QString("%1").arg(fDefault);
-            qDebug();*/
-
-
             LadspaControlPort* pControl = new LadspaControlPort();
             pControl->m_sName = sName;
             pControl->m_fLowerBound = fMin;
             pControl->m_fUpperBound = fMax;
             pControl->m_fControlValue = fDefault;
+            pControl->m_fDefaultControlValue = fDefault;
             pControl->m_bToggle = bToggle;
             pControl->m_bLogarithmic = bLogarithmic;
             pControl->m_bInteger = bInteger;
@@ -351,14 +307,6 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
                 fMax = ( pFX->m_d->PortRangeHints[ nPort ] ).UpperBound;
             }
 
-            /*   LadspaControlPort* pControl = new LadspaControlPort();
-               pControl->sName = pFX->m_d->PortNames[ nPort ];
-               pControl->fLowerBound = ( pFX->m_d->PortRangeHints[ nPort ] ).LowerBound;
-               pControl->fUpperBound = ( pFX->m_d->PortRangeHints[ nPort ] ).UpperBound;
-               pControl->fControlValue = pControl->fUpperBound / 2.0;
-            */
-            // always middle
-//   fDefault = (fMax - fMin) / 2.0 + fMin;
             // always min
             fDefault = fMin;
 
@@ -383,7 +331,6 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
 
     return pFX;
 }
-
 
 void LadspaFX::connectAudioPorts()
 {
@@ -432,7 +379,6 @@ void LadspaFX::connectAudioPorts(float* p_pInL, float* p_pInR, float* p_pOutL, f
     }
 }
 
-
 void LadspaFX::processFX( unsigned nFrames, bool stereo )
 {
     m_d->run( m_handle, nFrames );
@@ -453,7 +399,6 @@ void LadspaFX::activate()
         }
     }
 }
-
 
 void LadspaFX::deactivate()
 {

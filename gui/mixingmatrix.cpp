@@ -38,7 +38,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QCursor>
-#include <QContextMenuEvent>
 #include <QLabel>
 #include <QSpacerItem>
 #include <QFont>
@@ -184,8 +183,7 @@ void Widget::displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName)
 {
     if (fx->gui == NULL)
     {
-        fx->gui = new LadspaFXProperties(NULL, fx);
-        fx->gui->setFaderHeight(m_iEffectFaderHeight);
+        fx->gui = new LadspaFXProperties(NULL, fx, m_iEffectFaderHeight);
 	    addToggle(fx->gui->getActivateButton(), p_eType, p_sChannelName, MUTE_EFFECT, fx->fx->getPluginLabel());
         effect_layout->addWidget(fx->gui);
         connect(fx->gui, SIGNAL(removeClicked(LadspaFXProperties*, effect*)), this, SLOT(askRemoveFX(LadspaFXProperties*, effect*)));

@@ -1,3 +1,14 @@
+==== 0.45svn20071111 ====
+- add pan/bal background
+- new logo
+- avalability to change effect order
+- add lock on channel add/remove effect add/remove, change effect order
+- double click on effect selector
+- some change in listner (for input: after effect and before mute, for post pfl before effect)
+- fix effect feed back
+- linear peak level
+- set max gain to 40db
+- add context menu to effect, set all the effect to default
 
 ==== 0.45svn20071028 ====
 - some fix for info pannel

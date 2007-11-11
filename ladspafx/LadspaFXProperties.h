@@ -42,12 +42,11 @@ class LadspaFXProperties : public QWidget
     Q_OBJECT
 
 public:
-    LadspaFXProperties(QWidget* parent, effect *nLadspaFX);
+    LadspaFXProperties(QWidget* parent, effect *nLadspaFX, int p_iFaderHeight);
     ~LadspaFXProperties();
 
     void updateControls();
 
-    void showEvent ( QShowEvent *ev );
     void closeEvent( QCloseEvent *ev );
 
     static LadspaFX* getFXSelector(LadspaFX* oldFx);
@@ -63,7 +62,7 @@ public slots:
     void updateOutputControls();
     void leftBtnClicked();
     void rightBtnClicked();
-    void contextMenu(const QPoint &p_rPos);
+    void contextMenu(QMouseEvent *p_pEvent);
     void reset();
 
 signals:

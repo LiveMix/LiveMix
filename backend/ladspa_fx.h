@@ -88,6 +88,7 @@ public:
     bool m_bToggle;
     bool m_bLogarithmic;
     bool m_bInteger;
+    LADSPA_Data m_fDefaultControlValue;
     LADSPA_Data m_fControlValue;
     LADSPA_Data m_fLowerBound;
     LADSPA_Data m_fUpperBound;

@@ -20,9 +20,8 @@ config.status: configure
 	dh_testdir
 
 	# Add here commands to configure the package.
-	qmake-qt4 all.pro prefix=/usr -config release
-  cd i18n&&./updateTranslations.sh
-
+	qmake-qt4 all.pro prefix=/usr -config release && \
+	cd i18n&&./updateTranslations.sh
 
 build: build-stamp
 

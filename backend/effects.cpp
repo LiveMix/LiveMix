@@ -73,7 +73,6 @@ Effects::Effects()
     getPluginList();
 }
 
-
 Effects* Effects::getInstance()
 {
     if ( m_pInstance == NULL ) {
@@ -81,7 +80,6 @@ Effects* Effects::getInstance()
     }
     return m_pInstance;
 }
-
 
 Effects::~Effects()
 {
@@ -93,32 +91,7 @@ Effects::~Effects()
         delete fxinfo;
     }
     m_pluginList.clear();
-
-// foreach (LadspaFX* fx, m_FXList) {
-//  delete fx;
-// }
 }
-
-/*
-LadspaFX* Effects::getLadspaFX( int nFX )
-{
- return m_FXList[ nFX ];
-}
- 
- 
-void  Effects::setLadspaFX( LadspaFX* pFX, int nFX )
-{
- //qDebug( "[setLadspaFX] FX: " + pFX->getPluginLabel() + ", " + toString( nFX ) );
- 
- if ( m_FXList[ nFX ] ) {
-  m_FXList[ nFX ]->deactivate();
-  m_FXList.removeAt(nFX);
-  delete m_FXList[ nFX ];
- }
- 
- m_FXList[ nFX ] = pFX;
-}
-*/
 
 ///
 /// Loads only usable plugins
@@ -129,8 +102,6 @@ QList<LadspaFXInfo*> Effects::getPluginList()
         //Logger::getInstance()->log( "skipping" );
         return m_pluginList;
     }
-
-
 
     qDebug() << "PATHS: " + m_ladspaPathVect.size();
     foreach (QString sPluginDir, m_ladspaPathVect) {
@@ -207,21 +178,7 @@ QList<LadspaFXInfo*> Effects::getPluginList()
                             qDebug() << pFX->m_sLabel + "::" + sPortName + "  UNKNOWN port type";
                         }
                     }
-//     if (pFX->m_nIAPorts >= 1 && pFX->m_nOAPorts >= 1) {
-//                    if (pFX->m_nIAPorts <= 2 && pFX->m_nOAPorts <= 2) {
-                        m_pluginList.push_back( pFX );
-//                    }
-                    /*     if ( ( pFX->m_nIAPorts == 2 ) && ( pFX->m_nOAPorts == 2 ) ) { // Stereo plugin
-                          m_pluginList.push_back( pFX );
-                         }
-                         else if ( ( pFX->m_nIAPorts == 1 ) && ( pFX->m_nOAPorts == 1 ) ) { // Mono plugin
-                          m_pluginList.push_back( pFX );
-                         }*/
-/*                    else { // not supported plugin
-                        qDebug() << QString("Plugin not supported: %1, Label: %2, nb in: %3, nb out: %4")
-                        .arg(sPluginName).arg(pFX->m_sLabel).arg(pFX->m_nIAPorts).arg(pFX->m_nOAPorts);
-                        delete pFX;
-                    }*/
+                    m_pluginList.push_back( pFX );
                 }
             } else {
                 qDebug() << "Error loading: " + sPluginName ;
@@ -234,13 +191,9 @@ QList<LadspaFXInfo*> Effects::getPluginList()
     return m_pluginList;
 }
 
-
 LadspaFXGroup* Effects::getLadspaFXGroup()
 {
 //    qDebug() << "[getLadspaFXGroup]";
-
-// LadspaFX::getPluginList(); // load the list
-
     if ( m_pRootGroup  ) {
         return m_pRootGroup;
     }
@@ -287,9 +240,7 @@ LadspaFXGroup* Effects::getLadspaFXGroup()
     return m_pRootGroup;
 }
 
-
 #ifdef LRDF_SUPPORT
-
 
 void Effects::getRDF(LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList)
 {
@@ -320,7 +271,6 @@ void Effects::getRDF(LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList)
         RDFDescend( "http://ladspa.org/ontology#Plugin", pGroup, pluginList );
     }
 }
-
 
 // funzione ricorsiva
 void Effects::RDFDescend( const QString& sBase, LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList )
