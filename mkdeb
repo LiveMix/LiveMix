@@ -1,0 +1,39 @@
+#!/bin/bash
+
+#-S -sa
+#-us -uc
+
+echo "build livemix-$1 ($2 $3)"
+
+./copysrc $1
+
+cd ..
+
+rm livemix_$1*
+
+tar --exclude=debian -chzf livemix_$1.orig.tar.gz livemix-$1
+
+echo "----"
+
+cd livemix-$1
+
+dpkg-buildpackage $2 $3 -rfakeroot
+
+cd ../livemix
+
+lintian ../livemix_$1*.dsc
+linda ../livemix_$1*.dsc
+
+echo "----"
+echo "For pbuilder"
+# sudo pbuilder create --distribution gutsy --othermirror "deb ftp://ch.archive.ubuntu.com/ubuntu/ gutsy main universe" --mirror ftp://ch.archive.ubuntu.com/ubuntu
+# sudo pbuilder create --distribution sid --othermirror "deb ftp://ch.debian.org/debian sid main" --mirror ftp://ch.debian.org/debian
+#echo "sudo pbuilder update --distribution gutsy --mirror ftp://ch.archive.ubuntu.com/ubuntu"
+#echo "sudo pbuilder update --distribution sid --mirror ftp://ch.debian.org/debian"
+echo "sudo pbuilder update --distribution gutsy/sid"
+echo "cp ../livemix_$1* /home/public"
+echo "sudo pbuilder build --distribution gusty /home/public/livemix_$1-0ubuntu1.dsc"
+echo "sudo pbuilder build --distribution gusty ../livemix_$1-0ubuntu1.dsc"
+echo "sudo pbuilder build --distribution sid ../livemix_$1-0ubuntu1.dsc"
+echo "----"
+echo "To upload use: dput ../livemix_$1-0ubuntu1_source.changes"
