@@ -43,7 +43,7 @@ class RotaryTooltip : public QWidget
 public:
     RotaryTooltip();
     ~RotaryTooltip();
-    void showTip( QPoint pos, QString sText );
+    void showTip(QPoint pos, QString sText);
 
 private:
     LCDDisplay *m_pDisplay;
@@ -60,34 +60,32 @@ public:
         TYPE_CENTER
     };
 
-    Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip);
+    Rotary(QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip);
     ~Rotary();
     virtual QWidget* getWidget();
 
-    void setMinValue( float fMin );
+    void setMinValue(float fMin);
     float getMinValue();
 
-    void setMaxValue( float fMax );
+    void setMaxValue(float fMax);
     float getMaxValue();
 
-    void setValue( float fValue, bool emit = false );
-    float getValue()
-    {
-        if ( m_bUseIntSteps ) {
+    void setValue(float fValue, bool emit = false);
+    float getValue() {
+        if (m_bUseIntSteps) {
             int val = (int)m_fValue;
             return val;
         } else
             return m_fValue;
     }
     // in fact the external value is standanrd and internal in dB
-    void setDbValue( float fValue );
-    float getDbValue()
-    {
-        if ( m_bUseIntSteps ) {
-            int val = (int)db2lin( m_fValue, m_fMin );
+    void setDbValue(float fValue);
+    float getDbValue() {
+        if (m_bUseIntSteps) {
+            int val = (int)db2lin(m_fValue, m_fMin);
             return val;
         } else
-            return db2lin( m_fValue, m_fMin );
+            return db2lin(m_fValue, m_fMin);
     }
     void incValue(bool p_bDirection, int p_iStep =1);
 
@@ -112,7 +110,7 @@ private:
 
     virtual void paintEvent(QPaintEvent *ev);
     virtual void mousePressEvent(QMouseEvent *ev);
-    virtual void mouseReleaseEvent( QMouseEvent *ev );
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
     virtual void mouseMoveEvent(QMouseEvent *ev);
 //    virtual void wheelEvent( QWheelEvent *ev );
 };

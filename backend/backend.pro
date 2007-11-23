@@ -5,9 +5,7 @@ TEMPLATE = lib
 CONFIG += qt warn_on thread staticlib
 # precompile_header
 
-
 DESTDIR = ../libs
-INCLUDEPATH += . objs
 
 #PRECOMPILED_HEADER  = precompiled.h
 
@@ -24,6 +22,7 @@ HEADERS += \
 		LadspaFX.h \
 		db.h \
 		channels.h \
+		qlash.h \
 
 
 SOURCES += \
@@ -32,4 +31,5 @@ SOURCES += \
 		ladspa_fx.cpp \
 		db.cpp \
 		channels.cpp \
+		qlash.cpp \
 		

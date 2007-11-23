@@ -31,17 +31,17 @@ namespace LiveMix
 class GraphicalGuiServer : public GuiServer_Interface
 {
 public:
-    GraphicalGuiServer( QWidget* );
+    GraphicalGuiServer(QWidget*);
     ~GraphicalGuiServer();
 
-    void message( const QString&, const QString& ) const;
-    bool messageYesNo( const QString&, const QString& ) const;
-    bool messageOkCancel( const QString&, const QString& ) const;
+    void message(const QString&, const QString&) const;
+    bool messageYesNo(const QString&, const QString&) const;
+    bool messageOkCancel(const QString&, const QString&) const;
 
-    double getDouble( const QString&, const QString&, double, double, double ) const;
-    int getInt( const QString&, const QString&, int, int, int ) const;
-    QString getString( const QString&, const QString&, const QString& ) const;
-    QString getItem( const QString&, const QString&, const QStringList& ) const;
+    double getDouble(const QString&, const QString&, double, double, double) const;
+    int getInt(const QString&, const QString&, int, int, int) const;
+    QString getString(const QString&, const QString&, const QString&) const;
+    QString getItem(const QString&, const QString&, const QStringList&) const;
 private:
     QWidget* _parent;
 };

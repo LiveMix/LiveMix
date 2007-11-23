@@ -39,8 +39,8 @@ public:
     PixmapWidget(QWidget *pParent);
     ~PixmapWidget();
 
-    void setPixmap( QString sPixmapPath, bool expand_horiz = false );
-    void setColor( const QColor& color );
+    void setPixmap(QString sPixmapPath, bool expand_horiz = false);
+    void setColor(const QColor& color);
 
 protected:
     QString m_sPixmapPath;
@@ -48,7 +48,7 @@ protected:
     QPixmap m_pixmap;
     bool __expand_horiz;
 
-    virtual void paintEvent( QPaintEvent* ev);
+    virtual void paintEvent(QPaintEvent* ev);
 };
 
 }

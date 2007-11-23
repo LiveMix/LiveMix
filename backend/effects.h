@@ -58,8 +58,8 @@ private:
 
     Effects();
 
-    void RDFDescend( const QString& sBase, LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList );
-    void getRDF( LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList );
+    void RDFDescend(const QString& sBase, LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList);
+    void getRDF(LadspaFXGroup *pGroup, QList<LadspaFXInfo*> pluginList);
 
 };
 

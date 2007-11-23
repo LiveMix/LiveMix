@@ -26,21 +26,21 @@
 namespace LiveMix
 {
 
-class GetKeyField : public QLineEdit 
+class GetKeyField : public QLineEdit
 {
     Q_OBJECT
 public:
     GetKeyField();
     virtual ~GetKeyField();
-    
+
     QKeySequence getKeySequence();
     void setKeySequence(QKeySequence p_pKeySequence);
 
-	virtual void keyPressEvent(QKeyEvent * p_pEvent);
-	virtual void keyReleaseEvent(QKeyEvent * p_pEvent);
+    virtual void keyPressEvent(QKeyEvent * p_pEvent);
+    virtual void keyReleaseEvent(QKeyEvent * p_pEvent);
 
 private:
-	QKeySequence m_pKeySequence;
+    QKeySequence m_pKeySequence;
 };
 
 }

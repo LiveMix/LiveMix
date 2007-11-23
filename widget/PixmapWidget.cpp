@@ -29,9 +29,9 @@
 namespace LiveMix
 {
 
-PixmapWidget::PixmapWidget( QWidget *pParent )
-        : QWidget( pParent )
-        , m_sPixmapPath( "" )
+PixmapWidget::PixmapWidget(QWidget *pParent)
+        : QWidget(pParent)
+        , m_sPixmapPath("")
         , __expand_horiz(false)
 {
     // draw the background: slower but useful with transparent images!
@@ -54,46 +54,46 @@ void PixmapWidget::setColor(const QColor& color)
 }
 
 
-void PixmapWidget::setPixmap( QString sPixmapPath, bool expand_horiz )
+void PixmapWidget::setPixmap(QString sPixmapPath, bool expand_horiz)
 {
-    if ( m_sPixmapPath == sPixmapPath ) {
+    if (m_sPixmapPath == sPixmapPath) {
         return;
     }
     m_sPixmapPath = sPixmapPath;
     __expand_horiz = expand_horiz;
 
-    bool ok = m_pixmap.load( ":/data/" + sPixmapPath );
-    if ( !ok ) {
+    bool ok = m_pixmap.load(":/data/" + sPixmapPath);
+    if (!ok) {
         qDebug() << "error loading: " << ":/data/" + sPixmapPath;
     }
 
-    resize( m_pixmap.width(), m_pixmap.height() );
+    resize(m_pixmap.width(), m_pixmap.height());
     update();
 }
 
 
-void PixmapWidget::paintEvent( QPaintEvent* ev)
+void PixmapWidget::paintEvent(QPaintEvent* ev)
 {
     QWidget::paintEvent(ev);
 
     QPainter painter(this);
-    if ( m_pixmap.isNull() ) {
-        painter.fillRect( ev->rect(), __color );
+    if (m_pixmap.isNull()) {
+        painter.fillRect(ev->rect(), __color);
     } else {
         if (__expand_horiz) {
             static int w = 10;
             static int h = m_pixmap.height();
 
             // central section, scaled
-            painter.drawPixmap( QRect(w, 0, width() - w * 2, h), m_pixmap, QRect(10, 0, w, h) );
+            painter.drawPixmap(QRect(w, 0, width() - w * 2, h), m_pixmap, QRect(10, 0, w, h));
 
             // left side
-            painter.drawPixmap( QRect(0, 0, w, h), m_pixmap, QRect(0, 0, w, h) );
+            painter.drawPixmap(QRect(0, 0, w, h), m_pixmap, QRect(0, 0, w, h));
 
             // right side
-            painter.drawPixmap( QRect(width() - w, 0, w, h), m_pixmap, QRect(m_pixmap.width() - w, 0, w, h) );
+            painter.drawPixmap(QRect(width() - w, 0, w, h), m_pixmap, QRect(m_pixmap.width() - w, 0, w, h));
         } else {
-            painter.drawPixmap( ev->rect(), m_pixmap, ev->rect() );
+            painter.drawPixmap(ev->rect(), m_pixmap, ev->rect());
         }
     }
 

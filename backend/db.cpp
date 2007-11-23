@@ -34,7 +34,7 @@ namespace LiveMix
 
 float db2lin(float db)
 {
-    return pow( 10, db / 20.0 );
+    return pow(10, db / 20.0);
 };
 
 /*
@@ -74,7 +74,7 @@ QString displayDb(float db, float min)
 {
     char tmp[20];
     if (db >= min + 8.68588963806504) {
-        sprintf( tmp, "%#.1f", db );
+        sprintf(tmp, "%#.1f", db);
         return QString(tmp) + " db";
     } else {
         float milli = db2lin(db, min) * 1000;
@@ -86,7 +86,7 @@ QString displayDbShort(float db, float min)
 {
     char tmp[20];
     if (db >= min + 8.68588963806504) {
-        sprintf( tmp, "%#.1f", db );
+        sprintf(tmp, "%#.1f", db);
         return QString(tmp);
     } else {
         float milli = db2lin(db, min) * 1000;

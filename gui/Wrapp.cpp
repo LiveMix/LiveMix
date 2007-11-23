@@ -24,8 +24,8 @@
 namespace LiveMix
 {
 
-Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
-		QString p_sReatedChannelName)
+Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
+             QString p_sReatedChannelName)
         : QObject()
         , m_pMatrix(p_pMatrix)
         , m_eType(p_eType)
@@ -33,12 +33,12 @@ Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString 
         , m_eElement(p_eElement)
         , m_sReatedChannelName(p_sReatedChannelName)
 {
-    connect(p_pWidget->getWidget(), SIGNAL( leftClick(QMouseEvent*) ), this, SLOT( leftClick(QMouseEvent*) ) );
-    connect(p_pWidget->getWidget(), SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
-    connect(p_pWidget->getWidget(), SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );
-/*    connect(p_pWidget, SIGNAL( leftClick(QMouseEvent*) ), this, SLOT( leftClick(QMouseEvent*) ) );
-    connect(p_pWidget, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
-    connect(p_pWidget, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );*/
+    connect(p_pWidget->getWidget(), SIGNAL(leftClick(QMouseEvent*)), this, SLOT(leftClick(QMouseEvent*)));
+    connect(p_pWidget->getWidget(), SIGNAL(middleClick(QMouseEvent*)), this, SLOT(middleClick(QMouseEvent*)));
+    connect(p_pWidget->getWidget(), SIGNAL(rightClick(QMouseEvent*)), this, SLOT(rightClick(QMouseEvent*)));
+    /*    connect(p_pWidget, SIGNAL( leftClick(QMouseEvent*) ), this, SLOT( leftClick(QMouseEvent*) ) );
+        connect(p_pWidget, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
+        connect(p_pWidget, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );*/
 };
 bool Wrapp::exec()
 {
@@ -63,27 +63,26 @@ WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, ChannelType p_eTy
 {
     connect(p_pWidget->getWidget(), SIGNAL(valueChanged(Volume*)), this, SLOT(valueChanged(Volume*)));
 }
-void WrappVolume::valueChanged(Volume* p_pVolume) {
-	Backend::instance()->getChannel(m_eType, m_sChannelName)->setFloatAttribute(m_eElement == PAN_BAL ? p_pVolume->getValue() : p_pVolume->getDbValue(), m_eElement, m_sReatedChannelName);
-	
+void WrappVolume::valueChanged(Volume* p_pVolume)
+{
+    Backend::instance()->getChannel(m_eType, m_sChannelName)->setFloatAttribute(m_eElement == PAN_BAL ? p_pVolume->getValue() : p_pVolume->getDbValue(), m_eElement, m_sReatedChannelName);
+
     if (m_eType == OUT && m_eElement == FADER) {
-    	m_pMatrix->showMessage(trUtf8("%1 value: %2.")
-    			.arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName))
-    			.arg(displayDb(p_pVolume->getValue(), p_pVolume->getMinValue())));
-    }
-    else {
-    	QString value;
-    	if (m_eElement == PAN_BAL) {
-		    char tmp[20];
-	        sprintf(tmp, "%#.2f", p_pVolume->getValue());
-	        value = tmp;
-    	}
-    	else {
-    		value = displayDb(p_pVolume->getValue(), p_pVolume->getMinValue());
-    	}
+        m_pMatrix->showMessage(trUtf8("%1 value: %2.")
+                               .arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName))
+                               .arg(displayDb(p_pVolume->getValue(), p_pVolume->getMinValue())));
+    } else {
+        QString value;
+        if (m_eElement == PAN_BAL) {
+            char tmp[20];
+            sprintf(tmp, "%#.2f", p_pVolume->getValue());
+            value = tmp;
+        } else {
+            value = displayDb(p_pVolume->getValue(), p_pVolume->getMinValue());
+        }
         m_pMatrix->showMessage(trUtf8("%1 \"%2\" %3 value: %4.").arg(m_pMatrix->getDisplayChannelType(m_eType))
-        		.arg(m_pMatrix->getDisplayNameOfChannel(m_eType, m_sChannelName))
-        		.arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, false)).arg(value));
+                               .arg(m_pMatrix->getDisplayNameOfChannel(m_eType, m_sChannelName))
+                               .arg(m_pMatrix->getDisplayFunction(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, false)).arg(value));
     }
 }
 
@@ -107,8 +106,9 @@ bool WrappToggle::exec()
     m_pWidget->setValue(!m_pWidget->getValue(), true);
     return true;
 }
-void WrappToggle::valueChanged(ToggleButton* p_pToggle) {
-	Backend::instance()->getChannel(m_eType, m_sChannelName)->setBoolAttribute(p_pToggle->getValue(), m_eElement, m_sReatedChannelName);
+void WrappToggle::valueChanged(ToggleButton* p_pToggle)
+{
+    Backend::instance()->getChannel(m_eType, m_sChannelName)->setBoolAttribute(p_pToggle->getValue(), m_eElement, m_sReatedChannelName);
 }
 
 }

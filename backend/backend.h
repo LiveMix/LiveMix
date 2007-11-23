@@ -42,7 +42,7 @@ class QDomDocument;
 namespace LiveMix
 {
 
-int process( ::jack_nframes_t, void* );
+int process(::jack_nframes_t, void*);
 
 /**
  * @brief Abstract interface for backends
@@ -51,7 +51,7 @@ int process( ::jack_nframes_t, void* );
  */
 class Backend : public QObject
 {
-    friend int process( ::jack_nframes_t, void* );
+    friend int process(::jack_nframes_t, void*);
 
     Q_OBJECT
 public:
@@ -79,28 +79,28 @@ public:
     const QList<QString>& postchannels();
     const QList<QString>& subchannels();
 
-	channel* getChannel(ChannelType p_eType, QString p_rName);
-	
+    channel* getChannel(ChannelType p_eType, QString p_rName);
+
     /**
      * @brief Get the peek of the named out node.
      */
-    float getOutPeak( QString, bool left );
+    float getOutPeak(QString, bool left);
     /**
      * @brief Get the peek of the named in node.
      */
-    float getInPeak( QString, bool left );
+    float getInPeak(QString, bool left);
     /**
      * @brief Get the peek of the named out node.
      */
-    float getPrePeak( QString, bool left );
+    float getPrePeak(QString, bool left);
     /**
      * @brief Get the peek of the named out node.
      */
-    float getPostPeak( QString, bool left );
+    float getPostPeak(QString, bool left);
     /**
      * @brief Get the peek of the named out node.
      */
-    float getSubPeak( QString, bool left );
+    float getSubPeak(QString, bool left);
 
     /**
      * @brief Add a channel and return true on success.
@@ -108,28 +108,28 @@ public:
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool addInput( QString, bool );
+    bool addInput(QString, bool);
     /**
      * @brief Add a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool addPre( QString, bool );
+    bool addPre(QString, bool);
     /**
      * @brief Add a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool addPost( QString, bool, bool );
+    bool addPost(QString, bool, bool);
     /**
      * @brief Add a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool addSub( QString, bool );
+    bool addSub(QString, bool);
     /**
      * @brief Remove a channel and return true on success.
      *
@@ -143,141 +143,142 @@ public:
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool removeInput( QString );
+    bool removeInput(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool removePre( QString );
+    bool removePre(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool removePost( QString );
+    bool removePost(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool removeSub( QString );
+    bool removeSub(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const out* getOutput( QString );
+    const out* getOutput(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const in* getInput( QString );
+    const in* getInput(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const pre* getPre( QString );
+    const pre* getPre(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const post* getPost( QString );
+    const post* getPost(QString);
     /**
      * @brief Remove a channel and return true on success.
      *
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    const sub* getSub( QString );
+    const sub* getSub(QString);
 
     bool moveEffect(ChannelType p_eType, QString p_rName, effect *p_pEffect, bool p_bLeft);
-    
-    // should be in mixingmatrix !
+
+    void saveLash(QString p_rFile);
+    void restoreLash(QString p_rFile);
 
 public slots:
     /**
      * @brief Set the volume of the named node.
      */
-    void setInVolume( QString, float );
-    void setInGain( QString, float );
-    void setInBal( QString, float );
-    void setInMute( QString, bool );
-    void setInPfl( QString, bool );
-    void setInMain( QString, bool );
-    void setInPreVolume( QString, QString, float );
-    void setInPostVolume( QString, QString, float );
-    void setInSub( QString, QString, bool );
-    effect* addInEffect( QString, LadspaFX* fx );
-    void removeInEffect( QString, effect* );
-    QList<effect*>* getInEffects( QString );
+    void setInVolume(QString, float);
+    void setInGain(QString, float);
+    void setInBal(QString, float);
+    void setInMute(QString, bool);
+    void setInPfl(QString, bool);
+    void setInMain(QString, bool);
+    void setInPreVolume(QString, QString, float);
+    void setInPostVolume(QString, QString, float);
+    void setInSub(QString, QString, bool);
+    effect* addInEffect(QString, LadspaFX* fx);
+    void removeInEffect(QString, effect*);
+    QList<effect*>* getInEffects(QString);
 //  void setInEffectMute( QString, int, bool );
 //  void setInEffectAttribute( QString, int, QString, float );
 
     /**
      * @brief Set the volume of the named node.
      */
-    void setOutVolume( QString, float );
-    void setOutBal( QString, float );
-    void setOutMute( QString, bool );
-    void setOutAfl( QString, bool );
-    effect* addOutEffect( QString, LadspaFX* fx );
-    void removeOutEffect( QString, effect* );
-    QList<effect*>* getOutEffects( QString );
+    void setOutVolume(QString, float);
+    void setOutBal(QString, float);
+    void setOutMute(QString, bool);
+    void setOutAfl(QString, bool);
+    effect* addOutEffect(QString, LadspaFX* fx);
+    void removeOutEffect(QString, effect*);
+    QList<effect*>* getOutEffects(QString);
 //  void setOutEffectMute( QString, int, bool );
 //  void setOutEffectAttribute( QString, int, QString, float );
 
     /**
      * @brief Set the volume of the named node.
      */
-    void setPreVolume( QString, float );
-    void setPreBal( QString, float );
-    void setPreMute( QString, bool );
-    void setPreAfl( QString, bool );
-    effect* addPreEffect( QString, LadspaFX* fx );
-    void removePreEffect( QString, effect* );
-    QList<effect*>* getPreEffects( QString );
+    void setPreVolume(QString, float);
+    void setPreBal(QString, float);
+    void setPreMute(QString, bool);
+    void setPreAfl(QString, bool);
+    effect* addPreEffect(QString, LadspaFX* fx);
+    void removePreEffect(QString, effect*);
+    QList<effect*>* getPreEffects(QString);
 //  void setPreEffectMute( QString, int, bool );
 //  void setPreEffectAttribute( QString, int, QString, float );
 
     /**
      * @brief Set the volume of the named node.
      */
-    void setPostPreVolume( QString, float );
-    void setPostPostVolume( QString, float );
-    void setPostBal( QString, float );
-    void setPostMute( QString, bool );
-    void setPostPfl( QString, bool );
-    void setPostAfl( QString, bool );
-    void setPostMain( QString, bool );
-    void setPostSub( QString, QString, bool );
-    effect* addPostEffect( QString, LadspaFX* fx );
-    void removePostEffect( QString, effect* );
-    QList<effect*>* getPostEffects( QString );
+    void setPostPreVolume(QString, float);
+    void setPostPostVolume(QString, float);
+    void setPostBal(QString, float);
+    void setPostMute(QString, bool);
+    void setPostPfl(QString, bool);
+    void setPostAfl(QString, bool);
+    void setPostMain(QString, bool);
+    void setPostSub(QString, QString, bool);
+    effect* addPostEffect(QString, LadspaFX* fx);
+    void removePostEffect(QString, effect*);
+    QList<effect*>* getPostEffects(QString);
 //  void setPostEffectMute( QString, int, bool );
 //  void setPostEffectAttribute( QString, int, QString, float );
 
     /**
      * @brief Set the volume of the named node.
      */
-    void setSubVolume( QString, float );
-    void setSubBal( QString, float );
-    void setSubMute( QString, bool );
-    void setSubAfl( QString, bool );
-    void setSubMain( QString, bool );
-    effect* addSubEffect( QString, LadspaFX* fx );
-    void removeSubEffect( QString, effect* );
-    QList<effect*>* getSubEffects( QString );
+    void setSubVolume(QString, float);
+    void setSubBal(QString, float);
+    void setSubMute(QString, bool);
+    void setSubAfl(QString, bool);
+    void setSubMain(QString, bool);
+    effect* addSubEffect(QString, LadspaFX* fx);
+    void removeSubEffect(QString, effect*);
+    QList<effect*>* getSubEffects(QString);
 //  void setSubEffectMute( QString, int, bool );
 //  void setSubEffectAttribute( QString, int, QString, float );
 
@@ -306,9 +307,8 @@ private:
     QStringList posts_order;
     QStringList subs_order;
 
-    Backend()
-    {};
-    Backend( GuiServer_Interface* );
+    Backend() {};
+    Backend(GuiServer_Interface*);
 
     /**
      * @brief Add a channel and return true on success.
@@ -316,15 +316,15 @@ private:
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-    bool addOutput( QString, bool );
-    bool removeOutput( QString );
+    bool addOutput(QString, bool);
+    bool removeOutput(QString);
 
     void prossesLadspaFX(effect* pFX, float* left_channel, float* right_channel, uint nframes, bool bCalculatePk);
 
-    bool addOutput( jack_port_t** l, jack_port_t** r, QString name, QString prefix, bool stereo );
-    bool addInput( jack_port_t** l, jack_port_t** r, QString name, QString prefix, bool stereo );
-    bool removeInput( jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo );
-    bool removeOutput( jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo );
+    bool addOutput(jack_port_t** l, jack_port_t** r, QString name, QString prefix, bool stereo);
+    bool addInput(jack_port_t** l, jack_port_t** r, QString name, QString prefix, bool stereo);
+    bool removeInput(jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo);
+    bool removeOutput(jack_port_t* l, jack_port_t* r, QString name, QString prefix, bool stereo);
 
 };
 

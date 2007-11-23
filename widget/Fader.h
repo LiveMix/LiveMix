@@ -46,72 +46,67 @@ class Fader : public Volume
     Q_OBJECT
 
 public:
-    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true );
+    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true);
     ~Fader();
     virtual QWidget* getWidget();
 
-    void setMinValue( float fMin );
-    void setMaxValue( float fMax );
-    float getMinValue()
-    {
+    void setMinValue(float fMin);
+    void setMaxValue(float fMax);
+    float getMinValue() {
         return m_fMinValue;
     }
-    float getMaxValue()
-    {
+    float getMaxValue() {
         return m_fMaxValue;
     }
 
-    void setValue( float fVal, bool emit = false );
+    void setValue(float fVal, bool emit = false);
     float getValue();
     // in fact the external value is standanrd and internal in dB
-    void setDbValue( float fVal );
+    void setDbValue(float fVal);
     float getDbValue();
 
-    bool getLinDb()
-    {
+    bool getLinDb() {
         return m_bLinDb;
     };
 
     void incValue(bool p_bDirection, int p_iStep =1);
 
-    void setMaxPeak( float fMax );
-    void setMinPeak( float fMin );
+    void setMaxPeak(float fMax);
+    void setMinPeak(float fMin);
 
-    void setPeak_L( float peak );
-    float getPeak_L()
-    {
+    void setPeak_L(float peak);
+    float getPeak_L() {
         return m_fPeakValue_L;
     }
 
-    void setPeak_R( float peak );
-    float getPeak_R()
-    {
+    void setPeak_R(float peak);
+    float getPeak_R() {
         return m_fPeakValue_R;
     }
 
     // in fact the external value is standanrd and internal in dB
-    void setDbPeak_L( float peak );
+    void setDbPeak_L(float peak);
     float getDbPeak_L();
 
     // in fact the external value is standanrd and internal in dB
-    void setDbPeak_R( float peak );
+    void setDbPeak_R(float peak);
     float getDbPeak_R();
 
-    void setDbMaxValue( float val );
-    void setDbMinValue( float val );
-    void setDbMaxPeak( float val );
-    void setDbMinPeak( float val );
+    void setDbMaxValue(float val);
+    void setDbMinValue(float val);
+    void setDbMaxPeak(float val);
+    void setDbMinPeak(float val);
 
     virtual void mousePressEvent(QMouseEvent *ev);
     virtual void mouseMoveEvent(QMouseEvent *ev);
-	virtual void mouseReleaseEvent(QMouseEvent* ev);
-	virtual void mouseDoubleClickEvent(QMouseEvent* ev);
+    virtual void mouseReleaseEvent(QMouseEvent* ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent* ev);
 //    virtual void wheelEvent( QWheelEvent *ev );
     virtual void paintEvent(QPaintEvent *ev);
-    
-    virtual void setFixedHeight ( int h );
-    virtual void setFixedSize ( const QSize & s ); 
-    virtual void setFixedSize ( int w, int h );
+
+    virtual void setFixedHeight(int h);
+    virtual void setFixedSize(const QSize & s);
+    virtual void setFixedSize(int w, int h);
 
 private:
     float m_fMousePressValue;

@@ -29,31 +29,31 @@
 namespace LiveMix
 {
 
-ChannelSelector::ChannelSelector( QString title, QString label, QStringList channels, QWidget* p, const char* n ) : QDialog( p )
+ChannelSelector::ChannelSelector(QString title, QString label, QStringList channels, QWidget* p, const char* n) : QDialog(p)
 {
-    this->setWindowTitle( title );
+    this->setWindowTitle(title);
 
-    QGridLayout *_layout = new QGridLayout( this );
-    QLabel *_label = new QLabel( label, this );
-    _layout->addWidget( _label, 0,0, 1,4 );
+    QGridLayout *_layout = new QGridLayout(this);
+    QLabel *_label = new QLabel(label, this);
+    _layout->addWidget(_label, 0,0, 1,4);
 
-    _list = new QListWidget( this );
-    _list->addItems( channels );
-    _layout->addWidget( _list, 1,0, 1,4 );
+    _list = new QListWidget(this);
+    _list->addItems(channels);
+    _layout->addWidget(_list, 1,0, 1,4);
 
-    _layout->addItem( new QSpacerItem( 10,10 ), 2,0, 1,4 );
+    _layout->addItem(new QSpacerItem(10,10), 2,0, 1,4);
 
-    _layout->addItem( new QSpacerItem( 40,10 ), 3,0 );
-    _commit_n_quit = new QPushButton( trUtf8("Commit && Quit"), this );
-    _commit_n_quit->setDefault( true );
-    connect( _commit_n_quit, SIGNAL( clicked() ), this, SLOT( commitnquit() ) );
-    _layout->addWidget( _commit_n_quit, 3,3 );
-    _commit = new QPushButton( trUtf8("Commit"), this );
-    connect( _commit, SIGNAL( clicked() ), this, SLOT( commit() ) );
-    _layout->addWidget( _commit, 3,2 );
-    _cancel = new QPushButton( trUtf8("Cancel"), this );
-    connect( _cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    _layout->addWidget( _cancel, 3,1 );
+    _layout->addItem(new QSpacerItem(40,10), 3,0);
+    _commit_n_quit = new QPushButton(trUtf8("Commit && Quit"), this);
+    _commit_n_quit->setDefault(true);
+    connect(_commit_n_quit, SIGNAL(clicked()), this, SLOT(commitnquit()));
+    _layout->addWidget(_commit_n_quit, 3,3);
+    _commit = new QPushButton(trUtf8("Commit"), this);
+    connect(_commit, SIGNAL(clicked()), this, SLOT(commit()));
+    _layout->addWidget(_commit, 3,2);
+    _cancel = new QPushButton(trUtf8("Cancel"), this);
+    connect(_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    _layout->addWidget(_cancel, 3,1);
 
 }
 ChannelSelector::~ChannelSelector()
@@ -61,21 +61,21 @@ ChannelSelector::~ChannelSelector()
 
 void ChannelSelector::commit()
 {
-    qDebug( "ChannelSelector::commit()" );
-    qDebug( "Returning: %s", _list->currentItem()->text().toStdString().c_str() );
-    emit selectedChannel( _list->currentItem()->text() );
+    qDebug("ChannelSelector::commit()");
+    qDebug("Returning: %s", _list->currentItem()->text().toStdString().c_str());
+    emit selectedChannel(_list->currentItem()->text());
 }
 void ChannelSelector::commitnquit()
 {
-    qDebug( "ChannelSelector::commitnquit()" );
+    qDebug("ChannelSelector::commitnquit()");
     commit();
-    qDebug( "Now quit..." );
-    done( 0 );
+    qDebug("Now quit...");
+    done(0);
 }
 
-void ChannelSelector::addChannel( QString )
+void ChannelSelector::addChannel(QString)
 {}
-void ChannelSelector::removeChannel( QString )
+void ChannelSelector::removeChannel(QString)
 {}
 
 }; //LiveMix

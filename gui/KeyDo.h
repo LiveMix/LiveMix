@@ -44,7 +44,9 @@ public:
     KeyDoSelectChannel(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName);
     ~KeyDoSelectChannel();
     void action();
-    QString name() {return "KeyDoSelectChannel";};
+    QString name() {
+        return "KeyDoSelectChannel";
+    };
 
     ChannelType m_eType;
     QString m_sChannelName;
@@ -55,7 +57,9 @@ public:
     KeyDoChannelAction(Widget* p_pMatrix, ElementType p_eElement, QString p_sReatedChannelName);
     ~KeyDoChannelAction();
     void action();
-    QString name() {return "KeyDoChannelAction";};
+    QString name() {
+        return "KeyDoChannelAction";
+    };
 
     ElementType m_eElement;
     QString m_sReatedChannelName;
@@ -63,8 +67,8 @@ public:
 class KeyDoDirectAction : public KeyDo
 {
 public:
-    KeyDoDirectAction(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
-    		QString p_sReatedChannelName);
+    KeyDoDirectAction(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
+                      QString p_sReatedChannelName);
     ~KeyDoDirectAction();
     void action();
     QString name();

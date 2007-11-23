@@ -35,8 +35,8 @@ class Wrapp : public QObject
 {
     Q_OBJECT
 public:
-    Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
-    		QString p_sReatedChannelName);
+    Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
+          QString p_sReatedChannelName);
 
     virtual bool exec();
 

@@ -55,8 +55,8 @@ void KeyDoChannelAction::action()
     m_pMatrix->action(m_pMatrix->getSelectedChanelType(), m_pMatrix->getSetectedChannelName(), m_eElement, m_sReatedChannelName);
 }
 
-KeyDoDirectAction::KeyDoDirectAction(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, 
-		QString p_sReatedChannelName)
+KeyDoDirectAction::KeyDoDirectAction(Widget* p_pMatrix, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
+                                     QString p_sReatedChannelName)
         : KeyDo(p_pMatrix)
         , m_eType(p_eType)
         , m_sChannelName(p_sChannelName)

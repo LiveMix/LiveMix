@@ -30,55 +30,56 @@
 namespace LiveMix
 {
 
-Button::Button( QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, const QString& sOffOverImage, QSize size, bool use_skin_style)
-        : Toggle( pParent )
-        , m_bPressed( false )
-        , m_onPixmap( size )
-        , m_offPixmap( size )
-        , m_overPixmap( size )
-        , m_offOverPixmap( size )
-        , m_bMouseOver( false )
+Button::Button(QWidget * pParent, const QString& sOnImage, const QString& sOffImage, const QString& sOverImage, const QString& sOffOverImage, QSize size, bool use_skin_style)
+        : Toggle(pParent)
+        , m_bPressed(false)
+        , m_onPixmap(size)
+        , m_offPixmap(size)
+        , m_overPixmap(size)
+        , m_offOverPixmap(size)
+        , m_bMouseOver(false)
         , __use_skin_style(use_skin_style)
 {
     // draw the background: slower but useful with transparent images!
     //setAttribute(Qt::WA_NoBackground);
 
-    setMinimumSize( size );
-    setMaximumSize( size );
-    resize( size );
+    setMinimumSize(size);
+    setMaximumSize(size);
+    resize(size);
 
-    if ( loadImage( sOnImage, m_onPixmap ) == false ) {
-        m_onPixmap.fill( QColor( 0, 255, 0 ) );
+    if (loadImage(sOnImage, m_onPixmap) == false) {
+        m_onPixmap.fill(QColor(0, 255, 0));
     }
 
-    if ( loadImage( sOffImage, m_offPixmap ) == false ) {
-        m_offPixmap.fill( QColor( 0, 100, 0 ) );
+    if (loadImage(sOffImage, m_offPixmap) == false) {
+        m_offPixmap.fill(QColor(0, 100, 0));
     }
 
-    if ( loadImage( sOverImage, m_overPixmap ) == false ) {
-        m_overPixmap.fill( QColor( 0, 180, 0 ) );
+    if (loadImage(sOverImage, m_overPixmap) == false) {
+        m_overPixmap.fill(QColor(0, 180, 0));
     }
 
-    if ( loadImage( sOffOverImage, m_offOverPixmap ) == false ) {
-        m_offOverPixmap.fill( QColor( 0, 180, 0 ) );
+    if (loadImage(sOffOverImage, m_offOverPixmap) == false) {
+        m_offOverPixmap.fill(QColor(0, 180, 0));
     }
 
     // default text font
-    m_textFont.setPointSize( 9 );
+    m_textFont.setPointSize(9);
 // m_textFont.setBold( true );
 }
 Button::~Button()
 {}
-QWidget* Button::getWidget() {
+QWidget* Button::getWidget()
+{
     return this;
 }
 
-bool Button::loadImage( const QString& sFilename, QPixmap& pixmap )
+bool Button::loadImage(const QString& sFilename, QPixmap& pixmap)
 {
     // load an image
-    if (!pixmap.load( ":/data/" + sFilename)) {
-        if ( sFilename != "" ) {
-		   	qDebug() << "Error loading image: '" << sFilename << "'";
+    if (!pixmap.load(":/data/" + sFilename)) {
+        if (sFilename != "") {
+            qDebug() << "Error loading image: '" << sFilename << "'";
         }
         return false;
     }
@@ -97,16 +98,16 @@ void Button::mousePressEvent(QMouseEvent*)
 
 void Button::mouseReleaseEvent(QMouseEvent* ev)
 {
-    setPressed( false );
+    setPressed(false);
 
     if (ev->button() == Qt::LeftButton) {
         emit clicked();
         emit clicked(this);
     } else if (ev->button() == Qt::RightButton) {
         emit rightClicked(this);
-    	emit rightClick(ev);
+        emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
-    	emit middleClick(ev);
+        emit middleClick(ev);
     }
 }
 
@@ -134,21 +135,22 @@ void Button::leaveEvent(QEvent*)
 }
 
 
-void Button::draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap) {
+void Button::draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap)
+{
     if (__use_skin_style) {
         static int w = 5;
         static int h = pixmap.height();
 
         // central section, scaled
-        painter.drawPixmap( QRect(w, 0, width() - w * 2, h), pixmap, QRect(10, 0, w, h) );
+        painter.drawPixmap(QRect(w, 0, width() - w * 2, h), pixmap, QRect(10, 0, w, h));
 
         // left side
-        painter.drawPixmap( QRect(0, 0, w, h), pixmap, QRect(0, 0, w, h) );
+        painter.drawPixmap(QRect(0, 0, w, h), pixmap, QRect(0, 0, w, h));
 
         // right side
-        painter.drawPixmap( QRect(width() - w, 0, w, h), pixmap, QRect(pixmap.width() - w, 0, w, h) );
+        painter.drawPixmap(QRect(width() - w, 0, w, h), pixmap, QRect(pixmap.width() - w, 0, w, h));
     } else {
-        painter.drawPixmap( ev->rect(), pixmap, ev->rect() );
+        painter.drawPixmap(ev->rect(), pixmap, ev->rect());
     }
 }
 
@@ -159,22 +161,21 @@ void Button::paintEvent(QPaintEvent *ev)
     // background
     if (m_bPressed) {
         if (m_bMouseOver) {
-        	draw(ev, painter, m_overPixmap);
-        }
-        else {
-        	draw(ev, painter, m_onPixmap);
+            draw(ev, painter, m_overPixmap);
+        } else {
+            draw(ev, painter, m_onPixmap);
         }
     } else {
         if (m_bMouseOver) {
-        	draw(ev, painter, m_offOverPixmap);
+            draw(ev, painter, m_offOverPixmap);
         } else {
-        	draw(ev, painter, m_offPixmap);
+            draw(ev, painter, m_offPixmap);
         }
     }
 
 
-    if ( m_sText != "" ) {
-        painter.setFont( m_textFont );
+    if (m_sText != "") {
+        painter.setFont(m_textFont);
 
         QColor shadow(150, 150, 150, 100);
         QColor text(10, 10, 10);
@@ -184,17 +185,17 @@ void Button::paintEvent(QPaintEvent *ev)
         }
 
         // shadow
-        painter.setPen( shadow );
-        painter.drawText( 1, 1, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter,  m_sText );
+        painter.setPen(shadow);
+        painter.drawText(1, 1, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter,  m_sText);
 
         // text
-        painter.setPen( text );
-        painter.drawText( 0, 0, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter,  m_sText );
+        painter.setPen(text);
+        painter.drawText(0, 0, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter,  m_sText);
     }
 }
 
 
-void Button::setText( const QString& sText )
+void Button::setText(const QString& sText)
 {
     m_sText = sText;
     update();
@@ -204,8 +205,8 @@ void Button::setText( const QString& sText )
 // :::::::::::::::::::::::::
 
 
-ToggleButton::ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style)
-        : Button( pParent, sOnImg, sOffImg, sOverImg, sOffOverImg, size, use_skin_style)
+ToggleButton::ToggleButton(QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style)
+        : Button(pParent, sOnImg, sOffImg, sOverImg, sOffOverImg, size, use_skin_style)
 {}
 
 
@@ -216,16 +217,16 @@ ToggleButton::~ToggleButton()
 void ToggleButton::mousePressEvent(QMouseEvent* ev)
 {
     if (ev == NULL || ev->button() == Qt::LeftButton) {
-	    if (m_bPressed) {
-	        m_bPressed = false;
-	    } else {
-	        m_bPressed = true;
-	    }
-	    update();
-	
-	    emit clicked();
-	    emit clicked(this);
-	    emit valueChanged(this);
+        if (m_bPressed) {
+            m_bPressed = false;
+        } else {
+            m_bPressed = true;
+        }
+        update();
+
+        emit clicked();
+        emit clicked(this);
+        emit valueChanged(this);
     }
 }
 
@@ -237,7 +238,7 @@ void ToggleButton::setValue(bool p_bValue, bool p_bEmit)
 {
     m_bPressed = p_bValue;
     update();
-    
+
     if (p_bEmit) {
         emit clicked();
         emit clicked(this);
@@ -250,19 +251,19 @@ void ToggleButton::mouseReleaseEvent(QMouseEvent* ev)
 {
     // do nothing, this method MUST override Button's one
     if (ev->button() == Qt::RightButton) {
-    	emit rightClick(ev);
+        emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
-    	emit middleClick(ev);
+        emit middleClick(ev);
     }
 }
 
 Button* Button::create(QWidget* pParent)
 {
-    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
+    return new Button(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize(21, 16), true);
 }
 ToggleButton* ToggleButton::create(QWidget* pParent)
 {
-    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize( 21, 16 ), true);
+    return new ToggleButton(pParent, "btn_followPH_on.png", "btn_followPH_off.png", "btn_followPH_on.png", "btn_followPH_over.png", QSize(21, 16), true);
 }
 
 }

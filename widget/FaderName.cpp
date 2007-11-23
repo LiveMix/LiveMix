@@ -40,8 +40,8 @@ FaderName::FaderName(QWidget* parent)
 // int size = pref->getMixerFontPointSize();
 // m_mixerFont.setFamily( family );
 // m_mixerFont.setPointSize( size );
-    m_mixerFont.setBold( true );
-    m_mixerFont.setItalic( true );
+    m_mixerFont.setBold(true);
+    m_mixerFont.setItalic(true);
 
 // setPixmap( "mixerline_label_background.png" );
 
@@ -58,23 +58,23 @@ FaderName::~FaderName()
 }
 
 
-void FaderName::paintEvent( QPaintEvent* ev )
+void FaderName::paintEvent(QPaintEvent* ev)
 {
-    QWidget::paintEvent( ev );
+    QWidget::paintEvent(ev);
 
-    QPainter p( this );
+    QPainter p(this);
 
-    p.setPen( QColor(230, 230, 230) );
-    p.setFont( m_mixerFont );
-    p.rotate( -90 );
+    p.setPen(QColor(230, 230, 230));
+    p.setFont(m_mixerFont);
+    p.rotate(-90);
 // p.drawText( -m_nWidgetHeight + 5, 0, m_nWidgetHeight - 10, m_nWidgetWidth, Qt::AlignVCenter, m_sName );
-    p.drawText( -height() + 5, 0, height() - 10, width(), Qt::AlignVCenter, m_sName );
+    p.drawText(-height() + 5, 0, height() - 10, width(), Qt::AlignVCenter, m_sName);
 }
 
 
-void FaderName::setText( QString text )
+void FaderName::setText(QString text)
 {
-    if (m_sName != text ) {
+    if (m_sName != text) {
         m_sName = text;
         update();
     }

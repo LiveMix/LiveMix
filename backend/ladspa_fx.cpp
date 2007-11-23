@@ -39,7 +39,7 @@
 namespace LiveMix
 {
 
-LadspaFXGroup::LadspaFXGroup( const QString& sName )
+LadspaFXGroup::LadspaFXGroup(const QString& sName)
 {
 // qDebug() << "INIT - " + sName );
     m_sName = sName;
@@ -49,24 +49,24 @@ LadspaFXGroup::~LadspaFXGroup()
 {
 // qDebug() << "DESTROY - " + m_sName );
 
-    for ( int i = 0; i < (int)m_childGroups.size(); ++i ) {
+    for (int i = 0; i < (int)m_childGroups.size(); ++i) {
         delete m_childGroups[ i ];
     }
 }
 
 void LadspaFXGroup::addLadspaInfo(LadspaFXInfo *pInfo)
 {
-    m_ladspaList.push_back( pInfo );
+    m_ladspaList.push_back(pInfo);
 }
 
-void LadspaFXGroup::addChild( LadspaFXGroup *pChild )
+void LadspaFXGroup::addChild(LadspaFXGroup *pChild)
 {
-    m_childGroups.push_back( pChild );
+    m_childGroups.push_back(pChild);
 }
 
 ////////////////
 
-LadspaFXInfo::LadspaFXInfo( const QString& sName )
+LadspaFXInfo::LadspaFXInfo(const QString& sName)
 {
 // qDebug() << "INIT - " + sName;
     m_sFilename = "";
@@ -86,23 +86,23 @@ LadspaFXInfo::~LadspaFXInfo()
 ///////////////////
 
 // ctor
-LadspaFX::LadspaFX( const QString& sLibraryPath, const QString& sPluginLabel )
+LadspaFX::LadspaFX(const QString& sLibraryPath, const QString& sPluginLabel)
 //, m_nBufferSize( 0 )
         : m_pInBufferL(NULL)
         , m_pInBufferR(NULL)
         , m_pOutBufferL(NULL)
         , m_pOutBufferR(NULL)
-        , m_bEnabled( false )
-        , m_sLabel( sPluginLabel )
-        , m_sLibraryPath( sLibraryPath )
-        , m_pLibrary( NULL )
-        , m_d( NULL )
-        , m_handle( NULL )
-        , m_handleBis( NULL )
-        , m_nICPorts( 0 )
-        , m_nOCPorts( 0 )
-        , m_nIAPorts( 0 )
-        , m_nOAPorts( 0 )
+        , m_bEnabled(false)
+        , m_sLabel(sPluginLabel)
+        , m_sLibraryPath(sLibraryPath)
+        , m_pLibrary(NULL)
+        , m_d(NULL)
+        , m_handle(NULL)
+        , m_handleBis(NULL)
+        , m_nICPorts(0)
+        , m_nOCPorts(0)
+        , m_nIAPorts(0)
+        , m_nOAPorts(0)
 {
 // qDebug() << "INIT - " + sLibraryPath + " - " + sPluginLabel;
 }
@@ -116,11 +116,11 @@ LadspaFX::~LadspaFX()
     if (m_d) {
         if (m_d->cleanup) {
 //    qDebug() << "Cleanup";
-            if ( m_handle ) {
-                m_d->cleanup( m_handle );
+            if (m_handle) {
+                m_d->cleanup(m_handle);
             }
-            if ( m_handleBis ) {
-                m_d->cleanup( m_handleBis );
+            if (m_handleBis) {
+                m_d->cleanup(m_handleBis);
             }
         }
     }
@@ -135,38 +135,38 @@ LadspaFX::~LadspaFX()
 }
 
 // Static
-LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLabel, long nSampleRate )
+LadspaFX* LadspaFX::load(const QString& sLibraryPath, const QString& sPluginLabel, long nSampleRate)
 {
-    LadspaFX* pFX = new LadspaFX( sLibraryPath, sPluginLabel);
+    LadspaFX* pFX = new LadspaFX(sLibraryPath, sPluginLabel);
 
 // qDebug() << "INIT - " + sLibraryPath + " - " + sPluginLabel;
 
-    pFX->m_pLibrary = new QLibrary( sLibraryPath );
-    LADSPA_Descriptor_Function desc_func = (LADSPA_Descriptor_Function)pFX->m_pLibrary->resolve( "ladspa_descriptor" );
-    if ( desc_func == NULL ) {
+    pFX->m_pLibrary = new QLibrary(sLibraryPath);
+    LADSPA_Descriptor_Function desc_func = (LADSPA_Descriptor_Function)pFX->m_pLibrary->resolve("ladspa_descriptor");
+    if (desc_func == NULL) {
         qDebug() << "Error loading the library. (" + sLibraryPath + ")";
         delete pFX;
         return NULL;
     }
-    if ( desc_func ) {
-        for ( unsigned i = 0; ( pFX->m_d = desc_func( i ) ) != NULL; i++ ) {
+    if (desc_func) {
+        for (unsigned i = 0; (pFX->m_d = desc_func(i)) != NULL; i++) {
             QString sName = pFX->m_d->Name;
             QString sLabel = pFX->m_d->Label;
 
             if (sLabel != sPluginLabel) {
                 continue;
             }
-            pFX->setPluginName( sName );
+            pFX->setPluginName(sName);
 
             for (unsigned j = 0; j < pFX->m_d->PortCount; j++) {
                 LADSPA_PortDescriptor pd = pFX->m_d->PortDescriptors[j];
-                if ( LADSPA_IS_PORT_INPUT( pd ) && LADSPA_IS_PORT_CONTROL( pd ) ) {
+                if (LADSPA_IS_PORT_INPUT(pd) && LADSPA_IS_PORT_CONTROL(pd)) {
                     pFX->m_nICPorts++;
-                } else if ( LADSPA_IS_PORT_INPUT( pd ) && LADSPA_IS_PORT_AUDIO( pd ) ) {
+                } else if (LADSPA_IS_PORT_INPUT(pd) && LADSPA_IS_PORT_AUDIO(pd)) {
                     pFX->m_nIAPorts++;
-                } else if ( LADSPA_IS_PORT_OUTPUT( pd ) && LADSPA_IS_PORT_CONTROL( pd ) ) {
+                } else if (LADSPA_IS_PORT_OUTPUT(pd) && LADSPA_IS_PORT_CONTROL(pd)) {
                     pFX->m_nOCPorts++;
-                } else if ( LADSPA_IS_PORT_OUTPUT( pd ) && LADSPA_IS_PORT_AUDIO( pd ) ) {
+                } else if (LADSPA_IS_PORT_OUTPUT(pd) && LADSPA_IS_PORT_AUDIO(pd)) {
                     pFX->m_nOAPorts++;
                 } else {
                     qDebug() << "Unknown port type";
@@ -180,23 +180,22 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
         return NULL;
     }
 
-    if (pFX->m_nIAPorts <= 2 || pFX->m_nOAPorts <= 2) {}
-    else {
+    if (pFX->m_nIAPorts <= 2 || pFX->m_nOAPorts <= 2) {} else {
         qDebug() << "Wrong number of ports";
         qDebug() << "in audio = " + pFX->m_nIAPorts;
         qDebug() << "out audio = " + pFX->m_nOAPorts;
     }
 
     //pFX->qDebug() << "[LadspaFX::load] instantiate " + pFX->getPluginName() );
-    pFX->m_handle = pFX->m_d->instantiate( pFX->m_d, nSampleRate);
+    pFX->m_handle = pFX->m_d->instantiate(pFX->m_d, nSampleRate);
     if (pFX->m_nIAPorts == 1 && pFX->m_nOAPorts == 1) {
-        pFX->m_handleBis = pFX->m_d->instantiate( pFX->m_d, nSampleRate);
+        pFX->m_handleBis = pFX->m_d->instantiate(pFX->m_d, nSampleRate);
     }
 
-    for ( unsigned nPort = 0; nPort < pFX->m_d->PortCount; nPort++) {
+    for (unsigned nPort = 0; nPort < pFX->m_d->PortCount; nPort++) {
         LADSPA_PortDescriptor pd = pFX->m_d->PortDescriptors[ nPort ];
 
-        if ( LADSPA_IS_CONTROL_INPUT( pd ) ) {
+        if (LADSPA_IS_CONTROL_INPUT(pd)) {
             QString sName = pFX->m_d->PortNames[ nPort ];
             float fMin = 0.0;
             float fMax = 0.0;
@@ -206,13 +205,13 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
             bool bLogarithmic = false;
 
             LADSPA_PortRangeHint rangeHints = pFX->m_d->PortRangeHints[ nPort ];
-            if ( LADSPA_IS_HINT_BOUNDED_BELOW( rangeHints.HintDescriptor ) ) {
-                fMin = ( pFX->m_d->PortRangeHints[ nPort ] ).LowerBound;
+            if (LADSPA_IS_HINT_BOUNDED_BELOW(rangeHints.HintDescriptor)) {
+                fMin = (pFX->m_d->PortRangeHints[ nPort ]).LowerBound;
             }
-            if ( LADSPA_IS_HINT_BOUNDED_ABOVE( rangeHints.HintDescriptor ) ) {
-                fMax = ( pFX->m_d->PortRangeHints[ nPort ] ).UpperBound;
+            if (LADSPA_IS_HINT_BOUNDED_ABOVE(rangeHints.HintDescriptor)) {
+                fMax = (pFX->m_d->PortRangeHints[ nPort ]).UpperBound;
             }
-            if ( LADSPA_IS_HINT_TOGGLED( rangeHints.HintDescriptor ) ) {
+            if (LADSPA_IS_HINT_TOGGLED(rangeHints.HintDescriptor)) {
                 bToggle = true;
 
                 // this way the fader will act like a toggle (0, 1)
@@ -220,37 +219,37 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
                 fMin = 0.0;
                 fMax = 1.0;
             }
-            if ( LADSPA_IS_HINT_SAMPLE_RATE( rangeHints.HintDescriptor ) ) {
+            if (LADSPA_IS_HINT_SAMPLE_RATE(rangeHints.HintDescriptor)) {
 //    qDebug() << "samplerate hint not implemented yet";
                 fMin *= Backend::instance()->getSampleRate();
                 fMax *= Backend::instance()->getSampleRate();
             }
-            if ( LADSPA_IS_HINT_LOGARITHMIC( rangeHints.HintDescriptor ) ) {
+            if (LADSPA_IS_HINT_LOGARITHMIC(rangeHints.HintDescriptor)) {
 //                qDebug() <<  "logarithmic hint not implemented yet";
                 bLogarithmic = fMin > 0 && fMax > 0; // 0 can't be logaritmique
             }
-            if ( LADSPA_IS_HINT_INTEGER( rangeHints.HintDescriptor ) ) {
+            if (LADSPA_IS_HINT_INTEGER(rangeHints.HintDescriptor)) {
                 bInteger = true;
             }
-            if ( LADSPA_IS_HINT_HAS_DEFAULT( rangeHints.HintDescriptor ) ) {
-                if ( LADSPA_IS_HINT_DEFAULT_MINIMUM( rangeHints.HintDescriptor ) ) {
+            if (LADSPA_IS_HINT_HAS_DEFAULT(rangeHints.HintDescriptor)) {
+                if (LADSPA_IS_HINT_DEFAULT_MINIMUM(rangeHints.HintDescriptor)) {
                     fDefault = fMin;
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_LOW( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_LOW(rangeHints.HintDescriptor)) {
                     if (bLogarithmic) {
                         fDefault = db2lin(lin2db(fMin) * 0.75 + lin2db(fMax) * 0.25);
                     } else {
                         fDefault = fMin * 0.75 + fMax * 0.25;
                     }
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_MIDDLE( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_MIDDLE(rangeHints.HintDescriptor)) {
                     if (bLogarithmic) {
                         fDefault = db2lin((lin2db(fMin) + lin2db(fMax)) * 0.5);
                     } else {
                         fDefault = (fMax + fMin) * 0.5;
                     }
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_HIGH( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_HIGH(rangeHints.HintDescriptor)) {
                     if (bLogarithmic) {
                         fDefault = db2lin(lin2db(fMin) * 0.25 + lin2db(fMax) * 0.75);
 
@@ -258,19 +257,19 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
                         fDefault = fMin * 0.25 + fMax * 0.75;
                     }
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_MAXIMUM( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(rangeHints.HintDescriptor)) {
                     fDefault = fMax;
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_0( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_0(rangeHints.HintDescriptor)) {
                     fDefault = 0.0;
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_1( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_1(rangeHints.HintDescriptor)) {
                     fDefault = 1.0;
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_100( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_100(rangeHints.HintDescriptor)) {
                     fDefault = 100.0;
                 }
-                if ( LADSPA_IS_HINT_DEFAULT_440( rangeHints.HintDescriptor ) ) {
+                if (LADSPA_IS_HINT_DEFAULT_440(rangeHints.HintDescriptor)) {
                     fDefault = 440.0;
                 }
             }
@@ -288,23 +287,23 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
 //   qDebug() << "Input control port\t[" + sName + "]\tmin=" + QString().setNum(fMin) + ",\tmax=" + QString().setNum(fMax) +
 //     ",\tcontrolValue=" + QString().setNum(pControl->fControlValue);
 
-            pFX->inputControlPorts.push_back( pControl );
-            pFX->m_d->connect_port( pFX->m_handle, nPort, &(pControl->m_fControlValue) );
+            pFX->inputControlPorts.push_back(pControl);
+            pFX->m_d->connect_port(pFX->m_handle, nPort, &(pControl->m_fControlValue));
             if (pFX->m_handleBis) {
-                pFX->m_d->connect_port(pFX->m_handleBis, nPort, &(pControl->m_fControlValue) );
+                pFX->m_d->connect_port(pFX->m_handleBis, nPort, &(pControl->m_fControlValue));
             }
-        } else if ( LADSPA_IS_CONTROL_OUTPUT( pd ) ) {
+        } else if (LADSPA_IS_CONTROL_OUTPUT(pd)) {
             QString sName = pFX->m_d->PortNames[ nPort ];
             float fMin = 0.0;
             float fMax = 0.0;
             float fDefault = 0.0;
 
             LADSPA_PortRangeHint rangeHints = pFX->m_d->PortRangeHints[ nPort ];
-            if ( LADSPA_IS_HINT_BOUNDED_BELOW( rangeHints.HintDescriptor ) ) {
-                fMin = ( pFX->m_d->PortRangeHints[ nPort ] ).LowerBound;
+            if (LADSPA_IS_HINT_BOUNDED_BELOW(rangeHints.HintDescriptor)) {
+                fMin = (pFX->m_d->PortRangeHints[ nPort ]).LowerBound;
             }
-            if ( LADSPA_IS_HINT_BOUNDED_ABOVE( rangeHints.HintDescriptor ) ) {
-                fMax = ( pFX->m_d->PortRangeHints[ nPort ] ).UpperBound;
+            if (LADSPA_IS_HINT_BOUNDED_ABOVE(rangeHints.HintDescriptor)) {
+                fMax = (pFX->m_d->PortRangeHints[ nPort ]).UpperBound;
             }
 
             // always min
@@ -317,14 +316,12 @@ LadspaFX* LadspaFX::load( const QString& sLibraryPath, const QString& sPluginLab
             pControl->m_fControlValue = fDefault;
             //pFX->qDebug() << "[LadspaFX::load] Output control port\t[" + sName + "]\tmin=" + fMin) + ",\tmax=" + fMax) + ",\tcontrolValue=" + pControl->fControlValue) );
 
-            pFX->outputControlPorts.push_back( pControl );
-            pFX->m_d->connect_port( pFX->m_handle, nPort, &(pControl->m_fControlValue) );
+            pFX->outputControlPorts.push_back(pControl);
+            pFX->m_d->connect_port(pFX->m_handle, nPort, &(pControl->m_fControlValue));
             if (pFX->m_handleBis) {
                 pFX->m_d->connect_port(pFX->m_handleBis, nPort, &(pControl->m_fControlValue));
             }
-        } else if ( LADSPA_IS_AUDIO_INPUT( pd ) ) {}
-        else if ( LADSPA_IS_AUDIO_OUTPUT( pd ) ) {}
-        else {
+        } else if (LADSPA_IS_AUDIO_INPUT(pd)) {} else if (LADSPA_IS_AUDIO_OUTPUT(pd)) {} else {
             qDebug() << "unknown port";
         }
     }
@@ -347,27 +344,25 @@ void LadspaFX::connectAudioPorts(float* p_pInL, float* p_pInR, float* p_pOutL, f
 
     unsigned nAIConn = 0;
     unsigned nAOConn = 0;
-    for ( unsigned nPort = 0; nPort < m_d->PortCount; nPort++) {
+    for (unsigned nPort = 0; nPort < m_d->PortCount; nPort++) {
         LADSPA_PortDescriptor pd = m_d->PortDescriptors[ nPort ];
-        if ( LADSPA_IS_CONTROL_INPUT( pd ) ) {}
-        else if ( LADSPA_IS_CONTROL_OUTPUT( pd ) ) {}
-        else if ( LADSPA_IS_AUDIO_INPUT( pd ) ) {
+        if (LADSPA_IS_CONTROL_INPUT(pd)) {} else if (LADSPA_IS_CONTROL_OUTPUT(pd)) {} else if (LADSPA_IS_AUDIO_INPUT(pd)) {
             if (nAIConn == 0) {
-                m_d->connect_port( p_handle, nPort, p_pInL );
+                m_d->connect_port(p_handle, nPort, p_pInL);
                 //qDebug() << "connect input port (L): " + string( m_d->PortNames[ nPort ] ) );
             } else if (nAIConn == 1) {
-                m_d->connect_port( p_handle, nPort, p_pInR );
+                m_d->connect_port(p_handle, nPort, p_pInR);
                 //qDebug() << "connect input port (R): " + string( m_d->PortNames[ nPort ] ) );
             } else {
                 qDebug() << "too many input ports..";
             }
             nAIConn++;
-        } else if ( LADSPA_IS_AUDIO_OUTPUT( pd ) ) {
+        } else if (LADSPA_IS_AUDIO_OUTPUT(pd)) {
             if (nAOConn == 0) {
-                m_d->connect_port( p_handle, nPort, p_pOutL );
+                m_d->connect_port(p_handle, nPort, p_pOutL);
                 //qDebug() << "connect output port (L): " + string( m_d->PortNames[ nPort ] ) );
             } else if (nAOConn == 1) {
-                m_d->connect_port( p_handle, nPort, p_pOutR );
+                m_d->connect_port(p_handle, nPort, p_pOutR);
                 //qDebug() << "connect output port (R): " + string( m_d->PortNames[ nPort ] ) );
             } else {
                 qDebug() << "too many output ports..";
@@ -379,11 +374,11 @@ void LadspaFX::connectAudioPorts(float* p_pInL, float* p_pInR, float* p_pOutL, f
     }
 }
 
-void LadspaFX::processFX( unsigned nFrames, bool stereo )
+void LadspaFX::processFX(unsigned nFrames, bool stereo)
 {
-    m_d->run( m_handle, nFrames );
+    m_d->run(m_handle, nFrames);
     if (stereo && m_nIAPorts == 1 && m_nOAPorts == 1) {
-        m_d->run( m_handleBis, nFrames );
+        m_d->run(m_handleBis, nFrames);
     }
 //qDebug() << QString("processFX - Label: %1, nb in: %2, nb out: %3, in l: %4, in r: %5, out l: %6, out r: %7")
 //  .arg(m_sLabel).arg(m_nIAPorts).arg(m_nOAPorts).arg(m_pInBufferL[0]).arg(m_pInBufferR[0]).arg(m_pOutBufferL[0]).arg(m_pOutBufferR[0]);
@@ -391,22 +386,22 @@ void LadspaFX::processFX( unsigned nFrames, bool stereo )
 
 void LadspaFX::activate()
 {
-    if ( m_d->activate ) {
+    if (m_d->activate) {
 //        qDebug() << "activate " + getPluginName();
-        m_d->activate( m_handle );
+        m_d->activate(m_handle);
         if (m_nIAPorts == 1 && m_nOAPorts == 1) {
-            m_d->activate( m_handleBis );
+            m_d->activate(m_handleBis);
         }
     }
 }
 
 void LadspaFX::deactivate()
 {
-    if ( m_d->deactivate ) {
+    if (m_d->deactivate) {
 //  qDebug() << "deactivate " + getPluginName();
-        m_d->deactivate( m_handle );
+        m_d->deactivate(m_handle);
         if (m_nIAPorts == 1 && m_nOAPorts == 1) {
-            m_d->deactivate( m_handleBis );
+            m_d->deactivate(m_handleBis);
         }
     }
 }

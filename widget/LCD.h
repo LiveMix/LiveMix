@@ -45,10 +45,10 @@ public:
         SMALL_GRAY
     };
 
-    LCDDigit( QWidget *pParent, LCDType type );
+    LCDDigit(QWidget *pParent, LCDType type);
     ~LCDDigit();
 
-    void set( QChar ch );
+    void set(QChar ch);
 
     void setSmallRed();
     void setSmallBlue();
@@ -76,12 +76,11 @@ class LCDDisplay : public QWidget
 {
     Q_OBJECT
 public:
-    LCDDisplay( QWidget * pParent, LCDDigit::LCDType type, int nDigits, bool leftAlign = false );
+    LCDDisplay(QWidget * pParent, LCDDigit::LCDType type, int nDigits, bool leftAlign = false);
     ~LCDDisplay();
 
-    void setText( const QString& sMsg );
-    QString getText()
-    {
+    void setText(const QString& sMsg);
+    QString getText() {
         return m_sMsg;
     }
 
@@ -92,7 +91,7 @@ public slots:
     void digitClicked();
 
 signals:
-    void displayClicked( LCDDisplay* pRef );
+    void displayClicked(LCDDisplay* pRef);
 
 private:
     QList<LCDDigit*> m_pDisplay;
@@ -110,16 +109,15 @@ public:
         FLOAT
     };
 
-    LCDSpinBox( QWidget *pParent, int nDigits, LCDSpinBoxType type, int nMin = -1, int nMax = -1 );
+    LCDSpinBox(QWidget *pParent, int nDigits, LCDSpinBoxType type, int nMin = -1, int nMax = -1);
     ~LCDSpinBox();
 
-    void setValue( float nValue );
-    float getValue()
-    {
+    void setValue(float nValue);
+    float getValue() {
         return m_fValue;
     }
 
-    virtual void wheelEvent( QWheelEvent *ev );
+    virtual void wheelEvent(QWheelEvent *ev);
 
     // richiamati da PlayerControl
     void upBtnClicked();
@@ -130,7 +128,7 @@ signals:
     void spinboxClicked();
 
 public slots:
-    void displayClicked( LCDDisplay *pRef );
+    void displayClicked(LCDDisplay *pRef);
 
 private:
     LCDSpinBoxType m_type;

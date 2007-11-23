@@ -42,25 +42,25 @@ LadspaFXSelector::LadspaFXSelector(LadspaFX* nLadspaFX)
 {
     //qDebug() << "INIT" );
 
-    setupUi( this );
+    setupUi(this);
 
-    setFixedSize( width(), height() );
+    setFixedSize(width(), height());
 
-    setWindowTitle( trUtf8( "Select LADSPA FX" ) );
-    setWindowIcon( QPixmap( ":/data/icon16.png" ) );
+    setWindowTitle(trUtf8("Select LADSPA FX"));
+    setWindowIcon(QPixmap(":/data/icon16.png"));
 
     m_sSelectedPluginName = "";
 
-    m_nameLbl->setText( QString("") );
-    m_labelLbl->setText( QString("") );
-    m_typeLbl->setText( QString("") );
-    m_pIDLbl->setText( QString("") );
-    m_pMakerLbl->setText( QString("") );
-    m_pCopyrightLbl->setText( QString("") );
+    m_nameLbl->setText(QString(""));
+    m_labelLbl->setText(QString(""));
+    m_typeLbl->setText(QString(""));
+    m_pIDLbl->setText(QString(""));
+    m_pMakerLbl->setText(QString(""));
+    m_pCopyrightLbl->setText(QString(""));
     m_pPluginsListBox->clear();
     m_pOkBtn->setEnabled(false);
 
-    m_pGroupsListView->setHeaderLabels( QStringList( trUtf8( "Groups" ) ) );
+    m_pGroupsListView->setHeaderLabels(QStringList(trUtf8("Groups")));
 
 #ifdef LADSPA_SUPPORT
     //Song *pSong = Hydrogen::getInstance()->getSong();
@@ -70,8 +70,8 @@ LadspaFXSelector::LadspaFXSelector(LadspaFX* nLadspaFX)
     }
     buildLadspaGroups();
 
-    m_pGroupsListView->sortItems( 0 , Qt::AscendingOrder);
-    m_pGroupsListView->setItemHidden( m_pGroupsListView->headerItem(), true );
+    m_pGroupsListView->sortItems(0 , Qt::AscendingOrder);
+    m_pGroupsListView->setItemHidden(m_pGroupsListView->headerItem(), true);
 
 
 // LadspaFXGroup* nLadspaFX->fxGroup = LadspaFX::getLadspaFXGroup();
@@ -81,8 +81,8 @@ LadspaFXSelector::LadspaFXSelector(LadspaFX* nLadspaFX)
 // }
 #endif
 
-    connect( m_pPluginsListBox, SIGNAL( itemSelectionChanged () ), this, SLOT( pluginSelected() ) );
-    connect( m_pPluginsListBox, SIGNAL( itemDoubleClicked (QListWidgetItem *) ), this, SLOT( accept() ) );
+    connect(m_pPluginsListBox, SIGNAL(itemSelectionChanged()), this, SLOT(pluginSelected()));
+    connect(m_pPluginsListBox, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(accept()));
 }
 
 LadspaFXSelector::~LadspaFXSelector()
@@ -95,15 +95,15 @@ void LadspaFXSelector::buildLadspaGroups()
 #ifdef LADSPA_SUPPORT
     m_pGroupsListView->clear();
 
-    QTreeWidgetItem* pRootItem = new QTreeWidgetItem( );
-    pRootItem->setText( 0, trUtf8("Groups") );
-    m_pGroupsListView->addTopLevelItem( pRootItem );
-    m_pGroupsListView->setItemExpanded( pRootItem, true );
+    QTreeWidgetItem* pRootItem = new QTreeWidgetItem();
+    pRootItem->setText(0, trUtf8("Groups"));
+    m_pGroupsListView->addTopLevelItem(pRootItem);
+    m_pGroupsListView->setItemExpanded(pRootItem, true);
 
     LadspaFXGroup* nFxGroup = Effects::getInstance()->getLadspaFXGroup();
     for (int i = 0; i < nFxGroup->getChildList().size(); i++) {
-        LadspaFXGroup *pNewGroup = ( nFxGroup->getChildList() )[ i ];
-        addGroup( pRootItem, pNewGroup );
+        LadspaFXGroup *pNewGroup = (nFxGroup->getChildList())[ i ];
+        addGroup(pRootItem, pNewGroup);
     }
 #endif
 }
@@ -111,7 +111,7 @@ void LadspaFXSelector::buildLadspaGroups()
 
 
 #ifdef LADSPA_SUPPORT
-void LadspaFXSelector::addGroup( QTreeWidgetItem *pItem, LadspaFXGroup *pGroup )
+void LadspaFXSelector::addGroup(QTreeWidgetItem *pItem, LadspaFXGroup *pGroup)
 {
     QString sGroupName = pGroup->getName();
     if (sGroupName == "Uncategorized") {
@@ -119,14 +119,14 @@ void LadspaFXSelector::addGroup( QTreeWidgetItem *pItem, LadspaFXGroup *pGroup )
     } else if (sGroupName == "Categorized(LRDF)") {
         sGroupName = trUtf8("Categorized (LRDF)");
     }
-    QTreeWidgetItem* pNewItem = new QTreeWidgetItem( pItem );
-    pNewItem->setText( 0, sGroupName );
+    QTreeWidgetItem* pNewItem = new QTreeWidgetItem(pItem);
+    pNewItem->setText(0, sGroupName);
 
 
-    for (int i = 0; i < pGroup->getChildList().size(); i++ ) {
-        LadspaFXGroup *pNewGroup = ( pGroup->getChildList() )[ i ];
+    for (int i = 0; i < pGroup->getChildList().size(); i++) {
+        LadspaFXGroup *pNewGroup = (pGroup->getChildList())[ i ];
 
-        addGroup( pNewItem, pNewGroup );
+        addGroup(pNewItem, pNewGroup);
     }
     for (int i = 0; i < pGroup->getLadspaInfo().size(); i++) {
         LadspaFXInfo* pInfo = (pGroup->getLadspaInfo())[i];
@@ -158,20 +158,20 @@ void LadspaFXSelector::pluginSelected()
         QList<LadspaFXInfo*> pluginList = Effects::getInstance()->getPluginList();
         for (int i = 0; i < pluginList.size(); i++) {
             LadspaFXInfo *nFxInfo = pluginList[i];
-            if (nFxInfo->m_sName == m_sSelectedPluginName ) {
+            if (nFxInfo->m_sName == m_sSelectedPluginName) {
 
-                m_nameLbl->setText(  nFxInfo->m_sName );
-                m_labelLbl->setText(  nFxInfo->m_sLabel );
+                m_nameLbl->setText(nFxInfo->m_sName);
+                m_labelLbl->setText(nFxInfo->m_sLabel);
 
-				m_typeLbl->setText(QString("%1 / %2").arg(nFxInfo->m_nIAPorts).arg(nFxInfo->m_nOAPorts));
-/*                if ( ( nFxInfo->m_nIAPorts == 2 ) && ( nFxInfo->m_nOAPorts == 2 ) ) {  // Stereo plugin
-                    m_typeLbl->setText( trUtf8("Stereo") );
-                } else if ( ( nFxInfo->m_nIAPorts == 1 ) && ( nFxInfo->m_nOAPorts == 1 ) ) { // Mono plugin
-                    m_typeLbl->setText( trUtf8("Mono") );
-                } else {
-                    // not supported
-                    m_typeLbl->setText( trUtf8("Not supported") );
-                }*/
+                m_typeLbl->setText(QString("%1 / %2").arg(nFxInfo->m_nIAPorts).arg(nFxInfo->m_nOAPorts));
+                /*                if ( ( nFxInfo->m_nIAPorts == 2 ) && ( nFxInfo->m_nOAPorts == 2 ) ) {  // Stereo plugin
+                                    m_typeLbl->setText( trUtf8("Stereo") );
+                                } else if ( ( nFxInfo->m_nIAPorts == 1 ) && ( nFxInfo->m_nOAPorts == 1 ) ) { // Mono plugin
+                                    m_typeLbl->setText( trUtf8("Mono") );
+                                } else {
+                                    // not supported
+                                    m_typeLbl->setText( trUtf8("Not supported") );
+                                }*/
 
                 m_pIDLbl->setText(QString("%1").arg(nFxInfo->m_sID));
                 m_pMakerLbl->setText(nFxInfo->m_sMaker);
@@ -195,40 +195,40 @@ void LadspaFXSelector::pluginSelected()
 
 
 
-void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem * currentItem, QTreeWidgetItem* /*previous*/ )
+void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged(QTreeWidgetItem * currentItem, QTreeWidgetItem* /*previous*/)
 {
 #ifdef LADSPA_SUPPORT
 //qDebug() << "new selection: " + currentItem->text(0);
 
     m_pOkBtn->setEnabled(false);
-    m_nameLbl->setText( "" );
-    m_labelLbl->setText( "" );
-    m_typeLbl->setText( "" );
-    m_pIDLbl->setText( "" );
-    m_pMakerLbl->setText( "" );
-    m_pCopyrightLbl->setText( "" );
+    m_nameLbl->setText("");
+    m_labelLbl->setText("");
+    m_typeLbl->setText("");
+    m_pIDLbl->setText("");
+    m_pMakerLbl->setText("");
+    m_pCopyrightLbl->setText("");
 
     // nothing was selected => to early
 //    if ( m_pGroupsListView->selectedItems().size() == 0 ) {
 //        return;
 //    }
 
-    QString itemText = currentItem->text( 0 );
+    QString itemText = currentItem->text(0);
 
     //m_pPluginsListBox->clear();
 
-    while( m_pPluginsListBox->count() != 0) {
-        m_pPluginsListBox->takeItem( 0 );
+    while (m_pPluginsListBox->count() != 0) {
+        m_pPluginsListBox->takeItem(0);
     }
 
     LadspaFXGroup* nFxGroup = Effects::getInstance()->getLadspaFXGroup();
 
-    QList<LadspaFXInfo*> pluginList = findPluginsInGroup( itemText, nFxGroup );
+    QList<LadspaFXInfo*> pluginList = findPluginsInGroup(itemText, nFxGroup);
     for (int i = 0; i < pluginList.size(); i++) {
         //qDebug() << "adding plugin: " + pluginList[ i ]->m_sName );
-        m_pPluginsListBox->addItem( pluginList[ i ]->m_sName );
-        if ( pluginList[ i ]->m_sName == m_sSelectedPluginName ) {
-            m_pPluginsListBox->setCurrentRow( i );
+        m_pPluginsListBox->addItem(pluginList[ i ]->m_sName);
+        if (pluginList[ i ]->m_sName == m_sSelectedPluginName) {
+            m_pPluginsListBox->setCurrentRow(i);
         }
     }
     m_pPluginsListBox->sortItems();
@@ -237,23 +237,23 @@ void LadspaFXSelector::on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem 
 
 
 #ifdef LADSPA_SUPPORT
-QList<LadspaFXInfo*> LadspaFXSelector::findPluginsInGroup( const QString& sSelectedGroup, LadspaFXGroup *pGroup )
+QList<LadspaFXInfo*> LadspaFXSelector::findPluginsInGroup(const QString& sSelectedGroup, LadspaFXGroup *pGroup)
 {
     //qDebug() << "group: " + sSelectedGroup );
     QList<LadspaFXInfo*> list;
 
-    if ( pGroup->getName() == sSelectedGroup ) {
+    if (pGroup->getName() == sSelectedGroup) {
         //qDebug() << "found..." );
-        for (int i = 0; i < pGroup->getLadspaInfo().size(); ++i ) {
-            LadspaFXInfo *pInfo = ( pGroup->getLadspaInfo() )[i];
-            list.push_back( pInfo );
+        for (int i = 0; i < pGroup->getLadspaInfo().size(); ++i) {
+            LadspaFXInfo *pInfo = (pGroup->getLadspaInfo())[i];
+            list.push_back(pInfo);
         }
         return list;
     } else {
         //qDebug() << "not found...searching in the child groups" );
-        for (int i = 0; i < pGroup->getChildList().size(); ++i ) {
-            LadspaFXGroup *pNewGroup = ( pGroup->getChildList() )[ i ];
-            list = findPluginsInGroup( sSelectedGroup, pNewGroup );
+        for (int i = 0; i < pGroup->getChildList().size(); ++i) {
+            LadspaFXGroup *pNewGroup = (pGroup->getChildList())[ i ];
+            list = findPluginsInGroup(sSelectedGroup, pNewGroup);
             if (list.size() != 0) {
                 return list;
             }

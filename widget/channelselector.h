@@ -33,13 +33,13 @@ class ChannelSelector : public QDialog
 {
     Q_OBJECT
 public:
-    ChannelSelector( QString title, QString label, QStringList channels, QWidget*, const char* =0 );
+    ChannelSelector(QString title, QString label, QStringList channels, QWidget*, const char* =0);
     ~ChannelSelector();
 signals:
-    void selectedChannel( QString );
+    void selectedChannel(QString);
 public slots:
-    void addChannel( QString );
-    void removeChannel( QString );
+    void addChannel(QString);
+    void removeChannel(QString);
 private slots:
     void commit();
     void commitnquit();

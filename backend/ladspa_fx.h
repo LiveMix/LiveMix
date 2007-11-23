@@ -34,7 +34,7 @@ namespace LiveMix
 class LadspaFXInfo
 {
 public:
-    LadspaFXInfo( const QString& sName );
+    LadspaFXInfo(const QString& sName);
     ~LadspaFXInfo();
 
     QString m_sFilename; ///< plugin filename
@@ -53,23 +53,20 @@ public:
 class LadspaFXGroup
 {
 public:
-    LadspaFXGroup( const QString& sName );
+    LadspaFXGroup(const QString& sName);
     ~LadspaFXGroup();
 
-    const QString& getName()
-    {
+    const QString& getName() {
         return m_sName;
     }
 
-    void addLadspaInfo( LadspaFXInfo *pInfo );
-    QList<LadspaFXInfo*> getLadspaInfo()
-    {
+    void addLadspaInfo(LadspaFXInfo *pInfo);
+    QList<LadspaFXInfo*> getLadspaInfo() {
         return m_ladspaList;
     }
 
-    void addChild( LadspaFXGroup *pChild );
-    QList<LadspaFXGroup*> getChildList()
-    {
+    void addChild(LadspaFXGroup *pChild);
+    QList<LadspaFXGroup*> getChildList() {
         return m_childGroups;
     }
 
@@ -93,8 +90,7 @@ public:
     LADSPA_Data m_fLowerBound;
     LADSPA_Data m_fUpperBound;
 
-    LadspaControlPort()
-    { }
+    LadspaControlPort() { }
 };
 
 
@@ -118,44 +114,36 @@ public:
     void processFX(unsigned nFrames, bool stereo);
 
 
-    const QString& getPluginLabel()
-    {
+    const QString& getPluginLabel() {
         return m_sLabel;
     }
 
-    const QString& getPluginName()
-    {
+    const QString& getPluginName() {
         return m_sName;
     }
-    void setPluginName( const QString& sName )
-    {
+    void setPluginName(const QString& sName) {
         m_sName = sName;
     }
 
-    const QString& getLibraryPath()
-    {
+    const QString& getLibraryPath() {
         return m_sLibraryPath;
     }
 
-    bool isEnabled()
-    {
+    bool isEnabled() {
         return m_bEnabled;
     }
-    void setEnabled( bool value )
-    {
+    void setEnabled(bool value) {
         m_bEnabled = value;
     }
 
-    unsigned getInputAudio()
-    {
+    unsigned getInputAudio() {
         return m_nIAPorts;
     };
-    unsigned getOutputAudio()
-    {
+    unsigned getOutputAudio() {
         return m_nOAPorts;
     };
 
-    static LadspaFX* load( const QString& sLibraryPath,  const QString& sPluginLabel, long nSampleRate );
+    static LadspaFX* load(const QString& sLibraryPath,  const QString& sPluginLabel, long nSampleRate);
 
 
 private:
@@ -177,7 +165,7 @@ private:
     unsigned m_nOAPorts; ///< output audio port
 
 
-    LadspaFX( const QString& sLibraryPath, const QString& sPluginLabel );
+    LadspaFX(const QString& sLibraryPath, const QString& sPluginLabel);
     void connectAudioPorts(float* m_pInBufferL, float* m_pInBufferR, float* m_pOutBufferL, float* m_pOutBufferR, LADSPA_Handle p_handle);
 };
 

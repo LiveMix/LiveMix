@@ -28,22 +28,22 @@
 namespace LiveMix
 {
 
-ClickableLabel::ClickableLabel( QWidget *pParent )
-        : QLabel( pParent )
+ClickableLabel::ClickableLabel(QWidget *pParent)
+        : QLabel(pParent)
 {
 
     QPalette defaultPalette;
-    defaultPalette.setColor( QPalette::Background, QColor( 58, 62, 72 ) );
-    defaultPalette.setColor( QPalette::Foreground, QColor( 230, 230, 230 ) );
-    this->setPalette( defaultPalette );
+    defaultPalette.setColor(QPalette::Background, QColor(58, 62, 72));
+    defaultPalette.setColor(QPalette::Foreground, QColor(230, 230, 230));
+    this->setPalette(defaultPalette);
 
-    this->setAlignment( Qt::AlignCenter );
+    this->setAlignment(Qt::AlignCenter);
 }
 
 
 void ClickableLabel::mousePressEvent(QMouseEvent*)
 {
-    emit labelClicked( this );
+    emit labelClicked(this);
 }
 
 }

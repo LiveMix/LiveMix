@@ -22,6 +22,8 @@ UI_HEADERS_DIR = objs
 UI_SOURCES_DIR = objs
 MOC_DIR = objs
 
+INCLUDEPATH += . objs /usr/include/lash-1.0
+
 QT += svg
 QT += xml
 

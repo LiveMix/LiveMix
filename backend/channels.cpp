@@ -33,16 +33,16 @@ effect::effect(LadspaFX *p_fx, jack_nframes_t p_nframes)
         , m_fCpuUse(0)
 {
     switch (fx->getInputAudio()) {
-	    case 2:
-	        fx->m_pInBufferR = new float[p_nframes];
-	    case 1:
-	        fx->m_pInBufferL = new float[p_nframes];
+    case 2:
+        fx->m_pInBufferR = new float[p_nframes];
+    case 1:
+        fx->m_pInBufferL = new float[p_nframes];
     }
     switch (fx->getOutputAudio()) {
-	    case 2:
-	        fx->m_pOutBufferR = new float[p_nframes];
-	    case 1:
-	        fx->m_pOutBufferL = new float[p_nframes];
+    case 2:
+        fx->m_pOutBufferR = new float[p_nframes];
+    case 1:
+        fx->m_pOutBufferL = new float[p_nframes];
     }
     if (fx->getInputAudio() == 1 && fx->getOutputAudio() == 1) {
         fx->m_pInBufferR = new float[p_nframes];
@@ -60,16 +60,16 @@ effect::~effect()
 {
     fx->deactivate();
     switch (fx->getInputAudio()) {
-	    case 2:
-	        delete fx->m_pInBufferR;
-	    case 1:
-	        delete fx->m_pInBufferL;
+    case 2:
+        delete fx->m_pInBufferR;
+    case 1:
+        delete fx->m_pInBufferL;
     }
     switch (fx->getOutputAudio()) {
-	    case 2:
-	        delete fx->m_pOutBufferR;
-	    case 1:
-	        delete fx->m_pOutBufferL;
+    case 2:
+        delete fx->m_pOutBufferR;
+    case 1:
+        delete fx->m_pOutBufferL;
     }
     if (fx->getInputAudio() == 1 && fx->getOutputAudio() == 1) {
         delete fx->m_pInBufferR;
@@ -115,74 +115,78 @@ in::~in()
     delete post_l;
     delete post_r;
 }
-float in::getFloatAttribute(ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case GAIN:
-			return gain;
-		case PAN_BAL:
-			return bal;
-		case TO_PRE:
-			return pre[p_rToChannel];
-		case TO_POST:
-			return post[p_rToChannel];
-		case FADER:
-			return volume;
-		default:
-			return -1;
-	}
+float in::getFloatAttribute(ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case GAIN:
+        return gain;
+    case PAN_BAL:
+        return bal;
+    case TO_PRE:
+        return pre[p_rToChannel];
+    case TO_POST:
+        return post[p_rToChannel];
+    case FADER:
+        return volume;
+    default:
+        return -1;
+    }
 }
-void in::setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case GAIN:
-			gain = p_fValue;
-			break;
-		case PAN_BAL:
-			bal = p_fValue;
-			break;
-		case TO_PRE:
-			pre[p_rToChannel] = p_fValue;
-			break;
-		case TO_POST:
-			post[p_rToChannel] = p_fValue;
-			break;
-		case FADER:
-			volume = p_fValue;
-			break;
-		default:
-			break;
-	}
+void in::setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case GAIN:
+        gain = p_fValue;
+        break;
+    case PAN_BAL:
+        bal = p_fValue;
+        break;
+    case TO_PRE:
+        pre[p_rToChannel] = p_fValue;
+        break;
+    case TO_POST:
+        post[p_rToChannel] = p_fValue;
+        break;
+    case FADER:
+        volume = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
-bool in::getBoolAttribute(ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case MUTE:
-			return mute;
-		case TO_SUB:
-			return sub[p_rToChannel];
-		case TO_MAIN:
-			return main;
-		case TO_PFL:
-			return pfl;
-		default:
-			return false;
-	}
+bool in::getBoolAttribute(ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case MUTE:
+        return mute;
+    case TO_SUB:
+        return sub[p_rToChannel];
+    case TO_MAIN:
+        return main;
+    case TO_PFL:
+        return pfl;
+    default:
+        return false;
+    }
 }
-void in::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case MUTE:
-			mute = p_fValue;
-			break;
-		case TO_SUB:
-			sub[p_rToChannel] = p_fValue;
-			break;
-		case TO_MAIN:
-			main = p_fValue;
-			break;
-		case TO_PFL:
-			pfl = p_fValue;
-			break;
-		default:
-			break;
-	}
+void in::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case MUTE:
+        mute = p_fValue;
+        break;
+    case TO_SUB:
+        sub[p_rToChannel] = p_fValue;
+        break;
+    case TO_MAIN:
+        main = p_fValue;
+        break;
+    case TO_PFL:
+        pfl = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -195,65 +199,65 @@ out::out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
 }
 out::~out()
 {}
-float out::getFloatAttribute(ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case PAN_BAL:
-			return bal;
-		case FADER:
-			if (p_rToChannel == MONO) {
-				return Backend::instance()->getOutput(MONO)->volume;
-			}
-			else if (p_rToChannel == PFL) {
-				return Backend::instance()->getOutput(PFL)->volume;
-			}
-			else {
-				return volume;
-			}
-		default:
-			return -1;
-	}
+float out::getFloatAttribute(ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        return bal;
+    case FADER:
+        if (p_rToChannel == MONO) {
+            return Backend::instance()->getOutput(MONO)->volume;
+        } else if (p_rToChannel == PFL) {
+            return Backend::instance()->getOutput(PFL)->volume;
+        } else {
+            return volume;
+        }
+    default:
+        return -1;
+    }
 }
-void out::setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case PAN_BAL:
-			bal = p_fValue;
-			break;
-		case FADER:
-			if (p_rToChannel == MONO) {
-				Backend::instance()->setOutVolume(MONO, p_fValue);
-			}
-			else if (p_rToChannel == PFL) {
-				Backend::instance()->setOutVolume(PFL, p_fValue);
-			}
-			else {
-				volume = p_fValue;
-			}
-			break;
-		default:
-			break;
-	}
+void out::setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        bal = p_fValue;
+        break;
+    case FADER:
+        if (p_rToChannel == MONO) {
+            Backend::instance()->setOutVolume(MONO, p_fValue);
+        } else if (p_rToChannel == PFL) {
+            Backend::instance()->setOutVolume(PFL, p_fValue);
+        } else {
+            volume = p_fValue;
+        }
+        break;
+    default:
+        break;
+    }
 }
-bool out::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			return mute;
-		case TO_AFL:
-			return afl;
-		default:
-			return false;
-	}
+bool out::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        return mute;
+    case TO_AFL:
+        return afl;
+    default:
+        return false;
+    }
 }
-void out::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			mute = p_fValue;
-			break;
-		case TO_AFL:
-			afl = p_fValue;
-			break;
-		default:
-			break;
-	}
+void out::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        mute = p_fValue;
+        break;
+    case TO_AFL:
+        afl = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -267,49 +271,53 @@ pre::pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
 }
 pre::~pre()
 {}
-float pre::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			return bal;
-		case FADER:
-			return volume;
-		default:
-			return -1;
-	}
+float pre::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        return bal;
+    case FADER:
+        return volume;
+    default:
+        return -1;
+    }
 }
-void pre::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			bal = p_fValue;
-			break;
-		case FADER:
-			volume = p_fValue;
-			break;
-		default:
-			break;
-	}
+void pre::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        bal = p_fValue;
+        break;
+    case FADER:
+        volume = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
-bool pre::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			return mute;
-		case TO_AFL:
-			return afl;
-		default:
-			return false;
-	}
+bool pre::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        return mute;
+    case TO_AFL:
+        return afl;
+    default:
+        return false;
+    }
 }
-void pre::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			mute = p_fValue;
-			break;
-		case TO_AFL:
-			afl = p_fValue;
-			break;
-		default:
-			break;
-	}
+void pre::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        mute = p_fValue;
+        break;
+    case TO_AFL:
+        afl = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -345,69 +353,73 @@ post::~post()
         delete post_r;
     }
 }
-float post::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			return bal;
-		case FADER:
-			return postvolume;
-		case PRE_VOL:
-			return prevolume;
-		default:
-			return -1;
-	}
+float post::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        return bal;
+    case FADER:
+        return postvolume;
+    case PRE_VOL:
+        return prevolume;
+    default:
+        return -1;
+    }
 }
-void post::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			bal = p_fValue;
-			break;
-		case FADER:
-			postvolume = p_fValue;
-			break;
-		case PRE_VOL:
-			prevolume = p_fValue;
-			break;
-		default:
-			break;
-	}
+void post::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        bal = p_fValue;
+        break;
+    case FADER:
+        postvolume = p_fValue;
+        break;
+    case PRE_VOL:
+        prevolume = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
-bool post::getBoolAttribute(ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case MUTE:
-			return mute;
-		case TO_SUB:
-			return sub[p_rToChannel];
-		case TO_MAIN:
-			return main;
-		case TO_AFL:
-			return m_bAfl;
-		case TO_PFL:
-			return m_bPfl;
-		default:
-			return false;
-	}
+bool post::getBoolAttribute(ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case MUTE:
+        return mute;
+    case TO_SUB:
+        return sub[p_rToChannel];
+    case TO_MAIN:
+        return main;
+    case TO_AFL:
+        return m_bAfl;
+    case TO_PFL:
+        return m_bPfl;
+    default:
+        return false;
+    }
 }
-void post::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel) {
-	switch (p_eType) {
-		case MUTE:
-			mute = p_fValue;
-			break;
-		case TO_SUB:
-			sub[p_rToChannel];
-			break;
-		case TO_MAIN:
-			main = p_fValue;
-			break;
-		case TO_AFL:
-			m_bAfl = p_fValue;
-			break;
-		case TO_PFL:
-			m_bPfl = p_fValue;
-			break;
-		default:
-			break;
-	}
+void post::setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel)
+{
+    switch (p_eType) {
+    case MUTE:
+        mute = p_fValue;
+        break;
+    case TO_SUB:
+        sub[p_rToChannel];
+        break;
+    case TO_MAIN:
+        main = p_fValue;
+        break;
+    case TO_AFL:
+        m_bAfl = p_fValue;
+        break;
+    case TO_PFL:
+        m_bPfl = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -422,54 +434,58 @@ sub::sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l
 }
 sub::~sub()
 {}
-float sub::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			return bal;
-		case FADER:
-			return volume;
-		default:
-			return -1;
-	}
+float sub::getFloatAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        return bal;
+    case FADER:
+        return volume;
+    default:
+        return -1;
+    }
 }
-void sub::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case PAN_BAL:
-			bal = p_fValue;
-			break;
-		case FADER:
-			volume = p_fValue;
-			break;
-		default:
-			break;
-	}
+void sub::setFloatAttribute(float p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case PAN_BAL:
+        bal = p_fValue;
+        break;
+    case FADER:
+        volume = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
-bool sub::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			return mute;
-		case TO_MAIN:
-			return main;
-		case TO_AFL:
-			return afl;
-		default:
-			return false;
-	}
+bool sub::getBoolAttribute(ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        return mute;
+    case TO_MAIN:
+        return main;
+    case TO_AFL:
+        return afl;
+    default:
+        return false;
+    }
 }
-void sub::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/) {
-	switch (p_eType) {
-		case MUTE:
-			mute = p_fValue;
-			break;
-		case TO_MAIN:
-			main = p_fValue;
-			break;
-		case TO_AFL:
-			afl = p_fValue;
-			break;
-		default:
-			break;
-	}
+void sub::setBoolAttribute(bool p_fValue, ElementType p_eType, QString /*p_rToChannel*/)
+{
+    switch (p_eType) {
+    case MUTE:
+        mute = p_fValue;
+        break;
+    case TO_MAIN:
+        main = p_fValue;
+        break;
+    case TO_AFL:
+        afl = p_fValue;
+        break;
+    default:
+        break;
+    }
 }
 
 }; // LiveMix

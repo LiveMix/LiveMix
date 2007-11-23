@@ -48,17 +48,17 @@ class TbWrapp : public QWidget
 {
     Q_OBJECT
 public:
-	TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel);
+    TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel);
 
-	ToggleButton *m_pButton;
+    ToggleButton *m_pButton;
 
 public slots:
-	void clicked();
-	
+    void clicked();
+
 private:
-	ElementType m_eType;
-	QString m_rRefChannel;
-	Widget *m_pMatrix;
+    ElementType m_eType;
+    QString m_rRefChannel;
+    Widget *m_pMatrix;
 };
 class InfoWidget : public QWidget
 {
@@ -75,35 +75,35 @@ public:
     void removePost(QString channelPost);
     void removeSub(QString channelSub);
 
-	int setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
+    int setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo ="");
 
     IFWidget* m_pFader;
 
 private:
-	ToggleButton* createToggleButton(Widget* p_pMatrix, ElementType p_eElement, QString p_rChannelTo ="");
-	QLabel* createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
+    ToggleButton* createToggleButton(Widget* p_pMatrix, ElementType p_eElement, QString p_rChannelTo ="");
+    QLabel* createLabel(int p_iHeight, ElementType p_eElement, QString p_rChannelTo ="");
 
-	QMap<ElementType, QMap<QString, TbWrapp*>*> m_rToggleButtons;
-	QMap<ElementType, QMap<QString, QLabel*>*> m_rLabels;
+    QMap<ElementType, QMap<QString, TbWrapp*>*> m_rToggleButtons;
+    QMap<ElementType, QMap<QString, QLabel*>*> m_rLabels;
 
-/*	ToggleButton *gain_tb;
-	ToggleButton *mute_tb;
-	ToggleButton *pfl_tb;
-	ToggleButton *bal_tb;
-	ToggleButton *main_on_tb;
-	QLabel *gain;
-	QLabel *mute;
-	QLabel *pfl;
-	QLabel *bal;
-	QLabel *main_on;
+    /* ToggleButton *gain_tb;
+     ToggleButton *mute_tb;
+     ToggleButton *pfl_tb;
+     ToggleButton *bal_tb;
+     ToggleButton *main_on_tb;
+     QLabel *gain;
+     QLabel *mute;
+     QLabel *pfl;
+     QLabel *bal;
+     QLabel *main_on;
 
-    QMap<QString, ToggleButton*> pre_tb;
-    QMap<QString, ToggleButton*> post_tb;
-    QMap<QString, ToggleButton*> sub_tb;
-    QMap<QString, QLabel*> pre;
-    QMap<QString, QLabel*> post;
-    QMap<QString, QLabel*> sub;*/
-    
+        QMap<QString, ToggleButton*> pre_tb;
+        QMap<QString, ToggleButton*> post_tb;
+        QMap<QString, ToggleButton*> sub_tb;
+        QMap<QString, QLabel*> pre;
+        QMap<QString, QLabel*> post;
+        QMap<QString, QLabel*> sub;*/
+
 private:
     Widget* m_pMatrix;
 
@@ -257,15 +257,16 @@ private:
     Toggle *afl;
 };
 
-class IFWidget : public QWidget {
-    public:
-        IFWidget(Widget *p_pWidget);
-        virtual void mousePressEvent(QMouseEvent *p_pEvent);
-        virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
+class IFWidget : public QWidget
+{
+public:
+    IFWidget(Widget *p_pWidget);
+    virtual void mousePressEvent(QMouseEvent *p_pEvent);
+    virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
 
-    private:
-        int m_fMousePressY;
-        Widget *m_pWidget;
+private:
+    int m_fMousePressY;
+    Widget *m_pWidget;
 };
 
 }; // LiveMix

@@ -42,7 +42,7 @@ public:
     QString getSelectedFX();
 
 private slots:
-    void on_m_pGroupsListView_currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * previous );
+    void on_m_pGroupsListView_currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous);
     void pluginSelected();
 
 private:
@@ -53,7 +53,7 @@ private:
 //  void addGroup(QTreeWidgetItem* pItem, TargetType target, QString pName);
     void addGroup(QTreeWidgetItem *pItem, LadspaFXGroup *pGroup);
 
-    QList<LadspaFXInfo*> findPluginsInGroup( const QString& sSelectedGroup, LadspaFXGroup *pGroup );
+    QList<LadspaFXInfo*> findPluginsInGroup(const QString& sSelectedGroup, LadspaFXGroup *pGroup);
 #endif
 
 };

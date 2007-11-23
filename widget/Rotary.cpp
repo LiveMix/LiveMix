@@ -34,23 +34,23 @@ namespace LiveMix
 RotaryTooltip::RotaryTooltip()
 //  : QWidget( 0, "RotaryTooltip", Qt::WStyle_Customize| Qt::WStyle_NoBorder | Qt::WStyle_StaysOnTop| Qt::WX11BypassWM )
         :
-        QWidget( 0, Qt::ToolTip )
+        QWidget(0, Qt::ToolTip)
 {
-    m_pDisplay = new LCDDisplay( this, LCDDigit::SMALL_BLUE, 5);
-    m_pDisplay->move( 0, 0 );
-    resize( m_pDisplay->size() );
+    m_pDisplay = new LCDDisplay(this, LCDDigit::SMALL_BLUE, 5);
+    m_pDisplay->move(0, 0);
+    resize(m_pDisplay->size());
 
     QPalette defaultPalette;
-    defaultPalette.setColor( QPalette::Background, QColor( 49, 53, 61 ) );
-    this->setPalette( defaultPalette );
+    defaultPalette.setColor(QPalette::Background, QColor(49, 53, 61));
+    this->setPalette(defaultPalette);
 
 }
 
 
-void RotaryTooltip::showTip( QPoint pos, QString sText )
+void RotaryTooltip::showTip(QPoint pos, QString sText)
 {
-    move( pos );
-    m_pDisplay->setText( sText );
+    move(pos);
+    m_pDisplay->setText(sText);
     show();
 }
 
@@ -65,39 +65,39 @@ QPixmap* Rotary::m_background_normal = NULL;
 QPixmap* Rotary::m_background_center = NULL;
 
 
-Rotary::Rotary( QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip)
-        : Volume( parent )
-        , m_bUseIntSteps( bUseIntSteps )
-        , m_type( type )
-        , m_fMin( type == TYPE_CENTER ? -1 : -60.0 )
-        , m_fMax( type == TYPE_CENTER ? 1 : 20.0 )
-        , m_bShowValueToolTip( bUseValueTip )
+Rotary::Rotary(QWidget* parent, RotaryType type, QString sToolTip, bool bUseIntSteps, bool bUseValueTip)
+        : Volume(parent)
+        , m_bUseIntSteps(bUseIntSteps)
+        , m_type(type)
+        , m_fMin(type == TYPE_CENTER ? -1 : -60.0)
+        , m_fMax(type == TYPE_CENTER ? 1 : 20.0)
+        , m_bShowValueToolTip(bUseValueTip)
 {
     setAttribute(Qt::WA_NoBackground);
-    setToolTip( sToolTip );
+    setToolTip(sToolTip);
 
     m_pValueToolTip = new RotaryTooltip();
 
     m_nWidgetWidth = 28;
     m_nWidgetHeight = 26;
     m_fValue = 0.0;
-	m_fMousePressValue = m_fMin - 1;
+    m_fMousePressValue = m_fMin - 1;
 
-    if ( m_background_normal == NULL ) {
+    if (m_background_normal == NULL) {
         m_background_normal = new QPixmap();
-        if ( m_background_normal->load( ":/data/rotary_images.png" ) == false ) {
+        if (m_background_normal->load(":/data/rotary_images.png") == false) {
             qDebug() << "Error loading pixmap: " << ":/data/rotary_images.png";
         }
     }
-    if ( m_background_center == NULL ) {
+    if (m_background_center == NULL) {
         m_background_center = new QPixmap();
-        if ( m_background_center->load( ":/data/rotary_center_images.png" ) == false ) {
+        if (m_background_center->load(":/data/rotary_center_images.png") == false) {
             qDebug() << "Error loading pixmap: " << ":/data/rotary_center_images.png";
         }
     }
 
-    resize( m_nWidgetWidth, m_nWidgetHeight );
-    setFixedSize( m_nWidgetWidth, m_nWidgetHeight );
+    resize(m_nWidgetWidth, m_nWidgetHeight);
+    setFixedSize(m_nWidgetWidth, m_nWidgetHeight);
 // m_temp.resize( m_nWidgetWidth, m_nWidgetHeight );
 }
 
@@ -106,11 +106,12 @@ Rotary::~Rotary()
     delete m_pValueToolTip;
 }
 
-QWidget* Rotary::getWidget() {
+QWidget* Rotary::getWidget()
+{
     return this;
 }
 
-void Rotary::paintEvent( QPaintEvent* )
+void Rotary::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
@@ -118,48 +119,48 @@ void Rotary::paintEvent( QPaintEvent* )
     float fValue = m_fValue - m_fMin;
 
     int nFrame;
-    if ( m_bUseIntSteps ) {
-        nFrame = (int)( 63.0 * ( (int)fValue / fRange ) );
+    if (m_bUseIntSteps) {
+        nFrame = (int)(63.0 * ((int)fValue / fRange));
     } else {
-        nFrame = (int)( 63.0 * ( fValue / fRange ) );
+        nFrame = (int)(63.0 * (fValue / fRange));
     }
 
     //qDebug() << "\nrange: " << fRange;
     //qDebug() << "norm value: " << fValue;
     //qDebug() << "frame: " << nFrame;
 
-    if ( m_type == TYPE_NORMAL ) {
+    if (m_type == TYPE_NORMAL) {
 
         int xPos = m_nWidgetWidth * nFrame;
-        painter.drawPixmap( rect(), *m_background_normal, QRect( xPos, 0, m_nWidgetWidth, m_nWidgetHeight ) );
+        painter.drawPixmap(rect(), *m_background_normal, QRect(xPos, 0, m_nWidgetWidth, m_nWidgetHeight));
     } else {
         // the image is broken...
-        if ( nFrame > 62 ) {
+        if (nFrame > 62) {
             nFrame = 62;
         }
         int xPos = m_nWidgetWidth * nFrame;
-        painter.drawPixmap( rect(), *m_background_center, QRect( xPos, 0, m_nWidgetWidth, m_nWidgetHeight ) );
+        painter.drawPixmap(rect(), *m_background_center, QRect(xPos, 0, m_nWidgetWidth, m_nWidgetHeight));
     }
 }
 
 
-void Rotary::setDbValue( float val )
+void Rotary::setDbValue(float val)
 {
     setValue(lin2db(val, m_fMin));
 }
-void Rotary::setValue( float fValue, bool do_emit )
+void Rotary::setValue(float fValue, bool do_emit)
 {
-    if ( fValue == m_fValue ) {
+    if (fValue == m_fValue) {
         return;
     }
 
-    if ( fValue < m_fMin ) {
+    if (fValue < m_fMin) {
         fValue = m_fMin;
-    } else if ( fValue > m_fMax ) {
+    } else if (fValue > m_fMax) {
         fValue = m_fMax;
     }
 
-    if ( fValue != m_fValue ) {
+    if (fValue != m_fValue) {
         m_fValue = fValue;
         update();
     }
@@ -171,45 +172,45 @@ void Rotary::setValue( float fValue, bool do_emit )
 
 void Rotary::mousePressEvent(QMouseEvent *ev)
 {
-	if (ev->button() == Qt::LeftButton) {
-	    setCursor( QCursor( Qt::SizeVerCursor ) );
-	
-	    m_fMousePressValue = m_fValue;
-	    m_fMousePressY = ev->y();
-	
-	    if ( m_bShowValueToolTip ) {
-	        char tmp[20];
-	        if (m_type == TYPE_NORMAL) {
-	            sprintf( tmp, "%#.1f", m_fValue );
-	        } else {
-	            sprintf( tmp, "%#.2f", m_fValue );
-	        }
-	        m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), QString( tmp ) );
-	    }
-	}
+    if (ev->button() == Qt::LeftButton) {
+        setCursor(QCursor(Qt::SizeVerCursor));
+
+        m_fMousePressValue = m_fValue;
+        m_fMousePressY = ev->y();
+
+        if (m_bShowValueToolTip) {
+            char tmp[20];
+            if (m_type == TYPE_NORMAL) {
+                sprintf(tmp, "%#.1f", m_fValue);
+            } else {
+                sprintf(tmp, "%#.2f", m_fValue);
+            }
+            m_pValueToolTip->showTip(mapToGlobal(QPoint(-38, 1)), QString(tmp));
+        }
+    }
 }
 
-void Rotary::mouseReleaseEvent( QMouseEvent *ev )
+void Rotary::mouseReleaseEvent(QMouseEvent *ev)
 {
-	if (ev->button() == Qt::LeftButton) {
-	    setCursor( QCursor( Qt::ArrowCursor ) );
-	    m_pValueToolTip->hide();
-	    m_fMousePressValue = m_fMin - 1;
-    	emit leftClick(ev);
+    if (ev->button() == Qt::LeftButton) {
+        setCursor(QCursor(Qt::ArrowCursor));
+        m_pValueToolTip->hide();
+        m_fMousePressValue = m_fMin - 1;
+        emit leftClick(ev);
     } else if (ev->button() == Qt::RightButton) {
-    	emit rightClick(ev);
+        emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
-    	emit middleClick(ev);
+        emit middleClick(ev);
     }
 }
 
 void Rotary::incValue(bool p_bDirection, int p_iStep)
 {
-    if ( m_bUseIntSteps ) {
+    if (m_bUseIntSteps) {
         if (p_bDirection) {
-            setValue( getValue() + 1 * p_iStep, true );
+            setValue(getValue() + 1 * p_iStep, true);
         } else {
-            setValue( getValue() - 1 * p_iStep, true );
+            setValue(getValue() - 1 * p_iStep, true);
         }
     } else {
         float delta = 0.5;
@@ -219,9 +220,9 @@ void Rotary::incValue(bool p_bDirection, int p_iStep)
         }
 
         if (p_bDirection) {
-            setValue( m_fValue + delta * p_iStep, true );
+            setValue(m_fValue + delta * p_iStep, true);
         } else {
-            setValue( m_fValue - delta * p_iStep, true );
+            setValue(m_fValue - delta * p_iStep, true);
         }
     }
 }
@@ -230,7 +231,7 @@ void Rotary::incValue(bool p_bDirection, int p_iStep)
 {
 // qDebug() << "wheelEvent delta: " << ev->delta();
     ev->accept();
- 
+
     if ( m_bUseIntSteps ) {
         if ( ev->delta() > 0 ) {
             setValue( getValue() + 1, true );
@@ -243,7 +244,7 @@ void Rotary::incValue(bool p_bDirection, int p_iStep)
             float fRange = m_fMax - m_fMin;
             delta = fRange / MV_HEIGHT;
         }
- 
+
         if ( ev->delta() > 0 ) {
             setValue( m_fValue + delta, true );
         } else {
@@ -252,34 +253,34 @@ void Rotary::incValue(bool p_bDirection, int p_iStep)
     }
 }*/
 
-void Rotary::mouseMoveEvent( QMouseEvent *ev )
+void Rotary::mouseMoveEvent(QMouseEvent *ev)
 {
     if (m_fMousePressValue != m_fMin - 1) {
         float fRange = m_fMax - m_fMin;
 
         float deltaY = ev->y() - m_fMousePressY;
-        float fNewValue = ( m_fMousePressValue - ( deltaY / MV_HEIGHT * fRange ) );
+        float fNewValue = (m_fMousePressValue - (deltaY / MV_HEIGHT * fRange));
 
-        setValue( fNewValue, true );
+        setValue(fNewValue, true);
 
-        if ( m_bShowValueToolTip ) {
+        if (m_bShowValueToolTip) {
             QString tip;
             if (m_type == TYPE_NORMAL) {
                 tip = displayDbShort(m_fValue, m_fMin);
             } else {
                 char tmp[20];
-                sprintf( tmp, "%#.2f", m_fValue );
+                sprintf(tmp, "%#.2f", m_fValue);
                 tip = tmp;
             }
-            m_pValueToolTip->showTip( mapToGlobal( QPoint( -38, 1 ) ), tip );
+            m_pValueToolTip->showTip(mapToGlobal(QPoint(-38, 1)), tip);
         }
     }
 }
 
-void Rotary::setMinValue( float fMin )
+void Rotary::setMinValue(float fMin)
 {
     m_fMin = fMin;
-	m_fMousePressValue = m_fMin - 1;
+    m_fMousePressValue = m_fMin - 1;
     update();
 }
 
@@ -288,7 +289,7 @@ float Rotary::getMinValue()
     return m_fMin;
 }
 
-void Rotary::setMaxValue( float fMax )
+void Rotary::setMaxValue(float fMax)
 {
     m_fMax = fMax;
     update();

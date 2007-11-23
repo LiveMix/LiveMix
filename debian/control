@@ -3,8 +3,9 @@ Section: sound
 Priority: extra
 Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
-Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk
+Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk, liblash-dev
 Standards-Version: 3.7.2
+Homepage: http://livemix.codingteam.net/
 
 Package: livemix
 Architecture: any
@@ -20,4 +21,3 @@ Description: Simple mixer for live performances
   - PK meters.
   - CPU meters.
   - Hydrogen GUI.
- Homepage: http://livemix.codingteam.net/

@@ -32,7 +32,7 @@
 namespace LiveMix
 {
 
-CpuLoadWidget::CpuLoadWidget( QWidget *pParent )
+CpuLoadWidget::CpuLoadWidget(QWidget *pParent)
         : QWidget(pParent)
         , m_fValue(0)
 {
@@ -41,23 +41,23 @@ CpuLoadWidget::CpuLoadWidget( QWidget *pParent )
     static const uint WIDTH = 88;
     static const uint HEIGHT = 11;
 
-    resize( WIDTH, HEIGHT );
-    setMinimumSize( width(), height() );
-    setMaximumSize( width(), height() );
+    resize(WIDTH, HEIGHT);
+    setMinimumSize(width(), height());
+    setMaximumSize(width(), height());
 
 // m_nXRunValue = 0;
 
     // Background image
     QString background_path = ":/data/cpuLoad_back.svg";
-    bool ok = m_back.load( background_path );
-    if( !ok ) {
+    bool ok = m_back.load(background_path);
+    if (!ok) {
         qDebug() << "Error loading pixmap " + background_path;
     }
 
     // Leds image
     QString leds_path = ":/data/cpuLoad_leds.svg";
-    ok = m_leds.load( leds_path );
-    if( !ok ) {
+    ok = m_leds.load(leds_path);
+    if (!ok) {
         qDebug() << "Error loading pixmap " + leds_path;
     }
 
@@ -78,7 +78,7 @@ void CpuLoadWidget::mousePressEvent(QMouseEvent*)
 
 void CpuLoadWidget::setValue(float newValue)
 {
-    if ( newValue > 1.0 ) {
+    if (newValue > 1.0) {
         newValue = 1.0;
     } else if (newValue < 0.0) {
         newValue = 0.0;
@@ -97,7 +97,7 @@ float CpuLoadWidget::getValue()
 
 void CpuLoadWidget::setValue2(float newValue)
 {
-    if ( newValue > 1.0 ) {
+    if (newValue > 1.0) {
         newValue = 1.0;
     } else if (newValue < 0.0) {
         newValue = 0.0;
@@ -114,7 +114,7 @@ float CpuLoadWidget::getValue2()
     return m_fValue2;
 }
 
-void CpuLoadWidget::paintEvent( QPaintEvent*)
+void CpuLoadWidget::paintEvent(QPaintEvent*)
 {
     if (!isVisible()) {
         return;
@@ -123,14 +123,14 @@ void CpuLoadWidget::paintEvent( QPaintEvent*)
     QPainter painter(this);
 
     // background
-    painter.drawPixmap( rect(), m_back, QRect( 0, 0, width(), height() ) );
+    painter.drawPixmap(rect(), m_back, QRect(0, 0, width(), height()));
 
     // leds
-    int pos = (int)( 3 + m_fValue * ( width() - 3 * 2 ) );
-    painter.drawPixmap( QRect( 0, 0, pos, (height()-1)/2 -1 ), m_leds, QRect( 0, 0, pos, 1) );
+    int pos = (int)(3 + m_fValue * (width() - 3 * 2));
+    painter.drawPixmap(QRect(0, 0, pos, (height()-1)/2 -1), m_leds, QRect(0, 0, pos, 1));
 
-    pos = (int)( 3 + m_fValue2 * ( width() - 3 * 2 ) );
-    painter.drawPixmap( QRect( 0, (height()-1)/2 +2, pos, (height()-1)/2 -1), m_leds, QRect( 0, 0, pos, 1) );
+    pos = (int)(3 + m_fValue2 * (width() - 3 * 2));
+    painter.drawPixmap(QRect(0, (height()-1)/2 +2, pos, (height()-1)/2 -1), m_leds, QRect(0, 0, pos, 1));
 }
 
 }

@@ -23,6 +23,7 @@
 
 #include "ladspa_fx.h"
 #include "backend.h"
+#include "qlash.h"
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QDockWidget>
@@ -46,16 +47,16 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow( QWidget* =0 );
-    MainWindow( QString filename, QWidget* =0 );
+    MainWindow(QWidget* =0);
+    MainWindow(QString filename, QWidget* =0);
     ~MainWindow();
 public slots:
     void openFile();
-    void openFile( QString path );
+    void openFile(QString path);
     void saveFile();
-	void saveFile(QString p_rPath);
+    void saveFile(QString p_rPath);
 private slots:
-    void closeEvent( QCloseEvent* );
+    void closeEvent(QCloseEvent*);
 
     void addInputMono();
     void addPreMono();
@@ -74,47 +75,50 @@ private slots:
     void removePost();
     void removeSub();
 
-    void removeInput( QString );
-    void removePre( QString );
-    void removePost( QString );
-    void removeSub( QString );
+    void removeInput(QString);
+    void removePre(QString);
+    void removePost(QString);
+    void removeSub(QString);
 
     void about();
     void aboutQt();
 
     void initMatrix();
     void scheduleInit();
-    
+
     void openDefaultMenu();
     void openEmpty();
 
+    void saveLash(QString p_rDir);
+    void restoreLash(QString p_rDir);
+
 private:
     void toEmpty();
-	void openDefault();
+    void openDefault();
 
-    void addInput( QString, bool );
+    void addInput(QString, bool);
 // void addOutput( QString, bool );
-    void addPre( QString, bool );
-    void addPost( QString, bool, bool );
-    void addSub( QString, bool );
+    void addPre(QString, bool);
+    void addPost(QString, bool, bool);
+    void addSub(QString, bool);
 
     void init();
 
     LadspaFX* openEffect(const QDomElement& elem);
     void saveEffect(QString& xml, effect*);
-    
-	void openActionBinding(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
-	void openActionBindingList(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
-    void openActionBinding(const QDomElement& channel, const ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
-	QString saveActionBinding(const ChannelType p_eType, const QString& p_sChannelName);
 
-    bool toBool( QString );
-    QString fromBool( bool );
+    void openActionBinding(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
+    void openActionBindingList(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
+    void openActionBinding(const QDomElement& channel, const ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
+    QString saveActionBinding(const ChannelType p_eType, const QString& p_sChannelName);
+
+    bool toBool(QString);
+    QString fromBool(bool);
 
     int config_restore_id;
     QMenu *_filemenu, *_editmenu, *_viewmenu, *_settingsmenu, *_helpmenu;
     Widget *_mixerwidget;
-	QAction *_new_empty, *_new_default;
+    QAction *_new_empty, *_new_default;
     QAction *_add_inchannel_action, *_add_prechannel_action, *_add_postchannel_action, *_add_subchannel_action;
     QAction *_add_stinchannel_action, *_add_stprechannel_action, *_add_stpostchannel_action, *_add_stsubchannel_action;
     QAction *_add_intpostchannel_action, *_add_stintpostchannel_action;
@@ -122,7 +126,8 @@ private:
     QAction *m_pFaderHeight, *m_pEffectFaderHeight, *m_pShowGain;
     QAction *_debugPrint;
     bool _initScheduled;
-	void timerEvent( QTimerEvent* );
+    void timerEvent(QTimerEvent*);
+    qLashClient *m_lash;
 };
 
 }

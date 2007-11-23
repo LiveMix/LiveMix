@@ -47,12 +47,14 @@ public:
 
     void updateControls();
 
-    void closeEvent( QCloseEvent *ev );
+    void closeEvent(QCloseEvent *ev);
 
     static LadspaFX* getFXSelector(LadspaFX* oldFx);
-    ToggleButton* getActivateButton() { return m_pActivateBtn; };
+    ToggleButton* getActivateButton() {
+        return m_pActivateBtn;
+    };
     void setFaderHeight(int p_iHeight);
-    
+
 public slots:
     void faderChanged(Volume* ref);
     void toggleChanged(ToggleButton* ref);
@@ -94,7 +96,7 @@ private:
 
     QTimer *m_pTimer;
 
-	int m_iFaderHeight;
+    int m_iFaderHeight;
 };
 
 }

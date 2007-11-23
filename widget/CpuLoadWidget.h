@@ -45,10 +45,10 @@ public:
     CpuLoadWidget(QWidget *pParent);
     ~CpuLoadWidget();
 
-    void setValue( float newValue );
+    void setValue(float newValue);
     float getValue();
 
-    void setValue2( float newValue );
+    void setValue2(float newValue);
     float getValue2();
 
     void mousePressEvent(QMouseEvent *ev);

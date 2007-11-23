@@ -38,17 +38,15 @@ public:
     void setText(QString text);
     QString text();
 
-    void setFont(QFont p_font)
-    {
+    void setFont(QFont p_font) {
         m_mixerFont = p_font;
     };
-    QFont font()
-    {
+    QFont font() {
         return m_mixerFont;
     };
 
-    void mousePressEvent( QMouseEvent * e );
-    void mouseDoubleClickEvent( QMouseEvent * e );
+    void mousePressEvent(QMouseEvent * e);
+    void mouseDoubleClickEvent(QMouseEvent * e);
 
 signals:
     void clicked();

@@ -44,8 +44,8 @@ public:
     effect(LadspaFX *p_fx, jack_nframes_t p_nframes);
     ~effect();
 
-	QString displayname;
-	
+    QString displayname;
+
 // wrorking data:
 #ifdef LADSPA_SUPPORT
     LadspaFX *fx;
@@ -62,11 +62,11 @@ public:
     channel(QString p_name, bool p_stereo, jack_nframes_t p_nframes);
     virtual ~channel();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="") =0;
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="") =0;
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="") =0;
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="") =0;
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="") =0;
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="") =0;
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="") =0;
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="") =0;
+
     QString name;
     QString display_name;
     bool mute;
@@ -83,11 +83,11 @@ public:
     in(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r);
     virtual ~in();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
+
     float gain;
     float volume;
     float bal;
@@ -112,11 +112,11 @@ public:
     out(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r);
     virtual ~out();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
+
     float volume;
     float bal;
     bool afl;
@@ -132,11 +132,11 @@ public:
     pre(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r);
     virtual ~pre();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
+
     float volume;
     float bal;
     bool afl;
@@ -152,11 +152,11 @@ public:
     post(QString p_name, bool p_stereo, bool p_external, jack_nframes_t p_nframes, jack_port_t* s_l, jack_port_t* s_r, jack_port_t* r_l, jack_port_t* r_r);
     virtual ~post();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
+
     float prevolume;
     float postvolume;
     float bal;
@@ -183,11 +183,11 @@ public:
     sub(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r);
     virtual ~sub();
 
-	virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
-	virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
-	
+    virtual float getFloatAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setFloatAttribute(float p_fValue, ElementType p_eType, QString p_rToChannel ="");
+    virtual bool getBoolAttribute(ElementType p_eType, QString p_rToChannel ="");
+    virtual void setBoolAttribute(bool p_fValue, ElementType p_eType, QString p_rToChannel ="");
+
     float volume;
     float bal;
     bool afl;

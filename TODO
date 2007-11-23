@@ -2,18 +2,18 @@ External code review welcome (it's my fist QP application and c++ application fr
 
 ==== 0.45 ====
 
+- add lash support / save jack connection
+
 
 - multiple add in channels
 - manual set value by dbl click.
 
+- add MIDI learn support
+
 - add selected chanel LED, element (or highlight channel label) 
 - add pfl LED, on selected element
 
-- add lash support
-  - add possibility to change jack application name
-  - save jack connection ?
-
-- add MIDI learn support
+- add possibility to change jack application name
 
 - move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/ ?
 

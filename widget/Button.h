@@ -55,17 +55,18 @@ public:
     virtual ~Button();
     virtual QWidget* getWidget();
 
-    bool isPressed()
-    {
+    bool isPressed() {
         return m_bPressed;
     }
     void setPressed(bool pressed);
 
-    void setText( const QString& sText );
+    void setText(const QString& sText);
 
     static Button* create(QWidget* =NULL);
 
-    virtual bool getValue() {return false;};
+    virtual bool getValue() {
+        return false;
+    };
     virtual void setValue(bool, bool = false) {};
 
 signals:
@@ -98,7 +99,7 @@ private:
     void leaveEvent(QEvent *ev);
     void paintEvent(QPaintEvent* ev);
 
-	void draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap);
+    void draw(QPaintEvent *ev, QPainter &painter, QPixmap &pixmap);
     bool loadImage(const QString &sFilename, QPixmap &pixmap);
 };
 
@@ -112,7 +113,7 @@ class ToggleButton : public Button
     Q_OBJECT
 
 public:
-    ToggleButton( QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style);
+    ToggleButton(QWidget *pParent, const QString& sOnImg, const QString& sOffImg, const QString& sOverImg, const QString& sOffOverImg, QSize size, bool use_skin_style);
     ~ToggleButton();
 
     static ToggleButton* create(QWidget* =NULL);
@@ -120,13 +121,13 @@ public:
     virtual bool getValue();
     virtual void setValue(bool p_bValue, bool p_bEmit = false);
 
-    void mousePressEvent( QMouseEvent *ev );
+    void mousePressEvent(QMouseEvent *ev);
 
 signals:
     void valueChanged(ToggleButton* ref);
 
 private:
-    void mouseReleaseEvent( QMouseEvent *ev );
+    void mouseReleaseEvent(QMouseEvent *ev);
 };
 
 }

@@ -49,35 +49,35 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX, int p
     m_nLadspaFX = nLadspaFX;
 
     QHBoxLayout *hbox = new QHBoxLayout();
-    hbox->setSpacing( 0 );
-    hbox->setMargin( 0 );
-    setLayout( hbox );
+    hbox->setSpacing(0);
+    hbox->setMargin(0);
+    setLayout(hbox);
 
-    m_pScrollArea = new QScrollArea( NULL );
-    hbox->addWidget( m_pScrollArea );
+    m_pScrollArea = new QScrollArea(NULL);
+    hbox->addWidget(m_pScrollArea);
 
-    m_pScrollArea->move( 0, 0 );
-    m_pScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_pScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_pScrollArea->resize( width(), height() );
+    m_pScrollArea->move(0, 0);
+    m_pScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pScrollArea->resize(width(), height());
 
-    m_pFrame = new QWidget( this );
-    m_pFrame->resize( width(), height() - 5 );
+    m_pFrame = new QWidget(this);
+    m_pFrame->resize(width(), height() - 5);
 
-    m_pScrollArea->setWidget( m_pFrame );
+    m_pScrollArea->setWidget(m_pFrame);
 
     m_pNameLbl = new QLabel(this);
-    m_pNameLbl->move( 10, 17 );
-    m_pNameLbl->resize( 270, 24 );
+    m_pNameLbl->move(10, 17);
+    m_pNameLbl->resize(270, 24);
 
     QFont boldFont;
     boldFont.setBold(true);
-    m_pNameLbl->setFont( boldFont );
+    m_pNameLbl->setFont(boldFont);
 
     m_pActivateBtn = ToggleButton::create(this);
     m_pActivateBtn->setText(trUtf8("M"));
     m_pActivateBtn->setToolTip(trUtf8("Mute"));
-    connect( m_pActivateBtn, SIGNAL(clicked()), this, SLOT(activateBtnClicked()) );
+    connect(m_pActivateBtn, SIGNAL(clicked()), this, SLOT(activateBtnClicked()));
 
     m_pRemoveBtn = Button::create(this);
     m_pRemoveBtn->setText(trUtf8("X"));
@@ -94,8 +94,8 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX, int p
     m_pRightBtn->setToolTip(trUtf8("Move right"));
     connect(m_pRightBtn, SIGNAL(clicked()), this, SLOT(rightBtnClicked()));
 
-    m_pTimer = new QTimer( this );
-    connect(m_pTimer, SIGNAL( timeout() ), this, SLOT( updateOutputControls() ) );
+    m_pTimer = new QTimer(this);
+    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(updateOutputControls()));
 
     updateControls();
     setFaderHeight(p_iFaderHeight);
@@ -109,7 +109,7 @@ LadspaFXProperties::~LadspaFXProperties()
 // qDebug() << "DESTROY";
 }
 
-void LadspaFXProperties::closeEvent( QCloseEvent *ev )
+void LadspaFXProperties::closeEvent(QCloseEvent *ev)
 {
     ev->accept();
 }
@@ -117,8 +117,8 @@ void LadspaFXProperties::closeEvent( QCloseEvent *ev )
 void LadspaFXProperties::toggleChanged(ToggleButton* ref)
 {
 #ifdef LADSPA_SUPPORT
-    for ( int i = 0; i < m_pInputControlFaders.size(); i++ ) {
-        if (ref == m_pInputControlFaders[ i ] ) {
+    for (int i = 0; i < m_pInputControlFaders.size(); i++) {
+        if (ref == m_pInputControlFaders[ i ]) {
             LadspaControlPort *pControl = m_nLadspaFX->fx->inputControlPorts[ i ];
             pControl->m_fControlValue = (int)ref->getValue();
         }
@@ -128,23 +128,23 @@ void LadspaFXProperties::toggleChanged(ToggleButton* ref)
 
 void LadspaFXProperties::faderChanged(Volume* ref)
 {
-    ((Fader*)ref)->setPeak_L( ref->getValue() );
-    ((Fader*)ref)->setPeak_R( ref->getValue() );
+    ((Fader*)ref)->setPeak_L(ref->getValue());
+    ((Fader*)ref)->setPeak_R(ref->getValue());
 
 #ifdef LADSPA_SUPPORT
-    for ( int i = 0; i < m_pInputControlFaders.size(); i++ ) {
-        if (ref == m_pInputControlFaders[ i ] ) {
+    for (int i = 0; i < m_pInputControlFaders.size(); i++) {
+        if (ref == m_pInputControlFaders[ i ]) {
             LadspaControlPort *pControl = m_nLadspaFX->fx->inputControlPorts[ i ];
 
             pControl->m_fControlValue = ((Fader*)ref)->getLinDb() ? ref->getValue() : ref->getDbValue();
 
             QString sValue;
-            if (pControl->m_fControlValue < 1.0 ) {
-                sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 2 );
-            } else if ( pControl->m_fControlValue < 100.0 ) {
-                sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 1 );
+            if (pControl->m_fControlValue < 1.0) {
+                sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 2);
+            } else if (pControl->m_fControlValue < 100.0) {
+                sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 1);
             } else {
-                sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 0 );
+                sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 0);
             }
             m_pInputControlLabel[ i ]->setText(sValue);
         }
@@ -161,20 +161,20 @@ void LadspaFXProperties::updateControls()
         if (m_nLadspaFX->fx->inputControlPorts.size() > 0 && m_nLadspaFX->fx->outputControlPorts.size() > 0) {
             nControlsFrameWidth += 10;
         }
-        if ( nControlsFrameWidth < 100 ) {
+        if (nControlsFrameWidth < 100) {
             nControlsFrameWidth = 100;
         }
 
-        setFixedSize( nControlsFrameWidth, height() );
-        m_pFrame->resize( width(), height() - 5 );
-        m_pActivateBtn->move(nControlsFrameWidth - 51, 6 );
-        m_pRemoveBtn->move(nControlsFrameWidth - 27, 6 );
-        m_pLeftBtn->move(nControlsFrameWidth - 99, 6 );
-        m_pRightBtn->move(nControlsFrameWidth - 75, 6 );
-        m_pNameLbl->resize(nControlsFrameWidth - 17, 24 );
+        setFixedSize(nControlsFrameWidth, height());
+        m_pFrame->resize(width(), height() - 5);
+        m_pActivateBtn->move(nControlsFrameWidth - 51, 6);
+        m_pRemoveBtn->move(nControlsFrameWidth - 27, 6);
+        m_pLeftBtn->move(nControlsFrameWidth - 99, 6);
+        m_pRightBtn->move(nControlsFrameWidth - 75, 6);
+        m_pNameLbl->resize(nControlsFrameWidth - 17, 24);
 
-        m_pNameLbl->setText( m_nLadspaFX->fx->getPluginName() );
-        m_pNameLbl->setToolTip( m_nLadspaFX->fx->getPluginName() );
+        m_pNameLbl->setText(m_nLadspaFX->fx->getPluginName());
+        m_pNameLbl->setToolTip(m_nLadspaFX->fx->getPluginName());
 
         // input controls
         uint nInputControl_X = 10;
@@ -183,52 +183,52 @@ void LadspaFXProperties::updateControls()
 
             nInputControl_X = 10 + 45 * i;
 
-            LCDDisplay *pLCD = new LCDDisplay( m_pFrame, LCDDigit::SMALL_BLUE, 5);
-            pLCD->move( nInputControl_X + 5, 40 );
+            LCDDisplay *pLCD = new LCDDisplay(m_pFrame, LCDDigit::SMALL_BLUE, 5);
+            pLCD->move(nInputControl_X + 5, 40);
             QPalette lcdPalette;
-            lcdPalette.setColor( QPalette::Background, QColor( 58, 62, 72 ) );
-            pLCD->setPalette( lcdPalette );
+            lcdPalette.setColor(QPalette::Background, QColor(58, 62, 72));
+            pLCD->setPalette(lcdPalette);
 
-            m_pInputControlLabel.push_back( pLCD );
+            m_pInputControlLabel.push_back(pLCD);
 
-            FaderName *pName = new FaderName( m_pFrame );
-            pName->move( nInputControl_X + 3, 60 );
-            pName->setText( pControlPort->m_sName );
+            FaderName *pName = new FaderName(m_pFrame);
+            pName->move(nInputControl_X + 3, 60);
+            pName->setText(pControlPort->m_sName);
             m_pInputControlNames << pName;
-            pName->setToolTip( pName->text() );
+            pName->setToolTip(pName->text());
 
             if (pControlPort->m_bToggle) {
                 pLCD->hide();
 
                 ToggleButton *pToggle = ToggleButton::create(m_pFrame);
-                connect( pToggle, SIGNAL( valueChanged(ToggleButton*) ), this, SLOT( toggleChanged(ToggleButton*) ) );
-                m_pInputControlFaders.push_back( pToggle );
+                connect(pToggle, SIGNAL(valueChanged(ToggleButton*)), this, SLOT(toggleChanged(ToggleButton*)));
+                m_pInputControlFaders.push_back(pToggle);
                 pToggle->move(nInputControl_X + 20, m_iFaderHeight + 23);
 
                 pToggle->setValue((bool)pControlPort->m_fControlValue);
                 toggleChanged(pToggle);
             } else {
                 // fader
-                Fader *pFader = new Fader( m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic );
+                Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic);
 //                connect(pFader, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
                 connect(pFader, SIGNAL(rightClick(QMouseEvent*)), this, SLOT(contextMenu(QMouseEvent*)));
-                connect( pFader, SIGNAL( valueChanged(Volume*) ), this, SLOT( faderChanged(Volume*) ) );
-                m_pInputControlFaders.push_back( pFader );
-                pFader->move( nInputControl_X + 20, 56 );
+                connect(pFader, SIGNAL(valueChanged(Volume*)), this, SLOT(faderChanged(Volume*)));
+                m_pInputControlFaders.push_back(pFader);
+                pFader->move(nInputControl_X + 20, 56);
 
 
                 if (pControlPort->m_bLogarithmic) {
-                    pFader->setDbMaxValue( pControlPort->m_fUpperBound );
-                    pFader->setDbMinValue( pControlPort->m_fLowerBound );
-                    pFader->setDbMaxPeak( pControlPort->m_fUpperBound );
-                    pFader->setDbMinPeak( pControlPort->m_fLowerBound );
-                    pFader->setDbValue( pControlPort->m_fControlValue );
+                    pFader->setDbMaxValue(pControlPort->m_fUpperBound);
+                    pFader->setDbMinValue(pControlPort->m_fLowerBound);
+                    pFader->setDbMaxPeak(pControlPort->m_fUpperBound);
+                    pFader->setDbMinPeak(pControlPort->m_fLowerBound);
+                    pFader->setDbValue(pControlPort->m_fControlValue);
                 } else {
-                    pFader->setMaxValue( pControlPort->m_fUpperBound );
-                    pFader->setMinValue( pControlPort->m_fLowerBound );
-                    pFader->setMaxPeak( pControlPort->m_fUpperBound );
-                    pFader->setMinPeak( pControlPort->m_fLowerBound );
-                    pFader->setValue( pControlPort->m_fControlValue );
+                    pFader->setMaxValue(pControlPort->m_fUpperBound);
+                    pFader->setMinValue(pControlPort->m_fLowerBound);
+                    pFader->setMaxPeak(pControlPort->m_fUpperBound);
+                    pFader->setMinPeak(pControlPort->m_fLowerBound);
+                    pFader->setValue(pControlPort->m_fControlValue);
                 }
                 faderChanged(pFader);
             }
@@ -242,31 +242,31 @@ void LadspaFXProperties::updateControls()
             LadspaControlPort *pControl = m_nLadspaFX->fx->outputControlPorts[ i ];
             uint xPos = nInputControl_X + 10 + 45 * i;
 
-            LCDDisplay *pLCD = new LCDDisplay( m_pFrame, LCDDigit::SMALL_BLUE, 5);
-            pLCD->move( xPos + 5, 40 );
+            LCDDisplay *pLCD = new LCDDisplay(m_pFrame, LCDDigit::SMALL_BLUE, 5);
+            pLCD->move(xPos + 5, 40);
             QPalette lcdPalette;
-            lcdPalette.setColor( QPalette::Background, QColor( 58, 62, 72 ) );
-            pLCD->setPalette( lcdPalette );
-            m_pOutputControlLabel.push_back( pLCD );
+            lcdPalette.setColor(QPalette::Background, QColor(58, 62, 72));
+            pLCD->setPalette(lcdPalette);
+            m_pOutputControlLabel.push_back(pLCD);
 
-            FaderName *pName = new FaderName( m_pFrame );
-            pName->move( xPos + 3, 60 );
-            pName->setText( pControl->m_sName );
-            m_pOutputControlNames.push_back( pName );
-            pName->setToolTip( pName->text() );
+            FaderName *pName = new FaderName(m_pFrame);
+            pName->move(xPos + 3, 60);
+            pName->setText(pControl->m_sName);
+            m_pOutputControlNames.push_back(pName);
+            pName->setToolTip(pName->text());
 
             // fader
-            Fader *pFader = new Fader( m_pFrame, false, true ); // without knob!
-            pFader->move( xPos + 20, 56 );
+            Fader *pFader = new Fader(m_pFrame, false, true);   // without knob!
+            pFader->move(xPos + 20, 56);
 
-            pFader->setMaxPeak( pControl->m_fUpperBound );
-            pFader->setMinPeak( pControl->m_fLowerBound );
+            pFader->setMaxPeak(pControl->m_fUpperBound);
+            pFader->setMinPeak(pControl->m_fLowerBound);
 
             m_pOutputControlFaders.push_back(pFader);
         }
     } else {
         qDebug() << "NULL PLUGIN";
-        m_pNameLbl->setText( trUtf8("No plugin") );
+        m_pNameLbl->setText(trUtf8("No plugin"));
         m_pActivateBtn->setEnabled(false);
     }
 #endif
@@ -284,8 +284,8 @@ LadspaFX* LadspaFXProperties::getFXSelector(LadspaFX* oldFx)
             QList<LadspaFXInfo*> pluginList = Effects::getInstance()->getPluginList();
             for (int i = 0; i < pluginList.size(); i++) {
                 LadspaFXInfo *fxInfo = pluginList[i];
-                if (fxInfo->m_sName == sSelectedFX ) {
-                    return LadspaFX::load( fxInfo->m_sFilename, fxInfo->m_sLabel, Backend::instance()->getSampleRate() );
+                if (fxInfo->m_sName == sSelectedFX) {
+                    return LadspaFX::load(fxInfo->m_sFilename, fxInfo->m_sLabel, Backend::instance()->getSampleRate());
 //     m_nLadspaFX->fx->setEnabled( true );
                     break;
                 }
@@ -306,15 +306,15 @@ void LadspaFXProperties::updateOutputControls()
 // qDebug() << "[updateOutputControls]";
 
     if (m_nLadspaFX->fx) {
-    	QString title = trUtf8("%1 (%2 %)").arg(m_nLadspaFX->fx->getPluginName()).arg(m_nLadspaFX->m_fCpuUse * 100, 0, 'f', 2);
+        QString title = trUtf8("%1 (%2 %)").arg(m_nLadspaFX->fx->getPluginName()).arg(m_nLadspaFX->m_fCpuUse * 100, 0, 'f', 2);
         m_pNameLbl->setText(title);
         m_pNameLbl->setToolTip(title);
-    	
+
         if (m_nLadspaFX->fx->isEnabled()) {
-            m_pActivateBtn->setToolTip( trUtf8("Deactivate") );
+            m_pActivateBtn->setToolTip(trUtf8("Deactivate"));
             m_pActivateBtn->setPressed(false);
         } else {
-            m_pActivateBtn->setToolTip( trUtf8("Activate") );
+            m_pActivateBtn->setToolTip(trUtf8("Activate"));
             m_pActivateBtn->setPressed(true);
         }
 
@@ -323,7 +323,7 @@ void LadspaFXProperties::updateOutputControls()
 
             {
                 QList<Fader*>::iterator it = m_pOutputControlFaders.begin() + i;
-                if (it != m_pOutputControlFaders.end() ) {
+                if (it != m_pOutputControlFaders.end()) {
                     Fader *pFader = *it;
                     if (pFader == NULL) {
                         qDebug() << "[updateOutputControls] pFader = NULL";
@@ -335,13 +335,13 @@ void LadspaFXProperties::updateOutputControls()
                     float fValue = pControl->m_fControlValue;// / fInterval;
                     //    if (fValue < 0) fValue = -fValue;
 
-                    pFader->setPeak_L( fValue );
-                    pFader->setPeak_R( fValue );
+                    pFader->setPeak_L(fValue);
+                    pFader->setPeak_R(fValue);
                 }
             }
             {
                 QList<LCDDisplay*>::iterator it = m_pOutputControlLabel.begin() + i;
-                if (it != m_pOutputControlLabel.end() ) {
+                if (it != m_pOutputControlLabel.end()) {
                     LCDDisplay *pLabel = *it;
                     if (pLabel == NULL) {
                         qDebug() << "[updateOutputControls] pLabel = NULL";
@@ -349,14 +349,14 @@ void LadspaFXProperties::updateOutputControls()
                     }
 
                     QString sValue;
-                    if (pControl->m_fControlValue < 1.0 ) {
-                        sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 2 );
-                    } else if ( pControl->m_fControlValue < 100.0 ) {
-                        sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 1 );
+                    if (pControl->m_fControlValue < 1.0) {
+                        sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 2);
+                    } else if (pControl->m_fControlValue < 100.0) {
+                        sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 1);
                     } else {
-                        sValue = QString("%1").arg( pControl->m_fControlValue, 0, 'f', 0 );
+                        sValue = QString("%1").arg(pControl->m_fControlValue, 0, 'f', 0);
                     }
-                    pLabel->setText( sValue );
+                    pLabel->setText(sValue);
                 }
             }
         }
@@ -375,7 +375,7 @@ void LadspaFXProperties::activateBtnClicked()
 {
 #ifdef LADSPA_SUPPORT
     if (m_nLadspaFX->fx) {
-        m_nLadspaFX->fx->setEnabled( !m_nLadspaFX->fx->isEnabled() );
+        m_nLadspaFX->fx->setEnabled(!m_nLadspaFX->fx->isEnabled());
     }
 #endif
 }
@@ -390,59 +390,57 @@ void LadspaFXProperties::rightBtnClicked()
     emit rightClicked(this, m_nLadspaFX);
 }
 
-void LadspaFXProperties::setFaderHeight(int p_iHeight) { //195
-	m_iFaderHeight = p_iHeight;
+void LadspaFXProperties::setFaderHeight(int p_iHeight)   //195
+{
+    m_iFaderHeight = p_iHeight;
     setFixedHeight(p_iHeight + 64);
-    m_pFrame->resize( width(), height() - 5 );
+    m_pFrame->resize(width(), height() - 5);
     m_pNameLbl->resize(p_iHeight + 75, 24);
-    foreach (FaderName* label, m_pInputControlNames) {
-	    label->setFixedHeight(p_iHeight - 15);
+    foreach(FaderName* label, m_pInputControlNames) {
+        label->setFixedHeight(p_iHeight - 15);
     }
-    foreach (QWidget* fader, m_pInputControlFaders) {
-		if (typeid(*fader).name() == typeid(Fader).name()) {
-	    	((Fader*)fader)->setFixedHeight(p_iHeight);
-    	}
-    	else {
+    foreach(QWidget* fader, m_pInputControlFaders) {
+        if (typeid(*fader).name() == typeid(Fader).name()) {
+            ((Fader*)fader)->setFixedHeight(p_iHeight);
+        } else {
             fader->move(fader->x(), p_iHeight + 23);
-    	}
+        }
     }
-    foreach (FaderName* label, m_pOutputControlNames) {
-	    label->setFixedHeight(p_iHeight - 15);
+    foreach(FaderName* label, m_pOutputControlNames) {
+        label->setFixedHeight(p_iHeight - 15);
     }
-    foreach (Fader* fader, m_pOutputControlFaders) {
-	    fader->setFixedHeight(p_iHeight);
+    foreach(Fader* fader, m_pOutputControlFaders) {
+        fader->setFixedHeight(p_iHeight);
     }
 }
 void LadspaFXProperties::contextMenu(QMouseEvent *p_pEvent)
 {
     QMenu menu(this);
-    
+
 //    QAction* assigne = new QAction(trUtf8("Assigne key"), this);
 //    connect(assigne, SIGNAL(triggered()), this, SLOT(assigneKey()));
 //    menu.addAction(assigne);
-    
+
     QAction* reset = new QAction(trUtf8("Reset the effect"), this);
     connect(reset, SIGNAL(triggered()), this, SLOT(reset()));
     menu.addAction(reset);
-    
+
     menu.exec(p_pEvent->globalPos());
 }
-void LadspaFXProperties::reset() 
+void LadspaFXProperties::reset()
 {
-    for ( int i = 0; i < m_pInputControlFaders.size(); i++ ) {
+    for (int i = 0; i < m_pInputControlFaders.size(); i++) {
         QWidget *w = m_pInputControlFaders[i];
         LadspaControlPort *pControl = m_nLadspaFX->fx->inputControlPorts[ i ];
         if (typeid(*w).name() == typeid(Fader).name()) {
             Fader *f = (Fader*)w;
             if (f->getLinDb()) {
                 f->setValue(pControl->m_fDefaultControlValue);
-            }
-            else {
+            } else {
                 f->setDbValue(pControl->m_fDefaultControlValue);
             }
             faderChanged(f);
-        }
-        else {
+        } else {
             ToggleButton *t = (ToggleButton*)w;
             t->setValue(pControl->m_fDefaultControlValue);
             toggleChanged(t);

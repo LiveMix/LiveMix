@@ -25,29 +25,32 @@
 namespace LiveMix
 {
 
-void TbWrapp::clicked() {
-	m_pMatrix->setVisible(!m_pMatrix->isVisible(m_eType, m_rRefChannel), m_eType, m_rRefChannel);
-}
-TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel) 
- : m_pButton(p_pButton)
- , m_eType(p_eType)
- , m_rRefChannel(p_rRefChannel)
- , m_pMatrix(p_pMatrix)
+void TbWrapp::clicked()
 {
-	connect(p_pButton, SIGNAL(clicked()), this, SLOT(clicked()));
+    m_pMatrix->setVisible(!m_pMatrix->isVisible(m_eType, m_rRefChannel), m_eType, m_rRefChannel);
+}
+TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel)
+        : m_pButton(p_pButton)
+        , m_eType(p_eType)
+        , m_rRefChannel(p_rRefChannel)
+        , m_pMatrix(p_pMatrix)
+{
+    connect(p_pButton, SIGNAL(clicked()), this, SLOT(clicked()));
 }
 
-IFWidget::IFWidget(Widget *p_pWidget) 
-: m_pWidget(p_pWidget)
+IFWidget::IFWidget(Widget *p_pWidget)
+        : m_pWidget(p_pWidget)
 {
     setCursor(QCursor(Qt::SizeVerCursor));
 }
-void IFWidget::mousePressEvent(QMouseEvent *p_pEvent) {
+void IFWidget::mousePressEvent(QMouseEvent *p_pEvent)
+{
     if (p_pEvent->button() == Qt::LeftButton) {
         m_fMousePressY = p_pEvent->y();
     }
 }
-void IFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent) {
+void IFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent)
+{
     if (p_pEvent->button() == Qt::LeftButton) {
         m_pWidget->setFaderHeight(m_pWidget->getFaderHeight() + m_fMousePressY - p_pEvent->y());
     }
@@ -63,11 +66,11 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-	{
-		QWidget *w = new QWidget();
-		w->setFixedHeight(18);
-    	layout->addWidget(w);
-	}
+    {
+        QWidget *w = new QWidget();
+        w->setFixedHeight(18);
+        layout->addWidget(w);
+    }
 
     layout->addWidget(createToggleButton(m_pMatrix, GAIN));
     layout->addWidget(createLabel(26, GAIN));
@@ -85,12 +88,12 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
     wPre->setLayout(lPre);
     layout->addWidget(wPre);
 
-/*	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}*/
+    /* {
+      PixmapWidget *pw = new PixmapWidget(NULL);
+      pw->setPixmap("separator.svg");
+      pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+         layout->addWidget(pw);
+     }*/
 
     wPost = new QWidget;
     lPost = new QVBoxLayout;
@@ -118,44 +121,47 @@ InfoWidget::InfoWidget(Widget* p_pMatrix)
 InfoWidget::~InfoWidget()
 {
 }
-ToggleButton* InfoWidget::createToggleButton(Widget* p_pMatrix, ElementType p_eType, QString p_rRefChannel) {
+ToggleButton* InfoWidget::createToggleButton(Widget* p_pMatrix, ElementType p_eType, QString p_rRefChannel)
+{
     ToggleButton *tb = new ToggleButton(NULL, "intro-open.svg", "intro-close.svg", "intro-close.svg", "intro-open.svg", QSize(INFO_WIDTH, SEPARATOR_HEIGHT), false);
     TbWrapp *wrapp = new TbWrapp(p_pMatrix, tb, p_eType, p_rRefChannel);
     if (!m_rToggleButtons.contains(p_eType)) {
-    	m_rToggleButtons.insert(p_eType, new QMap<QString, TbWrapp*>);
+        m_rToggleButtons.insert(p_eType, new QMap<QString, TbWrapp*>);
     }
     m_rToggleButtons[p_eType]->insert(p_rRefChannel, wrapp);
     tb->setToolTip(m_pMatrix->getDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
-	tb->setValue(m_pMatrix->isVisible(p_eType, p_rRefChannel));
-	return tb;
+    tb->setValue(m_pMatrix->isVisible(p_eType, p_rRefChannel));
+    return tb;
 }
-QLabel* InfoWidget::createLabel(int p_iHeight, ElementType p_eType, QString p_rRefChannel) {
-	QLabel *lab = new QLabel(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
-	lab->setToolTip(m_pMatrix->getDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
-	lab->setWordWrap(true);
-	QFont font;
-	font.setPixelSize(11);
-	font.setStretch(QFont::SemiCondensed);
- 	lab->setFont(font);
+QLabel* InfoWidget::createLabel(int p_iHeight, ElementType p_eType, QString p_rRefChannel)
+{
+    QLabel *lab = new QLabel(m_pMatrix->getMediumDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+    lab->setToolTip(m_pMatrix->getDisplayFunction(IN, "", p_eType, p_rRefChannel, true));
+    lab->setWordWrap(true);
+    QFont font;
+    font.setPixelSize(11);
+    font.setStretch(QFont::SemiCondensed);
+    lab->setFont(font);
 
     if (!m_rLabels.contains(p_eType)) {
-	    m_rLabels.insert(p_eType, new QMap<QString, QLabel*>);
+        m_rLabels.insert(p_eType, new QMap<QString, QLabel*>);
     }
     m_rLabels[p_eType]->insert(p_rRefChannel, lab);
-	lab->setFixedSize(INFO_WIDTH, p_iHeight);
-	if (!m_pMatrix->isVisible(p_eType, p_rRefChannel)) {
-		lab->setVisible(false);
-	}
-	return lab;
+    lab->setFixedSize(INFO_WIDTH, p_iHeight);
+    if (!m_pMatrix->isVisible(p_eType, p_rRefChannel)) {
+        lab->setVisible(false);
+    }
+    return lab;
 }
-int InfoWidget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo) {
+int InfoWidget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChannelTo)
+{
     if (m_rToggleButtons.contains(p_eElement) && m_rToggleButtons[p_eElement]->contains(p_rChannelTo)) {
-    	(*m_rToggleButtons[p_eElement])[p_rChannelTo]->m_pButton->setValue(p_bVisible);
+        (*m_rToggleButtons[p_eElement])[p_rChannelTo]->m_pButton->setValue(p_bVisible);
     }
     int height = 0;
     if (m_rLabels.contains(p_eElement) && m_rLabels[p_eElement]->contains(p_rChannelTo)) {
-    	height = (*m_rLabels[p_eElement])[p_rChannelTo]->height();
-    	(*m_rLabels[p_eElement])[p_rChannelTo]->setVisible(p_bVisible);
+        height = (*m_rLabels[p_eElement])[p_rChannelTo]->height();
+        (*m_rLabels[p_eElement])[p_rChannelTo]->setVisible(p_bVisible);
     }
     return p_bVisible ? height : -height;
 }
@@ -177,49 +183,49 @@ void InfoWidget::addSub(QString channelSub)
 void InfoWidget::removePre(QString channelPre)
 {
     if (m_rToggleButtons.contains(TO_PRE) && m_rToggleButtons[TO_PRE]->contains(channelPre)) {
-	    TbWrapp *elem = (*m_rToggleButtons[TO_PRE])[channelPre];
-	    lPre->removeWidget(elem->m_pButton);
-	    m_rToggleButtons[TO_PRE]->remove(channelPre);
-	    delete elem->m_pButton;
-	    delete elem;
+        TbWrapp *elem = (*m_rToggleButtons[TO_PRE])[channelPre];
+        lPre->removeWidget(elem->m_pButton);
+        m_rToggleButtons[TO_PRE]->remove(channelPre);
+        delete elem->m_pButton;
+        delete elem;
     }
     if (m_rLabels.contains(TO_PRE) && m_rLabels[TO_PRE]->contains(channelPre)) {
-    	QWidget *elem = (*m_rLabels[TO_PRE])[channelPre];
-	    lPre->removeWidget(elem);
-	    m_rLabels[TO_PRE]->remove(channelPre);
-	    delete elem;
+        QWidget *elem = (*m_rLabels[TO_PRE])[channelPre];
+        lPre->removeWidget(elem);
+        m_rLabels[TO_PRE]->remove(channelPre);
+        delete elem;
     }
 }
 void InfoWidget::removePost(QString channelPost)
 {
     if (m_rToggleButtons.contains(TO_POST) && m_rToggleButtons[TO_POST]->contains(channelPost)) {
-	    TbWrapp *elem = (*m_rToggleButtons[TO_POST])[channelPost];
-	    lPost->removeWidget(elem->m_pButton);
-	    m_rToggleButtons[TO_POST]->remove(channelPost);
-	    delete elem->m_pButton;
-	    delete elem;
+        TbWrapp *elem = (*m_rToggleButtons[TO_POST])[channelPost];
+        lPost->removeWidget(elem->m_pButton);
+        m_rToggleButtons[TO_POST]->remove(channelPost);
+        delete elem->m_pButton;
+        delete elem;
     }
     if (m_rLabels.contains(TO_POST) && m_rLabels[TO_POST]->contains(channelPost)) {
-    	QWidget *elem = (*m_rLabels[TO_POST])[channelPost];
-	    lPost->removeWidget(elem);
-	    m_rLabels[TO_POST]->remove(channelPost);
-	    delete elem;
+        QWidget *elem = (*m_rLabels[TO_POST])[channelPost];
+        lPost->removeWidget(elem);
+        m_rLabels[TO_POST]->remove(channelPost);
+        delete elem;
     }
 }
 void InfoWidget::removeSub(QString channelSub)
 {
     if (m_rToggleButtons.contains(TO_SUB) && m_rToggleButtons[TO_SUB]->contains(channelSub)) {
-	    TbWrapp *elem = (*m_rToggleButtons[TO_SUB])[channelSub];
-	    lPost->removeWidget(elem->m_pButton);
-	    m_rToggleButtons[TO_SUB]->remove(channelSub);
-	    delete elem->m_pButton;
-	    delete elem;
+        TbWrapp *elem = (*m_rToggleButtons[TO_SUB])[channelSub];
+        lPost->removeWidget(elem->m_pButton);
+        m_rToggleButtons[TO_SUB]->remove(channelSub);
+        delete elem->m_pButton;
+        delete elem;
     }
     if (m_rLabels.contains(TO_SUB) && m_rLabels[TO_SUB]->contains(channelSub)) {
-    	QWidget *elem = (*m_rLabels[TO_SUB])[channelSub];
-	    lPost->removeWidget(elem);
-	    m_rLabels[TO_SUB]->remove(channelSub);
-	    delete elem;
+        QWidget *elem = (*m_rLabels[TO_SUB])[channelSub];
+        lPost->removeWidget(elem);
+        m_rLabels[TO_SUB]->remove(channelSub);
+        delete elem;
     }
 }
 
@@ -240,30 +246,30 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
     label->setAlignment(Qt::AlignHCenter);
     layout->addWidget(label);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     QWidget *gain = m_pMatrix->createRotary(IN, p_sChannel, GAIN);
     layout->addWidget(gain);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     Toggle* mute = m_pMatrix->createToggle(IN, p_sChannel, MUTE);
     layout->addWidget(mute);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     Toggle* pfl = m_pMatrix->createToggle(IN, p_sChannel, TO_PFL);
     layout->addWidget(pfl);
 
@@ -274,12 +280,12 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
     wPre->setLayout(lPre);
     layout->addWidget(wPre);
 
-/*	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}*/
+    /* {
+      PixmapWidget *pw = new PixmapWidget(NULL);
+      pw->setPixmap("separator.svg");
+      pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+         layout->addWidget(pw);
+     }*/
 
     wPost = new QWidget;
     lPost = new QVBoxLayout;
@@ -295,21 +301,21 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
     wSub->setLayout(lSub);
     layout->addWidget(wSub);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     QWidget *bal = m_pMatrix->createRotary(IN, p_sChannel, PAN_BAL);
     layout->addWidget(bal);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     Toggle* main_on = m_pMatrix->createToggle(IN, p_sChannel, TO_MAIN);
     layout->addWidget(main_on);
 
@@ -318,7 +324,7 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
 }
 InWidget::~InWidget()
 {
-	m_pMatrix->removeShurtCut(IN, m_Channel);
+    m_pMatrix->removeShurtCut(IN, m_Channel);
 }
 void InWidget::mouseReleaseEvent(QMouseEvent* ev)
 {
@@ -328,39 +334,39 @@ void InWidget::mouseReleaseEvent(QMouseEvent* ev)
 }
 void InWidget::addPre(QString channelIn, QString channelPre)
 {
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    lPre->addWidget(pw);
-	    pre_tb[channelPre] = pw;
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        lPre->addWidget(pw);
+        pre_tb[channelPre] = pw;
+    }
     VWidget *elem = m_pMatrix->createRotary(IN, channelIn, TO_PRE, channelPre);
     lPre->addWidget(elem);
     pre[channelPre] = elem;
 }
 void InWidget::addPost(QString channelIn, QString channelPost)
 {
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    lPost->addWidget(pw);
-	    post_tb[channelPost] = pw;
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        lPost->addWidget(pw);
+        post_tb[channelPost] = pw;
+    }
     VWidget *elem = m_pMatrix->createRotary(IN, channelIn, TO_POST, channelPost);
     lPost->addWidget(elem);
     post[channelPost] = elem;
 }
 void InWidget::addSub(QString channelIn, QString channelSub)
 {
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    lSub->addWidget(pw);
-	    sub_tb[channelSub] = pw;
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        lSub->addWidget(pw);
+        sub_tb[channelSub] = pw;
+    }
     TWidget* elem = m_pMatrix->createToggle(IN, channelIn, TO_SUB, channelSub);
     elem->setToolTip(channelSub);
     lSub->addWidget(elem);
@@ -368,12 +374,12 @@ void InWidget::addSub(QString channelIn, QString channelSub)
 }
 void InWidget::removePre(QString /*channelIn*/, QString channelPre)
 {
-	{
-	    PixmapWidget *elem = pre_tb[channelPre];
-	    lPre->removeWidget(elem);
-	    pre_tb.remove(channelPre);
-	    delete elem;
-	}
+    {
+        PixmapWidget *elem = pre_tb[channelPre];
+        lPre->removeWidget(elem);
+        pre_tb.remove(channelPre);
+        delete elem;
+    }
 
     VWidget *elem = pre[channelPre];
     lPre->removeWidget(elem);
@@ -382,12 +388,12 @@ void InWidget::removePre(QString /*channelIn*/, QString channelPre)
 }
 void InWidget::removePost(QString /*channelIn*/, QString channelPost)
 {
-	{
-	    PixmapWidget *elem = post_tb[channelPost];
-	    lPost->removeWidget(elem);
-	    post_tb.remove(channelPost);
-	    delete elem;
-	}
+    {
+        PixmapWidget *elem = post_tb[channelPost];
+        lPost->removeWidget(elem);
+        post_tb.remove(channelPost);
+        delete elem;
+    }
 
     VWidget *elem = post[channelPost];
     lPost->removeWidget(elem);
@@ -396,12 +402,12 @@ void InWidget::removePost(QString /*channelIn*/, QString channelPost)
 }
 void InWidget::removeSub(QString /*channelIn*/, QString channelSub)
 {
-	{
-	    PixmapWidget *elem = sub_tb[channelSub];
-	    lSub->removeWidget(elem);
-	    sub_tb.remove(channelSub);
-	    delete elem;
-	}
+    {
+        PixmapWidget *elem = sub_tb[channelSub];
+        lSub->removeWidget(elem);
+        sub_tb.remove(channelSub);
+        delete elem;
+    }
 
     TWidget *elem = sub[channelSub];
     lSub->removeWidget(elem);
@@ -442,7 +448,7 @@ PreWidget::PreWidget(QString channel, Widget* p_pMatrix)
 }
 PreWidget::~PreWidget()
 {
-	m_pMatrix->removeShurtCut(PRE, m_Channel);
+    m_pMatrix->removeShurtCut(PRE, m_Channel);
 }
 void PreWidget::mouseReleaseEvent(QMouseEvent* ev)
 {
@@ -494,21 +500,21 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
     wSub->setLayout(lSub);
     layout->addWidget(wSub);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     QWidget *bal = m_pMatrix->createRotary(POST, channel, PAN_BAL);
     layout->addWidget(bal);
 
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
     Toggle* main_on = m_pMatrix->createToggle(POST, channel, TO_MAIN);
     layout->addWidget(main_on);
 
@@ -517,7 +523,7 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
 }
 PostWidget::~PostWidget()
 {
-	m_pMatrix->removeShurtCut(POST, m_Channel);
+    m_pMatrix->removeShurtCut(POST, m_Channel);
 }
 void PostWidget::mouseReleaseEvent(QMouseEvent* ev)
 {
@@ -527,25 +533,25 @@ void PostWidget::mouseReleaseEvent(QMouseEvent* ev)
 }
 void PostWidget::addSub(QString channelPost, QString channelSub)
 {
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    lSub->addWidget(pw);
-	    sub_tb[channelSub] = pw;
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        lSub->addWidget(pw);
+        sub_tb[channelSub] = pw;
+    }
     TWidget* elem = m_pMatrix->createToggle(POST, channelPost, TO_SUB, channelSub);
     lSub->addWidget(elem);
     sub[channelSub] = elem;
 }
 void PostWidget::removeSub(QString /*channelPost*/, QString channelSub)
 {
-	{
-	    PixmapWidget *elem = sub_tb[channelSub];
-	    lSub->removeWidget(elem);
-	    sub_tb.remove(channelSub);
-	    delete elem;
-	}
+    {
+        PixmapWidget *elem = sub_tb[channelSub];
+        lSub->removeWidget(elem);
+        sub_tb.remove(channelSub);
+        delete elem;
+    }
 
     TWidget *elem = sub[channelSub];
     lSub->removeWidget(elem);
@@ -579,7 +585,7 @@ SubWidget::SubWidget(QString channel, Widget* p_pMatrix)
 }
 SubWidget::~SubWidget()
 {
-	m_pMatrix->removeShurtCut(SUB, m_Channel);
+    m_pMatrix->removeShurtCut(SUB, m_Channel);
 }
 void SubWidget::mouseReleaseEvent(QMouseEvent* ev)
 {
@@ -618,23 +624,23 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
     mute = m_pMatrix->createToggle(OUT, MAIN, MUTE);
     layout->addWidget(mute);
 //    Widget::addLine(layout);
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
 
     mono = m_pMatrix->createRotary(OUT, MAIN, FADER, MONO);
     layout->addWidget(mono);
-    
+
 //    Widget::addLine(layout);
-	{
-		PixmapWidget *pw = new PixmapWidget(NULL);
-		pw->setPixmap("separator.svg");
-		pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
-	    layout->addWidget(pw);
-	}
+    {
+        PixmapWidget *pw = new PixmapWidget(NULL);
+        pw->setPixmap("separator.svg");
+        pw->setFixedSize(CHANNEL_WIDTH, SEPARATOR_HEIGHT);
+        layout->addWidget(pw);
+    }
 
     bal = m_pMatrix->createRotary(OUT, MAIN, PAN_BAL);
     layout->addWidget(bal);
@@ -647,7 +653,7 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
 }
 MainWidget::~MainWidget()
 {
-	m_pMatrix->removeShurtCut(OUT, MAIN);
+    m_pMatrix->removeShurtCut(OUT, MAIN);
 }
 void MainWidget::update()
 {
