@@ -27,12 +27,13 @@
 #include "backend.h"
 #include "Action.h"
 
-#include <QtGui/QWidget>
-#include <QtGui/QPixmap>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWheelEvent>
-#include <QtGui/QPaintEvent>
+#include <QWidget>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QPaintEvent>
 #include <QSvgRenderer>
+#include <QDateTime>
 
 
 namespace LiveMix
@@ -115,6 +116,9 @@ private:
     bool m_bWithoutKnob;
     bool m_bUseIntSteps;
     bool m_bLinDb;
+
+    QDateTime m_rLastVuCalculate_L;
+    QDateTime m_rLastVuCalculate_R;
 
     float m_fVuValue_L;
     float m_fVuValue_R;

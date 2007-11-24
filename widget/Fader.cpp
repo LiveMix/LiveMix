@@ -33,17 +33,19 @@
 namespace LiveMix
 {
     
-#define VU_SUBSTRACT = 1.0;
+#define VU_SUBSTRACT 2.0;
 
 Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb)
         : Volume(pParent)
         , m_bWithoutKnob(bWithoutKnob)
         , m_bUseIntSteps(bUseIntSteps)
         , m_bLinDb(p_bLinDb)
-        , m_fPeakValue_L(-60)
-        , m_fPeakValue_R(-60)
+        , m_rLastVuCalculate_L(QDateTime::currentDateTime())
+        , m_rLastVuCalculate_R(QDateTime::currentDateTime())
         , m_fVuValue_L(-60)
         , m_fVuValue_R(-60)
+        , m_fPeakValue_L(-60)
+        , m_fPeakValue_R(-60)
         , m_fMinPeak(-60)
         , m_fMaxPeak(20)
         , m_fValue(0.0)
@@ -277,12 +279,16 @@ void Fader::setPeak_L(float fPeak)
         fPeak = m_fMaxPeak;
     }
 
-    m_fVuValue_L -= VU_SUBSTRACT;
-    if (m_fVuValue_L <  fPeak) {
-        m_fVuValue_L = fPeak;
+    QDateTime now = QDateTime::currentDateTime();
+    float newVu = m_fVuValue_L - (m_rLastVuCalculate_L.toTime_t() - now.toTime_t()) * VU_SUBSTRACT;
+    m_rLastVuCalculate_L = now;
+    
+    if (newVu <  fPeak) {
+        newVu = fPeak;
     }
-    if (m_fPeakValue_L != fPeak) {
+    if (m_fPeakValue_L != fPeak || newVu != m_fVuValue_L) {
         m_fPeakValue_L = fPeak;
+        m_fVuValue_L = newVu;
         update();
     }
 }
@@ -296,13 +302,16 @@ void Fader::setPeak_R(float fPeak)
         fPeak = m_fMaxPeak;
     }
 
-    m_fVuValue_R -= VU_SUBSTRACT;
-    if (m_fVuValue_R <  fPeak) {
-        m_fVuValue_R = fPeak;
+    QDateTime now = QDateTime::currentDateTime();
+    float newVu = m_fVuValue_R - (m_rLastVuCalculate_R.toTime_t() - now.toTime_t()) * VU_SUBSTRACT;
+    m_rLastVuCalculate_R = now;
+    
+    if (newVu <  fPeak) {
+        newVu = fPeak;
     }
-
-    if (m_fPeakValue_R != fPeak) {
+    if (m_fPeakValue_R != fPeak || newVu != m_fVuValue_R) {
         m_fPeakValue_R = fPeak;
+        m_fVuValue_R = newVu;
         update();
     }
 }
@@ -316,30 +325,6 @@ void Fader::paintEvent(QPaintEvent*)
     painter.drawPixmap(QRect(0, 0, width(), 15), m_top, QRect(0, 0, width(), 15));
     painter.drawPixmap(QRect(0, height() - 15, width(), 15), m_bottom, QRect(0, 0, width(), 15));
 
-    // VU leds
-    if (m_fMaxPeak > m_fMinPeak) {
-        float realVu_L = m_fVuValue_L - m_fMinPeak;
-        int Vu_L = (int)(height() - 30 - (realVu_L / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
-        if (Vu_L > height() - 30) {
-            Vu_L = height() - 30;
-        }
-        if (Vu_L > 2) {
-            painter.drawPixmap(QRect(0, Vu_L + 15, width() / 2, 2), m_leds_scaled,
-                               QRect(0, Vu_L     , width() / 2, 2));
-        }
-
-
-        float realVu_R = m_fVuValue_R - m_fMinPeak;
-        int Vu_R = (int)(height() - 30 - (realVu_R / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
-        if (Vu_R > height() - 30) {
-            Vu_R = height() - 30;
-        }
-        if (Vu_L > 2) {
-            painter.drawPixmap(QRect(width() / 2, Vu_R + 15, width() / 2, 2), m_leds_scaled,
-                               QRect(width() / 2, Vu_R     , width() / 2, 2));
-        }
-    }
-    
     // peak leds
     if (m_fMaxPeak > m_fMinPeak) {
         float realPeak_L = m_fPeakValue_L - m_fMinPeak;
@@ -360,6 +345,36 @@ void Fader::paintEvent(QPaintEvent*)
                            QRect(width() / 2, peak_R     , width() / 2, height() - 30 - peak_R));
     }
 
+    // VU leds
+    if (m_fMaxPeak > m_fMinPeak) {
+//        painter.setBrush(QBrush(QColor(255, 240, 0)));
+        painter.setPen(QColor(255, 255, 255));
+        
+        float realVu_L = m_fVuValue_L - m_fMinPeak;
+        int Vu_L = (int)(height() - 30 - (realVu_L / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
+        if (Vu_L > height() - 30) {
+            Vu_L = height() - 30;
+        }
+        if (Vu_L < height() - 31) {
+            painter.drawLine(4, Vu_L + 15, 7, Vu_L + 15);
+//            painter.drawPixmap(QRect(0, Vu_L + 15, width() / 2, 2), m_leds_scaled,
+//                               QRect(0, Vu_L     , width() / 2, 2));
+        }
+
+
+        float realVu_R = m_fVuValue_R - m_fMinPeak;
+        int Vu_R = (int)(height() - 30 - (realVu_R / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
+        if (Vu_R > height() - 30) {
+            Vu_R = height() - 30;
+        }
+            qDebug()<<Vu_R<<Vu_R<<height();
+        if (Vu_R < height() - 31) {
+            painter.drawLine(15, Vu_R + 15, 18, Vu_R + 15);
+//            painter.drawPixmap(QRect(width() / 2, Vu_R + 15, width() / 2, 2), m_leds_scaled,
+//                               QRect(width() / 2, Vu_R     , width() / 2, 2));
+        }
+    }
+    
     if (!m_bWithoutKnob) {
         // knob
         static const uint knob_height = 29;
