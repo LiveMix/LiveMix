@@ -125,26 +125,42 @@ void MainWindow::init()
     //_select_action->addTo( new QToolBar( this ) );
 // _editmenu->addAction(trUtf8("&Fill empty spaces"), this, SLOT( scheduleInit() ) );
 // _editmenu->addSeparator();
+    // INPUT
     QMenu* editInput = _editmenu->addMenu(trUtf8("&Input"));
-    _add_inchannel_action = new QAction(trUtf8("Add &Mono..."), this);
+
+    _add_inchannel_action = new QAction(trUtf8("Add &mono..."), this);
     connect(_add_inchannel_action, SIGNAL(triggered()), this, SLOT(addInputMono()));
     editInput->addAction(_add_inchannel_action);
-    _add_stinchannel_action = new QAction(trUtf8("Add &Stereo ..."), this);
+
+    _add_stinchannel_action = new QAction(trUtf8("Add &stereo ..."), this);
     connect(_add_stinchannel_action, SIGNAL(triggered()), this, SLOT(addInputStereo()));
     editInput->addAction(_add_stinchannel_action);
+
+    _add_inchannel_action = new QAction(trUtf8("Add multiple mono..."), this);
+    connect(_add_inchannel_action, SIGNAL(triggered()), this, SLOT(multipleAddInputMono()));
+    editInput->addAction(_add_inchannel_action);
+
+    _add_stinchannel_action = new QAction(trUtf8("Add multiple stereo ..."), this);
+    connect(_add_stinchannel_action, SIGNAL(triggered()), this, SLOT(multipleAddInputStereo()));
+    editInput->addAction(_add_stinchannel_action);
+
     _remove_inchannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_inchannel_action, SIGNAL(triggered()), this, SLOT(removeInput()));
     editInput->addAction(_remove_inchannel_action);
+    
+    // PRE
     QMenu* editPre = _editmenu->addMenu(trUtf8("&Pre"));
-    _add_prechannel_action = new QAction(trUtf8("Add &Mono..."), this);
+    _add_prechannel_action = new QAction(trUtf8("Add &mono..."), this);
     connect(_add_prechannel_action, SIGNAL(triggered()), this, SLOT(addPreMono()));
     editPre->addAction(_add_prechannel_action);
-    _add_stprechannel_action = new QAction(trUtf8("Add &Stereo..."), this);
+    _add_stprechannel_action = new QAction(trUtf8("Add &stereo..."), this);
     connect(_add_stprechannel_action, SIGNAL(triggered()), this, SLOT(addPreStereo()));
     editPre->addAction(_add_stprechannel_action);
     _remove_prechannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_prechannel_action, SIGNAL(triggered()), this, SLOT(removePre()));
     editPre->addAction(_remove_prechannel_action);
+    
+    // POST
     QMenu* editPost = _editmenu->addMenu(trUtf8("P&ost"));
     _add_intpostchannel_action = new QAction(trUtf8("Add Internal &mono..."), this);
     connect(_add_intpostchannel_action, SIGNAL(triggered()), this, SLOT(addPostMonoInternal()));
@@ -161,6 +177,8 @@ void MainWindow::init()
     _remove_postchannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_postchannel_action, SIGNAL(triggered()), this, SLOT(removePost()));
     editPost->addAction(_remove_postchannel_action);
+    
+    // SUB
     QMenu* editSub = _editmenu->addMenu(trUtf8("&Sub"));
     _add_subchannel_action = new QAction(trUtf8("Add &Mono..."), this);
     connect(_add_subchannel_action, SIGNAL(triggered()), this, SLOT(addSubMono()));
@@ -849,14 +867,16 @@ void MainWindow::aboutQt()
 void MainWindow::addInputMono()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Mono in channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addInput(tmp, false);
+    }
 }
 void MainWindow::addInputStereo()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Stereo in channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addInput(tmp, true);
+    }
 }
 void MainWindow::addInput(QString name, bool stereo)
 {
@@ -866,17 +886,54 @@ void MainWindow::addInput(QString name, bool stereo)
         _mixerwidget->addinchannel(name);
     }
 }
+void MainWindow::multipleAddInputMono()
+{
+    bool ok;
+    int nb = QInputDialog::getInteger(this, trUtf8("Mono in channel name"), trUtf8("Channel numbers"), 4, 0, 100, 1, &ok);
+    if (ok) {
+        int n = 1;
+        for (int i = 0 ; i < nb ; i++) {
+            while (Backend::instance()->inchannels().contains(QString("%1").arg(n))) {
+                n++;
+            }
+            if (Backend::instance()->addInput(QString("%1").arg(n), false)) {
+                _mixerwidget->addinchannel(QString("%1").arg(n));
+            }
+        }
+    }
+}
+void MainWindow::multipleAddInputStereo()
+{
+    bool ok;
+    int nb = QInputDialog::getInteger(this, trUtf8("Stereo in channel name"), trUtf8("Channel numbers"), 2, 0, 100, 1, &ok);
+    if (ok) {
+        int n = 1;
+        while (Backend::instance()->inchannels().contains(QString("%1").arg(n))) {
+            n += 2;
+        }
+        for (int i = 0 ; i < nb ; i++) {
+            while (Backend::instance()->inchannels().contains(QString("%1-%2").arg(n).arg(n+1))) {
+                n += 2;
+            }
+            if (Backend::instance()->addInput(QString("%1-%2").arg(n).arg(n+1), true)) {
+                _mixerwidget->addinchannel(QString("%1-%2").arg(n).arg(n+1));
+            }
+        }
+    }
+}
 void MainWindow::addPreMono()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Mono pre channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPre(tmp, false);
+    }
 }
 void MainWindow::addPreStereo()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Stereo pre channel name"), trUtf8("Channel name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPre(tmp, true);
+    }
 }
 void MainWindow::addPre(QString name, bool stereo)
 {
@@ -889,26 +946,30 @@ void MainWindow::addPre(QString name, bool stereo)
 void MainWindow::addPostMonoExternal()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("External mono post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPost(tmp, false, true);
+    }
 }
 void MainWindow::addPostStereoExternal()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("External stereo post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPost(tmp, true, true);
+    }
 }
 void MainWindow::addPostMonoInternal()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Internal mono post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPost(tmp, false, false);
+    }
 }
 void MainWindow::addPostStereoInternal()
 {
     QString tmp = QInputDialog::getText(this, trUtf8("Internal stereo post channel name"), trUtf8("Channel short name"), QLineEdit::Normal, trUtf8("(empty)"));
-    if (tmp != trUtf8("(empty)"))
+    if (tmp != trUtf8("(empty)")) {
         addPost(tmp, true, false);
+    }
 }
 void MainWindow::addPost(QString name, bool stereo, bool external)
 {

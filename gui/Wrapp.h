@@ -41,9 +41,10 @@ public:
     virtual bool exec();
 
 public slots:
-    void leftClick(QMouseEvent* p_ev);
-    void middleClick(QMouseEvent* p_ev);
-    void rightClick(QMouseEvent* p_ev);
+    void leftClick(QMouseEvent* p_pEvent);
+    void middleClick(QMouseEvent* p_pEvent);
+    void rightClick(QMouseEvent* p_pEvent);
+    void emitMouseDoubleClickEvent(QMouseEvent *p_pEvent);
 
 protected:
     Widget* m_pMatrix;

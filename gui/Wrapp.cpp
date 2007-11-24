@@ -36,6 +36,7 @@ Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString 
     connect(p_pWidget->getWidget(), SIGNAL(leftClick(QMouseEvent*)), this, SLOT(leftClick(QMouseEvent*)));
     connect(p_pWidget->getWidget(), SIGNAL(middleClick(QMouseEvent*)), this, SLOT(middleClick(QMouseEvent*)));
     connect(p_pWidget->getWidget(), SIGNAL(rightClick(QMouseEvent*)), this, SLOT(rightClick(QMouseEvent*)));
+    connect(p_pWidget->getWidget(), SIGNAL(emitMouseDoubleClickEvent(QMouseEvent*)), this, SLOT(emitMouseDoubleClickEvent(QMouseEvent*)));
     /*    connect(p_pWidget, SIGNAL( leftClick(QMouseEvent*) ), this, SLOT( leftClick(QMouseEvent*) ) );
         connect(p_pWidget, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
         connect(p_pWidget, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );*/
@@ -56,6 +57,10 @@ void Wrapp::rightClick(QMouseEvent* p_ev)
 {
     m_pMatrix->rightClick(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_ev);
 };
+void Wrapp::emitMouseDoubleClickEvent(QMouseEvent *p_pEvent)
+{
+    m_pMatrix->mouseDoubleClickEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pEvent);
+}
 
 WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName)
         : Wrapp(p_pMatrix, p_pWidget, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName)

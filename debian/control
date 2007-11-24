@@ -14,10 +14,11 @@ Recommends: swh-plugins
 Suggests: cmt, tap-plugins, ladspa-plugin
 Description: Simple mixer for live performances
  Based on Jack and LADSPA.
- Features :
+ Features:
   - In, pre fader, post fader, sub-groups customisable channel.
   - All-in is stereo-in internally.
   - LADSPA effects.
+  - LASH support.
   - PK meters.
   - CPU meters.
   - Hydrogen GUI.

@@ -70,6 +70,9 @@ private slots:
     void addPostStereoInternal();
     void addSubStereo();
 
+    void multipleAddInputMono();
+    void multipleAddInputStereo();
+
     void removeInput();
     void removePre();
     void removePost();

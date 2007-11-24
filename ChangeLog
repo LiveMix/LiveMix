@@ -1,3 +1,9 @@
+
+==== 0.45svn20071124 ====
+- add lash support / save jack connection
+- multiple add in channels
+- manual set value by dbl click.
+
 ==== 0.45svn20071111 ====
 - add pan/bal background
 - new logo

@@ -117,6 +117,7 @@ public:
     void leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
     void middleClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
     void rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
+    void mouseDoubleClickEvent(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent* ev);
 
     void action(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
     void addVolume(Volume* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
@@ -180,7 +181,11 @@ private slots:
     void enableAllTheLine();
     void desableAllTheLine();
 
+    void newValue();
+    void newLineValue();
+
 private:
+    void newValue(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bToLine);
     float getNewValue(float p_fOld, float p_fNew);
 
     InfoWidget *info_widget;
@@ -206,7 +211,7 @@ private:
     LFWidget *effectName;
     QWidget *m_pEffectStart;
 
-    enum ChannelType m_eSelectType;
+    ChannelType m_eSelectType;
     QString m_sSelectChannel;
     ElementType m_eSelectedElement;
     QString m_sSelectedReatedChannelName;
