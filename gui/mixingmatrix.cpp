@@ -1004,7 +1004,7 @@ void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType
         menu.addAction(enable);
 
         QAction* desable = new QAction(trUtf8("Desable all %1").arg(
-            getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
+                                           getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
         connect(desable, SIGNAL(triggered()), this, SLOT(desableAllTheLine()));
         menu.addAction(desable);
 
@@ -1013,35 +1013,37 @@ void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType
     default:
         if (p_eElement == PAN_BAL) {
             QAction* restet = new QAction(trUtf8("Reset %1").arg(
-                getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
+                                              getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
             connect(restet, SIGNAL(triggered()), this, SLOT(resetAllTheLine()));
             menu.addAction(restet);
         }
         QAction* set = new QAction(trUtf8("Set value to %1").arg(
-            getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
+                                       getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
         connect(set, SIGNAL(triggered()), this, SLOT(newValue()));
         menu.addAction(set);
 
         if (p_eType == IN) {
             QAction* setall = new QAction(trUtf8("Set value to all %1").arg(
-                getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
+                                              getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
             connect(setall, SIGNAL(triggered()), this, SLOT(newLineValue()));
             menu.addAction(setall);
         }
 
         QAction* restet = new QAction(trUtf8("Reset all %1").arg(
-            getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
+                                          getMediumDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName, false)), this);
         connect(restet, SIGNAL(triggered()), this, SLOT(resetAllTheLine()));
         menu.addAction(restet);
     }
     menu.exec(p_pEvent->globalPos());
 }
 
-void Widget::newValue() {
+void Widget::newValue()
+{
     newValue(m_eSelectType, m_sSelectChannel, m_eSelectedElement, m_sSelectedReatedChannelName, false);
 }
 
-void Widget::newLineValue() {
+void Widget::newLineValue()
+{
     newValue(m_eSelectType, m_sSelectChannel, m_eSelectedElement, m_sSelectedReatedChannelName, true);
 }
 
@@ -1053,32 +1055,31 @@ void Widget::mouseDoubleClickEvent(ChannelType p_eType, QString p_sChannelName, 
 void Widget::newValue(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bToLine)
 {
     switch (p_eElement) {
-        case MUTE:
-        case TO_SUB:
-        case TO_MAIN:
-        case TO_PFL:
-        case TO_AFL:
+    case MUTE:
+    case TO_SUB:
+    case TO_MAIN:
+    case TO_PFL:
+    case TO_AFL:
         break;
-        default:
-            Volume* vol = ((WrappVolume*)(*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName])->getVolume();
-            bool ok;
-            double value = QInputDialog::getDouble(vol, p_bToLine ? trUtf8("New value to assigne to line") : trUtf8("New value to assigne"), 
-                getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName),
-                vol->getValue(), vol->getMinValue(), vol->getMaxValue(), 1, &ok);
-            if (ok) {
-                if (p_bToLine) {
-                    foreach(QString j, m_mShurtCut[p_eType]->keys()) {
-                        if ((*m_mShurtCut[p_eType])[j]->contains(m_eSelectedElement) && 
-                                (*(*m_mShurtCut[IN])[j])[m_eSelectedElement]->contains(m_sSelectedReatedChannelName)) {
-                            Volume* vol = ((WrappVolume*)(*(*(*m_mShurtCut[IN])[j])[m_eSelectedElement])[m_sSelectedReatedChannelName])->getVolume();
-                            vol->setValue(value, true);
-                        }
+    default:
+        Volume* vol = ((WrappVolume*)(*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName])->getVolume();
+        bool ok;
+        double value = QInputDialog::getDouble(vol, p_bToLine ? trUtf8("New value to assigne to line") : trUtf8("New value to assigne"),
+                                               getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_sReatedChannelName),
+                                               vol->getValue(), vol->getMinValue(), vol->getMaxValue(), 1, &ok);
+        if (ok) {
+            if (p_bToLine) {
+                foreach(QString j, m_mShurtCut[p_eType]->keys()) {
+                    if ((*m_mShurtCut[p_eType])[j]->contains(m_eSelectedElement) &&
+                            (*(*m_mShurtCut[IN])[j])[m_eSelectedElement]->contains(m_sSelectedReatedChannelName)) {
+                        Volume* vol = ((WrappVolume*)(*(*(*m_mShurtCut[IN])[j])[m_eSelectedElement])[m_sSelectedReatedChannelName])->getVolume();
+                        vol->setValue(value, true);
                     }
                 }
-                else {
-                    vol->setValue(value, true);
-                }
+            } else {
+                vol->setValue(value, true);
             }
+        }
     }
 }
 

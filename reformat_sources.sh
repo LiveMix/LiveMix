@@ -7,7 +7,7 @@ def reformat(directory):
 	# --unpad=paren
 	os.system("%s %s/*.cpp" % (cmd, directory))
 	os.system("%s %s/*.h" % (cmd, directory))
-#	os.system("rm -f %s/*.orig" % directory)
+	os.system("rm -f %s/*.orig" % directory)
 
 
 reformat("backend")

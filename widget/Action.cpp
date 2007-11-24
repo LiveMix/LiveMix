@@ -28,7 +28,8 @@ Action::Action(QWidget* p_pParent) : QWidget(p_pParent)
 Action::~Action()
 {}
 
-void Action::mouseDoubleClickEvent(QMouseEvent *p_pEvent) {
+void Action::mouseDoubleClickEvent(QMouseEvent *p_pEvent)
+{
     emit(emitMouseDoubleClickEvent(p_pEvent));
 }
 

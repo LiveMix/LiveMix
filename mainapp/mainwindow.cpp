@@ -147,7 +147,7 @@ void MainWindow::init()
     _remove_inchannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_inchannel_action, SIGNAL(triggered()), this, SLOT(removeInput()));
     editInput->addAction(_remove_inchannel_action);
-    
+
     // PRE
     QMenu* editPre = _editmenu->addMenu(trUtf8("&Pre"));
     _add_prechannel_action = new QAction(trUtf8("Add &mono..."), this);
@@ -159,7 +159,7 @@ void MainWindow::init()
     _remove_prechannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_prechannel_action, SIGNAL(triggered()), this, SLOT(removePre()));
     editPre->addAction(_remove_prechannel_action);
-    
+
     // POST
     QMenu* editPost = _editmenu->addMenu(trUtf8("P&ost"));
     _add_intpostchannel_action = new QAction(trUtf8("Add Internal &mono..."), this);
@@ -177,7 +177,7 @@ void MainWindow::init()
     _remove_postchannel_action = new QAction(trUtf8("&Remove..."), this);
     connect(_remove_postchannel_action, SIGNAL(triggered()), this, SLOT(removePost()));
     editPost->addAction(_remove_postchannel_action);
-    
+
     // SUB
     QMenu* editSub = _editmenu->addMenu(trUtf8("&Sub"));
     _add_subchannel_action = new QAction(trUtf8("Add &Mono..."), this);

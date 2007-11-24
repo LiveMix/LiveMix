@@ -32,6 +32,8 @@
 
 namespace LiveMix
 {
+    
+#define VU_SUBSTRACT = 1.0;
 
 Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb)
         : Volume(pParent)
@@ -40,6 +42,8 @@ Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLin
         , m_bLinDb(p_bLinDb)
         , m_fPeakValue_L(-60)
         , m_fPeakValue_R(-60)
+        , m_fVuValue_L(-60)
+        , m_fVuValue_R(-60)
         , m_fMinPeak(-60)
         , m_fMaxPeak(20)
         , m_fValue(0.0)
@@ -264,9 +268,7 @@ void Fader::setDbMinPeak(float val)
     setMinPeak(m_bLinDb ? lin2db(val, m_fMinValue) : lin2db(val));
 }
 
-///
-/// Set peak value (0.0 .. 1.0)
-///
+/// Set peak value in db
 void Fader::setPeak_L(float fPeak)
 {
     if (fPeak <  m_fMinPeak) {
@@ -275,22 +277,28 @@ void Fader::setPeak_L(float fPeak)
         fPeak = m_fMaxPeak;
     }
 
+    m_fVuValue_L -= VU_SUBSTRACT;
+    if (m_fVuValue_L <  fPeak) {
+        m_fVuValue_L = fPeak;
+    }
     if (m_fPeakValue_L != fPeak) {
         m_fPeakValue_L = fPeak;
         update();
     }
 }
 
-
-///
-/// Set peak value (0.0 .. 1.0)
-///
+/// Set peak value in db
 void Fader::setPeak_R(float fPeak)
 {
     if (fPeak <  m_fMinPeak) {
         fPeak = m_fMinPeak;
     } else if (fPeak > m_fMaxPeak) {
         fPeak = m_fMaxPeak;
+    }
+
+    m_fVuValue_R -= VU_SUBSTRACT;
+    if (m_fVuValue_R <  fPeak) {
+        m_fVuValue_R = fPeak;
     }
 
     if (m_fPeakValue_R != fPeak) {
@@ -308,6 +316,30 @@ void Fader::paintEvent(QPaintEvent*)
     painter.drawPixmap(QRect(0, 0, width(), 15), m_top, QRect(0, 0, width(), 15));
     painter.drawPixmap(QRect(0, height() - 15, width(), 15), m_bottom, QRect(0, 0, width(), 15));
 
+    // VU leds
+    if (m_fMaxPeak > m_fMinPeak) {
+        float realVu_L = m_fVuValue_L - m_fMinPeak;
+        int Vu_L = (int)(height() - 30 - (realVu_L / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
+        if (Vu_L > height() - 30) {
+            Vu_L = height() - 30;
+        }
+        if (Vu_L > 2) {
+            painter.drawPixmap(QRect(0, Vu_L + 15, width() / 2, 2), m_leds_scaled,
+                               QRect(0, Vu_L     , width() / 2, 2));
+        }
+
+
+        float realVu_R = m_fVuValue_R - m_fMinPeak;
+        int Vu_R = (int)(height() - 30 - (realVu_R / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
+        if (Vu_R > height() - 30) {
+            Vu_R = height() - 30;
+        }
+        if (Vu_L > 2) {
+            painter.drawPixmap(QRect(width() / 2, Vu_R + 15, width() / 2, 2), m_leds_scaled,
+                               QRect(width() / 2, Vu_R     , width() / 2, 2));
+        }
+    }
+    
     // peak leds
     if (m_fMaxPeak > m_fMinPeak) {
         float realPeak_L = m_fPeakValue_L - m_fMinPeak;

@@ -1362,7 +1362,7 @@ void Backend::restoreLash(QString p_rFile)
         for (QDomElement my = connexions.firstChildElement("my"); !my.isNull(); my = my.nextSiblingElement("my")) {
             QString type = my.attribute("type");
             QString name = my.attribute("name");
-qDebug()<<type<<name;
+            qDebug()<<type<<name;
             jack_port_t *src = NULL;
             if (type == "in_l") {
                 in *c = (in*)getChannel(IN, name);
@@ -1417,8 +1417,7 @@ qDebug()<<type<<name;
 //                jack_port_t *dst = jack_port_by_name(client, name.toStdString().c_str());
                 if (jack_port_flags(src) & JackPortIsOutput) {
                     jack_connect(client, jack_port_name(src), name.toStdString().c_str());
-                }
-                else {
+                } else {
                     jack_connect(client, name.toStdString().c_str(), jack_port_name(src));
                 }
             }

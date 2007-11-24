@@ -116,6 +116,9 @@ private:
     bool m_bUseIntSteps;
     bool m_bLinDb;
 
+    float m_fVuValue_L;
+    float m_fVuValue_R;
+
     float m_fPeakValue_L;
     float m_fPeakValue_R;
     float m_fMinPeak;

@@ -144,10 +144,9 @@ int main(int argc, char** argv)
     }
 
     LiveMix::MainWindow *mw;
-    if (lash) { 
+    if (lash) {
         mw = new LiveMix::MainWindow();
-    }
-    else if (!file.isEmpty()) {
+    } else if (!file.isEmpty()) {
         mw = new LiveMix::MainWindow(file);
     } else {
         if (QFile(QDir::homePath().append("/.livemix/table.lm")).exists()) {
