@@ -196,6 +196,7 @@ void Rotary::mouseReleaseEvent(QMouseEvent *ev)
         setCursor(QCursor(Qt::ArrowCursor));
         m_pValueToolTip->hide();
         m_fMousePressValue = m_fMin - 1;
+        ev->setAccepted(false);
         emit leftClick(ev);
     } else if (ev->button() == Qt::RightButton) {
         emit rightClick(ev);
