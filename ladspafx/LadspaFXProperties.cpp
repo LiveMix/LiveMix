@@ -188,14 +188,15 @@ void LadspaFXProperties::updateControls()
             QPalette lcdPalette;
             lcdPalette.setColor(QPalette::Background, QColor(58, 62, 72));
             pLCD->setPalette(lcdPalette);
+            pLCD->setToolTip(pControlPort->m_sName);
 
             m_pInputControlLabel.push_back(pLCD);
 
             FaderName *pName = new FaderName(m_pFrame);
-            pName->move(nInputControl_X + 3, 60);
+            pName->move(nInputControl_X + 8, 60);
             pName->setText(pControlPort->m_sName);
             m_pInputControlNames << pName;
-            pName->setToolTip(pName->text());
+            pName->setToolTip(pControlPort->m_sName);
 
             if (pControlPort->m_bToggle) {
                 pLCD->hide();
@@ -203,19 +204,20 @@ void LadspaFXProperties::updateControls()
                 ToggleButton *pToggle = ToggleButton::create(m_pFrame);
                 connect(pToggle, SIGNAL(valueChanged(ToggleButton*)), this, SLOT(toggleChanged(ToggleButton*)));
                 m_pInputControlFaders.push_back(pToggle);
-                pToggle->move(nInputControl_X + 20, m_iFaderHeight + 23);
+                pToggle->move(nInputControl_X + 24, m_iFaderHeight + 23);
 
                 pToggle->setValue((bool)pControlPort->m_fControlValue);
+                pToggle->setToolTip(pControlPort->m_sName);
                 toggleChanged(pToggle);
             } else {
                 // fader
-                Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic);
+                Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic, Fader::FADER_PK);
 //                connect(pFader, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
                 connect(pFader, SIGNAL(rightClick(QMouseEvent*)), this, SLOT(contextMenu(QMouseEvent*)));
                 connect(pFader, SIGNAL(valueChanged(Volume*)), this, SLOT(faderChanged(Volume*)));
                 m_pInputControlFaders.push_back(pFader);
-                pFader->move(nInputControl_X + 20, 56);
-
+                pFader->move(nInputControl_X + 25, 56);
+                pFader->setToolTip(pControlPort->m_sName);
 
                 if (pControlPort->m_bLogarithmic) {
                     pFader->setDbMaxValue(pControlPort->m_fUpperBound);
@@ -248,16 +250,18 @@ void LadspaFXProperties::updateControls()
             lcdPalette.setColor(QPalette::Background, QColor(58, 62, 72));
             pLCD->setPalette(lcdPalette);
             m_pOutputControlLabel.push_back(pLCD);
+            pLCD->setToolTip(pControl->m_sName);
 
             FaderName *pName = new FaderName(m_pFrame);
-            pName->move(xPos + 3, 60);
+            pName->move(xPos + 10, 60);
             pName->setText(pControl->m_sName);
             m_pOutputControlNames.push_back(pName);
-            pName->setToolTip(pName->text());
+            pName->setToolTip(pControl->m_sName);
 
             // fader
-            Fader *pFader = new Fader(m_pFrame, false, true);   // without knob!
-            pFader->move(xPos + 20, 56);
+            Fader *pFader = new Fader(m_pFrame, false, true, true, Fader::PK_VU);   // without knob!
+            pFader->move(xPos + 27, 56);
+            pFader->setToolTip(pControl->m_sName);
 
             pFader->setMaxPeak(pControl->m_fUpperBound);
             pFader->setMinPeak(pControl->m_fLowerBound);
@@ -307,8 +311,6 @@ void LadspaFXProperties::updateOutputControls()
 
     if (m_nLadspaFX->fx) {
         QString title = trUtf8("%1 (%2 %)").arg(m_nLadspaFX->fx->getPluginName()).arg(m_nLadspaFX->m_fCpuUse * 100, 0, 'f', 2);
-        m_pNameLbl->setText(title);
-        m_pNameLbl->setToolTip(title);
 
         if (m_nLadspaFX->fx->isEnabled()) {
             m_pActivateBtn->setToolTip(trUtf8("Deactivate"));
@@ -392,6 +394,9 @@ void LadspaFXProperties::rightBtnClicked()
 
 void LadspaFXProperties::setFaderHeight(int p_iHeight)   //195
 {
+//    m_pNameLbl->move(10, 17);
+    m_pNameLbl->resize(270, 24);
+
     m_iFaderHeight = p_iHeight;
     setFixedHeight(p_iHeight + 64);
     m_pFrame->resize(width(), height() - 5);

@@ -281,10 +281,12 @@ class FWidget : public VWidget
 public:
     FWidget(int p_fFaderHeignt, ChannelType p_eType, QString p_sChannelName);
     Fader* getFader();
+    Fader* getMeter();
     FaderName* getLabelFader();
     virtual void setFixedHeight(int y);
 protected:
     FaderName* m_pLabelFader;
+    Fader* m_pMeter;
     ChannelType m_eType;
     QString m_sChannelName;
 protected slots:

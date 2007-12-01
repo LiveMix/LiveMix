@@ -394,7 +394,7 @@ QString Widget::getSetectedChannelName()
 
 float Widget::getNewValue(float p_fOld, float p_fNew)
 {
-#define FACTOR 0.5
+#define FACTOR 0
     return (p_fOld * FACTOR + p_fNew) / (1 + FACTOR);
 }
 void Widget::update()
@@ -411,33 +411,33 @@ void Widget::update()
     foreach(QString in_name, Backend::instance()->inchannels()) {
         if (in[in_name] != NULL) {
             FWidget* fader = in[in_name]->fader;
-            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getInPeak(in_name, true)));
-            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getInPeak(in_name, false)));
+            fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getInPeak(in_name, true)));
+            fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getInPeak(in_name, false)));
         }
     }
     foreach(QString pre_name, Backend::instance()->prechannels()) {
         if (pre[pre_name] != NULL) {
             FWidget* fader = pre[pre_name]->fader;
-            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getPrePeak(pre_name, true)));
-            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getPrePeak(pre_name, false)));
+            fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getPrePeak(pre_name, true)));
+            fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getPrePeak(pre_name, false)));
         }
     }
     foreach(QString post_name, Backend::instance()->postchannels()) {
         if (post[post_name] != NULL) {
             FWidget* fader = post[post_name]->fader;
-            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getPostPeak(post_name, true)));
-            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getPostPeak(post_name, false)));
+            fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getPostPeak(post_name, true)));
+            fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getPostPeak(post_name, false)));
         }
     }
     foreach(QString sub_name, Backend::instance()->subchannels()) {
         if (sub[sub_name] != NULL) {
             FWidget* fader = sub[sub_name]->fader;
-            fader->getFader()->setDbPeak_L(getNewValue(fader->getFader()->getDbPeak_L(), Backend::instance()->getSubPeak(sub_name, true)));
-            fader->getFader()->setDbPeak_R(getNewValue(fader->getFader()->getDbPeak_R(), Backend::instance()->getSubPeak(sub_name, false)));
+            fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getSubPeak(sub_name, true)));
+            fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getSubPeak(sub_name, false)));
         }
     }
-    main_widget->fader->getFader()->setDbPeak_L(getNewValue(main_widget->fader->getFader()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, true)));
-    main_widget->fader->getFader()->setDbPeak_R(getNewValue(main_widget->fader->getFader()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, false)));
+    main_widget->fader->getMeter()->setDbPeak_L(getNewValue(main_widget->fader->getMeter()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, true)));
+    main_widget->fader->getMeter()->setDbPeak_R(getNewValue(main_widget->fader->getMeter()->getDbPeak_L(), Backend::instance()->getOutPeak(MAIN, false)));
 }
 void Widget::init()
 {
@@ -720,7 +720,7 @@ QString Widget::getDisplayFunction(ChannelType p_eType, QString p_sChannelName, 
         displayName = trUtf8("sub-group \"%1\"").arg(Backend::instance()->getSub(p_sReatedChannelName)->display_name);
         break;
     case TO_MAIN:
-        displayName = trUtf8("main");
+        displayName = trUtf8("main output");
         break;
     case FADER:
         if (p_sReatedChannelName == MAIN) {
@@ -1386,6 +1386,7 @@ void Widget::setFaderHeight(int p_iHeight)
                 if (sub != PFL && sub != MONO) {
                     Wrapp* w = (*(*(*m_mShurtCut[i])[j])[FADER])[sub];
                     ((Fader*)((WrappVolume*)w)->getVolume())->setFixedHeight(m_iFaderHeight);
+//                    ((FWidget*)((WrappVolume*)w)->getVolume()->parent())->getMeter()->setFixedHeight(m_iFaderHeight);
                 }
             }
         }
@@ -1413,7 +1414,9 @@ void Widget::setEffectFaderHeight(int p_iHeight)
         p_iHeight = 150;
     }
     m_iEffectFaderHeight = p_iHeight;
-
+    
+    effectName->setFixedHeight(m_iEffectFaderHeight+50);
+    
     m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
     m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
     effect_layout->parentWidget()->setFixedHeight(m_iEffectFaderHeight + 82);
@@ -1472,12 +1475,14 @@ FWidget::FWidget(int p_fFaderHeignt, ChannelType p_eType, QString p_sChannelName
         : m_eType(p_eType)
         , m_sChannelName(p_sChannelName)
 {
-    m_pVolume = new Fader(this, false, false);
+    m_pVolume = new Fader(this, false, false, true, Fader::FADER);
+    m_pMeter = new Fader(this, false, false, true, Fader::PK_VU);
     m_pLabelFader = new FaderName(this);
 
     setFixedSize(CHANNEL_WIDTH, p_fFaderHeignt);
     setFixedHeight(p_fFaderHeignt);
-    m_pVolume->move(CHANNEL_WIDTH/2-10, 0);
+    m_pVolume->move(CHANNEL_WIDTH/2 -13, 0);
+    m_pMeter->move(CHANNEL_WIDTH/2 +5, 0);
     m_pLabelFader->move(CHANNEL_WIDTH/2 -25, 0);
 
     if (p_eType == OUT) {
@@ -1491,6 +1496,10 @@ Fader* FWidget::getFader()
 {
     return (Fader*)m_pVolume;
 }
+Fader* FWidget::getMeter()
+{
+    return m_pMeter;
+}
 FaderName* FWidget::getLabelFader()
 {
     return m_pLabelFader;
@@ -1499,6 +1508,7 @@ void FWidget::setFixedHeight(int h)
 {
     QWidget::setFixedHeight(h);
     ((Fader*)m_pVolume)->setFixedHeight(h);
+    m_pMeter->setFixedHeight(h);
     m_pLabelFader->setFixedHeight(h - 10);
 }
 void FWidget::changeName()
@@ -1517,17 +1527,18 @@ FWidget* Widget::createFader(ChannelType p_eType, QString p_sChannelName, Elemen
     FWidget *fader = new FWidget(getFaderHeight(), p_eType, p_sChannelName);
     addVolume(fader, p_eType, p_sChannelName, p_eElement, p_rChannelTo);
     fader->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
+    fader->getFader()->setToolTip(getDisplayFunction(p_eType, p_sChannelName, p_eElement, p_rChannelTo));
 //    connect(fader, SIGNAL( dbValueChanged(QString, float) ), Backend::instance(), SLOT( setInVolume( QString, float ) ) );
     if (p_eType == IN || p_eType == POST) {
         fader->getFader()->setMaxValue(20);
-        fader->getFader()->setMaxPeak(20);
+        fader->getMeter()->setMaxPeak(20);
         fader->getFader()->setMinValue(-60);
-        fader->getFader()->setMinPeak(-60);
+        fader->getMeter()->setMinPeak(-60);
     } else {
         fader->getFader()->setMaxValue(0);
-        fader->getFader()->setMaxPeak(0);
+        fader->getMeter()->setMaxPeak(0);
         fader->getFader()->setMinValue(-80);
-        fader->getFader()->setMinPeak(-80);
+        fader->getMeter()->setMinPeak(-80);
     }
     fader->setDbValue(Backend::instance()->getChannel(p_eType, p_sChannelName)->getFloatAttribute(p_eElement, p_rChannelTo));
     return fader;

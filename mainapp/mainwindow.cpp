@@ -520,7 +520,6 @@ void MainWindow::saveFile(QString p_rPath)
     foreach(QString name, Backend::instance()->subchannels()) {
         xml += QString("  <subVisible name=\"%1\" visible=\"%2\"/>").arg(name).arg(fromBool(_mixerwidget->isVisible(TO_SUB, name)));
     }
-
     xml += QString("  <actionbinding>");
     foreach(QKeySequence rKey, _mixerwidget->getKeyToWrapp()->keys()) {
         KeyDo* pKeyDo = (*_mixerwidget->getKeyToWrapp())[rKey];

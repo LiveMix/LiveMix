@@ -25,17 +25,18 @@
 #include "LCD.h"
 #include "db.h"
 
-#include <QtGui/QPainter>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
+#include <QPainter>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QInputDialog>
 #include <sys/time.h>
 
 namespace LiveMix
 {
-    
-#define VU_SUBSTRACT 2.0;
+/* less db for VU metre per segonds */
+#define VU_SUBSTRACT 5.0;
 
-Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb)
+Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb, Type p_eType)
         : Volume(pParent)
         , m_bWithoutKnob(bWithoutKnob)
         , m_bUseIntSteps(bUseIntSteps)
@@ -44,6 +45,7 @@ Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLin
         , m_rLastVuCalculate_R(QDateTime::currentDateTime())
         , m_fVuValue_L(-60)
         , m_fVuValue_R(-60)
+        , m_eType(p_eType)
         , m_fPeakValue_L(-60)
         , m_fPeakValue_R(-60)
         , m_fMinPeak(-60)
@@ -53,36 +55,58 @@ Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLin
         , m_fMaxValue(20)
 {
     setAttribute(Qt::WA_NoBackground);
-    setMinimumSize(23, 116);
-    setMaximumSize(23, 116);
-    resize(23, 116);
+    setMinimumSize(p_eType == PK_VU ? 11 : 17, 116);
+    setMaximumSize(p_eType == PK_VU ? 11 : 17, 116);
+    resize(p_eType == PK_VU ? 11 : 17, 116);
 
     m_fMousePressValue = m_fMinValue - 1;
 
     // Background image
-    QString path = ":/data/fader_background.svg";
-    bool ok = m_back_original.load(path);
-    if (ok == false) {
-        qDebug() << "Fader: Error loading pixmap: " << path;
+    QString backgroundPath;
+    QString topPath;
+    QString bottomPath;
+    QString ledsPath;
+    switch (p_eType) {
+        case FADER:
+            backgroundPath = ":/data/fader_background_nometer.svg";
+            topPath = ":/data/fader_top_nometer.svg";
+            bottomPath = ":/data/fader_bottom_nometer.svg";
+            ledsPath = ":/data/fader_leds_meter.svg";
+            break;
+        case PK_VU:
+            backgroundPath = ":/data/fader_background_meter.svg";
+            topPath = ":/data/fader_top_meter.svg";
+            bottomPath = ":/data/fader_bottom_meter.svg";
+            ledsPath = ":/data/fader_leds_meter.svg";
+            break;
+        default:
+        case FADER_PK_VU:
+        case FADER_PK:
+            backgroundPath = ":/data/fader_background.svg";
+            topPath = ":/data/fader_top.svg";
+            bottomPath = ":/data/fader_bottom.svg";
+            ledsPath = ":/data/fader_leds.svg";
     }
 
-    path = ":/data/fader_top.svg";
-    ok = m_top.load(path);
+    bool ok = m_back_original.load(backgroundPath);
     if (ok == false) {
-        qDebug() << "Fader: Error loading pixmap: " << path;
+        qDebug() << "Fader: Error loading pixmap: " << backgroundPath;
     }
 
-    path = ":/data/fader_bottom.svg";
-    ok = m_bottom.load(path);
+    ok = m_top.load(topPath);
     if (ok == false) {
-        qDebug() << "Fader: Error loading pixmap: " << path;
+        qDebug() << "Fader: Error loading pixmap: " << topPath;
+    }
+
+    ok = m_bottom.load(bottomPath);
+    if (ok == false) {
+        qDebug() << "Fader: Error loading pixmap: " << bottomPath;
     }
 
     // Leds image
-    QString leds_path = ":/data/fader_leds.svg";
-    ok = m_leds_original.load(leds_path);
+    ok = m_leds_original.load(ledsPath);
     if (ok == false) {
-        qDebug() << "Error loading pixmap: " << ":/data/fader_background.svg";
+        qDebug() << "Fader: Error loading pixmap: " << ledsPath;
     }
 
     // Knob image
@@ -164,15 +188,30 @@ void Fader::mouseReleaseEvent(QMouseEvent* ev)
     }
 }
 
-void Fader::mouseDoubleClickEvent(QMouseEvent* ev)
+void Fader::mouseDoubleClickEvent(QMouseEvent* p_pEvent)
 {
-    if (ev->button() == Qt::LeftButton) {
-        float fVal = (float)(height() - ev->y() - 15.0) / ((float)height() - 30.0);
+/*    if (p_pEvent->button() == Qt::RightButton ) {
+        float fVal = (float)(height() - p_pEvent->y() - 15.0) / ((float)height() - 30.0);
         fVal = fVal * (m_fMaxValue - m_fMinValue);
 
         fVal = fVal + m_fMinValue;
 
         setValue(fVal, true);
+    }*/
+    if (p_pEvent->button() == Qt::LeftButton ) {
+        bool ok;
+        double value;
+        if (m_bUseIntSteps) {
+            value = QInputDialog::getInteger(this, trUtf8("New fader value to assigne"), toolTip(),
+                    (int)getValue(), (int)getMinValue(), (int)getMaxValue(), 1, &ok);
+        }
+        else {
+            value = QInputDialog::getDouble(this, trUtf8("New fader value to assigne"), toolTip(),
+                    getValue(), getMinValue(), getMaxValue(), 1, &ok);
+        }
+        if (ok) {
+            setValue(value, true);
+        }
     }
 }
 
@@ -220,16 +259,15 @@ void Fader::setValue(float fVal, bool do_emit)
     }
 }
 
-
 float Fader::getValue()
 {
     return m_fValue;
 }
+
 float Fader::getDbValue()
 {
     return m_bLinDb ? db2lin(m_fValue, m_fMinValue) :  db2lin(m_fValue);
 }
-
 
 // in fact the external value is standanrd and internal in dB
 void Fader::setDbValue(float val)
@@ -280,7 +318,9 @@ void Fader::setPeak_L(float fPeak)
     }
 
     QDateTime now = QDateTime::currentDateTime();
-    float newVu = m_fVuValue_L - (m_rLastVuCalculate_L.toTime_t() - now.toTime_t()) * VU_SUBSTRACT;
+    double diff = now.toTime_t() - m_rLastVuCalculate_L.toTime_t();
+    diff += (now.time().msec() - m_rLastVuCalculate_L.time().msec()) / 1000.0;
+    float newVu = m_fVuValue_L - diff * VU_SUBSTRACT;
     m_rLastVuCalculate_L = now;
     
     if (newVu <  fPeak) {
@@ -303,7 +343,9 @@ void Fader::setPeak_R(float fPeak)
     }
 
     QDateTime now = QDateTime::currentDateTime();
-    float newVu = m_fVuValue_R - (m_rLastVuCalculate_R.toTime_t() - now.toTime_t()) * VU_SUBSTRACT;
+    double diff = now.toTime_t() - m_rLastVuCalculate_R.toTime_t();
+    diff += (now.time().msec() - m_rLastVuCalculate_R.time().msec()) / 1000.0;
+    float newVu = m_fVuValue_R - diff * VU_SUBSTRACT;
     m_rLastVuCalculate_R = now;
     
     if (newVu <  fPeak) {
@@ -346,7 +388,7 @@ void Fader::paintEvent(QPaintEvent*)
     }
 
     // VU leds
-    if (m_fMaxPeak > m_fMinPeak) {
+    if (m_fMaxPeak > m_fMinPeak && (m_eType == FADER_PK_VU || m_eType == PK_VU)) {
 //        painter.setBrush(QBrush(QColor(255, 240, 0)));
         painter.setPen(QColor(255, 255, 255));
         
@@ -355,8 +397,11 @@ void Fader::paintEvent(QPaintEvent*)
         if (Vu_L > height() - 30) {
             Vu_L = height() - 30;
         }
+        
+        int VuLx = m_eType == PK_VU ? 1 : 4;
+        int VuRx = width() - VuLx - 4;
         if (Vu_L < height() - 31) {
-            painter.drawLine(4, Vu_L + 15, 7, Vu_L + 15);
+            painter.drawLine(VuLx, Vu_L + 15, VuLx+3, Vu_L + 15);
 //            painter.drawPixmap(QRect(0, Vu_L + 15, width() / 2, 2), m_leds_scaled,
 //                               QRect(0, Vu_L     , width() / 2, 2));
         }
@@ -367,9 +412,8 @@ void Fader::paintEvent(QPaintEvent*)
         if (Vu_R > height() - 30) {
             Vu_R = height() - 30;
         }
-            qDebug()<<Vu_R<<Vu_R<<height();
         if (Vu_R < height() - 31) {
-            painter.drawLine(15, Vu_R + 15, 18, Vu_R + 15);
+            painter.drawLine(VuRx, Vu_R + 15, VuRx+3, Vu_R + 15);
 //            painter.drawPixmap(QRect(width() / 2, Vu_R + 15, width() / 2, 2), m_leds_scaled,
 //                               QRect(width() / 2, Vu_R     , width() / 2, 2));
         }
@@ -386,7 +430,7 @@ void Fader::paintEvent(QPaintEvent*)
 
         uint knob_y = (uint)(height() - ((height() - 30) * (realVal / fRange)));
 
-        painter.drawPixmap(QRect(4, knob_y - knob_height, knob_width, knob_height), m_knob, QRect(0, 0, knob_width, knob_height));
+        painter.drawPixmap(QRect((width() - knob_width) / 2, knob_y - knob_height, knob_width, knob_height), m_knob, QRect(0, 0, knob_width, knob_height));
     }
 }
 

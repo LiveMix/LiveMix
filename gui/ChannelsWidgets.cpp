@@ -29,6 +29,7 @@ void TbWrapp::clicked()
 {
     m_pMatrix->setVisible(!m_pMatrix->isVisible(m_eType, m_rRefChannel), m_eType, m_rRefChannel);
 }
+
 TbWrapp::TbWrapp(Widget *p_pMatrix, ToggleButton *p_pButton, ElementType p_eType, QString p_rRefChannel)
         : m_pButton(p_pButton)
         , m_eType(p_eType)

@@ -47,7 +47,9 @@ class Fader : public Volume
     Q_OBJECT
 
 public:
-    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true);
+    enum Type {FADER_PK_VU, FADER_PK, FADER, PK_VU}; 
+        
+    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true, Type p_eType =FADER_PK_VU);
     ~Fader();
     virtual QWidget* getWidget();
 
@@ -122,6 +124,7 @@ private:
 
     float m_fVuValue_L;
     float m_fVuValue_R;
+    Type m_eType;
 
     float m_fPeakValue_L;
     float m_fPeakValue_R;
@@ -131,7 +134,7 @@ private:
     float m_fValue;
     float m_fMinValue;
     float m_fMaxValue;
-
+    
     QPixmap m_back_original;
     QPixmap m_back_scaled;
     QPixmap m_top;

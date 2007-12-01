@@ -15,7 +15,7 @@
    height="15"
    version="1.0"
    sodipodi:docbase="/home/sbrunner/workspace/livemix/data"
-   sodipodi:docname="fader_top.svg"
+   sodipodi:docname="fader_top_nometer.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
      id="metadata7">
@@ -58,20 +58,6 @@
      height="15"
      x="-3"
      y="0" />
-  <rect
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect3758"
-     width="6.3774433"
-     height="1.3646766"
-     x="-0.092636108"
-     y="13.635324" />
-  <rect
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect3678"
-     width="6.3774433"
-     height="1.3646766"
-     x="10.724007"
-     y="13.635324" />
   <rect
      style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.54330707;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect3844"

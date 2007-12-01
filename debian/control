@@ -1,6 +1,6 @@
 Source: livemix
 Section: sound
-Priority: extra
+Priority: optional
 Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
 Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk, liblash-dev

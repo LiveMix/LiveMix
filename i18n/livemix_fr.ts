@@ -595,19 +595,27 @@
 <context>
     <name>LiveMix::FWidget</name>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1506"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1517"/>
         <source>%1 &quot;%2&quot;</source>
         <translation>%1 « %2 »</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1507"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1518"/>
         <source>Display name</source>
         <translation>Nom usuel</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1483"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1489"/>
         <source>Main output</source>
         <translation>Sortie principale</translation>
+    </message>
+</context>
+<context>
+    <name>LiveMix::Fader</name>
+    <message>
+        <location filename="../widget/Fader.cpp" line="209"/>
+        <source>New fader value to assigne</source>
+        <translation>Nouvelle valeur du curseur</translation>
     </message>
 </context>
 <context>
@@ -656,22 +664,22 @@
         <translation type="obsolete">[%1] Propriétés du module d&apos;effet LADSPA</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="314"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="316"/>
         <source>Deactivate</source>
         <translation>Désactive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="317"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="319"/>
         <source>Activate</source>
         <translation>Avitive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="269"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="273"/>
         <source>No plugin</source>
         <translation>Pas de module</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="309"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="313"/>
         <source>%1 (%2 %)</source>
         <translation>%1 (%2 %)</translation>
     </message>
@@ -696,7 +704,7 @@
         <translation>Déplace à droite</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="424"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="429"/>
         <source>Reset the effect</source>
         <translation>Réinitialise le module d&apos;effet</translation>
     </message>
@@ -737,7 +745,7 @@
 <context>
     <name>LiveMix::MainWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="607"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="608"/>
         <source>Phone</source>
         <translation>Casque</translation>
     </message>
@@ -747,7 +755,7 @@
         <translation type="obsolete">Volume du casque</translation>
     </message>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="618"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="619"/>
         <source>Main</source>
         <translation>Main</translation>
     </message>
@@ -870,7 +878,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="855"/>
+        <location filename="../mainapp/mainwindow.cpp" line="854"/>
         <source>LiveMix: About LiveMix</source>
         <translation>LiveMix : A propos de LiveMix</translation>
     </message>
@@ -880,112 +888,112 @@
         <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Maintenance : &lt;b&gt;Stéphane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;&lt;p&gt;LiveMix est une table de mixage logicielle pour utilisation en live. Elle utilise Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) et LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Voire aussi &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; pour plus d&apos;informations et les nouvele version de LiveMix.&lt;/p&gt;&lt;p&gt;Cette application ainsi que tous ces composant sont distribué avec la licence GPL.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="864"/>
+        <location filename="../mainapp/mainwindow.cpp" line="863"/>
         <source>LiveMix: About Qt</source>
         <translation>LiveMix : à propos de Qt</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="892"/>
+        <location filename="../mainapp/mainwindow.cpp" line="891"/>
         <source>Mono in channel name</source>
         <translation>Nom du canal mono</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="990"/>
+        <location filename="../mainapp/mainwindow.cpp" line="989"/>
         <source>Channel name</source>
         <translation>Nom du canal</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="991"/>
+        <location filename="../mainapp/mainwindow.cpp" line="990"/>
         <source>(empty)</source>
         <translation>(vide)</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="908"/>
+        <location filename="../mainapp/mainwindow.cpp" line="907"/>
         <source>Stereo in channel name</source>
         <translation>Nom du canal stéréo</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="926"/>
+        <location filename="../mainapp/mainwindow.cpp" line="925"/>
         <source>Mono pre channel name</source>
         <translation>Nom du pré-curseur mono</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="933"/>
+        <location filename="../mainapp/mainwindow.cpp" line="932"/>
         <source>Stereo pre channel name</source>
         <translation>Nom du pré-curseur stéréo</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="948"/>
+        <location filename="../mainapp/mainwindow.cpp" line="947"/>
         <source>External mono post channel name</source>
         <translation>Nom du post-curseur mono, externe</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="955"/>
+        <location filename="../mainapp/mainwindow.cpp" line="954"/>
         <source>External stereo post channel name</source>
         <translation>Nom du post-curseur stéréo, externe</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="962"/>
+        <location filename="../mainapp/mainwindow.cpp" line="961"/>
         <source>Internal mono post channel name</source>
         <translation>Nom du post-curseur mono interne</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="969"/>
+        <location filename="../mainapp/mainwindow.cpp" line="968"/>
         <source>Internal stereo post channel name</source>
         <translation>Nom du post-curseur stéréo</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="984"/>
+        <location filename="../mainapp/mainwindow.cpp" line="983"/>
         <source>Mono sub channel name</source>
         <translation>Nom du sous-group mono</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="990"/>
+        <location filename="../mainapp/mainwindow.cpp" line="989"/>
         <source>Stereo sub channel name</source>
         <translation>Nom du sous-group stéréo</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1006"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1005"/>
         <source>Delete Input channels</source>
         <translation>Retire des entrées</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1006"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1005"/>
         <source>Select the input channels for deletion:</source>
         <translation>Selectionne les entrées à retirer :</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1028"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1027"/>
         <source>Delete Pre channels</source>
         <translation>Retire des pré-curseurs</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1028"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1027"/>
         <source>Select the pre channels for deletion:</source>
         <translation>Selectionner le pré-curseur à retirer :</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1050"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1049"/>
         <source>Delete Post channels</source>
         <translation>Retire des post-curseurs</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1050"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1049"/>
         <source>Select the post channels for deletion:</source>
         <translation>Selectionne les post-curseur à retirer :</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1072"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1071"/>
         <source>Delete Sub channels</source>
         <translation>Retire des sous-groups </translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1072"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1071"/>
         <source>Select the sub channels for deletion:</source>
         <translation>Selectionne les sous-groups à retirer :</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="1095"/>
+        <location filename="../mainapp/mainwindow.cpp" line="1094"/>
         <source>LiveMix started.</source>
         <translation>LiveMix démarré.</translation>
     </message>
@@ -1010,27 +1018,27 @@
         <translation>Pré&amp;férances</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="884"/>
+        <location filename="../mainapp/mainwindow.cpp" line="883"/>
         <source>Unable to add input channel</source>
         <translation>Impossible d&apos;ajouter l&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="997"/>
+        <location filename="../mainapp/mainwindow.cpp" line="996"/>
         <source>The name &quot;%1&quot; allready exists</source>
         <translation>Le nom « %1 » existe déjà</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="941"/>
+        <location filename="../mainapp/mainwindow.cpp" line="940"/>
         <source>Unable to add pre-fader channel</source>
         <translation>Impossible d&apos;ajouter le pré-curseur</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="977"/>
+        <location filename="../mainapp/mainwindow.cpp" line="976"/>
         <source>Unable to add post-fader channel</source>
         <translation>Impossible d&apos;ajouter le post-curseur</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="997"/>
+        <location filename="../mainapp/mainwindow.cpp" line="996"/>
         <source>Unable to add sub-group channel</source>
         <translation>Impossible d&apos;ajouter le sous-groupe</translation>
     </message>
@@ -1065,50 +1073,50 @@
         <translation>Êtes vous sur de vouloire perdre les donnée de la table acctuelle</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="969"/>
+        <location filename="../mainapp/mainwindow.cpp" line="968"/>
         <source>Channel short name</source>
         <translation>Nom « court » du canal</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="860"/>
+        <location filename="../mainapp/mainwindow.cpp" line="859"/>
         <source>&lt;qt&gt;                        &lt;p&gt;Maintainer &lt;b&gt;St&amp;eacute;phane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;                        &lt;p&gt;LiveMix is a mixer application for live performance using Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) and LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                        Check out &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; for more information and new versions of LiveMix.&lt;/p&gt;                        &lt;p&gt;This application and all its components are licensed under the GPL.&lt;/p&gt;                        &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Maintenance : &lt;b&gt;Stéphane Brunner&lt;/b&gt; &amp;lt;stephane.brunner@gmail.com&amp;gt;&lt;/p&gt;&lt;p&gt;LiveMix est une table de mixage logicielle pour utilisation en live. Elle utilise Jack (&lt;a href=&quot;http://www.jackaudio.org/&quot;&gt;www.jackaudio.org&lt;/a&gt;) et LADSPA (&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;www.ladspa.org&lt;/a&gt;).                         Voire aussi &lt;a href=&quot;http://livemix.codingteam.net/&quot;&gt;livemix.codingteam.net&lt;/a&gt; pour plus d&apos;informations et les nouvele version de LiveMix.&lt;/p&gt;&lt;p&gt;Cette application ainsi que tous ces composant sont distribué avec la licence GPL.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="153"/>
         <source>Add &amp;mono...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoute un cannal &amp;mono...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="135"/>
         <source>Add &amp;stereo ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoute un cannal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="139"/>
         <source>Add multiple mono...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout de plusieurs canaux nono...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="143"/>
         <source>Add multiple stereo ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout de plusieurs cannaux stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="156"/>
         <source>Add &amp;stereo...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoute un cannal &amp;stéréo...</translation>
     </message>
     <message>
-        <location filename="../mainapp/mainwindow.cpp" line="908"/>
+        <location filename="../mainapp/mainwindow.cpp" line="907"/>
         <source>Channel numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de cannaux</translation>
     </message>
 </context>
 <context>
     <name>LiveMix::PostWidget</name>
     <message>
-        <location filename="../gui/ChannelsWidgets.cpp" line="488"/>
+        <location filename="../gui/ChannelsWidgets.cpp" line="489"/>
         <source>Return</source>
         <translation>Retour</translation>
     </message>
@@ -1266,12 +1274,12 @@
         <translation type="obsolete">Selectionne %1 %2 sur le cannal %3.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1141"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1142"/>
         <source>Phono selected.</source>
         <translation>Casque séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1143"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1144"/>
         <source>Mono selected.</source>
         <translation>Sortie mono séléctionnée.</translation>
     </message>
@@ -1296,7 +1304,7 @@
         <translation>Sous-groupe « %1 » séléctionné.</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1145"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1146"/>
         <source>Main fader selected.</source>
         <translation>Curseur principal séléctionné.</translation>
     </message>
@@ -1348,22 +1356,22 @@
         <translation>Dois-je réassigner le rasourci %1</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1403"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1405"/>
         <source>Change the fader height</source>
         <translation>Change la hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1403"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1405"/>
         <source>New fader height</source>
         <translation>Nouvelle hauteur des curseurs</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1459"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1463"/>
         <source>Change the effect fader height</source>
         <translation>Change la hauter des curseurs d&apos;effets</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1459"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1463"/>
         <source>New effect fader height</source>
         <translation>Nouvelle hauteur des curseurs d&apos;effets</translation>
     </message>
@@ -1443,7 +1451,7 @@
         <translation>mono</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1153"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1154"/>
         <source>%1 on channel %2 selected.</source>
         <translation>%1 du channal %2 séléctionné.</translation>
     </message>
@@ -1603,24 +1611,29 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1065"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1067"/>
         <source>New value to assigne</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle valeur</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="1020"/>
         <source>Set value to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Affacte la valeur à %1</translation>
     </message>
     <message>
         <location filename="../gui/mixingmatrix.cpp" line="1026"/>
         <source>Set value to all %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Affecte la valeur à tous les %1</translation>
     </message>
     <message>
-        <location filename="../gui/mixingmatrix.cpp" line="1065"/>
+        <location filename="../gui/mixingmatrix.cpp" line="1067"/>
         <source>New value to assigne to line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle valeur à affecter</translation>
+    </message>
+    <message>
+        <location filename="../gui/mixingmatrix.cpp" line="723"/>
+        <source>main output</source>
+        <translation>sortie principale</translation>
     </message>
 </context>
 <context>

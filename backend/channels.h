@@ -76,6 +76,9 @@ public:
 // wrorking data:
     jack_default_audio_sample_t peak_l;
     jack_default_audio_sample_t peak_r;
+    
+    jack_default_audio_sample_t calculate_peak_l;
+    jack_default_audio_sample_t calculate_peak_r;
 };
 class in : public channel
 {

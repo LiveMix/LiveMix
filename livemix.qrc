@@ -24,10 +24,21 @@
      <file>data/bypass_over.png</file>
      <file>data/cpuLoad_back.svg</file>
      <file>data/cpuLoad_leds.svg</file>
+
      <file>data/fader_bottom.svg</file>
      <file>data/fader_top.svg</file>
      <file>data/fader_background.svg</file>
      <file>data/fader_leds.svg</file>
+
+     <file>data/fader_bottom_nometer.svg</file>
+     <file>data/fader_top_nometer.svg</file>
+     <file>data/fader_background_nometer.svg</file>
+
+     <file>data/fader_bottom_meter.svg</file>
+     <file>data/fader_top_meter.svg</file>
+     <file>data/fader_background_meter.svg</file>
+     <file>data/fader_leds_meter.svg</file>
+
      <!--file>data/fader_background.png</file-->
      <!--file>data/fader_leds.png</file-->
      <file>data/fader_knob.png</file>

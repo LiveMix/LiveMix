@@ -89,7 +89,7 @@ void setPalette(QApplication *pQApp)
 
 int main(int argc, char** argv)
 {
-    qDebug() << "JackMix starting";
+    qDebug() << "LackMix starting";
     //Q_INIT_RESOURCE(i18n);
 
     QApplication *qapp = new QApplication(argc, argv);
