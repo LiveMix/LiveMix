@@ -217,6 +217,24 @@ int process(jack_nframes_t nframes, void* arg)
         try {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
             backend->_lock.lock();
+
+            foreach(out* elem, backend->outs) {
+                if (elem->stereo) {
+                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
+                    elem->out_s_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
+                } else {
+                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
+                    elem->out_s_r = elem->out_s_l;
+                }
+                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_l[ n ] = 0;
+                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_r[ n ] = 0;
+            }
+    
+            // init listner
+            out* pfl_elem = backend->outs[PFL];
+            jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
+            jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;    
+            bool pflOn = false;
     
             struct timeval start;
             bool calculate_pk = false;
@@ -258,7 +276,7 @@ int process(jack_nframes_t nframes, void* arg)
                     }
                     float bal_l = 1-elem->bal;
                     float bal_r = 1+elem->bal;
-                    float volume = elem->volume;
+                    float volume = elem->mute ? 0 : elem->volume;
                     for (jack_nframes_t n=0; n<nframes; n++) {
                         elem->pre_l[n] *= bal_l;
                         elem->pre_r[n] *= bal_r;
@@ -277,6 +295,27 @@ int process(jack_nframes_t nframes, void* arg)
                          elem->peak_l *= 1-elem->bal;
                          elem->peak_r *= 1+elem->bal;
                         }*/
+
+                    jack_default_audio_sample_t* inl = elem->pre_l;
+                    jack_default_audio_sample_t* inr = elem->pre_r;
+                    if (elem->pfl) {
+                        pflOn = true;
+                        if (elem->mute) {
+                            for (jack_nframes_t n=0; n<nframes; n++) {
+                                pfl_l[ n ] += inl[ n ];
+                                pfl_r[ n ] += inr[ n ];
+                                inl[n] = 0;
+                                inr[n] = 0;
+                            }
+                            elem->calculate_peak_l = 0;
+                            elem->calculate_peak_r = 0;
+                        } else {
+                            for (jack_nframes_t n=0; n<nframes; n++) {
+                                pfl_l[ n ] += inl[ n ];
+                                pfl_r[ n ] += inr[ n ];
+                            }
+                        }
+                    }
                 } else {
                     for (jack_nframes_t n=0; n<nframes; n++) {
                         elem->pre_l[n] = 0;
@@ -286,7 +325,7 @@ int process(jack_nframes_t nframes, void* arg)
                     }
                 }
             }
-    
+
             //qDebug() << "Blank outports...";
             foreach(pre* elem, backend->pres) {
                 elem->pre_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
@@ -329,25 +368,6 @@ int process(jack_nframes_t nframes, void* arg)
                 for (jack_nframes_t n=0; n<nframes; n++) elem->sub_l[ n ] = 0;
                 for (jack_nframes_t n=0; n<nframes; n++) elem->sub_r[ n ] = 0;
             }
-    
-            foreach(out* elem, backend->outs) {
-                if (elem->stereo) {
-                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
-                    elem->out_s_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
-                } else {
-                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
-                    elem->out_s_r = elem->out_s_l;
-                }
-                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_l[ n ] = 0;
-                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_r[ n ] = 0;
-            }
-    
-            out* pfl_elem = backend->outs[PFL];
-    
-            // init listner
-            jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
-            jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
-            bool pflOn = false;
     
             //qDebug() << "The actual pre.";
             //qDebug() << "Adjust prelevels.";
@@ -620,28 +640,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
             //qDebug() << "plf / alf";
             // in
-            foreach(in* in_elem, backend->ins) {
-                jack_default_audio_sample_t* inl = in_elem->pre_l;
-                jack_default_audio_sample_t* inr = in_elem->pre_r;
-                if (in_elem->pfl) {
-                    pflOn = true;
-                    if (in_elem->mute) {
-                        for (jack_nframes_t n=0; n<nframes; n++) {
-                            pfl_l[ n ] += inl[ n ];
-                            pfl_r[ n ] += inr[ n ];
-                            inl[n] = 0;
-                            inr[n] = 0;
-                        }
-                        in_elem->calculate_peak_l = 0;
-                        in_elem->calculate_peak_r = 0;
-                    } else {
-                        for (jack_nframes_t n=0; n<nframes; n++) {
-                            pfl_l[ n ] += inl[ n ];
-                            pfl_r[ n ] += inr[ n ];
-                        }
-                    }
-                }
-            }
+//            foreach(in* in_elem, backend->ins) {
+//            }
     
             //qDebug() << 25;
             // pre

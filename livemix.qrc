@@ -1,6 +1,5 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
-     <!--file>data/background_Jack.png</file-->
      <file>data/btn_edit_off.png</file>
      <file>data/btn_edit_on.png</file>
      <file>data/btn_edit_over.png</file>
@@ -68,7 +67,9 @@
      <file>data/separator.svg</file>
      <file>data/intro-open.svg</file>
      <file>data/intro-close.svg</file>
+     
      <file>i18n/livemix_fr.qm</file>
+     
      <file>data/bal_background.png</file>
      <file>data/rotary_background.png</file>
  </qresource>

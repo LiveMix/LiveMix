@@ -167,7 +167,7 @@ void Fader::mouseMoveEvent(QMouseEvent *ev)
 
 void Fader::mousePressEvent(QMouseEvent *ev)
 {
-    if (ev->button() == Qt::LeftButton) {
+    if (ev->button() == Qt::LeftButton && m_eType != PK_VU) {
         setCursor(QCursor(Qt::SizeVerCursor));
 
         m_fMousePressValue = m_fValue;
@@ -181,6 +181,7 @@ void Fader::mouseReleaseEvent(QMouseEvent* ev)
         setCursor(QCursor(Qt::ArrowCursor));
         m_fMousePressValue = m_fMinValue - 1;
         emit leftClick(ev);
+        ev->setAccepted(false);
     } else if (ev->button() == Qt::RightButton) {
         emit rightClick(ev);
     } else if (ev->button() == Qt::MidButton) {
@@ -198,7 +199,7 @@ void Fader::mouseDoubleClickEvent(QMouseEvent* p_pEvent)
 
         setValue(fVal, true);
     }*/
-    if (p_pEvent->button() == Qt::LeftButton ) {
+    if (p_pEvent->button() == Qt::LeftButton && m_eType != PK_VU) {
         bool ok;
         double value;
         if (m_bUseIntSteps) {
