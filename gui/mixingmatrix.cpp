@@ -319,6 +319,30 @@ void Widget::select(ChannelType type, QString channel)
 }
 void Widget::doSelect(ChannelType type, QString channel, bool p_bForce)
 {
+    ChannelWidget* channelW;
+    switch (m_eSelectType) {
+        case IN:
+            channelW = in[m_sSelectChannel];
+            break;
+        case PRE:
+            channelW = pre[m_sSelectChannel];
+            break;
+        case POST:
+            channelW = post[m_sSelectChannel];
+            break;
+        case SUB:
+            channelW = sub[m_sSelectChannel];
+            break;
+        case OUT:
+        default:
+            channelW = main_widget;
+            break;
+    }
+    
+    QFont font = channelW->getLabel()->font();
+    font.setBold(false); 
+    channelW->getLabel()->setFont(font);
+    
 // effect = new effectData;
     if (!p_bForce && m_eSelectType == type && m_sSelectChannel == channel) {
         return;
@@ -326,6 +350,28 @@ void Widget::doSelect(ChannelType type, QString channel, bool p_bForce)
     m_eSelectType = type;
     m_sSelectChannel = channel;
 
+    switch (m_eSelectType) {
+        case IN:
+            channelW = in[m_sSelectChannel];
+            break;
+        case PRE:
+            channelW = pre[m_sSelectChannel];
+            break;
+        case POST:
+            channelW = post[m_sSelectChannel];
+            break;
+        case SUB:
+            channelW = sub[m_sSelectChannel];
+            break;
+        case OUT:
+            channelW = main_widget;
+            break;
+    }
+    
+    font = channelW->getLabel()->font();
+    font.setBold(true); 
+    channelW->getLabel()->setFont(font);
+    
     if (type == OUT) {
         effectName->setText(trUtf8("Main output"));
     } else {

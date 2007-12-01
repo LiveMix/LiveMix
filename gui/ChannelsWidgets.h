@@ -115,7 +115,17 @@ private:
     QVBoxLayout* lPost;
     QVBoxLayout* lSub;
 };
-class InWidget : public QWidget
+class ChannelWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    QLabel* getLabel() {
+        return m_pLabel;
+    };
+protected:
+    QLabel* m_pLabel;
+};
+class InWidget : public ChannelWidget
 {
     Q_OBJECT
 public:
@@ -160,7 +170,7 @@ private:
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
-class PreWidget : public QWidget
+class PreWidget : public ChannelWidget
 {
     Q_OBJECT
 public:
@@ -181,7 +191,7 @@ private:
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
-class PostWidget : public QWidget
+class PostWidget : public ChannelWidget
 {
     Q_OBJECT
 public:
@@ -210,7 +220,7 @@ private:
 // QMap<QWidget*, Wrapp*> m_mWrapps;
 };
 
-class SubWidget : public QWidget
+class SubWidget : public ChannelWidget
 {
     Q_OBJECT
 public:
@@ -231,7 +241,7 @@ private:
 // QMap<QWidget*, Wrapp*> wrapps;
 };
 
-class MainWidget : public QWidget
+class MainWidget : public ChannelWidget
 {
     Q_OBJECT
 public:

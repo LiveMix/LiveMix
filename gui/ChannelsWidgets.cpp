@@ -232,7 +232,7 @@ void InfoWidget::removeSub(QString channelSub)
 
 
 InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
-        : QWidget()
+        : ChannelWidget()
         , m_Channel(p_sChannel)
         , m_pMatrix(p_pMatrix)
 {
@@ -242,10 +242,10 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    QLabel* label = new QLabel(p_sChannel);
-    label->setFixedWidth(CHANNEL_WIDTH);
-    label->setAlignment(Qt::AlignHCenter);
-    layout->addWidget(label);
+    m_pLabel = new QLabel(p_sChannel);
+    m_pLabel->setFixedWidth(CHANNEL_WIDTH);
+    m_pLabel->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(m_pLabel);
 
     {
         PixmapWidget *pw = new PixmapWidget(NULL);
@@ -426,10 +426,10 @@ PreWidget::PreWidget(QString channel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    QLabel* label = new QLabel(channel);
-    label->setFixedWidth(CHANNEL_WIDTH);
-    label->setAlignment(Qt::AlignHCenter);
-    layout->addWidget(label);
+    m_pLabel = new QLabel(channel);
+    m_pLabel->setFixedWidth(CHANNEL_WIDTH);
+    m_pLabel->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(m_pLabel);
 
     Toggle* mute = m_pMatrix->createToggle(PRE, channel, MUTE);
     layout->addWidget(mute);
@@ -468,10 +468,10 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
     layout->setMargin(0);
 
     {
-        QLabel* label = new QLabel(channel);
-        label->setFixedWidth(CHANNEL_WIDTH);
-        label->setAlignment(Qt::AlignHCenter);
-        layout->addWidget(label);
+        m_pLabel = new QLabel(channel);
+        m_pLabel->setFixedWidth(CHANNEL_WIDTH);
+        m_pLabel->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(m_pLabel);
     }
 
     QWidget *prevol = m_pMatrix->createRotary(POST, channel, PRE_VOL);
@@ -486,7 +486,7 @@ PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
     Widget::addSpacer(layout);
 
     {
-        QLabel* label = new QLabel(trUtf8("Return"));
+        QLabel *label = new QLabel(trUtf8("Return"));
         label->setFixedWidth(CHANNEL_WIDTH);
         label->setAlignment(Qt::AlignHCenter);
         layout->addWidget(label);
@@ -570,10 +570,10 @@ SubWidget::SubWidget(QString channel, Widget* p_pMatrix)
     layout->setSpacing(0);
     layout->setMargin(0);
 
-    QLabel* label = new QLabel(channel);
-    label->setFixedWidth(CHANNEL_WIDTH);
-    label->setAlignment(Qt::AlignHCenter);
-    layout->addWidget(label);
+    m_pLabel = new QLabel(channel);
+    m_pLabel->setFixedWidth(CHANNEL_WIDTH);
+    m_pLabel->setAlignment(Qt::AlignHCenter);
+    layout->addWidget(m_pLabel);
 
     layout->addWidget(m_pMatrix->createToggle(SUB, channel, MUTE));
     layout->addWidget(m_pMatrix->createToggle(SUB, channel, TO_AFL));
@@ -595,7 +595,7 @@ void SubWidget::mouseReleaseEvent(QMouseEvent* ev)
     }
 }
 
-MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
+MainWidget::MainWidget(Widget* p_pMatrix) : ChannelWidget()
         , m_pMatrix(p_pMatrix)
 {
     QVBoxLayout* layout = new QVBoxLayout;
@@ -605,7 +605,7 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
     layout->setMargin(0);
 
     {
-        QLabel* label = new QLabel(trUtf8("Phone"));
+        QLabel *label = new QLabel(trUtf8("Phone"));
         label->setFixedWidth(CHANNEL_WIDTH);
         label->setAlignment(Qt::AlignHCenter);
         layout->addWidget(label);
@@ -616,10 +616,13 @@ MainWidget::MainWidget(Widget* p_pMatrix) : QWidget()
 
     {
         Widget::addSpacer(layout);
-        QLabel* label = new QLabel(trUtf8("Main"));
-        label->setFixedWidth(CHANNEL_WIDTH);
-        label->setAlignment(Qt::AlignHCenter);
-        layout->addWidget(label);
+        m_pLabel = new QLabel(trUtf8("Main"));
+        m_pLabel->setFixedWidth(CHANNEL_WIDTH);
+        m_pLabel->setAlignment(Qt::AlignHCenter);
+        layout->addWidget(m_pLabel);
+        QFont font = m_pLabel->font();
+        font.setBold(true); 
+        m_pLabel->setFont(font);        
     }
 
     mute = m_pMatrix->createToggle(OUT, MAIN, MUTE);

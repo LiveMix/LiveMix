@@ -5,13 +5,13 @@
 - rm VU on effect
 - dbl click on fader to set the value
 - separate VU/PK to fader
+- highlight channel label of the selected chanel
 
 - add set value on effect context menu
 - add MIDI learn support
 
 ==== 0.6 ====
 
-- add selected chanel LED, element (or highlight channel label) 
 - add pfl LED, on selected element
 
 - add test button (can play a sound for each channel) (plock, left, right, white noize, pink noize, brown noize).

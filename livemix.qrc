@@ -39,11 +39,9 @@
      <file>data/fader_background_meter.svg</file>
      <file>data/fader_leds_meter.svg</file>
 
-     <!--file>data/fader_background.png</file-->
-     <!--file>data/fader_leds.png</file-->
      <file>data/fader_knob.png</file>
-     <file>data/knob_images1.png</file>
      <file>data/knob_images.png</file>
+
      <file>data/LCDLargeFontSet.png</file>
      <file>data/LCDLargeGrayFontSet.png</file>
      <file>data/LCDSmallBlueFontSet.png</file>
@@ -56,8 +54,10 @@
      <file>data/LCDSpinBox_up_off.png</file>
      <file>data/LCDSpinBox_up_on.png</file>
      <file>data/LCDSpinBox_up_over.png</file>
+
      <file>data/led_trigger_off.png</file>
      <file>data/led_trigger_on.png</file>
+
      <file>data/livemix.svg</file>
      <file>data/master_mute_off.png</file>
      <file>data/master_mute_on.png</file>
