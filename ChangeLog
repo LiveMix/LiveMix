@@ -1,3 +1,10 @@
+==== 0.45svn20071202 ====
+- add VU meter
+- fully review the PK meter (not to many refresh, calculate on all data)
+- rm VU on effect
+- dbl click on fader to set the value
+- separate VU/PK to fader
+- bold the channel label of the selected channel
 
 ==== 0.45svn20071124 ====
 - add lash support / save jack connection

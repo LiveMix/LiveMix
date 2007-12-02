@@ -1,12 +1,5 @@
 ==== 0.5 ====
 
-- add VU meter
-- fully review the PK meter (not to many refresh, calculate on all data)
-- rm VU on effect
-- dbl click on fader to set the value
-- separate VU/PK to fader
-- highlight channel label of the selected chanel
-
 - add set value on effect context menu
 - add MIDI learn support
 
