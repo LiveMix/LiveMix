@@ -1,3 +1,7 @@
+==== 0.45svn20071209 ====
+- add MIDI learn support
+- add --verbose argument to have output
+
 ==== 0.45svn20071202 ====
 - add VU meter
 - fully review the PK meter (not to many refresh, calculate on all data)

@@ -71,6 +71,8 @@ WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, ChannelType p_eTy
 void WrappVolume::valueChanged(Volume* p_pVolume)
 {
     Backend::instance()->getChannel(m_eType, m_sChannelName)->setFloatAttribute(m_eElement == PAN_BAL ? p_pVolume->getValue() : p_pVolume->getDbValue(), m_eElement, m_sReatedChannelName);
+    m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pVolume->getValue());
+    
 
     if (m_eType == OUT && m_eElement == FADER) {
         m_pMatrix->showMessage(trUtf8("%1 value: %2.")
@@ -114,6 +116,7 @@ bool WrappToggle::exec()
 void WrappToggle::valueChanged(ToggleButton* p_pToggle)
 {
     Backend::instance()->getChannel(m_eType, m_sChannelName)->setBoolAttribute(p_pToggle->getValue(), m_eElement, m_sReatedChannelName);
+    m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pToggle->getValue());
 }
 
 }

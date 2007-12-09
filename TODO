@@ -1,23 +1,24 @@
-==== 0.5 ====
-
-- add set value on effect context menu
-- add MIDI learn support
-
 ==== 0.6 ====
 
-- add pfl LED, on selected element
+- add set value on effect context menu.
+- save midi connexion.
+- add an option to resend all midi event.
+- add midi assignement for selected effect (fader 1-16).
+
+==== 0.8 ====
+
+- add pfl LED, on selected element.
+
+- add pattern.
+- add mute groupe.
 
 - add test button (can play a sound for each channel) (plock, left, right, white noize, pink noize, brown noize).
 - add special channel support for compressor with external signal and crossfader.
     nb in = nb effect in, rm gain, one effect, add pick outut for input after effect ;-)
     pre/post input1 pre/post input2 mute pfl main sub pre post=> too complicate :(
 
-- add possibility to change jack application name
-- move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/
-
-- add layer.
-- add pattern.
-- add mute groupe.
+- add possibility to change jack application name.
+- move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/.
 
 ==== RC 2 ====
 - display dB on the GUI (artwork welcome, in SVG) ?
@@ -25,6 +26,6 @@
 ==== 1.0 ====
 - bug fix !
 
-==== post 1.0 (or optional) ====
+==== post 1.0 ====
 - add lv2 support (help welcome) ?
 - create some needed effects like better multiBand EQ (+-12 db).

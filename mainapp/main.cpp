@@ -87,13 +87,34 @@ void setPalette(QApplication *pQApp)
     pQApp->setPalette(defaultPalette);
 }
 
+void messageOutput(QtMsgType type, const char *msg)
+{
+    bool verbose = QCoreApplication::arguments().contains("--verbose");
+    switch (type) {
+        case QtDebugMsg:
+            if (verbose) fprintf(stderr, "%s\n", msg);
+            break;
+        case QtWarningMsg:
+            fprintf(stderr, "Warning: %s\n", msg);
+            break;
+         case QtCriticalMsg:
+             fprintf(stderr, "Critical: %s\n", msg);
+             break;
+         case QtFatalMsg:
+            fprintf(stderr, "Fatal: %s\n", msg);
+            abort();
+    }
+}
+
 int main(int argc, char** argv)
 {
+    QApplication *qapp = new QApplication(argc, argv);
+    QStringList args = qapp->arguments();
+    qInstallMsgHandler(messageOutput);
+    
     qDebug() << "LackMix starting";
     //Q_INIT_RESOURCE(i18n);
 
-    QApplication *qapp = new QApplication(argc, argv);
-    QStringList args = qapp->arguments();
     qapp->setWindowIcon(QIcon(":/data/livemix.svg"));
 
     QTranslator tor;
@@ -151,6 +172,7 @@ int main(int argc, char** argv)
     } else {
         if (QFile(QDir::homePath().append("/.livemix/table.lm")).exists()) {
             mw = new LiveMix::MainWindow(QDir::homePath().append("/.livemix/table.lm"));
+            mw->restoreLash(QDir::homePath().append("/.livemix"));
         } else if (QFile(QCoreApplication::applicationDirPath() + "/default.lm").exists()) {
             mw = new LiveMix::MainWindow(QCoreApplication::applicationDirPath() + "/default.lm");
         } else {

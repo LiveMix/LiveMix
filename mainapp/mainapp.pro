@@ -22,6 +22,7 @@ contains(LMDEFINES, JACK_SUPPORT ) {
 }
 
 LIBS += -llash
+LIBS += -lasound
 
 #PRECOMPILED_HEADER  = precompiled.h
 

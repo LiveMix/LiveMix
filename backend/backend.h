@@ -35,6 +35,7 @@
 #include <QMutex>
 
 #include <jack/jack.h>
+#include <alsa/asoundlib.h>
 
 class QDomElement;
 class QDomDocument;
@@ -60,6 +61,10 @@ public:
     static Backend* instance();
     static void init(GuiServer_Interface* p_pGui);
 
+    void sendMidiEvent(unsigned char p_iChannel, unsigned int p_iController, signed int p_iValue);
+    bool hasMidiEvent();
+    snd_seq_event_t* readMidiEvent();
+    
     void run(bool run);
     uint getSampleRate();
     float getCPULoad();
@@ -293,7 +298,17 @@ private:
     int count;
     bool _run;
     QMutex _lock;
-    ::jack_client_t *client;
+    
+    snd_seq_t* seq;
+//    snd_midi_event_t *decoder, *encoder;
+    int m_iPort;
+//    snd_seq_event_t SEv;
+    int m_iMidi;
+    
+    jack_client_t *client;
+    
+//    jack_port_t *midi_in;
+//    jack_port_t *midi_out;
 
     QHash<QString, in*> ins;
     QHash<QString, out*> outs;

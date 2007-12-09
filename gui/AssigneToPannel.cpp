@@ -20,6 +20,8 @@
 
 #include "AssigneToPannel.h"
 
+#import "backend.h"
+
 #import <QLabel>
 #import <QDebug>
 #include <QGridLayout>
@@ -30,11 +32,14 @@ namespace LiveMix
 {
 
 AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, bool p_bOnlyDirrect, QKeySequence p_rActionOnChannelKeySequence
-                                 , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence)
+                                 , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence
+                                 , unsigned char p_iChannel, unsigned int p_iController)
         : QDialog()
         , m_pActionOnChannel(new GetKeyField)
         , m_pSelectChannel(new GetKeyField)
         , m_pActionOnSelectedChannel(new GetKeyField)
+        , m_iChannel(p_iChannel)
+        , m_iController(p_iController)
 {
     QGridLayout* layout = new QGridLayout();
     setLayout(layout);
@@ -51,9 +56,9 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
     }
 
     if (p_bVolume) {
-        layout->addWidget(new QLabel(trUtf8("Key to select the %2 of the channel %1").arg(p_sChannel).arg(p_sFunction)), 1, 1);
+        layout->addWidget(new QLabel(trUtf8("Key to select the %2 of the channel %1").arg(p_sFunction).arg(p_sChannel)), 1, 1);
     } else {
-        layout->addWidget(new QLabel(trUtf8("Key to %2 the channel %1").arg(p_sChannel).arg(p_sFunction)), 1, 1);
+        layout->addWidget(new QLabel(trUtf8("Key to %2 the channel %1").arg(p_sFunction).arg(p_sChannel)), 1, 1);
     }
 
     if (!p_bOnlyDirrect) {
@@ -65,10 +70,13 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
             layout->addWidget(new QLabel(trUtf8("Key to %1 the selected channel").arg(p_sFunction)), 3, 1);
         }
     }
+    m_pMidiLabel = new QLabel(m_iChannel == (unsigned char)-1 ? trUtf8("Midi event : -") : trUtf8("Midi event : %1 / %2").arg(m_iChannel).arg(m_iController));
+    layout->addWidget(m_pMidiLabel, 4, 1);
+    
 
     QWidget* buttons = new QWidget;
 // layout->addWidget(buttons, 4, 1, 2, 2);
-    layout->addWidget(buttons, 4, 1, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(buttons, 5, 1, 1, 2, Qt::AlignHCenter);
     QHBoxLayout* buttonsLayout = new QHBoxLayout;
     buttons->setLayout(buttonsLayout);
     QPushButton* ok = new QPushButton(trUtf8("OK"));
@@ -79,10 +87,29 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
 
     connect(ok, SIGNAL(clicked(bool)), this, SLOT(okClicked(bool)));
     connect(cancel, SIGNAL(clicked(bool)), this, SLOT(cancelClicked(bool)));
+
+    m_iTimer = startTimer(50);
 }
 
 AssigneToPannel::~AssigneToPannel()
 {
+    killTimer(m_iTimer);
+}
+
+void AssigneToPannel::timerEvent(QTimerEvent*) {
+    while (Backend::instance()->hasMidiEvent()) {
+        snd_seq_event_t *ev = Backend::instance()->readMidiEvent();
+        if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+            m_iChannel = ev->data.control.channel;
+            m_iController = ev->data.control.param;
+            m_pMidiLabel->setText(trUtf8("Midi event : %1 / %2").arg(m_iChannel).arg(m_iController));
+        } 
+    } 
+}
+
+void AssigneToPannel::done(int r) {
+    QDialog::done(r);
+    killTimer(m_iTimer);
 }
 
 void AssigneToPannel::okClicked(bool /*p_bChecked*/)
@@ -106,6 +133,11 @@ QKeySequence AssigneToPannel::getActionOnSelectedChannelKeySequence()
 {
     return m_pActionOnSelectedChannel->getKeySequence();
 }
-
+unsigned char AssigneToPannel::getChannel() {
+    return m_iChannel;
+}
+unsigned int AssigneToPannel::getController() {
+    return m_iController;
+}
 }
 ; // LiveMix

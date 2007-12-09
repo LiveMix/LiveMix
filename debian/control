@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
-Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk, liblash-dev
+Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk, liblash-dev, libasound2-dev
 Standards-Version: 3.7.2
 Homepage: http://livemix.codingteam.net/
 

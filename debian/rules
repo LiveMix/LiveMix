@@ -56,4 +56,16 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install 
+get-orig-source:
+	UPSTREAMURL="$(shell uscan --dehs | grep upstream-url | cut -f 2 -d\> | cut -f 1 -d\<)";\
+    UPSTREAMVERSION="$(shell uscan --dehs | grep debian-mangled-uversion | cut -f 2 -d\> | cut -f 1 -d\<)";\
+    p=$$(pwd);\
+    cd ..;\
+    pwd;\
+    wget $${UPSTREAMURL} -O livemix-$${UPSTREAMVERSION}-src.tar.bz2;\
+    bunzip2 livemix-$${UPSTREAMVERSION}-src.tar.bz2;\
+    gzip -9 livemix-$${UPSTREAMVERSION}-src.tar;\
+    ln -s livemix-$${UPSTREAMVERSION}-src.tar.gz livemix_$${UPSTREAMVERSION}.orig.tar.gz;\
+    cd $$p
+
+.PHONY: build clean binary-indep binary-arch binary install get-orig-source

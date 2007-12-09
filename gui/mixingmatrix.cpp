@@ -70,6 +70,7 @@ Widget::Widget(QWidget* p)
         : QWidget(p)
         , m_mShurtCut()
         , m_pSelectedWrapper(NULL)
+        , m_bLearn(false)
         , m_iFaderHeight(300)
         , m_iEffectFaderHeight(200)
 {
@@ -175,10 +176,45 @@ Widget::Widget(QWidget* p)
 
     m_pStatusTimer = new QTimer(this);
     connect(m_pStatusTimer, SIGNAL(timeout()), this, SLOT(onStatusTimerEvent()));
+    
+    startTimer(50);
 }
 
 Widget::~Widget()
 {}
+
+void Widget::timerEvent(QTimerEvent*) {
+    if (!m_bLearn) {
+        while (Backend::instance()->hasMidiEvent()) {
+            snd_seq_event_t *ev = Backend::instance()->readMidiEvent();
+            if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+                if (m_mMidiToWrapp.contains(ev->data.control.channel)) {
+                    QMap<unsigned int, KeyDoDirectAction*>* map = m_mMidiToWrapp[ev->data.control.channel];
+                    if (map->contains(ev->data.control.param)) {
+                        KeyDoDirectAction *act = (*map)[ev->data.control.param];
+                        Wrapp *w = (*(*(*m_mShurtCut[act->m_eType])[act->m_sChannelName])[act->m_eElement])[act->m_sReatedChannelName];
+                        if (w != NULL) {
+                            switch (act->m_eElement) {
+                                case MUTE:
+                                case MUTE_EFFECT:
+                                case TO_SUB:
+                                case TO_MAIN:
+                                case TO_PFL:
+                                case TO_AFL:
+                                    ((WrappToggle*)w)->getToggle()->setValue(ev->data.control.value > 63, true);
+                                    break;
+                                default:
+                                    Volume *vol = ((WrappVolume*)w)->getVolume();
+                                    vol->setValue(ev->data.control.value * (vol->getMaxValue() - vol->getMinValue()) / 127 
+                                            + vol->getMinValue());
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    } 
+}
 
 void Widget::displayFX(effect *fx, ChannelType p_eType, QString p_sChannelName)
 {
@@ -644,6 +680,8 @@ void Widget::clearAll()
     foreach(Map map, m_bVisible.values()) {
         map->empty();
     }
+    clearKeyToWrapp();
+    clearMidiToWrapp();
 }
 
 void Widget::leftClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, QMouseEvent*)
@@ -920,6 +958,8 @@ void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementTyp
     QKeySequence rActionOnChannelKeySequence;
     QKeySequence rSelectChannelKeySequence;
     QKeySequence rActionOnSelectedChannelKeySequence;
+    unsigned char iChannel = -1;
+    unsigned int iController = -1;
     foreach(QKeySequence rKey, m_mKeyToWrapp.keys()) {
         KeyDo* pKeyDo = m_mKeyToWrapp[rKey];
         if (typeid(*pKeyDo).name() == typeid(KeyDoDirectAction).name()) {
@@ -940,28 +980,38 @@ void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementTyp
             }
         }
     }
+    foreach(unsigned char ch, m_mMidiToWrapp.keys()) {
+        foreach(unsigned int co, m_mMidiToWrapp[ch]->keys()) {
+            KeyDoDirectAction *pKD = (*m_mMidiToWrapp[ch])[co];
+            if (pKD->m_eType == p_eType && pKD->m_sChannelName == p_sChannelName
+                    && pKD->m_eElement == p_eElement && pKD->m_sReatedChannelName == p_sReatedChannelName) {
+                iChannel = ch;
+                iController = co;
+            }
+        }
+    }
     // TODO assigne old key !
     bool volume = true;
     bool only_dirrect = false;
     switch (p_eElement) {
-    case FADER:
-        if (p_sChannelName == MAIN && p_sReatedChannelName != MAIN) {
-            only_dirrect = true;
-        }
-    case GAIN:
-    case PAN_BAL:
-    case TO_PRE:
-    case TO_POST:
-    case PRE_VOL:
-        break;
-    case MUTE:
-    case TO_SUB:
-    case TO_MAIN:
-    case TO_AFL:
-    case TO_PFL:
-    case MUTE_EFFECT:
-        volume = false;
-        break;
+        case FADER:
+            if (p_sChannelName == MAIN && p_sReatedChannelName != MAIN) {
+                only_dirrect = true;
+            }
+        case GAIN:
+        case PAN_BAL:
+        case TO_PRE:
+        case TO_POST:
+        case PRE_VOL:
+            break;
+        case MUTE:
+        case TO_SUB:
+        case TO_MAIN:
+        case TO_AFL:
+        case TO_PFL:
+        case MUTE_EFFECT:
+            volume = false;
+            break;
     }
 
     // get displayName
@@ -972,8 +1022,11 @@ void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementTyp
       displayElement += " " + p_sDisplayReatedChannelName;
      }*/
 
-    AssigneToPannel* panel = new AssigneToPannel(displayName, displayElement, volume, only_dirrect, rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence);;
+    AssigneToPannel* panel = new AssigneToPannel(displayName, displayElement, volume, only_dirrect, 
+            rActionOnChannelKeySequence, rSelectChannelKeySequence, rActionOnSelectedChannelKeySequence, 
+            iChannel, iController);
 
+    m_bLearn = true;
     if (panel->exec() == QDialog::Accepted) {
         if (panel->getActionOnChannelKeySequence() != QKeySequence()) {
             if (panel->getActionOnChannelKeySequence() != rActionOnChannelKeySequence) {
@@ -1022,9 +1075,86 @@ void Widget::middleClick(ChannelType p_eType, QString p_sChannelName, ElementTyp
             delete m_mKeyToWrapp[rActionOnSelectedChannelKeySequence];
             m_mKeyToWrapp.remove(rActionOnSelectedChannelKeySequence);
         }
+        
+        if (panel->getChannel() != -1 && !(panel->getChannel() == iChannel && panel->getController() == iController)) 
+        if ((!m_mMidiToWrapp.contains(panel->getChannel()) || !m_mMidiToWrapp[panel->getChannel()]->contains(panel->getController()) || 
+                QMessageBox::question(this, trUtf8("Reassigne MIDI")
+                    , trUtf8("Does I reassigne the MIDI controler (%1 / %2)").arg(panel->getChannel()).arg(panel->getController())
+                    , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes))) {
+            if (m_mMidiToWrapp.contains(panel->getChannel())) {
+                QMap<unsigned int, KeyDoDirectAction*>* map = m_mMidiToWrapp[panel->getChannel()];
+                if (map->contains(panel->getController())) {
+                    delete (*map)[panel->getController()];
+                    map->remove(panel->getController());
+                }
+            }
+
+            if (m_mMidiToWrapp.contains(iChannel)) {
+                QMap<unsigned int, KeyDoDirectAction*>* map = m_mMidiToWrapp[iChannel];
+                if (map->contains(iController)) {
+                    delete (*map)[iController];
+                    map->remove(iController);
+                }
+            }
+
+            if (!m_mMidiToWrapp.contains(panel->getChannel())) {
+                m_mMidiToWrapp.insert(panel->getChannel(), new QMap<unsigned int, KeyDoDirectAction*>);
+            }
+
+            m_mMidiToWrapp[panel->getChannel()]->insert(panel->getController(), 
+                    new KeyDoDirectAction(this, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName));
+
+            Wrapp *w = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
+            int value = 0;
+            Toggle* t;
+            Volume* vol;
+            switch (p_eElement) {
+                case MUTE:
+                case MUTE_EFFECT:
+                case TO_SUB:
+                case TO_MAIN:
+                case TO_PFL:
+                case TO_AFL:
+                    t = ((WrappToggle*)w)->getToggle();
+                    value = t->getValue() ? 127 : 0;
+                    break;
+                default:
+                    vol = ((WrappVolume*)w)->getVolume();
+                    value = (int)((vol->getValue() - vol->getMinValue()) * 127 / (vol->getMaxValue() - vol->getMinValue()));
+            }
+            Backend::instance()->sendMidiEvent(panel->getChannel(), panel->getController(), value);
+        }
     }
+    m_bLearn = false;
 }
 
+void Widget::sendMidiEvent(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
+        QString p_sReatedChannelName, float p_fValue) {
+    foreach(unsigned char ch, m_mMidiToWrapp.keys()) {
+        foreach(unsigned int co, m_mMidiToWrapp[ch]->keys()) {
+            KeyDoDirectAction *act = (*m_mMidiToWrapp[ch])[co];
+            if (act->m_eType == p_eType && act->m_sChannelName == p_sChannelName && act->m_sChannelName == p_sChannelName
+                    && act->m_sReatedChannelName == p_sReatedChannelName) {
+                int value = 0;
+                switch (p_eElement) {
+                    case MUTE:
+                    case MUTE_EFFECT:
+                    case TO_SUB:
+                    case TO_MAIN:
+                    case TO_PFL:
+                    case TO_AFL:
+                        value = p_fValue == 0 ? 0 : 127;
+                        break;
+                    default:
+                        Wrapp *w = (*(*(*m_mShurtCut[p_eType])[p_sChannelName])[p_eElement])[p_sReatedChannelName];
+                        Volume *vol = ((WrappVolume*)w)->getVolume();
+                        value = (int)((p_fValue - vol->getMinValue()) * 127 / (vol->getMaxValue() - vol->getMinValue()));
+                }
+                Backend::instance()->sendMidiEvent(ch, co, value);
+            }
+        }
+    }
+}
 void Widget::rightClick(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
                         QString p_sReatedChannelName, QMouseEvent* p_pEvent)
 {
@@ -1102,6 +1232,7 @@ void Widget::newValue(ChannelType p_eType, QString p_sChannelName, ElementType p
 {
     switch (p_eElement) {
     case MUTE:
+    case MUTE_EFFECT:
     case TO_SUB:
     case TO_MAIN:
     case TO_PFL:
@@ -1249,7 +1380,6 @@ void Widget::keyPressEvent(QKeyEvent * p_pEvent)
 }
 void Widget::wheelEvent(QWheelEvent *p_pEvent)
 {
-    qDebug()<<(p_pEvent->delta() > 0);
     if (m_pSelectedWrapper != NULL) {
         m_pSelectedWrapper->getVolume()->incValue(p_pEvent->delta() > 0);
     }
@@ -1257,12 +1387,21 @@ void Widget::wheelEvent(QWheelEvent *p_pEvent)
 
 void Widget::clearKeyToWrapp()
 {
-    qDebug()<<1111;
     foreach(KeyDo* keyDo, m_mKeyToWrapp) {
         delete keyDo;
     }
     m_mKeyToWrapp.clear();
+}
 
+void Widget::clearMidiToWrapp() {
+    foreach(unsigned char p_iChannel, m_mMidiToWrapp.keys()) {
+        foreach(KeyDo* keyDo, *m_mMidiToWrapp[p_iChannel]) {
+            delete keyDo;
+        }
+        m_mMidiToWrapp[p_iChannel]->clear();
+        delete m_mMidiToWrapp[p_iChannel];
+    }
+    m_mMidiToWrapp.clear();
 }
 
 void Widget::addVolume(Volume* p_pVolume, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName)

@@ -24,6 +24,7 @@
 #import "GetKeyField.h"
 
 #import <QDialog>
+#import <QLabel>
 
 namespace LiveMix
 {
@@ -33,21 +34,31 @@ class AssigneToPannel : public QDialog
     Q_OBJECT
 public:
     AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, bool p_bOnlyDirrect, QKeySequence p_rActionOnChannelKeySequence
-                    , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence);
+                    , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence 
+                    , unsigned char p_iChannel, unsigned int p_iController);
     virtual ~AssigneToPannel();
 
     QKeySequence getActionOnChannelKeySequence();
     QKeySequence getSelectChannelKeySequence();
     QKeySequence getActionOnSelectedChannelKeySequence();
+    unsigned char getChannel();
+    unsigned int getController();
 
 public slots:
     void okClicked(bool p_bChecked);
     void cancelClicked(bool p_bChecked);
+    virtual void done(int r);
 
 private:
-    GetKeyField* m_pActionOnChannel;
-    GetKeyField* m_pSelectChannel;
-    GetKeyField* m_pActionOnSelectedChannel;
+    GetKeyField *m_pActionOnChannel;
+    GetKeyField *m_pSelectChannel;
+    GetKeyField *m_pActionOnSelectedChannel;
+
+    void timerEvent(QTimerEvent*);
+    QLabel *m_pMidiLabel;
+    unsigned char m_iChannel;
+    unsigned int m_iController;
+    int m_iTimer;
 };
 
 }

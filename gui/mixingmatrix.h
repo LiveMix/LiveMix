@@ -54,6 +54,7 @@ class PostWidget;
 class SubWidget;
 class MainWidget;
 class KeyDo;
+class KeyDoDirectAction;
 class VWidget;
 class RWidget;
 class TWidget;
@@ -138,6 +139,17 @@ public:
         m_mKeyToWrapp.insert(p_rKey,p_pDo);
     };
 
+    const QMap<unsigned char, QMap<unsigned int, KeyDoDirectAction*>*>* getMidiToWrapp() {
+        return &m_mMidiToWrapp;
+    };
+    void clearMidiToWrapp();
+    void insertMidiToWrapp(unsigned char p_iChannel, unsigned int p_iControler, KeyDoDirectAction* p_pDo) {
+        if (!m_mMidiToWrapp.contains(p_iChannel)) {
+            m_mMidiToWrapp.insert(p_iChannel, new QMap<unsigned int, KeyDoDirectAction*>);
+        }
+        m_mMidiToWrapp[p_iChannel]->insert(p_iControler,p_pDo);
+    };
+
 //    QString getDisplayElement(ElementType p_eElement);
 
     bool isVisible(ElementType p_eElement, QString p_rChannelTo ="");
@@ -156,6 +168,8 @@ public:
     static void addSpacer(QVBoxLayout*);
 
     void clearAll();
+
+    void sendMidiEvent(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, float p_fValue);
 
 public slots:
     // Fills the empty nodes with 1to1-controls
@@ -220,6 +234,10 @@ private:
     QMap<ChannelType, QMap<QString, QMap<ElementType, QMap<QString, Wrapp*>*>*>*> m_mShurtCut;
     QMap<QKeySequence, KeyDo*> m_mKeyToWrapp;
     WrappVolume* m_pSelectedWrapper;
+
+    void timerEvent(QTimerEvent*);
+    QMap<unsigned char, QMap<unsigned int, KeyDoDirectAction*>*> m_mMidiToWrapp;
+    bool m_bLearn;
 
     void keyPressEvent(QKeyEvent * p_pEvent);
     void wheelEvent(QWheelEvent *p_pEvent);

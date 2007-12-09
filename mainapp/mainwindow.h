@@ -46,15 +46,20 @@ class Widget;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 public:
     MainWindow(QWidget* =0);
     MainWindow(QString filename, QWidget* =0);
     ~MainWindow();
+
 public slots:
     void openFile();
     void openFile(QString path);
     void saveFile();
     void saveFile(QString p_rPath);
+
+    void restoreLash(QString p_rDir);
+
 private slots:
     void closeEvent(QCloseEvent*);
 
@@ -93,7 +98,6 @@ private slots:
     void openEmpty();
 
     void saveLash(QString p_rDir);
-    void restoreLash(QString p_rDir);
 
 private:
     void toEmpty();
@@ -114,6 +118,9 @@ private:
     void openActionBindingList(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName, const QString& p_sTagName, const ElementType p_eElemetType, bool p_bMain =false);
     void openActionBinding(const QDomElement& channel, const ChannelType p_eType, const QString& p_sChannelName, bool p_bMain =false);
     QString saveActionBinding(const ChannelType p_eType, const QString& p_sChannelName);
+
+    void openMidiBinding(const QDomElement& binding, const ChannelType p_eType, const QString& p_sChannelName);
+    QString saveMidiBinding(const ChannelType p_eType, const QString& p_sChannelName);
 
     bool toBool(QString);
     QString fromBool(bool);

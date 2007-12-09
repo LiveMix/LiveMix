@@ -26,7 +26,10 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
+
 #include <sys/time.h>
+//#include <jack/midiport.h>
+
 
 namespace LiveMix
 {
@@ -36,7 +39,8 @@ float m_fMaxProcessTime = 0.0f;   /// max ms usable in process with no xrun
 Backend* m_pInstance;
 
 Backend::Backend(GuiServer_Interface* g) :  gui(g)
-        ,_run(false)
+  , _run(false)
+  , seq(0)
 {
     qDebug() << "JackBackend::JackBackend()";
     client = ::jack_client_new("LiveMix");
@@ -55,6 +59,45 @@ Backend::Backend(GuiServer_Interface* g) :  gui(g)
                      QObject::trUtf8("<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it (for example by using QJackCtl) and try LiveMix again.</p></qt>"));
         exit(-1);
     }
+//    midi_in = jack_port_register(client, "control", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
+//    midi_out = jack_port_register(client, "control", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
+//    snd_midi_event_init(midi_in);
+//    snd_midi_event_init(midi_out);
+    if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) >= 0) {
+        snd_seq_set_client_name(seq, "LiveMix");
+        m_iPort = snd_seq_create_simple_port(seq, "control", 0, 
+                SND_SEQ_PORT_TYPE_MIDI_GENERIC | SND_SEQ_PORT_TYPE_SOFTWARE | SND_SEQ_PORT_TYPE_APPLICATION);
+/*        midi_in = snd_seq_create_simple_port(seq, "control", SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ, 
+                SND_SEQ_PORT_TYPE_APPLICATION);
+        midi_out = snd_seq_create_simple_port(seq, "control", SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE, 
+                SND_SEQ_PORT_TYPE_APPLICATION);*/
+        m_iMidi = snd_seq_create_simple_port(seq, "control", 
+                SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE, 
+                SND_SEQ_PORT_TYPE_APPLICATION);
+/*        snd_seq_ev_clear (&SEv);
+        snd_seq_ev_set_source (&SEv, port_id);
+        snd_seq_ev_set_subs (&SEv);
+        snd_seq_ev_set_direct (&SEv);
+        snd_midi_event_new (1024, &decoder);
+        snd_midi_event_new (64, &encoder);
+        snd_midi_event_init (decoder);
+        snd_midi_event_init (encoder);
+
+        snd_seq_port_subscribe_t *sub;
+        snd_seq_addr_t seq_addr;
+        
+        snd_seq_port_subscribe_alloca(&sub);
+
+        seq_addr.client = snd_seq_client_id (seq);
+        seq_addr.port   = port_id;
+        snd_seq_port_subscribe_set_sender(sub, &seq_addr);
+        snd_seq_port_subscribe_set_dest(sub, &seq_addr);
+
+        snd_seq_subscribe_port (seq, sub);*/
+    } else {
+        qDebug() << "The ALSA MIDI system is not available. No ports based on it will be created";
+    }
+
     addOutput(MAIN, true);
     addOutput(MONO, false);
     addOutput(PFL, true);
@@ -208,6 +251,40 @@ jack_default_audio_sample_t Backend::getSubPeak(QString ch, bool left)
     }
 }
 
+void Backend::sendMidiEvent(unsigned char p_iChannel, unsigned int p_iController, signed int p_iValue) {
+//    qDebug()<<111<<p_iChannel<<p_iController<<p_iValue;
+    snd_seq_event_t ev;
+    
+    snd_seq_ev_clear(&ev);
+    snd_seq_ev_set_source(&ev, m_iMidi);
+    snd_seq_ev_set_subs(&ev);
+    snd_seq_ev_set_direct(&ev);
+    snd_seq_ev_set_controller(&ev,p_iChannel,p_iController,p_iValue);
+    
+    snd_seq_event_output(seq, &ev);
+    snd_seq_drain_output(seq);
+}
+
+bool Backend::hasMidiEvent() {
+    return snd_seq_event_input_pending(seq, m_iMidi) > 0;
+}
+
+snd_seq_event_t* Backend::readMidiEvent() {
+/*            while (snd_seq_event_input_pending(backend->seq, backend->midi_in) > 0) {
+                snd_seq_event_t *ev;
+                snd_seq_event_input(backend->seq, &ev);
+                if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+//                    qDebug()<<ev->source.client<<ev->source.port<<ev->dest.client<<ev->dest.port;
+                    qDebug()<<ev->data.control.channel<<ev->data.control.param<<ev->data.control.value;
+                    snd_seq_free_event(ev);
+                }
+            }*/
+    snd_seq_event_t *ev;
+    snd_seq_event_input(seq, &ev);
+    snd_seq_free_event(ev);
+    return ev;
+}
+
 int process(jack_nframes_t nframes, void* arg)
 {
 // qDebug() << "JackMix::process( jack_nframes_t " << nframes << ", void* )";
@@ -217,7 +294,17 @@ int process(jack_nframes_t nframes, void* arg)
         try {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
             backend->_lock.lock();
+            
+/*            void* jack_buffer = jack_port_get_buffer(backend->midi_in, nframes);
+            const jack_nframes_t event_count = jack_midi_get_event_count(jack_buffer, nframes);
+ 
+            for (jack_nframes_t i=0; i < event_count; ++i) {
+                jack_midi_event_t ev;
+                jack_midi_event_get(&ev, jack_buffer, i, nframes);
 
+                qDebug()<<ev.time<<ev.size<<ev.buffer;
+            }*/
+            
             foreach(out* elem, backend->outs) {
                 if (elem->stereo) {
                     elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
@@ -1400,6 +1487,13 @@ void Backend::saveLash(QString p_rFile)
             }
         }
     }
+    
+/*    snd_seq_port_info_t *port_info;
+    snd_seq_port_info_alloca (&port_info);
+    snd_seq_port_info_set_client(port_info, seq);
+    snd_seq_port_info_set_port(port_info, midi_in);
+    qDebug<<snd_seq_client_info_get_name(client_info);*/
+    
     xml += "</connexions>";
     QFile file(p_rFile);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1480,6 +1574,10 @@ void Backend::restoreLash(QString p_rFile)
                 }
             }
         }
+//midi
+//int snd_seq_connect_from(snd_seq_t *seq, int my_port, int src_client, int src_port);
+//int snd_seq_connect_to(snd_seq_t *seq, int my_port, int dest_client, int dest_port);
+//int snd_seq_get_port_info(snd_seq_t *handle, int port, snd_seq_port_info_t *info);
     }
 }
 
