@@ -21,6 +21,7 @@
 #include "ChannelsWidgets.h"
 
 #include "PixmapWidget.h"
+#include <QPainter>
 
 namespace LiveMix
 {
@@ -43,6 +44,7 @@ IFWidget::IFWidget(Widget *p_pWidget)
         : m_pWidget(p_pWidget)
 {
     setCursor(QCursor(Qt::SizeVerCursor));
+    m_background.load(":/data/resize_grip.svg");
 }
 void IFWidget::mousePressEvent(QMouseEvent *p_pEvent)
 {
@@ -55,6 +57,11 @@ void IFWidget::mouseReleaseEvent(QMouseEvent *p_pEvent)
     if (p_pEvent->button() == Qt::LeftButton) {
         m_pWidget->setFaderHeight(m_pWidget->getFaderHeight() + m_fMousePressY - p_pEvent->y());
     }
+}
+void IFWidget::paintEvent(QPaintEvent*)
+{
+    QPainter painter(this);
+    painter.drawPixmap(QRect(0, height()/3-25, width(), 50), m_background, QRect(0, 0, width(), 50));
 }
 
 InfoWidget::InfoWidget(Widget* p_pMatrix)
@@ -621,8 +628,8 @@ MainWidget::MainWidget(Widget* p_pMatrix) : ChannelWidget()
         m_pLabel->setAlignment(Qt::AlignHCenter);
         layout->addWidget(m_pLabel);
         QFont font = m_pLabel->font();
-        font.setBold(true); 
-        m_pLabel->setFont(font);        
+        font.setBold(true);
+        m_pLabel->setFont(font);
     }
 
     mute = m_pMatrix->createToggle(OUT, MAIN, MUTE);

@@ -34,7 +34,7 @@ class AssigneToPannel : public QDialog
     Q_OBJECT
 public:
     AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p_bVolume, bool p_bOnlyDirrect, QKeySequence p_rActionOnChannelKeySequence
-                    , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence 
+                    , QKeySequence p_rSelectChannelKeySequence, QKeySequence p_rActionOnSelectedChannelKeySequence
                     , unsigned char p_iChannel, unsigned int p_iController);
     virtual ~AssigneToPannel();
 

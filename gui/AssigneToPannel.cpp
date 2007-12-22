@@ -70,9 +70,9 @@ AssigneToPannel::AssigneToPannel(QString p_sChannel, QString p_sFunction, bool p
             layout->addWidget(new QLabel(trUtf8("Key to %1 the selected channel").arg(p_sFunction)), 3, 1);
         }
     }
-    m_pMidiLabel = new QLabel(m_iChannel == (unsigned char)-1 ? trUtf8("Midi event : -") : trUtf8("Midi event : %1 / %2").arg(m_iChannel).arg(m_iController));
+    m_pMidiLabel = new QLabel(m_iChannel == (unsigned char)-1 ? trUtf8("MIDI event: -") : trUtf8("MIDI event: %1 / %2").arg(m_iChannel).arg(m_iController));
     layout->addWidget(m_pMidiLabel, 4, 1);
-    
+
 
     QWidget* buttons = new QWidget;
 // layout->addWidget(buttons, 4, 1, 2, 2);
@@ -96,18 +96,20 @@ AssigneToPannel::~AssigneToPannel()
     killTimer(m_iTimer);
 }
 
-void AssigneToPannel::timerEvent(QTimerEvent*) {
+void AssigneToPannel::timerEvent(QTimerEvent*)
+{
     while (Backend::instance()->hasMidiEvent()) {
         snd_seq_event_t *ev = Backend::instance()->readMidiEvent();
         if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
             m_iChannel = ev->data.control.channel;
             m_iController = ev->data.control.param;
-            m_pMidiLabel->setText(trUtf8("Midi event : %1 / %2").arg(m_iChannel).arg(m_iController));
-        } 
-    } 
+            m_pMidiLabel->setText(trUtf8("MIDI event: %1 / %2").arg(m_iChannel).arg(m_iController));
+        }
+    }
 }
 
-void AssigneToPannel::done(int r) {
+void AssigneToPannel::done(int r)
+{
     QDialog::done(r);
     killTimer(m_iTimer);
 }
@@ -133,10 +135,12 @@ QKeySequence AssigneToPannel::getActionOnSelectedChannelKeySequence()
 {
     return m_pActionOnSelectedChannel->getKeySequence();
 }
-unsigned char AssigneToPannel::getChannel() {
+unsigned char AssigneToPannel::getChannel()
+{
     return m_iChannel;
 }
-unsigned int AssigneToPannel::getController() {
+unsigned int AssigneToPannel::getController()
+{
     return m_iController;
 }
 }

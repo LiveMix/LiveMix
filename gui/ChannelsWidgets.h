@@ -122,6 +122,9 @@ public:
     QLabel* getLabel() {
         return m_pLabel;
     };
+
+    FWidget* fader;
+
 protected:
     QLabel* m_pLabel;
 };
@@ -139,8 +142,6 @@ public:
     void removePre(QString channelIn, QString channelPre);
     void removePost(QString channelIn, QString channelPost);
     void removeSub(QString channelIn, QString channelSub);
-
-    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -177,8 +178,6 @@ public:
     PreWidget(QString channel, Widget* p_pMatrix);
     ~PreWidget();
 
-    FWidget* fader;
-
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
@@ -200,8 +199,6 @@ public:
 
     void addSub(QString channelPost, QString channelSub);
     void removeSub(QString channelIn, QString channelSub);
-
-    FWidget* fader;
 
     void mouseReleaseEvent(QMouseEvent* ev);
 
@@ -227,8 +224,6 @@ public:
     SubWidget(QString channel, Widget* p_pMatrix);
     ~SubWidget();
 
-    FWidget* fader;
-
     void mouseReleaseEvent(QMouseEvent* ev);
 
 signals:
@@ -249,10 +244,7 @@ public:
     ~MainWidget();
 
     void update();
-
     void mouseReleaseEvent(QMouseEvent* ev);
-
-    FWidget* fader;
 
 signals:
     void clicked(ChannelType, QString channel);
@@ -273,10 +265,12 @@ public:
     IFWidget(Widget *p_pWidget);
     virtual void mousePressEvent(QMouseEvent *p_pEvent);
     virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
+    virtual void paintEvent(QPaintEvent *p_pEvent);
 
 private:
     int m_fMousePressY;
     Widget *m_pWidget;
+    QPixmap m_background;
 };
 
 }; // LiveMix

@@ -37,6 +37,7 @@ class Wrapp : public QObject
 public:
     Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement,
           QString p_sReatedChannelName);
+    ~Wrapp();
 
     virtual bool exec();
 
@@ -49,6 +50,7 @@ public slots:
 protected:
     Widget* m_pMatrix;
 
+    Action* m_pWidget;
     ChannelType m_eType;
     QString m_sChannelName;
     ElementType m_eElement;
@@ -66,7 +68,7 @@ private:
     Volume* m_pWidget;
 
 private slots:
-    void valueChanged(Volume* p_pVolume);
+    void valueChanged(Volume* p_pVolume, int p_iSource);
 };
 
 class WrappToggle : public Wrapp
@@ -74,6 +76,8 @@ class WrappToggle : public Wrapp
     Q_OBJECT
 public:
     WrappToggle(Widget* p_pMatrix, Toggle* p_pWidget, ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName);
+    ~WrappToggle();
+
     Toggle* getToggle();
 
     bool exec();
@@ -82,7 +86,7 @@ private:
     Toggle* m_pWidget;
 
 private slots:
-    void valueChanged(ToggleButton* p_pToggle);
+    void valueChanged(ToggleButton* p_pToggle, int p_iSource);
 };
 
 }

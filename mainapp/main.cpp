@@ -91,18 +91,18 @@ void messageOutput(QtMsgType type, const char *msg)
 {
     bool verbose = QCoreApplication::arguments().contains("--verbose");
     switch (type) {
-        case QtDebugMsg:
-            if (verbose) fprintf(stderr, "%s\n", msg);
-            break;
-        case QtWarningMsg:
-            fprintf(stderr, "Warning: %s\n", msg);
-            break;
-         case QtCriticalMsg:
-             fprintf(stderr, "Critical: %s\n", msg);
-             break;
-         case QtFatalMsg:
-            fprintf(stderr, "Fatal: %s\n", msg);
-            abort();
+    case QtDebugMsg:
+        if (verbose) fprintf(stderr, "%s\n", msg);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "Warning: %s\n", msg);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s\n", msg);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "Fatal: %s\n", msg);
+        abort();
     }
 }
 
@@ -111,8 +111,8 @@ int main(int argc, char** argv)
     QApplication *qapp = new QApplication(argc, argv);
     QStringList args = qapp->arguments();
     qInstallMsgHandler(messageOutput);
-    
-    qDebug() << "LackMix starting";
+
+    qDebug() << "LiveMix starting";
     //Q_INIT_RESOURCE(i18n);
 
     qapp->setWindowIcon(QIcon(":/data/livemix.svg"));
@@ -124,7 +124,6 @@ int main(int argc, char** argv)
         QString sTranslationPath = ":i18n";
 
         bool bTransOk = tor.load(sTranslationFile, sTranslationPath);
-//        bool bTransOk = tor.load( sTranslationFile, sTranslationPath );
         if (bTransOk) {
             qDebug() << "Using locale: " + sTranslationPath + "/" + sTranslationFile;
         } else {
@@ -136,20 +135,7 @@ int main(int argc, char** argv)
     }
     qapp->installTranslator(&tor);
 
-//    QTranslator translator;
-//    translator.load("livemix.fr.qm", ":i18n");
-//    translator.load("livemix.fr.qm", "/home/sbrunner/workspace/livemix/i18n");
-//    qapp->installTranslator(&translator);
-
-//    qDebug() << QPushButton::trUtf8("Locale Test C.");
-//    qDebug() << QPushButton::tr("Locale Test C.");
-
     setPalette(qapp);
-
-//     QPushButton hello(QPushButton::tr("Hello world!"));
-//     hello.resize(100, 30);
-//     hello.show();
-
 
     QString file;
     bool lash = false;

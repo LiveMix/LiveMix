@@ -107,6 +107,28 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX, int p
 LadspaFXProperties::~LadspaFXProperties()
 {
 // qDebug() << "DESTROY";
+    disconnect(m_pRemoveBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
+    disconnect(m_pLeftBtn, SIGNAL(clicked()), this, SLOT(leftBtnClicked()));
+    disconnect(m_pRightBtn, SIGNAL(clicked()), this, SLOT(rightBtnClicked()));
+    disconnect(m_pTimer, SIGNAL(timeout()), this, SLOT(updateOutputControls()));
+
+    delete m_pScrollArea;
+//    delete m_pFrame;
+    delete m_pNameLbl;
+    delete m_pActivateBtn;
+    delete m_pRemoveBtn;
+    delete m_pLeftBtn;
+    delete m_pRightBtn;
+    delete m_pTimer;
+
+    m_pScrollArea = NULL;
+//    delete m_pFrame;
+    m_pNameLbl = NULL;
+    m_pActivateBtn = NULL;
+    m_pRemoveBtn = NULL;
+    m_pLeftBtn = NULL;
+    m_pRightBtn = NULL;
+    m_pTimer = NULL;
 }
 
 void LadspaFXProperties::closeEvent(QCloseEvent *ev)
@@ -202,7 +224,7 @@ void LadspaFXProperties::updateControls()
                 pLCD->hide();
 
                 ToggleButton *pToggle = ToggleButton::create(m_pFrame);
-                connect(pToggle, SIGNAL(valueChanged(ToggleButton*)), this, SLOT(toggleChanged(ToggleButton*)));
+                connect(pToggle, SIGNAL(valueChanged(ToggleButton*, int)), this, SLOT(toggleChanged(ToggleButton*)));
                 m_pInputControlFaders.push_back(pToggle);
                 pToggle->move(nInputControl_X + 24, m_iFaderHeight + 23);
 
@@ -212,9 +234,11 @@ void LadspaFXProperties::updateControls()
             } else {
                 // fader
                 Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic, Fader::FADER_PK);
+                WrappFXFader *pWrappFXFader = new WrappFXFader(pFader);
+
 //                connect(pFader, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
-                connect(pFader, SIGNAL(rightClick(QMouseEvent*)), this, SLOT(contextMenu(QMouseEvent*)));
-                connect(pFader, SIGNAL(valueChanged(Volume*)), this, SLOT(faderChanged(Volume*)));
+                connect(pWrappFXFader, SIGNAL(rightClick(QMouseEvent*, Fader*)), this, SLOT(contextMenu(QMouseEvent*, Fader*)));
+                connect(pFader, SIGNAL(valueChanged(Volume*, int)), this, SLOT(faderChanged(Volume*)));
                 m_pInputControlFaders.push_back(pFader);
                 pFader->move(nInputControl_X + 25, 56);
                 pFader->setToolTip(pControlPort->m_sName);
@@ -311,6 +335,8 @@ void LadspaFXProperties::updateOutputControls()
 
     if (m_nLadspaFX->fx) {
         QString title = trUtf8("%1 (%2 %)").arg(m_nLadspaFX->fx->getPluginName()).arg(m_nLadspaFX->m_fCpuUse * 100, 0, 'f', 2);
+        m_pNameLbl->setText(title);
+        m_pNameLbl->setToolTip(title);
 
         if (m_nLadspaFX->fx->isEnabled()) {
             m_pActivateBtn->setToolTip(trUtf8("Deactivate"));
@@ -418,13 +444,17 @@ void LadspaFXProperties::setFaderHeight(int p_iHeight)   //195
         fader->setFixedHeight(p_iHeight);
     }
 }
-void LadspaFXProperties::contextMenu(QMouseEvent *p_pEvent)
+void LadspaFXProperties::contextMenu(QMouseEvent *p_pEvent, Fader *p_pFader)
 {
     QMenu menu(this);
 
 //    QAction* assigne = new QAction(trUtf8("Assigne key"), this);
 //    connect(assigne, SIGNAL(triggered()), this, SLOT(assigneKey()));
 //    menu.addAction(assigne);
+
+    QAction* set = new QAction(trUtf8("Set value..."), this);
+    connect(set, SIGNAL(triggered()), p_pFader , SLOT(openSetValue()));
+    menu.addAction(set);
 
     QAction* reset = new QAction(trUtf8("Reset the effect"), this);
     connect(reset, SIGNAL(triggered()), this, SLOT(reset()));
@@ -451,6 +481,16 @@ void LadspaFXProperties::reset()
             toggleChanged(t);
         }
     }
+}
+
+WrappFXFader::WrappFXFader(Fader* p_pFader)
+        : m_pFader(p_pFader)
+{
+    connect(m_pFader, SIGNAL(rightClick(QMouseEvent*)), this, SLOT(rightClicked(QMouseEvent*)));
+}
+void WrappFXFader::rightClicked(QMouseEvent *p_pEvent)
+{
+    emit rightClick(p_pEvent, m_pFader);
 }
 
 }

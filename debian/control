@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
 Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-dev, liblrdf-dev, ladspa-sdk, liblash-dev, libasound2-dev
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
 Homepage: http://livemix.codingteam.net/
 
 Package: livemix
@@ -13,12 +13,12 @@ Depends: ${shlibs:Depends}
 Recommends: swh-plugins
 Suggests: cmt, tap-plugins, ladspa-plugin
 Description: Simple mixer for live performances
- Based on Jack and LADSPA.
+ Based on Jack.
  Features:
   - In, pre fader, post fader, sub-groups customisable channel.
   - All-in is stereo-in internally.
   - LADSPA effects.
   - LASH support.
-  - PK meters.
-  - CPU meters.
-  - Hydrogen GUI.
+  - MIDI support.
+  - PK & pseudo VU meters.
+  - Simple GUI.

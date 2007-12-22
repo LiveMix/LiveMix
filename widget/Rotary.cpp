@@ -148,7 +148,7 @@ void Rotary::setDbValue(float val)
 {
     setValue(lin2db(val, m_fMin));
 }
-void Rotary::setValue(float fValue, bool do_emit)
+void Rotary::setValue(float fValue, bool do_emit, int p_iSource)
 {
     if (fValue == m_fValue) {
         return;
@@ -166,7 +166,7 @@ void Rotary::setValue(float fValue, bool do_emit)
     }
 
     if (do_emit) {
-        emit valueChanged(this);
+        emit valueChanged(this, p_iSource);
     }
 }
 

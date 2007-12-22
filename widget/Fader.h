@@ -47,8 +47,8 @@ class Fader : public Volume
     Q_OBJECT
 
 public:
-    enum Type {FADER_PK_VU, FADER_PK, FADER, PK_VU}; 
-        
+    enum Type {FADER_PK_VU, FADER_PK, FADER, PK_VU};
+
     Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true, Type p_eType =FADER_PK_VU);
     ~Fader();
     virtual QWidget* getWidget();
@@ -62,7 +62,7 @@ public:
         return m_fMaxValue;
     }
 
-    void setValue(float fVal, bool emit = false);
+    void setValue(float fVal, bool emit = false, int p_iSource =0);
     float getValue();
     // in fact the external value is standanrd and internal in dB
     void setDbValue(float fVal);
@@ -100,16 +100,20 @@ public:
     void setDbMaxPeak(float val);
     void setDbMinPeak(float val);
 
-    virtual void mousePressEvent(QMouseEvent *ev);
-    virtual void mouseMoveEvent(QMouseEvent *ev);
-    virtual void mouseReleaseEvent(QMouseEvent* ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* ev);
-//    virtual void wheelEvent( QWheelEvent *ev );
-    virtual void paintEvent(QPaintEvent *ev);
+    virtual void mousePressEvent(QMouseEvent *p_pEvent);
+    virtual void mouseMoveEvent(QMouseEvent *p_pEvent);
+    virtual void mouseReleaseEvent(QMouseEvent *p_pEvent);
+    virtual void mouseDoubleClickEvent(QMouseEvent *p_pEvent);
+//    virtual void wheelEvent(QWheelEvent *p_pEvent);
+    virtual void paintEvent(QPaintEvent *p_pEvent);
+
 
     virtual void setFixedHeight(int h);
     virtual void setFixedSize(const QSize & s);
     virtual void setFixedSize(int w, int h);
+
+public slots:
+    void openSetValue();
 
 private:
     float m_fMousePressValue;
@@ -134,7 +138,7 @@ private:
     float m_fValue;
     float m_fMinValue;
     float m_fMaxValue;
-    
+
     QPixmap m_back_original;
     QPixmap m_back_scaled;
     QPixmap m_top;

@@ -195,6 +195,14 @@ void MainWindow::init()
 //    m_pShowGain = new QAction(trUtf8("Show/hide &gain"), this );
 //    connect(m_pShowGain, SIGNAL(triggered()), _mixerwidget, SLOT(showGain()));
 //    preferances->addAction(m_pShowGain);
+
+    QAction *showAll = new QAction(trUtf8("&Show all part"), this);
+    connect(showAll, SIGNAL(triggered()), _mixerwidget, SLOT(showAll()));
+    preferances->addAction(showAll);
+    QAction *hideAll = new QAction(trUtf8("&Hide all part"), this);
+    connect(hideAll, SIGNAL(triggered()), _mixerwidget, SLOT(hideAll()));
+    preferances->addAction(hideAll);
+
     m_pFaderHeight = new QAction(trUtf8("Set &fader height..."), this);
     connect(m_pFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(faderHeight()));
     preferances->addAction(m_pFaderHeight);
@@ -283,7 +291,7 @@ void MainWindow::toEmpty()
     }
     while (Backend::instance()->getOutEffects(MAIN)->size() > 0) {
         effect *fx = (*Backend::instance()->getOutEffects(MAIN))[0];
-        _mixerwidget->removeFX(fx->gui, fx);
+        _mixerwidget->removeFX(fx->gui, fx, OUT, MAIN);
     }
 
     _mixerwidget->clearAll();
@@ -408,7 +416,7 @@ void MainWindow::openFile(QString path)
                     openActionBinding(binding, OUT, MAIN, "afl", TO_AFL);
                     openActionBinding(binding, OUT, MAIN, "effect", MUTE_EFFECT);
                 }
-                
+
                 QDomElement main = out.firstChildElement("main");
                 if (!main.isNull()) {
                     openMidiBinding(main, OUT, MAIN);
@@ -421,7 +429,7 @@ void MainWindow::openFile(QString path)
                 if (!pfl.isNull()) {
                     openMidiBinding(pfl, OUT, PFL);
                 }
-                
+
                 Backend::instance()->setOutVolume(MAIN, out.attribute("volume").toDouble());
                 Backend::instance()->setOutMute(MAIN, toBool(out.attribute("mute")));
                 Backend::instance()->setOutAfl(MAIN, toBool(out.attribute("afl")));
@@ -767,47 +775,36 @@ void MainWindow::openMidiBinding(const QDomElement& channel, const ChannelType p
     if (!binding.isNull()) {
         for (QDomElement bind = binding.firstChildElement("bind"); !bind.isNull(); bind = bind.nextSiblingElement("bind")) {
             ElementType type = FADER;
-            QString sType(bind.attribute("element")); 
+            QString sType(bind.attribute("element"));
             if (sType == "gain") {
                 type = GAIN;
-            }
-            else if (sType == "bal") {
+            } else if (sType == "bal") {
                 type = PAN_BAL;
-            }
-            else if (sType == "pre") {
+            } else if (sType == "pre") {
                 type = TO_PRE;
-            }
-            else if (sType == "post") {
+            } else if (sType == "post") {
                 type = TO_POST;
-            }
-            else if (sType == "fader") {
+            } else if (sType == "fader") {
                 type = FADER;
-            }
-            else if (sType == "prevol") {
+            } else if (sType == "prevol") {
                 type = PRE_VOL;
-            }
-            else if (sType == "mute") {
+            } else if (sType == "mute") {
                 type = MUTE;
-            }
-            else if (sType == "sub") {
+            } else if (sType == "sub") {
                 type = TO_SUB;
-            }
-            else if (sType == "main") {
+            } else if (sType == "main") {
                 type = TO_MAIN;
-            }
-            else if (sType == "afl") {
+            } else if (sType == "afl") {
                 type = TO_AFL;
-            }
-            else if (sType == "pfl") {
+            } else if (sType == "pfl") {
                 type = TO_PFL;
-            }
-            else if (sType == "effect") {
+            } else if (sType == "effect") {
                 type = MUTE_EFFECT;
             }
 
-            _mixerwidget->insertMidiToWrapp((unsigned char)bind.attribute("channel").toUInt(), 
-                    bind.attribute("controller").toUInt(), new KeyDoDirectAction(_mixerwidget, p_eType, 
-                    p_sChannelName, type, bind.attribute("channelto")));
+            _mixerwidget->insertMidiToWrapp((unsigned char)bind.attribute("channel").toUInt(),
+                                            bind.attribute("controller").toUInt(), new KeyDoDirectAction(_mixerwidget, p_eType,
+                                                    p_sChannelName, type, bind.attribute("channelto")));
         }
     }
 }
@@ -967,10 +964,10 @@ QString MainWindow::saveMidiBinding(ChannelType p_eType, const QString& p_sChann
                     type = "effect";
                     break;
                 }
-    //            xml += QString("      <bind channel=\"%1\" controller=\"%2\" type=\"%3\" name=\"%4\" element=\"%5\" channelto=\"%6\" />")
-    //                    .arg(ch).arg(co).arg(channelType).arg(pKeyDo->m_sChannelName).arg(type).arg(pKeyDo->m_sReatedChannelName);
+                //            xml += QString("      <bind channel=\"%1\" controller=\"%2\" type=\"%3\" name=\"%4\" element=\"%5\" channelto=\"%6\" />")
+                //                    .arg(ch).arg(co).arg(channelType).arg(pKeyDo->m_sChannelName).arg(type).arg(pKeyDo->m_sReatedChannelName);
                 xml += QString("      <bind channel=\"%1\" controller=\"%2\" element=\"%3\" channelto=\"%4\" />")
-                        .arg(ch).arg(co).arg(type).arg(pKeyDo->m_sReatedChannelName);
+                       .arg(ch).arg(co).arg(type).arg(pKeyDo->m_sReatedChannelName);
             }
         }
     }

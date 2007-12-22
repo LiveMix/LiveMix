@@ -49,7 +49,7 @@ public:
     Volume(QWidget* p_pParent =NULL);
     virtual ~Volume();
 
-    virtual void setValue(float fValue, bool emit = false) =0;
+    virtual void setValue(float fValue, bool emit = false, int p_iSource =0) =0;
     virtual float getValue() =0;
     // in fact the external value is standanrd and internal in dB
     virtual void setDbValue(float fValue) =0;
@@ -59,7 +59,7 @@ public:
     virtual void incValue(bool p_bDirection, int p_iStep =1) =0;
 
 signals:
-    void valueChanged(Volume* p_pVolume);
+    void valueChanged(Volume* p_pVolume, int p_iSource);
 
 };
 
@@ -71,7 +71,7 @@ public:
     virtual ~Toggle();
 
     virtual bool getValue() =0;
-    virtual void setValue(bool p_bValue, bool p_bEmit = false) =0;
+    virtual void setValue(bool p_bValue, bool p_bEmit = false, int p_iSource =0) =0;
 };
 
 }

@@ -70,7 +70,7 @@ public:
     void setMaxValue(float fMax);
     float getMaxValue();
 
-    void setValue(float fValue, bool emit = false);
+    void setValue(float fValue, bool emit = false, int p_iSource =0);
     float getValue() {
         if (m_bUseIntSteps) {
             int val = (int)m_fValue;

@@ -226,7 +226,7 @@ void ToggleButton::mousePressEvent(QMouseEvent* ev)
 
         emit clicked();
         emit clicked(this);
-        emit valueChanged(this);
+        emit valueChanged(this, 0);
     }
 }
 
@@ -234,7 +234,7 @@ bool ToggleButton::getValue()
 {
     return m_bPressed;
 }
-void ToggleButton::setValue(bool p_bValue, bool p_bEmit)
+void ToggleButton::setValue(bool p_bValue, bool p_bEmit, int p_iSource)
 {
     m_bPressed = p_bValue;
     update();
@@ -242,7 +242,7 @@ void ToggleButton::setValue(bool p_bValue, bool p_bEmit)
     if (p_bEmit) {
         emit clicked();
         emit clicked(this);
-        emit valueChanged(this);
+        emit valueChanged(this, p_iSource);
     }
 }
 

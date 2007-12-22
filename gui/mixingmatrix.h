@@ -59,11 +59,14 @@ class VWidget;
 class RWidget;
 class TWidget;
 class FWidget;
+class ChannelWidget;
 
 
 #define CHANNEL_WIDTH 50
 #define SEPARATOR_HEIGHT 10
 #define INFO_WIDTH 30
+#define MIDI 2
+
 
 class LFWidget : public FaderName
 {
@@ -175,11 +178,14 @@ public slots:
     // Fills the empty nodes with 1to1-controls
     void init();
     void removeFX(LadspaFXProperties*, effect*);
+    void removeFX(LadspaFXProperties*, effect*, ChannelType p_eType, QString p_rChannel);
     void askRemoveFX(LadspaFXProperties*, effect*);
     void askLeftFX(LadspaFXProperties*, effect*);
     void askRightFX(LadspaFXProperties*, effect*);
 
 // void showGain();
+    void showAll();
+    void hideAll();
     void faderHeight();
     void effectFaderHeight();
 
@@ -199,6 +205,7 @@ private slots:
     void newLineValue();
 
 private:
+    ChannelWidget* getFaderWidget(ChannelType p_eType, QString p_rChannel);
     void newValue(ChannelType p_eType, QString p_sChannelName, ElementType p_eElement, QString p_sReatedChannelName, bool p_bToLine);
     float getNewValue(float p_fOld, float p_fNew);
 
@@ -256,7 +263,7 @@ public:
     virtual QWidget* getWidget();
 
     virtual bool getValue();
-    virtual void setValue(bool value, bool emit = false);
+    virtual void setValue(bool value, bool emit = false, int p_iSource =0);
 
 protected:
     ToggleButton* m_pToggle;
@@ -270,7 +277,7 @@ public:
     Volume* getVolume();
     virtual QWidget* getWidget();
 
-    virtual void setValue(float fValue, bool emit = false);
+    virtual void setValue(float fValue, bool emit = false, int p_iSource =0);
     virtual float getValue();
     virtual void setDbValue(float fValue);
     virtual float getDbValue();

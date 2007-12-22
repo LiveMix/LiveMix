@@ -31,7 +31,7 @@ Action::~Action()
 
 void Action::mouseDoubleClickEvent(QMouseEvent *p_pEvent)
 {
-    if (p_pEvent->button() == Qt::LeftButton || p_pEvent->button() == Qt::RightButton ) {
+    if (p_pEvent->button() == Qt::LeftButton || p_pEvent->button() == Qt::RightButton) {
         emit(emitMouseDoubleClickEvent(p_pEvent));
     }
 }

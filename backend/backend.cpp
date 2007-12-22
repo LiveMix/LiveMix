@@ -39,8 +39,8 @@ float m_fMaxProcessTime = 0.0f;   /// max ms usable in process with no xrun
 Backend* m_pInstance;
 
 Backend::Backend(GuiServer_Interface* g) :  gui(g)
-  , _run(false)
-  , seq(0)
+        , _run(false)
+        , seq(0)
 {
     qDebug() << "JackBackend::JackBackend()";
     client = ::jack_client_new("LiveMix");
@@ -59,41 +59,13 @@ Backend::Backend(GuiServer_Interface* g) :  gui(g)
                      QObject::trUtf8("<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it (for example by using QJackCtl) and try LiveMix again.</p></qt>"));
         exit(-1);
     }
-//    midi_in = jack_port_register(client, "control", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
-//    midi_out = jack_port_register(client, "control", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-//    snd_midi_event_init(midi_in);
-//    snd_midi_event_init(midi_out);
     if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) >= 0) {
-        snd_seq_set_client_name(seq, "LiveMix");
-        m_iPort = snd_seq_create_simple_port(seq, "control", 0, 
-                SND_SEQ_PORT_TYPE_MIDI_GENERIC | SND_SEQ_PORT_TYPE_SOFTWARE | SND_SEQ_PORT_TYPE_APPLICATION);
-/*        midi_in = snd_seq_create_simple_port(seq, "control", SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ, 
-                SND_SEQ_PORT_TYPE_APPLICATION);
-        midi_out = snd_seq_create_simple_port(seq, "control", SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE, 
-                SND_SEQ_PORT_TYPE_APPLICATION);*/
-        m_iMidi = snd_seq_create_simple_port(seq, "control", 
-                SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE, 
-                SND_SEQ_PORT_TYPE_APPLICATION);
-/*        snd_seq_ev_clear (&SEv);
-        snd_seq_ev_set_source (&SEv, port_id);
-        snd_seq_ev_set_subs (&SEv);
-        snd_seq_ev_set_direct (&SEv);
-        snd_midi_event_new (1024, &decoder);
-        snd_midi_event_new (64, &encoder);
-        snd_midi_event_init (decoder);
-        snd_midi_event_init (encoder);
-
-        snd_seq_port_subscribe_t *sub;
-        snd_seq_addr_t seq_addr;
-        
-        snd_seq_port_subscribe_alloca(&sub);
-
-        seq_addr.client = snd_seq_client_id (seq);
-        seq_addr.port   = port_id;
-        snd_seq_port_subscribe_set_sender(sub, &seq_addr);
-        snd_seq_port_subscribe_set_dest(sub, &seq_addr);
-
-        snd_seq_subscribe_port (seq, sub);*/
+        m_iClient = snd_seq_set_client_name(seq, "LiveMix");
+        m_iPort = snd_seq_create_simple_port(seq, "control", 0,
+                                             SND_SEQ_PORT_TYPE_MIDI_GENERIC | SND_SEQ_PORT_TYPE_SOFTWARE | SND_SEQ_PORT_TYPE_APPLICATION);
+        m_iMidi = snd_seq_create_simple_port(seq, "control",
+                                             SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
+                                             SND_SEQ_PORT_TYPE_APPLICATION);
     } else {
         qDebug() << "The ALSA MIDI system is not available. No ports based on it will be created";
     }
@@ -251,34 +223,28 @@ jack_default_audio_sample_t Backend::getSubPeak(QString ch, bool left)
     }
 }
 
-void Backend::sendMidiEvent(unsigned char p_iChannel, unsigned int p_iController, signed int p_iValue) {
+void Backend::sendMidiEvent(unsigned char p_iChannel, unsigned int p_iController, signed int p_iValue)
+{
 //    qDebug()<<111<<p_iChannel<<p_iController<<p_iValue;
     snd_seq_event_t ev;
-    
+
     snd_seq_ev_clear(&ev);
     snd_seq_ev_set_source(&ev, m_iMidi);
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     snd_seq_ev_set_controller(&ev,p_iChannel,p_iController,p_iValue);
-    
+
     snd_seq_event_output(seq, &ev);
     snd_seq_drain_output(seq);
 }
 
-bool Backend::hasMidiEvent() {
+bool Backend::hasMidiEvent()
+{
     return snd_seq_event_input_pending(seq, m_iMidi) > 0;
 }
 
-snd_seq_event_t* Backend::readMidiEvent() {
-/*            while (snd_seq_event_input_pending(backend->seq, backend->midi_in) > 0) {
-                snd_seq_event_t *ev;
-                snd_seq_event_input(backend->seq, &ev);
-                if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
-//                    qDebug()<<ev->source.client<<ev->source.port<<ev->dest.client<<ev->dest.port;
-                    qDebug()<<ev->data.control.channel<<ev->data.control.param<<ev->data.control.value;
-                    snd_seq_free_event(ev);
-                }
-            }*/
+snd_seq_event_t* Backend::readMidiEvent()
+{
     snd_seq_event_t *ev;
     snd_seq_event_input(seq, &ev);
     snd_seq_free_event(ev);
@@ -294,45 +260,47 @@ int process(jack_nframes_t nframes, void* arg)
         try {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
             backend->_lock.lock();
-            
-/*            void* jack_buffer = jack_port_get_buffer(backend->midi_in, nframes);
-            const jack_nframes_t event_count = jack_midi_get_event_count(jack_buffer, nframes);
- 
-            for (jack_nframes_t i=0; i < event_count; ++i) {
-                jack_midi_event_t ev;
-                jack_midi_event_get(&ev, jack_buffer, i, nframes);
 
-                qDebug()<<ev.time<<ev.size<<ev.buffer;
-            }*/
-            
+            /*            void* jack_buffer = jack_port_get_buffer(backend->midi_in, nframes);
+                        const jack_nframes_t event_count = jack_midi_get_event_count(jack_buffer, nframes);
+
+                        for (jack_nframes_t i=0; i < event_count; ++i) {
+                            jack_midi_event_t ev;
+                            jack_midi_event_get(&ev, jack_buffer, i, nframes);
+
+                            qDebug()<<ev.time<<ev.size<<ev.buffer;
+                        }*/
+
             foreach(out* elem, backend->outs) {
-                if (elem->stereo) {
-                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
-                    elem->out_s_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
-                } else {
-                    elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
-                    elem->out_s_r = elem->out_s_l;
+                if (elem != NULL) { // ???
+                    if (elem->stereo) {
+                        elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
+                        elem->out_s_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
+                    } else {
+                        elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
+                        elem->out_s_r = elem->out_s_l;
+                    }
+                    for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_l[ n ] = 0;
+                    for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_r[ n ] = 0;
                 }
-                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_l[ n ] = 0;
-                for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_r[ n ] = 0;
             }
-    
+
             // init listner
             out* pfl_elem = backend->outs[PFL];
             jack_default_audio_sample_t* pfl_l = pfl_elem->out_s_l;
-            jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;    
+            jack_default_audio_sample_t* pfl_r = pfl_elem->out_s_r;
             bool pflOn = false;
-    
+
             struct timeval start;
             bool calculate_pk = false;
-    //        if (++backend->count % ( 5000 / nframes ) == 0  && backend->getCPULoad() < 95 && backend->count / backend->getCPULoad() > (300 / nframes)) {
+            //        if (++backend->count % ( 5000 / nframes ) == 0  && backend->getCPULoad() < 95 && backend->count / backend->getCPULoad() > (300 / nframes)) {
             if (backend->getCPULoad() < 95 && ++backend->count * (100 - backend->getCPULoad()) > (300000.0 / nframes)) {
                 gettimeofday(&start, NULL);
                 backend->count = 0;
                 calculate_pk = true;
             }
-    
-    //  JackMix::ports_it it;
+
+            //  JackMix::ports_it it;
             //qDebug() << "Calculate pre and post in levels.";
             foreach(in* elem, backend->ins) {
                 if (calculate_pk) {
@@ -370,12 +338,12 @@ int process(jack_nframes_t nframes, void* arg)
                         elem->post_l[n] = elem->pre_l[n] * volume;
                         elem->post_r[n] = elem->pre_r[n] * volume;
 //                        if (calculate_pk) {
-                            if (elem->pre_l[n] > elem->calculate_peak_l) {
-                                elem->calculate_peak_l = elem->pre_l[n];
-                            }
-                            if (elem->pre_r[n] > elem->calculate_peak_r) {
-                                elem->calculate_peak_r = elem->pre_r[n];
-                            }
+                        if (elem->pre_l[n] > elem->calculate_peak_l) {
+                            elem->calculate_peak_l = elem->pre_l[n];
+                        }
+                        if (elem->pre_r[n] > elem->calculate_peak_r) {
+                            elem->calculate_peak_r = elem->pre_r[n];
+                        }
 //                        }
                     }
                     /*    if (calculate_pk) {
@@ -419,7 +387,7 @@ int process(jack_nframes_t nframes, void* arg)
                 if (elem->stereo) {
                     elem->pre_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
                 } else {
-    
+
                     elem->pre_r = elem->pre_l;
                 }
                 for (jack_nframes_t n=0; n<nframes; n++) elem->pre_l[ n ] = 0;
@@ -427,7 +395,7 @@ int process(jack_nframes_t nframes, void* arg)
                     for (jack_nframes_t n=0; n<nframes; n++) elem->pre_r[ n ] = 0;
                 }
             }
-    
+
             foreach(post* elem, backend->posts) {
                 if (elem->external) {
                     elem->post_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
@@ -437,13 +405,13 @@ int process(jack_nframes_t nframes, void* arg)
                     elem->post_l = new jack_default_audio_sample_t[nframes];
                     elem->post_r = elem->stereo ? new jack_default_audio_sample_t[nframes] : elem->post_l;
                    }*/
-    
+
                 for (jack_nframes_t n=0; n<nframes; n++) elem->post_l[ n ] = 0;
                 if (elem->stereo) {
                     for (jack_nframes_t n=0; n<nframes; n++) elem->post_r[ n ] = 0;
                 }
             }
-    
+
             foreach(sub* elem, backend->subs) {
                 if (elem->stereo) {
                     elem->sub_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
@@ -455,7 +423,7 @@ int process(jack_nframes_t nframes, void* arg)
                 for (jack_nframes_t n=0; n<nframes; n++) elem->sub_l[ n ] = 0;
                 for (jack_nframes_t n=0; n<nframes; n++) elem->sub_r[ n ] = 0;
             }
-    
+
             //qDebug() << "The actual pre.";
             //qDebug() << "Adjust prelevels.";
             foreach(pre* pre_elem, backend->pres) {
@@ -470,7 +438,7 @@ int process(jack_nframes_t nframes, void* arg)
                     foreach(effect* effect, pre_elem->effects) {
                         backend->prossesLadspaFX(effect, pre_elem->pre_l, pre_elem->pre_r, nframes, calculate_pk);
                     }
-    
+
                     float vol_l = pre_elem->volume * (1-pre_elem->bal);
                     float vol_r = pre_elem->volume * (1+pre_elem->bal);
                     foreach(in* in_elem, backend->ins) {
@@ -481,18 +449,18 @@ int process(jack_nframes_t nframes, void* arg)
                             pre_elem->pre_l[ n ] += in_elem->pre_l[ n ] * vl;
                             pre_elem->pre_r[ n ] += in_elem->pre_r[ n ] * vr;
 //                            if (calculate_pk) {
-                                if (pre_elem->pre_l[ n ] > pre_elem->calculate_peak_l) {
-                                    pre_elem->calculate_peak_l = pre_elem->pre_l[ n ];
-                                }
-                                if (pre_elem->pre_r[ n ] > pre_elem->calculate_peak_r) {
-                                    pre_elem->calculate_peak_r = pre_elem->pre_r[ n ];
-                                }
+                            if (pre_elem->pre_l[ n ] > pre_elem->calculate_peak_l) {
+                                pre_elem->calculate_peak_l = pre_elem->pre_l[ n ];
+                            }
+                            if (pre_elem->pre_r[ n ] > pre_elem->calculate_peak_r) {
+                                pre_elem->calculate_peak_r = pre_elem->pre_r[ n ];
+                            }
 //                            }
                         }
                     }
                 }
             }
-    
+
             //qDebug() << "The actual post.";
             foreach(post* post_elem, backend->posts) {
                 if (calculate_pk) {
@@ -501,13 +469,13 @@ int process(jack_nframes_t nframes, void* arg)
                     post_elem->calculate_peak_l = 0;
                     post_elem->calculate_peak_r = 0;
                 }
-    
+
                 if (!post_elem->mute) {
                     jack_default_audio_sample_t* outl = post_elem->post_l;
                     jack_default_audio_sample_t* outr = post_elem->post_r;
                     float vol_l = post_elem->prevolume;
                     float vol_r = post_elem->prevolume;
-    
+
                     foreach(in* in_elem, backend->ins) {
                         jack_default_audio_sample_t* inl = in_elem->post_l;
                         jack_default_audio_sample_t* inr = in_elem->post_r;
@@ -519,7 +487,7 @@ int process(jack_nframes_t nframes, void* arg)
                             outr[ n ] += inr[ n ] * vr;
                         }
                     }
-    
+
                     // plf
                     if (post_elem->m_bPfl) {
                         pflOn = true;
@@ -530,19 +498,19 @@ int process(jack_nframes_t nframes, void* arg)
                             pfl_r[ n ] += inr[ n ];
                         }
                     }
-    
+
                     /// Effect.
                     foreach(effect* effect, post_elem->effects) {
                         backend->prossesLadspaFX(effect, outl, outr, nframes, calculate_pk);
                     }
-    
+
                     //qDebug() << "Calculate return levels.";
-    
+
                     /*    if (post_elem->return_l == NULL) {
                          post_elem->return_l = new jack_default_audio_sample_t[nframes];
                          post_elem->return_r = new jack_default_audio_sample_t[nframes];
                         }*/
-    
+
                     /*    jack_default_audio_sample_t* sample_l;
                         jack_default_audio_sample_t* sample_r;*/
                     if (post_elem->external) {
@@ -559,12 +527,12 @@ int process(jack_nframes_t nframes, void* arg)
                         post_elem->return_l[n] = post_elem->return_sample_l[n] * volume_l;
                         post_elem->return_r[n] = post_elem->return_sample_r[n] * volume_r;
 //                        if (calculate_pk) {
-                            if (post_elem->return_l[ n ] > post_elem->calculate_peak_l) {
-                                post_elem->calculate_peak_l = post_elem->return_l[ n ];
-                            }
-                            if (post_elem->return_r[ n ] > post_elem->calculate_peak_r) {
-                                post_elem->calculate_peak_r = post_elem->return_r[ n ];
-                            }
+                        if (post_elem->return_l[ n ] > post_elem->calculate_peak_l) {
+                            post_elem->calculate_peak_l = post_elem->return_l[ n ];
+                        }
+                        if (post_elem->return_r[ n ] > post_elem->calculate_peak_r) {
+                            post_elem->calculate_peak_r = post_elem->return_r[ n ];
+                        }
 //                        }
                     }
                 } else {
@@ -583,14 +551,14 @@ int process(jack_nframes_t nframes, void* arg)
 
                     sub_elem->peak_l *= 1-sub_elem->bal;
                     sub_elem->peak_r *= 1+sub_elem->bal;
-                    
+
                     sub_elem->calculate_peak_l = 0;
                     sub_elem->calculate_peak_r = 0;
                 }
                 if (!sub_elem->mute) {
                     jack_default_audio_sample_t* outl = sub_elem->sub_l;
                     jack_default_audio_sample_t* outr = sub_elem->sub_r;
-    
+
                     foreach(in* in_elem, backend->ins) {
                         jack_default_audio_sample_t* inl = in_elem->post_l;
                         jack_default_audio_sample_t* inr = in_elem->post_r;
@@ -614,7 +582,7 @@ int process(jack_nframes_t nframes, void* arg)
                             }
                         }
                     }
-    
+
                     //qDebug() << "Effect.";
                     foreach(effect* effect, sub_elem->effects) {
                         backend->prossesLadspaFX(effect, outl, outr, nframes, calculate_pk);
@@ -630,19 +598,19 @@ int process(jack_nframes_t nframes, void* arg)
                         outl[ n ] *= vol_l;
                         outr[ n ] *= vol_r;
 //                        if (calculate_pk) {
-                            if (outl[ n ] > sub_elem->calculate_peak_l) {
-                                sub_elem->calculate_peak_l = outl[ n ];
-                            }
-                            if (outr[ n ] > sub_elem->calculate_peak_r) {
-                                sub_elem->calculate_peak_r = outr[ n ];
-                            }
+                        if (outl[ n ] > sub_elem->calculate_peak_l) {
+                            sub_elem->calculate_peak_l = outl[ n ];
+                        }
+                        if (outr[ n ] > sub_elem->calculate_peak_r) {
+                            sub_elem->calculate_peak_r = outr[ n ];
+                        }
 //                        }
                     }
                 }
             }
             //qDebug() << "The actual main.";
             out* main_elem = backend->outs[MAIN];
-    
+
             {
                 if (calculate_pk) {
                     main_elem->peak_l = main_elem->calculate_peak_l;
@@ -714,12 +682,12 @@ int process(jack_nframes_t nframes, void* arg)
                             main_l[ n ] *= vol_l;
                             main_r[ n ] *= vol_r;
 //                            if (calculate_pk) {
-                                if (main_l[ n ] > main_elem->calculate_peak_l) {
-                                    main_elem->calculate_peak_l = main_l[ n ];
-                                }
-                                if (main_r[ n ] > main_elem->calculate_peak_r) {
-                                    main_elem->calculate_peak_r = main_r[ n ];
-                                }
+                            if (main_l[ n ] > main_elem->calculate_peak_l) {
+                                main_elem->calculate_peak_l = main_l[ n ];
+                            }
+                            if (main_r[ n ] > main_elem->calculate_peak_r) {
+                                main_elem->calculate_peak_r = main_r[ n ];
+                            }
 //                            }
                         }
                     }
@@ -729,7 +697,7 @@ int process(jack_nframes_t nframes, void* arg)
             // in
 //            foreach(in* in_elem, backend->ins) {
 //            }
-    
+
             //qDebug() << 25;
             // pre
             foreach(pre* elem, backend->pres) {
@@ -782,7 +750,7 @@ int process(jack_nframes_t nframes, void* arg)
                     }
                 }
                 //qDebug() << 30;
-    
+
                 /// Adjust outlevels.
                 {
                     float volume = pfl_elem->volume;
@@ -793,25 +761,25 @@ int process(jack_nframes_t nframes, void* arg)
                 }
             }
             //qDebug() << 31;
-    
+
             if (calculate_pk) {
                 struct timeval end;
                 gettimeofday(&end, NULL);
                 m_fProcessTime = (end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
                 m_fMaxProcessTime = 1000.0 / (backend->getSampleRate() / nframes);
-    
+
                 emit backend->processed();
-    //   qDebug()<<__FILE__<<__LINE__<<::jack_cpu_load(backend->client);
+                //   qDebug()<<__FILE__<<__LINE__<<::jack_cpu_load(backend->client);
             }
-    
-    //  struct timeval end;
-    //  gettimeofday(&end, NULL);
-    //  m_fProcessTime = (end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
-    //  m_fProcessTime = ::jack_cpu_load(backend->client);
-    //  m_fMaxProcessTime = 1000.0 / (backend->getSampleRate() / nframes);
-    
+
+            //  struct timeval end;
+            //  gettimeofday(&end, NULL);
+            //  m_fProcessTime = (end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
+            //  m_fProcessTime = ::jack_cpu_load(backend->client);
+            //  m_fMaxProcessTime = 1000.0 / (backend->getSampleRate() / nframes);
+
             //qDebug() << 32;
-    
+
             //DEBUG
             /*  if ( m_fProcessTime > m_fMaxProcessTime ) {
                qDebug() << "";
@@ -825,12 +793,11 @@ int process(jack_nframes_t nframes, void* arg)
                emit backend->xrun();
               }*/
 //qDebug()<<__FILE__<<__LINE__<<"end";
-        }
-        catch(...) {
+        } catch (...) {
 //qDebug()<<__FILE__<<__LINE__<<"error !";
         }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
-            backend->_lock.unlock();
+        backend->_lock.unlock();
     }
     return 0;
 }
@@ -860,6 +827,18 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
                 }
             }
         }
+        /*        switch (fx->getOutputAudio()) {
+                case 2:
+                    for (unsigned i = 0; i < nframes; ++i) {
+                        left_channel[i] = 0;
+                        right_channel[i] = 0;
+                    }
+                    break;
+                case 1:
+                    for (unsigned i = 0; i < nframes; ++i) {
+                        left_channel[i] = 0;
+                    }
+                }*/
         pFX->fx->processFX(nframes, left_channel != right_channel);
         if (left_channel != right_channel) {
             if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
@@ -966,7 +945,9 @@ void Backend::removeInEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    ins[ ch ]->effects.removeAll(eff);
+    if (ins[ch] != NULL) {
+        ins[ch]->effects.removeAll(eff);
+    }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
@@ -1006,12 +987,14 @@ effect* Backend::addOutEffect(QString ch, LadspaFX* fx)
 void Backend::removeOutEffect(QString ch, effect* eff)
 {
     _lock.lock();
-    outs[ ch ]->effects.removeAll(eff);
+    if (outs[ch] != NULL) {
+        outs[ch]->effects.removeAll(eff);
+    }
     _lock.unlock();
 }
 QList<effect*>* Backend::getOutEffects(QString ch)
 {
-    return &(outs[ ch ]->effects);
+    return &(outs[ch]->effects);
 }
 
 void Backend::setPreVolume(QString ch, float volume)
@@ -1044,7 +1027,9 @@ void Backend::removePreEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    pres[ ch ]->effects.removeAll(eff);
+    if (pres[ch] != NULL) {
+        pres[ch]->effects.removeAll(eff);
+    }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
@@ -1099,7 +1084,9 @@ void Backend::removePostEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    posts[ ch ]->effects.removeAll(eff);
+    if (posts[ch] != NULL) {
+        posts[ch]->effects.removeAll(eff);
+    }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
@@ -1142,7 +1129,9 @@ void Backend::removeSubEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    subs[ ch ]->effects.removeAll(eff);
+    if (subs[ch] != NULL) {
+        subs[ch]->effects.removeAll(eff);
+    }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
@@ -1348,10 +1337,10 @@ bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect
     int index = ch->effects.indexOf(p_pEffect);
     int indexTo = index + (p_bLeft ? -1 : 1);
     if (indexTo >= 0 && indexTo < ch->effects.size()) {
-qDebug()<<__FILE__<<__LINE__<<1248;
+        qDebug()<<__FILE__<<__LINE__<<1248;
         _lock.lock();
         ch->effects.move(index, indexTo);
-qDebug()<<__FILE__<<__LINE__<<1251;
+        qDebug()<<__FILE__<<__LINE__<<1251;
         _lock.unlock();
         return true;
     }
@@ -1487,13 +1476,57 @@ void Backend::saveLash(QString p_rFile)
             }
         }
     }
-    
-/*    snd_seq_port_info_t *port_info;
-    snd_seq_port_info_alloca (&port_info);
-    snd_seq_port_info_set_client(port_info, seq);
-    snd_seq_port_info_set_port(port_info, midi_in);
-    qDebug<<snd_seq_client_info_get_name(client_info);*/
-    
+
+    xml += "  <midi>";
+    snd_seq_query_subscribe_t *subs;
+    snd_seq_query_subscribe_alloca(&subs);
+
+    snd_seq_client_info_t *cinfo;
+    snd_seq_port_info_t *pinfo;
+    snd_seq_client_info_alloca(&cinfo);
+    snd_seq_port_info_alloca(&pinfo);
+    snd_seq_client_info_set_client(cinfo, -1);
+    qDebug()<<111<<snd_seq_query_next_client(seq, cinfo);
+    qDebug()<<111<<snd_seq_client_info_get_client(cinfo);
+    snd_seq_port_info_set_client(pinfo, snd_seq_client_info_get_client(cinfo));
+    snd_seq_port_info_set_port(pinfo, m_iMidi);
+    qDebug()<<snd_seq_port_info_get_addr(pinfo);
+    qDebug()<<888<<snd_seq_port_info_get_addr(pinfo)->client<<snd_seq_port_info_get_addr(pinfo)->port;
+//    snd_seq_query_subscribe_set_root(subs, snd_seq_port_info_get_addr(pinfo));
+    qDebug()<<m_iPort<<m_iMidi;
+    snd_seq_query_subscribe_set_client(subs, m_iClient);
+    snd_seq_query_subscribe_set_port(subs, m_iMidi);
+    snd_seq_query_subscribe_set_type(subs, SND_SEQ_QUERY_SUBS_READ);
+    snd_seq_query_subscribe_set_index(subs, 0);
+    qDebug()<<snd_seq_query_port_subscribers(seq, subs);
+    while (snd_seq_query_port_subscribers(seq, subs) >= 0) {
+        const snd_seq_addr_t *addr;
+        addr = snd_seq_query_subscribe_get_addr(subs);
+        qDebug()<<222<<addr->client<<addr->port<<snd_seq_query_subscribe_get_index(subs);
+        qDebug()<<333<<snd_seq_query_subscribe_get_client(subs)<<snd_seq_query_subscribe_get_port(subs);
+        addr = snd_seq_query_subscribe_get_root(subs);
+        qDebug()<<444<<addr->client<<addr->port<<snd_seq_query_subscribe_get_num_subs(subs)
+        <<snd_seq_query_subscribe_get_queue(subs)<<snd_seq_query_subscribe_get_exclusive(subs);
+
+        xml += QString("    <read cilent=\"%1\" port=\"%2\"/>").arg(addr->client).arg(addr->port);
+        snd_seq_query_subscribe_set_index(subs, snd_seq_query_subscribe_get_index(subs) + 1);
+    }
+
+    snd_seq_query_subscribe_alloca(&subs);
+    snd_seq_query_subscribe_set_client(subs, m_iClient);
+    snd_seq_query_subscribe_set_port(subs, m_iMidi);
+    snd_seq_query_subscribe_set_type(subs, SND_SEQ_QUERY_SUBS_WRITE);
+    snd_seq_query_subscribe_set_index(subs, 0);
+    qDebug()<<snd_seq_query_port_subscribers(seq, subs);
+    while (snd_seq_query_port_subscribers(seq, subs) >= 0) {
+        const snd_seq_addr_t *addr;
+        addr = snd_seq_query_subscribe_get_addr(subs);
+        qDebug()<<333<<addr->client<<addr->port<<snd_seq_query_subscribe_get_index(subs);
+        xml += QString("    <write cilent=\"%1\" port=\"%2\"/>").arg(addr->client).arg(addr->port);
+        snd_seq_query_subscribe_set_index(subs, snd_seq_query_subscribe_get_index(subs) + 1);
+    }
+    xml += "  </midi>";
+
     xml += "</connexions>";
     QFile file(p_rFile);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1574,10 +1607,33 @@ void Backend::restoreLash(QString p_rFile)
                 }
             }
         }
+
+        QDomElement midi = connexions.firstChildElement("midi");
+        if (!midi.isNull()) {
+            for (QDomElement read = midi.firstChildElement("read"); !read.isNull(); read = read.nextSiblingElement("read")) {
+                int client = read.attribute("cilent").toInt();
+                int port = read.attribute("port").toInt();
+                snd_seq_connect_from(seq, m_iMidi, client, port);
+            }
+            for (QDomElement write = midi.firstChildElement("write"); !write.isNull(); write = write.nextSiblingElement("write")) {
+                int client = write.attribute("cilent").toInt();
+                int port = write.attribute("port").toInt();
+                snd_seq_connect_to(seq, m_iMidi, client, port);
+            }
+        }
+
 //midi
 //int snd_seq_connect_from(snd_seq_t *seq, int my_port, int src_client, int src_port);
 //int snd_seq_connect_to(snd_seq_t *seq, int my_port, int dest_client, int dest_port);
 //int snd_seq_get_port_info(snd_seq_t *handle, int port, snd_seq_port_info_t *info);
+
+
+
+        /*    snd_seq_port_info_t *port_info;
+        snd_seq_port_info_alloca (&port_info);
+        snd_seq_port_info_set_client(port_info, seq);
+        snd_seq_port_info_set_port(port_info, midi_in);
+        qDebug<<snd_seq_client_info_get_name(client_info);*/
     }
 }
 

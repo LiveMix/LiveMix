@@ -67,25 +67,25 @@ Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLin
     QString bottomPath;
     QString ledsPath;
     switch (p_eType) {
-        case FADER:
-            backgroundPath = ":/data/fader_background_nometer.svg";
-            topPath = ":/data/fader_top_nometer.svg";
-            bottomPath = ":/data/fader_bottom_nometer.svg";
-            ledsPath = ":/data/fader_leds_meter.svg";
-            break;
-        case PK_VU:
-            backgroundPath = ":/data/fader_background_meter.svg";
-            topPath = ":/data/fader_top_meter.svg";
-            bottomPath = ":/data/fader_bottom_meter.svg";
-            ledsPath = ":/data/fader_leds_meter.svg";
-            break;
-        default:
-        case FADER_PK_VU:
-        case FADER_PK:
-            backgroundPath = ":/data/fader_background.svg";
-            topPath = ":/data/fader_top.svg";
-            bottomPath = ":/data/fader_bottom.svg";
-            ledsPath = ":/data/fader_leds.svg";
+    case FADER:
+        backgroundPath = ":/data/fader_background_nometer.svg";
+        topPath = ":/data/fader_top_nometer.svg";
+        bottomPath = ":/data/fader_bottom_nometer.svg";
+        ledsPath = ":/data/fader_leds_meter.svg";
+        break;
+    case PK_VU:
+        backgroundPath = ":/data/fader_background_meter.svg";
+        topPath = ":/data/fader_top_meter.svg";
+        bottomPath = ":/data/fader_bottom_meter.svg";
+        ledsPath = ":/data/fader_leds_meter.svg";
+        break;
+    default:
+    case FADER_PK_VU:
+    case FADER_PK:
+        backgroundPath = ":/data/fader_background.svg";
+        topPath = ":/data/fader_top.svg";
+        bottomPath = ":/data/fader_bottom.svg";
+        ledsPath = ":/data/fader_leds.svg";
     }
 
     bool ok = m_back_original.load(backgroundPath);
@@ -191,28 +191,32 @@ void Fader::mouseReleaseEvent(QMouseEvent* ev)
 
 void Fader::mouseDoubleClickEvent(QMouseEvent* p_pEvent)
 {
-/*    if (p_pEvent->button() == Qt::RightButton ) {
-        float fVal = (float)(height() - p_pEvent->y() - 15.0) / ((float)height() - 30.0);
-        fVal = fVal * (m_fMaxValue - m_fMinValue);
+    /*    if (p_pEvent->button() == Qt::RightButton ) {
+            float fVal = (float)(height() - p_pEvent->y() - 15.0) / ((float)height() - 30.0);
+            fVal = fVal * (m_fMaxValue - m_fMinValue);
 
-        fVal = fVal + m_fMinValue;
+            fVal = fVal + m_fMinValue;
 
-        setValue(fVal, true);
-    }*/
+            setValue(fVal, true);
+        }*/
     if (p_pEvent->button() == Qt::LeftButton && m_eType != PK_VU) {
-        bool ok;
-        double value;
-        if (m_bUseIntSteps) {
-            value = QInputDialog::getInteger(this, trUtf8("New fader value to assigne"), toolTip(),
-                    (int)getValue(), (int)getMinValue(), (int)getMaxValue(), 1, &ok);
-        }
-        else {
-            value = QInputDialog::getDouble(this, trUtf8("New fader value to assigne"), toolTip(),
-                    getValue(), getMinValue(), getMaxValue(), 1, &ok);
-        }
-        if (ok) {
-            setValue(value, true);
-        }
+        openSetValue();
+    }
+}
+
+void Fader::openSetValue()
+{
+    bool ok;
+    double value;
+    if (m_bUseIntSteps) {
+        value = QInputDialog::getInteger(this, trUtf8("New fader value to assigne"), toolTip(),
+                                         (int)getValue(), (int)getMinValue(), (int)getMaxValue(), 1, &ok);
+    } else {
+        value = QInputDialog::getDouble(this, trUtf8("New fader value to assigne"), toolTip(),
+                                        getValue(), getMinValue(), getMaxValue(), 1, &ok);
+    }
+    if (ok) {
+        setValue(value, true);
     }
 }
 
@@ -238,7 +242,7 @@ void Fader::incValue(bool p_bDirection, int p_iStep)
     }
 }
 
-void Fader::setValue(float fVal, bool do_emit)
+void Fader::setValue(float fVal, bool do_emit, int p_iSource)
 {
     if (fVal > m_fMaxValue) {
         fVal = m_fMaxValue;
@@ -256,7 +260,7 @@ void Fader::setValue(float fVal, bool do_emit)
     }
 
     if (do_emit) {
-        emit valueChanged(this);
+        emit valueChanged(this, p_iSource);
     }
 }
 
@@ -323,7 +327,7 @@ void Fader::setPeak_L(float fPeak)
     diff += (now.time().msec() - m_rLastVuCalculate_L.time().msec()) / 1000.0;
     float newVu = m_fVuValue_L - diff * VU_SUBSTRACT;
     m_rLastVuCalculate_L = now;
-    
+
     if (newVu <  fPeak) {
         newVu = fPeak;
     }
@@ -348,7 +352,7 @@ void Fader::setPeak_R(float fPeak)
     diff += (now.time().msec() - m_rLastVuCalculate_R.time().msec()) / 1000.0;
     float newVu = m_fVuValue_R - diff * VU_SUBSTRACT;
     m_rLastVuCalculate_R = now;
-    
+
     if (newVu <  fPeak) {
         newVu = fPeak;
     }
@@ -392,13 +396,13 @@ void Fader::paintEvent(QPaintEvent*)
     if (m_fMaxPeak > m_fMinPeak && (m_eType == FADER_PK_VU || m_eType == PK_VU)) {
 //        painter.setBrush(QBrush(QColor(255, 240, 0)));
         painter.setPen(QColor(255, 255, 255));
-        
+
         float realVu_L = m_fVuValue_L - m_fMinPeak;
         int Vu_L = (int)(height() - 30 - (realVu_L / (m_fMaxPeak - m_fMinPeak)) * (height() - 30));
         if (Vu_L > height() - 30) {
             Vu_L = height() - 30;
         }
-        
+
         int VuLx = m_eType == PK_VU ? 1 : 4;
         int VuRx = width() - VuLx - 4;
         if (Vu_L < height() - 31) {
@@ -419,7 +423,7 @@ void Fader::paintEvent(QPaintEvent*)
 //                               QRect(width() / 2, Vu_R     , width() / 2, 2));
         }
     }
-    
+
     if (!m_bWithoutKnob) {
         // knob
         static const uint knob_height = 29;

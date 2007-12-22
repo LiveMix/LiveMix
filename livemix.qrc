@@ -40,6 +40,7 @@
 
      <file>data/fader_knob.png</file>
      <file>data/knob_images.png</file>
+     <file>data/resize_grip.svg</file>
 
      <file>data/LCDLargeFontSet.png</file>
      <file>data/LCDLargeGrayFontSet.png</file>

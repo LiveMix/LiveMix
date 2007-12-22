@@ -1,12 +1,33 @@
+Release candidate
+
+- some core dump fixed
+- some new menu item
+
+It seem that there were some problème on 64 bit compilation it is welcome to semd me some dump.
+launch "ulimit -c 1000000" before LiveMix to generate the "core" file.
+
+---------------
+
+- quelque core dump corriger
+- quelque action supplementaire disponnible dans les menus
+
+Il semblerais qu'il y aie des problèmes avec lors de compilation en 64 bit.
+Il est donc bienvenu de m'encoyer des core dump l'ors de crash.
+Il faut lancer la commande "ulimit -c 1000000" avant LiveMix pour que le fichier "core" sois généré.
+
+==== 0.5 ====
+
+
+
 ==== 0.6 ====
 
-- add set value on effect context menu.
-- save midi connexion.
 - add an option to resend all midi event.
 - add midi assignement for selected effect (fader 1-16).
 
-==== 0.8 ====
-
+- save midi connexion.
+- add effect from the rightclick menu (in tree) ?
+- add filter to faster find an effect.
+- add a couple of effect in one time.
 - add pfl LED, on selected element.
 
 - add pattern.
@@ -20,7 +41,7 @@
 - add possibility to change jack application name.
 - move localisation to /usr/share/livemix/i18n/ and data to /usr/share/livemix/data/.
 
-==== RC 2 ====
+==== RC 1 ====
 - display dB on the GUI (artwork welcome, in SVG) ?
 
 ==== 1.0 ====

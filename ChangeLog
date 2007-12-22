@@ -1,3 +1,13 @@
+==== 0.49rc1 ====
+- add set value on effect context menu.
+- fix core dump on change channel order.
+- fix core dump on open table.
+- on reassise effect fader the correct the windows size.
+- add artwork on resize fader.
+- add effect with right click action.
+- add rename in click action.
+- add global show/hide action.
+
 ==== 0.45svn20071209 ====
 - add MIDI learn support
 - add --verbose argument to have output

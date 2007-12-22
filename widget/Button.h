@@ -67,7 +67,7 @@ public:
     virtual bool getValue() {
         return false;
     };
-    virtual void setValue(bool, bool = false) {};
+    virtual void setValue(bool, bool = false, int =0) {};
 
 signals:
     void clicked();
@@ -119,12 +119,12 @@ public:
     static ToggleButton* create(QWidget* =NULL);
 
     virtual bool getValue();
-    virtual void setValue(bool p_bValue, bool p_bEmit = false);
+    virtual void setValue(bool p_bValue, bool p_bEmit = false, int p_iSource =0);
 
     void mousePressEvent(QMouseEvent *ev);
 
 signals:
-    void valueChanged(ToggleButton* ref);
+    void valueChanged(ToggleButton* ref, int p_iSource);
 
 private:
     void mouseReleaseEvent(QMouseEvent *ev);

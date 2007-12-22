@@ -37,6 +37,21 @@
 namespace LiveMix
 {
 
+class WrappFXFader : public QWidget
+{
+    Q_OBJECT
+public:
+    WrappFXFader(Fader* p_pFader);
+
+public slots:
+    void rightClicked(QMouseEvent *p_pEvent);
+
+signals:
+    void rightClick(QMouseEvent *p_pEvent, Fader* p_pFader);
+
+private:
+    Fader* m_pFader;
+};
 class LadspaFXProperties : public QWidget
 {
     Q_OBJECT
@@ -64,7 +79,7 @@ public slots:
     void updateOutputControls();
     void leftBtnClicked();
     void rightBtnClicked();
-    void contextMenu(QMouseEvent *p_pEvent);
+    void contextMenu(QMouseEvent *p_pEvent, Fader *p_pFader);
     void reset();
 
 signals:

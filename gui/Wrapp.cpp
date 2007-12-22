@@ -28,6 +28,7 @@ Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString 
              QString p_sReatedChannelName)
         : QObject()
         , m_pMatrix(p_pMatrix)
+        , m_pWidget(p_pWidget)
         , m_eType(p_eType)
         , m_sChannelName(p_sChannelName)
         , m_eElement(p_eElement)
@@ -41,6 +42,14 @@ Wrapp::Wrapp(Widget* p_pMatrix, Action* p_pWidget, ChannelType p_eType, QString 
         connect(p_pWidget, SIGNAL( middleClick(QMouseEvent*) ), this, SLOT( middleClick(QMouseEvent*) ) );
         connect(p_pWidget, SIGNAL( rightClick(QMouseEvent*) ), this, SLOT( rightClick(QMouseEvent*) ) );*/
 };
+Wrapp::~Wrapp()
+{
+    disconnect(m_pWidget->getWidget(), SIGNAL(leftClick(QMouseEvent*)), this, SLOT(leftClick(QMouseEvent*)));
+    disconnect(m_pWidget->getWidget(), SIGNAL(middleClick(QMouseEvent*)), this, SLOT(middleClick(QMouseEvent*)));
+    disconnect(m_pWidget->getWidget(), SIGNAL(rightClick(QMouseEvent*)), this, SLOT(rightClick(QMouseEvent*)));
+    disconnect(m_pWidget->getWidget(), SIGNAL(emitMouseDoubleClickEvent(QMouseEvent*)), this, SLOT(emitMouseDoubleClickEvent(QMouseEvent*)));
+}
+
 bool Wrapp::exec()
 {
     return false;
@@ -66,13 +75,15 @@ WrappVolume::WrappVolume(Widget* p_pMatrix, Volume* p_pWidget, ChannelType p_eTy
         : Wrapp(p_pMatrix, p_pWidget, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName)
         , m_pWidget(p_pWidget)
 {
-    connect(p_pWidget->getWidget(), SIGNAL(valueChanged(Volume*)), this, SLOT(valueChanged(Volume*)));
+    connect(p_pWidget->getWidget(), SIGNAL(valueChanged(Volume*, int)), this, SLOT(valueChanged(Volume*, int)));
 }
-void WrappVolume::valueChanged(Volume* p_pVolume)
+void WrappVolume::valueChanged(Volume* p_pVolume, int p_iSource)
 {
     Backend::instance()->getChannel(m_eType, m_sChannelName)->setFloatAttribute(m_eElement == PAN_BAL ? p_pVolume->getValue() : p_pVolume->getDbValue(), m_eElement, m_sReatedChannelName);
-    m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pVolume->getValue());
-    
+    if (p_iSource != MIDI) {
+        m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pVolume->getValue());
+    }
+
 
     if (m_eType == OUT && m_eElement == FADER) {
         m_pMatrix->showMessage(trUtf8("%1 value: %2.")
@@ -102,7 +113,11 @@ WrappToggle::WrappToggle(Widget* p_pMatrix, Toggle* p_pWidget, ChannelType p_eTy
         : Wrapp(p_pMatrix, p_pWidget, p_eType, p_sChannelName, p_eElement, p_sReatedChannelName)
         , m_pWidget(p_pWidget)
 {
-    connect(p_pWidget->getWidget(), SIGNAL(valueChanged(ToggleButton*)), this, SLOT(valueChanged(ToggleButton*)));
+    connect(p_pWidget->getWidget(), SIGNAL(valueChanged(ToggleButton*, int)), this, SLOT(valueChanged(ToggleButton*, int)));
+}
+WrappToggle::~WrappToggle()
+{
+    connect(m_pWidget->getWidget(), SIGNAL(valueChanged(ToggleButton*, int)), this, SLOT(valueChanged(ToggleButton*, int)));
 }
 Toggle* WrappToggle::getToggle()
 {
@@ -113,10 +128,12 @@ bool WrappToggle::exec()
     m_pWidget->setValue(!m_pWidget->getValue(), true);
     return true;
 }
-void WrappToggle::valueChanged(ToggleButton* p_pToggle)
+void WrappToggle::valueChanged(ToggleButton* p_pToggle, int p_iSource)
 {
     Backend::instance()->getChannel(m_eType, m_sChannelName)->setBoolAttribute(p_pToggle->getValue(), m_eElement, m_sReatedChannelName);
-    m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pToggle->getValue());
+    if (p_iSource != MIDI) {
+        m_pMatrix->sendMidiEvent(m_eType, m_sChannelName, m_eElement, m_sReatedChannelName, p_pToggle->getValue());
+    }
 }
 
 }
