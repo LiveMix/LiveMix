@@ -1477,7 +1477,7 @@ void Backend::saveLash(QString p_rFile)
         }
     }
 
-    xml += "  <midi>";
+/*    xml += "  <midi>";
     snd_seq_query_subscribe_t *subs;
     snd_seq_query_subscribe_alloca(&subs);
 
@@ -1525,7 +1525,7 @@ void Backend::saveLash(QString p_rFile)
         xml += QString("    <write cilent=\"%1\" port=\"%2\"/>").arg(addr->client).arg(addr->port);
         snd_seq_query_subscribe_set_index(subs, snd_seq_query_subscribe_get_index(subs) + 1);
     }
-    xml += "  </midi>";
+    xml += "  </midi>";*/
 
     xml += "</connexions>";
     QFile file(p_rFile);

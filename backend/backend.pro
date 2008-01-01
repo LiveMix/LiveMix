@@ -32,4 +32,3 @@ SOURCES += \
 		db.cpp \
 		channels.cpp \
 		qlash.cpp \
-		

@@ -1,20 +1,3 @@
-Release candidate
-
-- some core dump fixed
-- some new menu item
-
-It seem that there were some problème on 64 bit compilation it is welcome to semd me some dump.
-launch "ulimit -c 1000000" before LiveMix to generate the "core" file.
-
----------------
-
-- quelque core dump corriger
-- quelque action supplementaire disponnible dans les menus
-
-Il semblerais qu'il y aie des problèmes avec lors de compilation en 64 bit.
-Il est donc bienvenu de m'encoyer des core dump l'ors de crash.
-Il faut lancer la commande "ulimit -c 1000000" avant LiveMix pour que le fichier "core" sois généré.
-
 ==== 0.5 ====
 
 

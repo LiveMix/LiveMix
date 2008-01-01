@@ -116,6 +116,7 @@ int main(int argc, char** argv)
     //Q_INIT_RESOURCE(i18n);
 
     qapp->setWindowIcon(QIcon(":/data/livemix.svg"));
+    qapp->setApplicationName("LiveMix");    
 
     QTranslator tor;
     QString sTranslationFile = QString("livemix_") + QLocale::system().name();

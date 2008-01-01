@@ -29,6 +29,3 @@ QT += xml
 
 QMAKE_CXXFLAGS_RELEASE += -g -O3
 QMAKE_CXXFLAGS_DEBUG += -Werror -O2
-
-
-
