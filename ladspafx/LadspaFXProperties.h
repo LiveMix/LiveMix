@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
-#include <QScrollArea>
 
 #include "Fader.h"
 #include "FaderName.h"
@@ -100,7 +99,7 @@ private:
     QList<FaderName*> m_pOutputControlNames;
     QList<LCDDisplay*> m_pOutputControlLabel;
 
-    QScrollArea* m_pScrollArea;
+    QWidget *m_pScrollArea;
     QWidget *m_pFrame;
 
 //  QPushButton *m_pSelectFXBtn;

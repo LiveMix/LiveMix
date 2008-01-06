@@ -36,6 +36,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QMenu>
+#include <QGroupBox>
 
 namespace LiveMix
 {
@@ -53,22 +54,22 @@ LadspaFXProperties::LadspaFXProperties(QWidget* parent, effect *nLadspaFX, int p
     hbox->setMargin(0);
     setLayout(hbox);
 
-    m_pScrollArea = new QScrollArea(NULL);
+    m_pScrollArea = new QGroupBox(NULL);
     hbox->addWidget(m_pScrollArea);
 
     m_pScrollArea->move(0, 0);
-    m_pScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_pScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_pScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_pScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_pScrollArea->resize(width(), height());
 
-    m_pFrame = new QWidget(this);
+    m_pFrame = new QWidget(m_pScrollArea);
     m_pFrame->resize(width(), height() - 5);
 
-    m_pScrollArea->setWidget(m_pFrame);
+//    ((QGroupBox*)m_pScrollArea)->addWidget(m_pFrame);
 
     m_pNameLbl = new QLabel(this);
     m_pNameLbl->move(10, 17);
-    m_pNameLbl->resize(270, 24);
+//    m_pNameLbl->resize(270, 24);
 
     QFont boldFont;
     boldFont.setBold(true);
@@ -193,7 +194,7 @@ void LadspaFXProperties::updateControls()
         m_pRemoveBtn->move(nControlsFrameWidth - 27, 6);
         m_pLeftBtn->move(nControlsFrameWidth - 99, 6);
         m_pRightBtn->move(nControlsFrameWidth - 75, 6);
-        m_pNameLbl->resize(nControlsFrameWidth - 17, 24);
+        m_pNameLbl->resize(nControlsFrameWidth - 13, 24);
 
         m_pNameLbl->setText(m_nLadspaFX->fx->getPluginName());
         m_pNameLbl->setToolTip(m_nLadspaFX->fx->getPluginName());
@@ -421,12 +422,12 @@ void LadspaFXProperties::rightBtnClicked()
 void LadspaFXProperties::setFaderHeight(int p_iHeight)   //195
 {
 //    m_pNameLbl->move(10, 17);
-    m_pNameLbl->resize(270, 24);
+//    m_pNameLbl->resize(270, 24);
 
     m_iFaderHeight = p_iHeight;
     setFixedHeight(p_iHeight + 64);
     m_pFrame->resize(width(), height() - 5);
-    m_pNameLbl->resize(p_iHeight + 75, 24);
+//    m_pNameLbl->resize(p_iHeight + 75, 24);
     foreach(FaderName* label, m_pInputControlNames) {
         label->setFixedHeight(p_iHeight - 15);
     }
