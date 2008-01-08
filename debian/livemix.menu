@@ -1,1 +1,6 @@
-?package(livemix):needs="X11" section="Applications/Sound" title="LiveMix" command="livemix" icon="livemix"
+?package(livemix):\
+    needs="X11"\
+    section="Applications/Sound"\
+    title="LiveMix"\
+    command="/usr/bin/livemix"\
+    icon="/usr/share/pixmaps/livemix.xpm"
