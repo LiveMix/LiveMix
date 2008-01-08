@@ -1,2 +1,1 @@
-?package(livemix):needs="X11" section="Applications/Sound"\
-  title="LiveMix" command="livemix"
+?package(livemix):needs="X11" section="Applications/Sound" title="LiveMix" command="livemix" icon="livemix"
