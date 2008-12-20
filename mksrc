@@ -1,0 +1,7 @@
+#!/bin/bash
+
+./copysrc $1
+
+cd ..
+tar -cjf livemix-$1.tar.bz2 livemix-$1
+cd livemix
