@@ -1,7 +1,10 @@
 #!/bin/bash
 
 prefix=../livemix-$1-bin ./configure
+touch livemix
+chmod +x livemix
 make qmake
+rm livemix
 make
 rm -rf livemix-$1-bin
 make install
