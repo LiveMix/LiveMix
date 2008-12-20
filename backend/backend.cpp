@@ -811,7 +811,7 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
 //qDebug() << QString("processLadspaFX - Label: %1, nb in: %2, nb out: %3, in l: %4, in r: %5")
 //  .arg(m_sLabel).arg(m_nIAPorts).arg(m_nOAPorts).arg(right_channel[0]).arg(left_channel[0]);
 
-        if (pFX->fx->getInputAudio() >=  2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+        if (pFX->fx->getInputAudio() >=  2 || (pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1)) {
             for (unsigned i = 0; i < nframes; ++i) {
                 pFX->fx->m_pInBufferL[i] = left_channel[i];
                 pFX->fx->m_pInBufferR[i] = right_channel[i];
@@ -841,7 +841,7 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
                 }*/
         pFX->fx->processFX(nframes, left_channel != right_channel);
         if (left_channel != right_channel) {
-            if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+            if (pFX->fx->getOutputAudio() == 2 || (pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1)) {
                 for (unsigned i = 0; i < nframes; ++i) {
                     left_channel[i] = pFX->fx->m_pOutBufferL[i];
                     right_channel[i] = pFX->fx->m_pOutBufferR[i];
@@ -853,7 +853,7 @@ void Backend::prossesLadspaFX(effect* pFX, float* left_channel, float* right_cha
                 }
             }
         } else {
-            if (pFX->fx->getOutputAudio() == 2 || pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1) {
+            if (pFX->fx->getOutputAudio() == 2 || (pFX->fx->getOutputAudio() == 1 && pFX->fx->getInputAudio() == 1)) {
                 for (unsigned i = 0; i < nframes; ++i) {
                     left_channel[i] = pFX->fx->m_pOutBufferL[i];
                 }
@@ -976,6 +976,7 @@ void Backend::setOutAfl(QString ch, bool afl)
 }
 effect* Backend::addOutEffect(QString ch, LadspaFX* fx)
 {
+qDebug()<<__FILE__<<__LINE__<<fx;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
@@ -1347,7 +1348,7 @@ bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect
     return false;
 }
 
-void Backend::saveLash(QString p_rFile)
+void Backend::saveConnexions(QString p_rFile)
 {
     QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xml += "<connexions>";
@@ -1536,7 +1537,7 @@ void Backend::saveLash(QString p_rFile)
     }
 }
 
-void Backend::restoreLash(QString p_rFile)
+void Backend::restoreConnexions(QString p_rFile)
 {
     QFile file(p_rFile);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {

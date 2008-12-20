@@ -458,37 +458,37 @@
 <context>
     <name>LadspaFXSelector_UI</name>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="182"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="65"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="183"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="68"/>
         <source>Alt+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="184"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="87"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="185"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="90"/>
         <source>Alt+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="187"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="147"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="190"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="207"/>
         <source>Name:</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="192"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="246"/>
         <source>Label:</source>
         <translation>Label :</translation>
     </message>
@@ -498,27 +498,27 @@
         <translation type="obsolete">Type :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="196"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="311"/>
         <source>ID:</source>
         <translation>ID :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="199"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="366"/>
         <source>Maker:</source>
         <translation>Concepteur :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="201"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="405"/>
         <source>Copyright:</source>
         <translation>Copyright :</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="194"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="285"/>
         <source>Input / Output</source>
         <translation>Entrée / Sorties</translation>
     </message>
     <message>
-        <location filename="../ladspafx/objs/ui_LadspaFXSelector_UI.h" line="195"/>
+        <location filename="../ladspafx/LadspaFXSelector_UI.ui" line="288"/>
         <source>In / Out:</source>
         <translation>E / S :</translation>
     </message>
@@ -659,22 +659,22 @@
 <context>
     <name>LiveMix::LadspaFXProperties</name>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="78"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="79"/>
         <source>M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="79"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="80"/>
         <source>Mute</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="83"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="84"/>
         <source>X</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="84"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="85"/>
         <source>Remove</source>
         <translation>Enlève</translation>
     </message>
@@ -684,52 +684,52 @@
         <translation type="obsolete">[%1] Propriétés du module d&apos;effet LADSPA</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="342"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="343"/>
         <source>Deactivate</source>
         <translation>Désactive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="345"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="346"/>
         <source>Activate</source>
         <translation>Avitive</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="297"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="298"/>
         <source>No plugin</source>
         <translation>Pas de module</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="337"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="338"/>
         <source>%1 (%2 %)</source>
         <translation>%1 (%2 %)</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="88"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="89"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="89"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="90"/>
         <source>Move left</source>
         <translation>Déplace à gauche</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="93"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="94"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="94"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="95"/>
         <source>Move right</source>
         <translation>Déplace à droite</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="459"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="460"/>
         <source>Reset the effect</source>
         <translation>Réinitialise le module d&apos;effet</translation>
     </message>
     <message>
-        <location filename="../ladspafx/LadspaFXProperties.cpp" line="455"/>
+        <location filename="../ladspafx/LadspaFXProperties.cpp" line="456"/>
         <source>Set value...</source>
         <translation>Définire la valeur...</translation>
     </message>

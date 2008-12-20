@@ -18,6 +18,9 @@
  * MA 02110-1301, USA.
  */
 
+
+#include "backend.h"
+
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -89,7 +92,7 @@ void setPalette(QApplication *pQApp)
 
 void messageOutput(QtMsgType type, const char *msg)
 {
-    bool verbose = QCoreApplication::arguments().contains("--verbose");
+    bool verbose = QCoreApplication::arguments().contains("--verbose") || QCoreApplication::arguments().contains("-v");
     switch (type) {
     case QtDebugMsg:
         if (verbose) fprintf(stderr, "%s\n", msg);
@@ -159,7 +162,7 @@ int main(int argc, char** argv)
     } else {
         if (QFile(QDir::homePath().append("/.livemix/table.lm")).exists()) {
             mw = new LiveMix::MainWindow(QDir::homePath().append("/.livemix/table.lm"));
-            mw->restoreLash(QDir::homePath().append("/.livemix"));
+	    LiveMix::Backend::instance()->restoreConnexions(QDir::homePath().append("/.livemix/connexions.xml"));
         } else if (QFile(QCoreApplication::applicationDirPath() + "/default.lm").exists()) {
             mw = new LiveMix::MainWindow(QCoreApplication::applicationDirPath() + "/default.lm");
         } else {

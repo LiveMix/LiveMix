@@ -217,7 +217,7 @@ private:
     QHBoxLayout *sub_layout;
     QHBoxLayout *effect_layout;
 
-    QMap<QString, InWidget*> in;
+    QMap<QString, InWidget*> m_rIn;
     QMap<QString, PreWidget*> pre;
     QMap<QString, PostWidget*> post;
     QMap<QString, SubWidget*> sub;

@@ -46,6 +46,8 @@
 #include <QAction>
 #include <QPainter>
 
+#include <typeinfo>
+
 namespace LiveMix
 {
 
@@ -67,6 +69,7 @@ class ScrollArea : public QScrollArea
 
 Widget::Widget(QWidget* p)
         : QWidget(p)
+	, m_rIn()
         , m_mShurtCut()
         , m_pSelectedWrapper(NULL)
         , m_bLearn(false)
@@ -361,7 +364,7 @@ ChannelWidget* Widget::getFaderWidget(ChannelType p_eType, QString p_rChannel)
 {
     switch (p_eType) {
     case IN:
-        return in[p_rChannel];
+        return m_rIn[p_rChannel];
     case PRE:
         return pre[p_rChannel];
     case POST:
@@ -484,8 +487,8 @@ void Widget::update()
     }
 
     foreach(QString in_name, Backend::instance()->inchannels()) {
-        if (in[in_name] != NULL) {
-            FWidget* fader = in[in_name]->fader;
+        if (m_rIn[in_name] != NULL) {
+            FWidget* fader = m_rIn[in_name]->fader;
             fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getInPeak(in_name, true)));
             fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getInPeak(in_name, false)));
         }
@@ -536,7 +539,6 @@ void Widget::addinchannel(QString name, bool related)
 {
     InWidget* elem = new InWidget(name, this);
     in_layout->addWidget(elem);
-    in[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     if (related) {
@@ -558,33 +560,43 @@ void Widget::addinchannel(QString name, bool related)
             elem->addSub(name, iter_sub.key());
         }
     }
+    m_rIn[name] = elem;
 }
 void Widget::addprechannel(QString name)
 {
     PreWidget* elem = new PreWidget(name, this);
     pre_layout->addWidget(elem);
-    pre[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPre(name);
-    QMapIterator<QString, InWidget *> iter(in);
+    QMapIterator<QString, InWidget *> iter(m_rIn);
     while (iter.hasNext()) {
         iter.next();
-        iter.value()->addPre(iter.key(), name);
+	if (iter.value() == NULL) {
+	    m_rIn.remove(iter.key());
+	}
+	else {
+            iter.value()->addPre(iter.key(), name);
+	}
     }
+    pre[name] = elem;
 }
 void Widget::addpostchannel(QString name, bool related)
 {
     PostWidget* elem = new PostWidget(name, this);
     post_layout->addWidget(elem);
-    post[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPost(name);
-    QMapIterator<QString, InWidget *> iter(in);
+    QMapIterator<QString, InWidget *> iter(m_rIn);
     while (iter.hasNext()) {
         iter.next();
-        iter.value()->addPost(iter.key(), name);
+	if (iter.value() == NULL) {
+	    m_rIn.remove(iter.key());
+	}
+	else {
+            iter.value()->addPost(iter.key(), name);
+	}
     }
 
     if (related) {
@@ -594,16 +606,16 @@ void Widget::addpostchannel(QString name, bool related)
             elem->addSub(name, iter.key());
         }
     }
+    post[name] = elem;
 }
 void Widget::addsubchannel(QString name)
 {
     SubWidget* elem = new SubWidget(name, this);
     sub_layout->addWidget(elem);
-    sub[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addSub(name);
-    QMapIterator<QString, InWidget *> iter_in(in);
+    QMapIterator<QString, InWidget *> iter_in(m_rIn);
     while (iter_in.hasNext()) {
         iter_in.next();
         iter_in.value()->addSub(iter_in.key(), name);
@@ -613,53 +625,54 @@ void Widget::addsubchannel(QString name)
         iter_post.next();
         iter_post.value()->addSub(iter_post.key(), name);
     }
+    sub[name] = elem;
 }
 void Widget::removeinchannel(QString name)
 {
-    InWidget *elem = in[name];
+    InWidget *elem = m_rIn[name];
+    m_rIn.remove(name);
     in_layout->removeWidget(elem);
-    in.remove(name);
     delete elem;
 }
 void Widget::removeprechannel(QString name)
 {
     PreWidget *elem = pre[name];
-    pre_layout->removeWidget(elem);
     pre.remove(name);
+    pre_layout->removeWidget(elem);
     delete elem;
 
     m_bVisible[TO_PRE]->remove(name);
 
     info_widget->removePre(name);
-    for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
         i.value()->removePre(i.key(), name);
     }
 }
 void Widget::removepostchannel(QString name)
 {
     PostWidget *elem = post[name];
-    post_layout->removeWidget(elem);
     post.remove(name);
+    post_layout->removeWidget(elem);
     delete elem;
 
     m_bVisible[TO_POST]->remove(name);
 
     info_widget->removePost(name);
-    for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
         i.value()->removePost(i.key(), name);
     }
 }
 void Widget::removesubchannel(QString name)
 {
     SubWidget *elem = sub[name];
-    sub_layout->removeWidget(elem);
     sub.remove(name);
+    sub_layout->removeWidget(elem);
     delete elem;
 
     m_bVisible[TO_SUB]->remove(name);
 
     info_widget->removeSub(name);
-    for (QMap<QString, InWidget*>::iterator i = in.begin() ; i != in.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
     }
     for (QMap<QString, PostWidget*>::iterator i = post.begin() ; i != post.end() ; ++i) {

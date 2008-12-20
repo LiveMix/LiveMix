@@ -38,6 +38,8 @@
 #include <QMenu>
 #include <QGroupBox>
 
+#include <typeinfo>
+
 namespace LiveMix
 {
 

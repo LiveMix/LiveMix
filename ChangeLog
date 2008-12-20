@@ -1,3 +1,9 @@
+==== 0.49rc3 ====
+- fix bug #265.
+
+==== 0.49rc2 ====
+- Ubuntu policy fix.
+
 ==== 0.49rc1 ====
 - add set value on effect context menu.
 - fix core dump on change channel order.

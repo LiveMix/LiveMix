@@ -114,34 +114,18 @@ public:
     void processFX(unsigned nFrames, bool stereo);
 
 
-    const QString& getPluginLabel() {
-        return m_sLabel;
-    }
+    const QString& getPluginLabel();
 
-    const QString& getPluginName() {
-        return m_sName;
-    }
-    void setPluginName(const QString& sName) {
-        m_sName = sName;
-    }
+    const QString& getPluginName();
+    void setPluginName(const QString& sName);
 
-    const QString& getLibraryPath() {
-        return m_sLibraryPath;
-    }
+    const QString& getLibraryPath();
 
-    bool isEnabled() {
-        return m_bEnabled;
-    }
-    void setEnabled(bool value) {
-        m_bEnabled = value;
-    }
+    bool isEnabled();
+    void setEnabled(bool value);
 
-    unsigned getInputAudio() {
-        return m_nIAPorts;
-    };
-    unsigned getOutputAudio() {
-        return m_nOAPorts;
-    };
+    unsigned getInputAudio();
+    unsigned getOutputAudio();
 
     static LadspaFX* load(const QString& sLibraryPath,  const QString& sPluginLabel, long nSampleRate);
 
@@ -167,6 +151,7 @@ private:
 
     LadspaFX(const QString& sLibraryPath, const QString& sPluginLabel);
     void connectAudioPorts(float* m_pInBufferL, float* m_pInBufferR, float* m_pOutBufferL, float* m_pOutBufferR, LADSPA_Handle p_handle);
+//    LadspaFX(const LadspaFX* m_pFX);
 };
 
 }

@@ -1,5 +1,12 @@
 livemix (0.49~rc2-0ubuntu1) hardy; urgency=low
 
+  * upstream release
+
+ -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sat, 20 Dec 2008 17:47:01 +0100
+
+
+livemix (0.49~rc2-0ubuntu1) hardy; urgency=low
+
   * Initial release (LP: #138621)
 
  -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sat, 22 Dec 2007 13:41:31 +0100

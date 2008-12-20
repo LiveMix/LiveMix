@@ -41,6 +41,8 @@
 #include <QCoreApplication>
 #include <QDomDocument>
 
+#include <typeinfo>
+
 namespace LiveMix
 {
 
@@ -49,6 +51,7 @@ MainWindow::MainWindow(QWidget* p) : QMainWindow(p), _initScheduled(true)
     qDebug() << "MainWindow::MainWindow()";
     Backend::init(new GraphicalGuiServer(this));
     init();
+    startTimer(1000);   // Fire every seconds.
 
 //    openDefault();
 
@@ -61,9 +64,9 @@ MainWindow::MainWindow(QWidget* p) : QMainWindow(p), _initScheduled(true)
 MainWindow::MainWindow(QString filename, QWidget* p) : QMainWindow(p), _initScheduled(true)
 {
     qDebug() << "MainWindow::MainWindow(" << filename << "," << p << ")";
+
     Backend::init(new GraphicalGuiServer(this));
     init();
-
     openFile(filename);
 
     QStringList ins = Backend::instance()->inchannels();
@@ -74,6 +77,7 @@ MainWindow::MainWindow(QString filename, QWidget* p) : QMainWindow(p), _initSche
 
     _initScheduled = false;
     scheduleInit();
+    startTimer(1000);   // Fire every seconds.
 
 //    qDebug() << "MainWindow::MainWindow() finished...";
 }
@@ -83,7 +87,7 @@ void MainWindow::saveLash(QString p_rDir)
 //    qDebug() << "MainWindow::saveLash(" << p_rDir << ")";
     saveFile(QString("%1/table.lm").arg(p_rDir));
 
-    Backend::instance()->saveLash(QString("%1/connexions.xml").arg(p_rDir));
+    Backend::instance()->saveConnexions(QString("%1/connexions.xml").arg(p_rDir));
 }
 
 void MainWindow::restoreLash(QString p_rDir)
@@ -91,7 +95,7 @@ void MainWindow::restoreLash(QString p_rDir)
 //    qDebug() << "MainWindow::restoreLash(" << p_rDir << ")";
     openFile(QString("%1/table.lm").arg(p_rDir));
 
-    Backend::instance()->restoreLash(QString("%1/connexions.xml").arg(p_rDir));
+    Backend::instance()->restoreConnexions(QString("%1/connexions.xml").arg(p_rDir));
 //    _lashclient->setJackName( "LiveMix" );
 //    qDebug() << "MainWindow::restoreLash() finished";
 }
@@ -215,8 +219,6 @@ void MainWindow::init()
     _helpmenu->addAction(trUtf8("About &Qt"), this, SLOT(aboutQt()));
 
     setCentralWidget(_mixerwidget);
-
-    startTimer(1000);   // Fire every seconds.
 }
 
 MainWindow::~MainWindow()
@@ -398,7 +400,10 @@ void MainWindow::openFile(QString path)
                 }
 
                 for (QDomElement effect = in.firstChildElement("effect"); !effect.isNull(); effect = effect.nextSiblingElement("effect")) {
-                    Backend::instance()->addInEffect(name, openEffect(effect));
+		    LadspaFX* pFX = openEffect(effect);
+		    if (pFX != NULL) {
+                    	Backend::instance()->addInEffect(name, pFX);
+		    }
                 }
             }
 
@@ -438,7 +443,10 @@ void MainWindow::openFile(QString path)
                 Backend::instance()->setOutVolume(PFL, out.attribute("phonevolume").toDouble());
 
                 for (QDomElement effect = out.firstChildElement("effect"); !effect.isNull(); effect = effect.nextSiblingElement("effect")) {
-                    Backend::instance()->addOutEffect(MAIN, openEffect(effect));
+		    LadspaFX* pFX = openEffect(effect);
+		    if (pFX != NULL) {
+                    	Backend::instance()->addOutEffect(MAIN, pFX);
+		    }
                 }
             }
 
@@ -453,7 +461,10 @@ void MainWindow::openFile(QString path)
                 Backend::instance()->setPreAfl(name, toBool(pre.attribute("afl")));
 
                 for (QDomElement effect = pre.firstChildElement("effect"); !effect.isNull(); effect = effect.nextSiblingElement("effect")) {
-                    Backend::instance()->addPreEffect(name, openEffect(effect));
+		    LadspaFX* pFX = openEffect(effect);
+		    if (pFX != NULL) {
+                    	Backend::instance()->addPreEffect(name, pFX);
+		    }
                 }
             }
 
@@ -476,7 +487,10 @@ void MainWindow::openFile(QString path)
                 }
 
                 for (QDomElement effect = post.firstChildElement("effect"); !effect.isNull(); effect = effect.nextSiblingElement("effect")) {
-                    Backend::instance()->addPostEffect(name, openEffect(effect));
+		    LadspaFX* pFX = openEffect(effect);
+		    if (pFX != NULL) {
+                    	Backend::instance()->addPostEffect(name, pFX);
+		    }
                 }
             }
 
@@ -493,7 +507,10 @@ void MainWindow::openFile(QString path)
                 Backend::instance()->setSubBal(name, sub.attribute("bal").toFloat());
 
                 for (QDomElement effect = sub.firstChildElement("effect"); !effect.isNull(); effect = effect.nextSiblingElement("effect")) {
-                    Backend::instance()->addSubEffect(name, openEffect(effect));
+		    LadspaFX* pFX = openEffect(effect);
+		    if (pFX != NULL) {
+                    	Backend::instance()->addSubEffect(name, pFX);
+		    }
                 }
             }
         }
@@ -754,6 +771,10 @@ void MainWindow::saveFile(QString p_rPath)
 LadspaFX* MainWindow::openEffect(const QDomElement& effect)
 {
     LadspaFX* pFX = LadspaFX::load(effect.attribute("filename"), effect.attribute("name"), 44100);
+    if (pFX == NULL) {
+	return NULL; // no effect found
+    }
+
     pFX->setEnabled(toBool(effect.attribute("enabled")));
     for (QDomElement attr = effect.firstChildElement("attribute"); !attr.isNull(); attr = attr.nextSiblingElement("attribute")) {
         QString sName = attr.attribute("name");
@@ -1164,7 +1185,7 @@ void MainWindow::removePre()
 }
 void MainWindow::removePre(QString n)
 {
-//    qDebug( "MainWindow::removePre( QString %s )", qPrintable( n ) );
+    qDebug( "MainWindow::removePre( QString %s )", qPrintable( n ) );
     if (Backend::instance()->prechannels().contains(n)) {
         foreach(effect* fx, *Backend::instance()->getPreEffects(n)) {
             if (fx->gui) {

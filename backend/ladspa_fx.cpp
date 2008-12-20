@@ -94,6 +94,7 @@ LadspaFX::LadspaFX(const QString& sLibraryPath, const QString& sPluginLabel)
         , m_pOutBufferR(NULL)
         , m_bEnabled(false)
         , m_sLabel(sPluginLabel)
+	, m_sName()
         , m_sLibraryPath(sLibraryPath)
         , m_pLibrary(NULL)
         , m_d(NULL)
@@ -106,6 +107,25 @@ LadspaFX::LadspaFX(const QString& sLibraryPath, const QString& sPluginLabel)
 {
 // qDebug() << "INIT - " + sLibraryPath + " - " + sPluginLabel;
 }
+//LadspaFX::LadspaFX(const LadspaFX* m_pFX)
+//        : m_pInBufferL(m_pFX->m_pInBufferL)
+//        , m_pInBufferR(m_pFX->m_pInBufferR)
+//        , m_pOutBufferL(m_pFX->m_pOutBufferL)
+//        , m_pOutBufferR(m_pFX->m_pOutBufferR)
+//        , m_bEnabled(m_pFX->m_bEnabled)
+//        , m_sLabel(m_pFX->m_sLabel)
+//	, m_sName(m_pFX->m_sName)
+//        , m_sLibraryPath(m_pFX->m_sLibraryPath)
+//        , m_pLibrary(m_pFX->m_pLibrary)
+//        , m_d(m_pFX->m_d)
+//        , m_handle(m_pFX->m_handle)
+//        , m_handleBis(m_pFX->m_handleBis)
+//        , m_nICPorts(m_pFX->m_nICPorts)
+//        , m_nOCPorts(m_pFX->m_nOCPorts)
+//        , m_nIAPorts(m_pFX->m_nIAPorts)
+//        , m_nOAPorts(m_pFX->m_nOAPorts)
+//{
+//}
 
 // dtor
 LadspaFX::~LadspaFX()
@@ -404,6 +424,35 @@ void LadspaFX::deactivate()
             m_d->deactivate(m_handleBis);
         }
     }
+}
+
+const QString& LadspaFX::getPluginLabel() {
+    return m_sLabel;
+}
+
+const QString& LadspaFX::getPluginName() {
+    return m_sName;
+}
+void LadspaFX::setPluginName(const QString& sName) {
+    m_sName = sName;
+}
+
+const QString& LadspaFX::getLibraryPath() {
+    return m_sLibraryPath;
+}
+
+bool LadspaFX::isEnabled() {
+    return m_bEnabled;
+}
+void LadspaFX::setEnabled(bool value) {
+    m_bEnabled = value;
+}
+
+unsigned LadspaFX::getInputAudio() {
+    return m_nIAPorts;
+}
+unsigned LadspaFX::getOutputAudio() {
+    return m_nOAPorts;
 }
 
 }
