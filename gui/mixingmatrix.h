@@ -217,10 +217,10 @@ private:
     QHBoxLayout *sub_layout;
     QHBoxLayout *effect_layout;
 
-    QMap<QString, InWidget*> m_rIn;
-    QMap<QString, PreWidget*> pre;
-    QMap<QString, PostWidget*> post;
-    QMap<QString, SubWidget*> sub;
+    QMap<QString, InWidget*> m_in;
+    QMap<QString, PreWidget*> m_pre;
+    QMap<QString, PostWidget*> m_post;
+    QMap<QString, SubWidget*> m_sub;
     MainWidget* main_widget;
     QScrollArea *m_pEffectScrollArea;
 

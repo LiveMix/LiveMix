@@ -69,7 +69,10 @@ class ScrollArea : public QScrollArea
 
 Widget::Widget(QWidget* p)
         : QWidget(p)
-	, m_rIn()
+	, m_in()
+    	, m_pre()
+    	, m_post()
+    	, m_sub()
         , m_mShurtCut()
         , m_pSelectedWrapper(NULL)
         , m_bLearn(false)
@@ -81,27 +84,30 @@ Widget::Widget(QWidget* p)
     main_layout->setSizeConstraint(QLayout::SetMinimumSize);
 
 #ifdef LADSPA_SUPPORT
+    QWidget* main_effect = new QWidget;
+    QHBoxLayout* main_effect_layout = new QHBoxLayout;
+    main_effect->setLayout(main_effect_layout);
+    main_layout->addWidget(main_effect);
+
+    QWidget* effect_start = new QWidget();
+    m_pEffectStart = effect_start;
+    main_effect_layout->addWidget(effect_start);
+
     m_pEffectScrollArea = new ScrollArea;
     m_pEffectScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_pEffectScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     QWidget* effect = new QWidget;
-    m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
-//    m_pEffectScrollArea->setMinimumHeight(m_iEffectFaderHeight + 102);
-    main_layout->addWidget(m_pEffectScrollArea);
+    main_effect_layout->addWidget(m_pEffectScrollArea);
     m_pEffectScrollArea->setWidget(effect);
 
     effect_layout = new QHBoxLayout;
     effect->setLayout(effect_layout);
     effect_layout->setSizeConstraint(QLayout::SetMinimumSize);
-    QWidget* effect_start = new QWidget();
-    m_pEffectStart = effect_start;
-    effect_layout->addWidget(effect_start);
+    
     QVBoxLayout *effect_start_layout = new QVBoxLayout;
     effect_start_layout->setSpacing(0);
     effect_start_layout->setMargin(0);
-    effect_start->setFixedHeight(m_iEffectFaderHeight + 64);
     effect_start->setLayout(effect_start_layout);
-//    effect_start->hide();
     Button* select = Button::create();
     connect(select, SIGNAL(clicked()), this, SLOT(addFX()));
     select->setText(trUtf8("A"));
@@ -111,8 +117,9 @@ Widget::Widget(QWidget* p)
     effectName = new LFWidget(this);
     {
         QFont font = effectName->font();
-        font.setPixelSize(16);
+        font.setPixelSize(14);
         font.setItalic(false);
+        font.setBold(true);
         effectName->setFont(font);
     }
     effect_start_layout->addWidget(effectName);
@@ -364,13 +371,33 @@ ChannelWidget* Widget::getFaderWidget(ChannelType p_eType, QString p_rChannel)
 {
     switch (p_eType) {
     case IN:
-        return m_rIn[p_rChannel];
+    	if (m_in.contains(p_rChannel)) {
+	        return m_in[p_rChannel];
+    	}
+    	else {
+    		return NULL;
+    	}
     case PRE:
-        return pre[p_rChannel];
+    	if (m_pre.contains(p_rChannel)) {
+	        return m_pre[p_rChannel];
+    	}
+    	else {
+    		return NULL;
+    	}
     case POST:
-        return post[p_rChannel];
+    	if (m_post.contains(p_rChannel)) {
+    	    return m_post[p_rChannel];
+    	}
+    	else {
+    		return NULL;
+    	}
     case SUB:
-        return sub[p_rChannel];
+    	if (m_sub.contains(p_rChannel)) {
+	        return m_sub[p_rChannel];
+    	}
+    	else {
+    		return NULL;
+    	}
     case OUT:
     default:
         return main_widget;
@@ -487,29 +514,29 @@ void Widget::update()
     }
 
     foreach(QString in_name, Backend::instance()->inchannels()) {
-        if (m_rIn[in_name] != NULL) {
-            FWidget* fader = m_rIn[in_name]->fader;
+        if (m_in[in_name] != NULL) {
+            FWidget* fader = m_in[in_name]->fader;
             fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getInPeak(in_name, true)));
             fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getInPeak(in_name, false)));
         }
     }
     foreach(QString pre_name, Backend::instance()->prechannels()) {
-        if (pre[pre_name] != NULL) {
-            FWidget* fader = pre[pre_name]->fader;
+        if (m_pre[pre_name] != NULL) {
+            FWidget* fader = m_pre[pre_name]->fader;
             fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getPrePeak(pre_name, true)));
             fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getPrePeak(pre_name, false)));
         }
     }
     foreach(QString post_name, Backend::instance()->postchannels()) {
-        if (post[post_name] != NULL) {
-            FWidget* fader = post[post_name]->fader;
+        if (m_post[post_name] != NULL) {
+            FWidget* fader = m_post[post_name]->fader;
             fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getPostPeak(post_name, true)));
             fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getPostPeak(post_name, false)));
         }
     }
     foreach(QString sub_name, Backend::instance()->subchannels()) {
-        if (sub[sub_name] != NULL) {
-            FWidget* fader = sub[sub_name]->fader;
+        if (m_sub[sub_name] != NULL) {
+            FWidget* fader = m_sub[sub_name]->fader;
             fader->getMeter()->setDbPeak_L(getNewValue(fader->getMeter()->getDbPeak_L(), Backend::instance()->getSubPeak(sub_name, true)));
             fader->getMeter()->setDbPeak_R(getNewValue(fader->getMeter()->getDbPeak_R(), Backend::instance()->getSubPeak(sub_name, false)));
         }
@@ -539,28 +566,29 @@ void Widget::addinchannel(QString name, bool related)
 {
     InWidget* elem = new InWidget(name, this);
     in_layout->addWidget(elem);
+    m_in[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     if (related) {
-        QMapIterator<QString, PreWidget *> iter_pre(pre);
+        QMapIterator<QString, PreWidget *> iter_pre(m_pre);
         while (iter_pre.hasNext()) {
             iter_pre.next();
             elem->addPre(name, iter_pre.key());
         }
 
-        QMapIterator<QString, PostWidget *> iter_post(post);
+        QMapIterator<QString, PostWidget *> iter_post(m_post);
         while (iter_post.hasNext()) {
             iter_post.next();
             elem->addPost(name, iter_post.key());
         }
 
-        QMapIterator<QString, SubWidget *> iter_sub(sub);
+        QMapIterator<QString, SubWidget *> iter_sub(m_sub);
         while (iter_sub.hasNext()) {
             iter_sub.next();
             elem->addSub(name, iter_sub.key());
         }
     }
-    m_rIn[name] = elem;
+    m_in[name] = elem;
 }
 void Widget::addprechannel(QString name)
 {
@@ -569,17 +597,17 @@ void Widget::addprechannel(QString name)
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPre(name);
-    QMapIterator<QString, InWidget *> iter(m_rIn);
+    QMapIterator<QString, InWidget *> iter(m_in);
     while (iter.hasNext()) {
         iter.next();
 	if (iter.value() == NULL) {
-	    m_rIn.remove(iter.key());
+	    m_in.remove(iter.key());
 	}
 	else {
             iter.value()->addPre(iter.key(), name);
 	}
     }
-    pre[name] = elem;
+    m_pre[name] = elem;
 }
 void Widget::addpostchannel(QString name, bool related)
 {
@@ -588,11 +616,11 @@ void Widget::addpostchannel(QString name, bool related)
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPost(name);
-    QMapIterator<QString, InWidget *> iter(m_rIn);
+    QMapIterator<QString, InWidget *> iter(m_in);
     while (iter.hasNext()) {
         iter.next();
 	if (iter.value() == NULL) {
-	    m_rIn.remove(iter.key());
+	    m_in.remove(iter.key());
 	}
 	else {
             iter.value()->addPost(iter.key(), name);
@@ -600,13 +628,13 @@ void Widget::addpostchannel(QString name, bool related)
     }
 
     if (related) {
-        QMapIterator<QString, SubWidget *> iter(sub);
+        QMapIterator<QString, SubWidget *> iter(m_sub);
         while (iter.hasNext()) {
             iter.next();
             elem->addSub(name, iter.key());
         }
     }
-    post[name] = elem;
+    m_post[name] = elem;
 }
 void Widget::addsubchannel(QString name)
 {
@@ -615,67 +643,70 @@ void Widget::addsubchannel(QString name)
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addSub(name);
-    QMapIterator<QString, InWidget *> iter_in(m_rIn);
+    QMapIterator<QString, InWidget *> iter_in(m_in);
     while (iter_in.hasNext()) {
         iter_in.next();
         iter_in.value()->addSub(iter_in.key(), name);
     }
-    QMapIterator<QString, PostWidget *> iter_post(post);
+    QMapIterator<QString, PostWidget *> iter_post(m_post);
     while (iter_post.hasNext()) {
         iter_post.next();
         iter_post.value()->addSub(iter_post.key(), name);
     }
-    sub[name] = elem;
+    m_sub[name] = elem;
 }
 void Widget::removeinchannel(QString name)
 {
-    InWidget *elem = m_rIn[name];
-    m_rIn.remove(name);
+    InWidget *elem = m_in[name];
+    m_in.remove(name);
     in_layout->removeWidget(elem);
     delete elem;
 }
 void Widget::removeprechannel(QString name)
 {
-    PreWidget *elem = pre[name];
-    pre.remove(name);
+    PreWidget *elem = m_pre[name];
+    m_pre.remove(name);
     pre_layout->removeWidget(elem);
+    m_pre.remove(name);
     delete elem;
 
     m_bVisible[TO_PRE]->remove(name);
 
     info_widget->removePre(name);
-    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_in.begin() ; i != m_in.end() ; ++i) {
         i.value()->removePre(i.key(), name);
     }
 }
 void Widget::removepostchannel(QString name)
 {
-    PostWidget *elem = post[name];
-    post.remove(name);
+    PostWidget *elem = m_post[name];
+    m_post.remove(name);
     post_layout->removeWidget(elem);
+    m_post.remove(name);
     delete elem;
 
     m_bVisible[TO_POST]->remove(name);
 
     info_widget->removePost(name);
-    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_in.begin() ; i != m_in.end() ; ++i) {
         i.value()->removePost(i.key(), name);
     }
 }
 void Widget::removesubchannel(QString name)
 {
-    SubWidget *elem = sub[name];
-    sub.remove(name);
+    SubWidget *elem = m_sub[name];
+    m_sub.remove(name);
     sub_layout->removeWidget(elem);
+    m_sub.remove(name);
     delete elem;
 
     m_bVisible[TO_SUB]->remove(name);
 
     info_widget->removeSub(name);
-    for (QMap<QString, InWidget*>::iterator i = m_rIn.begin() ; i != m_rIn.end() ; ++i) {
+    for (QMap<QString, InWidget*>::iterator i = m_in.begin() ; i != m_in.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
     }
-    for (QMap<QString, PostWidget*>::iterator i = post.begin() ; i != post.end() ; ++i) {
+    for (QMap<QString, PostWidget*>::iterator i = m_post.begin() ; i != m_post.end() ; ++i) {
         i.value()->removeSub(i.key(), name);
     }
 }
@@ -1551,8 +1582,8 @@ void Widget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChan
 void Widget::setFaderHeight(int p_iHeight)
 {
     int diff = m_iFaderHeight - p_iHeight;
-    if (p_iHeight < 200) {
-        p_iHeight = 200;
+    if (p_iHeight < 150) {
+        p_iHeight = 150;
     }
     m_iFaderHeight = p_iHeight;
 
@@ -1632,15 +1663,15 @@ void Widget::faderHeight()
 void Widget::setEffectFaderHeight(int p_iHeight)
 {
     int diff = m_iEffectFaderHeight - p_iHeight;
-    if (p_iHeight < 150) {
-        p_iHeight = 150;
+    if (p_iHeight < 130) {
+        p_iHeight = 130;
     }
     m_iEffectFaderHeight = p_iHeight;
 
-    effectName->setFixedHeight(m_iEffectFaderHeight+50);
+    effectName->setFixedHeight(m_iEffectFaderHeight+50+64);
 
     m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
-    m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
+    m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 102);
     effect_layout->parentWidget()->setFixedHeight(m_iEffectFaderHeight + 82);
 
     foreach(QString channel, Backend::instance()->inchannels()) {

@@ -242,6 +242,12 @@ InWidget::InWidget(QString p_sChannel, Widget* p_pMatrix)
         : ChannelWidget()
         , m_Channel(p_sChannel)
         , m_pMatrix(p_pMatrix)
+        , pre_tb()
+        , post_tb()
+        , sub_tb()
+        , pre()
+        , post()
+        , sub()        
 {
     QVBoxLayout* layout = new QVBoxLayout();
     setLayout(layout);
@@ -467,6 +473,8 @@ void PreWidget::mouseReleaseEvent(QMouseEvent* ev)
 PostWidget::PostWidget(QString channel, Widget* p_pMatrix)
         : m_Channel(channel)
         , m_pMatrix(p_pMatrix)
+        , sub_tb()
+        , sub()
 {
     QVBoxLayout* layout = new QVBoxLayout;
     setLayout(layout);

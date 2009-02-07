@@ -40,7 +40,7 @@ FaderName::FaderName(QWidget* parent)
 // int size = pref->getMixerFontPointSize();
 // m_mixerFont.setFamily( family );
 // m_mixerFont.setPointSize( size );
-    m_mixerFont.setBold(true);
+//    m_mixerFont.setBold(true);
     m_mixerFont.setItalic(true);
 
 // setPixmap( "mixerline_label_background.png" );

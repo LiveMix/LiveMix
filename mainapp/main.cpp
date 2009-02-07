@@ -87,6 +87,12 @@ void setPalette(QApplication *pQApp)
     defaultPalette.setColor(QPalette::Link, QColor(78, 84, 102));
     defaultPalette.setColor(QPalette::LinkVisited, QColor(88, 94, 112));
 
+    QFont font = pQApp->font();
+    qDebug()<<font.defaultFamily();
+    font.setFamily("DejaVu Sans");
+    font.setPixelSize(12);
+    pQApp->setFont(font);
+
     pQApp->setPalette(defaultPalette);
 }
 
@@ -157,6 +163,7 @@ int main(int argc, char** argv)
     LiveMix::MainWindow *mw;
     if (lash) {
         mw = new LiveMix::MainWindow();
+        mw->restoreLash(QDir::homePath().append("/.livemix"));
     } else if (!file.isEmpty()) {
         mw = new LiveMix::MainWindow(file);
     } else {
