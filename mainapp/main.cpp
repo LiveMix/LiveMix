@@ -95,7 +95,7 @@ void setPalette(QApplication *pQApp)
 
 void messageOutput(QtMsgType type, const char *msg)
 {
-    bool verbose = QCoreApplication::arguments().contains("--verbose");
+    bool verbose = QCoreApplication::arguments().contains("--verbose") || QCoreApplication::arguments().contains("-v");
     switch (type) {
     case QtDebugMsg:
         if (verbose) fprintf(stderr, "%s\n", msg);

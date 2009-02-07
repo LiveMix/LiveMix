@@ -757,6 +757,11 @@ void MainWindow::saveFile(QString p_rPath)
 LadspaFX* MainWindow::openEffect(const QDomElement& effect)
 {
     LadspaFX* pFX = LadspaFX::load(effect.attribute("filename"), effect.attribute("name"), 44100);
+
+    if (pFX == NULL) {
+	return NULL; // no effect found
+    }
+
     pFX->setEnabled(toBool(effect.attribute("enabled")));
     for (QDomElement attr = effect.firstChildElement("attribute"); !attr.isNull(); attr = attr.nextSiblingElement("attribute")) {
         QString sName = attr.attribute("name");

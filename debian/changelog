@@ -1,3 +1,17 @@
+livemix (0.49~rc3-0ubuntu1) hardy; urgency=low
+
+  * Upstream release
+
+ -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sat, 20 Dec 2008 17:47:01 +0100
+
+
+livemix (0.49~rc2-0ubuntu3) hardy; urgency=low
+
+  * Replace deprecated Build-Depend python-xml with python (LP: #199014)
+
+ -- David Futcher <bobbocanfly@gmail.com>   Fri, 07 Mar 2008 14:14:44 +0000
+
+
 livemix (0.49~rc2-0ubuntu2) hardy; urgency=low
 
   * Add python-xml to Build-Depends.
