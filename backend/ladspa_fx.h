@@ -56,19 +56,13 @@ public:
     LadspaFXGroup(const QString& sName);
     ~LadspaFXGroup();
 
-    const QString& getName() {
-        return m_sName;
-    }
+    const QString& getName();
 
     void addLadspaInfo(LadspaFXInfo *pInfo);
-    QList<LadspaFXInfo*> getLadspaInfo() {
-        return m_ladspaList;
-    }
+    QList<LadspaFXInfo*> getLadspaInfo();
 
     void addChild(LadspaFXGroup *pChild);
-    QList<LadspaFXGroup*> getChildList() {
-        return m_childGroups;
-    }
+    QList<LadspaFXGroup*> getChildList();
 
 private:
     QString m_sName;
@@ -114,34 +108,18 @@ public:
     void processFX(unsigned nFrames, bool stereo);
 
 
-    const QString& getPluginLabel() {
-        return m_sLabel;
-    }
+    const QString& getPluginLabel();
+    
+    const QString& getPluginName();
+    void setPluginName(const QString& sName);
 
-    const QString& getPluginName() {
-        return m_sName;
-    }
-    void setPluginName(const QString& sName) {
-        m_sName = sName;
-    }
+    const QString& getLibraryPath();
 
-    const QString& getLibraryPath() {
-        return m_sLibraryPath;
-    }
+    bool isEnabled();
+    void setEnabled(bool value);
 
-    bool isEnabled() {
-        return m_bEnabled;
-    }
-    void setEnabled(bool value) {
-        m_bEnabled = value;
-    }
-
-    unsigned getInputAudio() {
-        return m_nIAPorts;
-    };
-    unsigned getOutputAudio() {
-        return m_nOAPorts;
-    };
+    unsigned getInputAudio();
+    unsigned getOutputAudio();
 
     static LadspaFX* load(const QString& sLibraryPath,  const QString& sPluginLabel, long nSampleRate);
 

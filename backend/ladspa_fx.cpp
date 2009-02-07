@@ -406,6 +406,47 @@ void LadspaFX::deactivate()
     }
 }
 
+const QString& LadspaFXGroup::getName() {
+    return m_sName;
+}
+
+QList<LadspaFXInfo*> LadspaFXGroup::getLadspaInfo() {
+    return m_ladspaList;
+}
+
+QList<LadspaFXGroup*> LadspaFXGroup::getChildList() {
+    return m_childGroups;
+}
+
+const QString& LadspaFX::getPluginLabel() {
+    return m_sLabel;
+}
+
+const QString& LadspaFX::getPluginName() {
+    return m_sName;
+}
+void LadspaFX::setPluginName(const QString& sName) {
+    m_sName = sName;
+}
+
+const QString& LadspaFX::getLibraryPath() {
+    return m_sLibraryPath;
+}
+
+bool LadspaFX::isEnabled() {
+    return m_bEnabled;
+}
+void LadspaFX::setEnabled(bool value) {
+    m_bEnabled = value;
+}
+
+unsigned LadspaFX::getInputAudio() {
+    return m_nIAPorts;
+};
+unsigned LadspaFX::getOutputAudio() {
+    return m_nOAPorts;
+};
+
 }
 ; //LiveMix
 
