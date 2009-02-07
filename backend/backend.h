@@ -208,8 +208,8 @@ public:
 
     bool moveEffect(ChannelType p_eType, QString p_rName, effect *p_pEffect, bool p_bLeft);
 
-    void saveConnexions(QString p_rFile);
-    void restoreConnexions(QString p_rFile);
+    void saveLash(QString p_rFile);
+    void restoreLash(QString p_rFile);
 
 public slots:
     /**

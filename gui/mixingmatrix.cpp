@@ -46,7 +46,8 @@
 #include <QAction>
 #include <QPainter>
 
-#include <typeinfo>
+#include <typeinfo> 
+
 
 namespace LiveMix
 {
@@ -588,12 +589,12 @@ void Widget::addinchannel(QString name, bool related)
             elem->addSub(name, iter_sub.key());
         }
     }
-    m_in[name] = elem;
 }
 void Widget::addprechannel(QString name)
 {
     PreWidget* elem = new PreWidget(name, this);
     pre_layout->addWidget(elem);
+    m_pre[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPre(name);
@@ -603,16 +604,14 @@ void Widget::addprechannel(QString name)
 	if (iter.value() == NULL) {
 	    m_in.remove(iter.key());
 	}
-	else {
-            iter.value()->addPre(iter.key(), name);
-	}
+        iter.value()->addPre(iter.key(), name);
     }
-    m_pre[name] = elem;
 }
 void Widget::addpostchannel(QString name, bool related)
 {
     PostWidget* elem = new PostWidget(name, this);
     post_layout->addWidget(elem);
+    m_post[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addPost(name);
@@ -622,9 +621,7 @@ void Widget::addpostchannel(QString name, bool related)
 	if (iter.value() == NULL) {
 	    m_in.remove(iter.key());
 	}
-	else {
-            iter.value()->addPost(iter.key(), name);
-	}
+        iter.value()->addPost(iter.key(), name);
     }
 
     if (related) {
@@ -634,12 +631,12 @@ void Widget::addpostchannel(QString name, bool related)
             elem->addSub(name, iter.key());
         }
     }
-    m_post[name] = elem;
 }
 void Widget::addsubchannel(QString name)
 {
     SubWidget* elem = new SubWidget(name, this);
     sub_layout->addWidget(elem);
+    m_sub[name] = elem;
     connect(elem, SIGNAL(clicked(ChannelType, QString)), this, SLOT(select(ChannelType, QString)));
 
     info_widget->addSub(name);
@@ -653,7 +650,6 @@ void Widget::addsubchannel(QString name)
         iter_post.next();
         iter_post.value()->addSub(iter_post.key(), name);
     }
-    m_sub[name] = elem;
 }
 void Widget::removeinchannel(QString name)
 {
@@ -667,7 +663,6 @@ void Widget::removeprechannel(QString name)
     PreWidget *elem = m_pre[name];
     m_pre.remove(name);
     pre_layout->removeWidget(elem);
-    m_pre.remove(name);
     delete elem;
 
     m_bVisible[TO_PRE]->remove(name);
@@ -682,7 +677,6 @@ void Widget::removepostchannel(QString name)
     PostWidget *elem = m_post[name];
     m_post.remove(name);
     post_layout->removeWidget(elem);
-    m_post.remove(name);
     delete elem;
 
     m_bVisible[TO_POST]->remove(name);
@@ -697,7 +691,6 @@ void Widget::removesubchannel(QString name)
     SubWidget *elem = m_sub[name];
     m_sub.remove(name);
     sub_layout->removeWidget(elem);
-    m_sub.remove(name);
     delete elem;
 
     m_bVisible[TO_SUB]->remove(name);
