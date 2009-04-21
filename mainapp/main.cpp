@@ -160,13 +160,12 @@ int main(int argc, char** argv)
     LiveMix::MainWindow *mw;
     if (lash) {
         mw = new LiveMix::MainWindow();
-        mw->restoreLash(QDir::homePath().append("/.livemix"));
     } else if (!file.isEmpty()) {
         mw = new LiveMix::MainWindow(file);
     } else {
         if (QFile(QDir::homePath().append("/.livemix/table.lm")).exists()) {
             mw = new LiveMix::MainWindow(QDir::homePath().append("/.livemix/table.lm"));
-            mw->restoreLash(QDir::homePath().append("/.livemix"));
+			LiveMix::Backend::instance()->restoreConnexions(QDir::homePath().append("/.livemix/connexions.xml"));
         } else if (QFile(QCoreApplication::applicationDirPath() + "/default.lm").exists()) {
             mw = new LiveMix::MainWindow(QCoreApplication::applicationDirPath() + "/default.lm");
         } else {

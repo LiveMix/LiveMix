@@ -118,9 +118,8 @@ Widget::Widget(QWidget* p)
     effectName = new LFWidget(this);
     {
         QFont font = effectName->font();
-        font.setPixelSize(14);
+        font.setPixelSize(16);
         font.setItalic(false);
-        font.setBold(true);
         effectName->setFont(font);
     }
     effect_start_layout->addWidget(effectName);
@@ -1575,8 +1574,8 @@ void Widget::setVisible(bool p_bVisible, ElementType p_eElement, QString p_rChan
 void Widget::setFaderHeight(int p_iHeight)
 {
     int diff = m_iFaderHeight - p_iHeight;
-    if (p_iHeight < 150) {
-        p_iHeight = 150;
+    if (p_iHeight < 200) {
+        p_iHeight = 200;
     }
     m_iFaderHeight = p_iHeight;
 
@@ -1656,15 +1655,15 @@ void Widget::faderHeight()
 void Widget::setEffectFaderHeight(int p_iHeight)
 {
     int diff = m_iEffectFaderHeight - p_iHeight;
-    if (p_iHeight < 130) {
-        p_iHeight = 130;
+    if (p_iHeight < 150) {
+        p_iHeight = 150;
     }
     m_iEffectFaderHeight = p_iHeight;
 
-    effectName->setFixedHeight(m_iEffectFaderHeight+50+64);
+    effectName->setFixedHeight(m_iEffectFaderHeight+50);
 
     m_pEffectScrollArea->setFixedHeight(m_iEffectFaderHeight + 102);
-    m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 102);
+    m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
     effect_layout->parentWidget()->setFixedHeight(m_iEffectFaderHeight + 82);
 
     foreach(QString channel, Backend::instance()->inchannels()) {

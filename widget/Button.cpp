@@ -64,7 +64,7 @@ Button::Button(QWidget * pParent, const QString& sOnImage, const QString& sOffIm
     }
 
     // default text font
-    m_textFont.setPointSize(8);
+    m_textFont.setPointSize(9);
 // m_textFont.setBold( true );
 }
 Button::~Button()

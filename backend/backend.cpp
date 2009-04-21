@@ -1347,7 +1347,7 @@ bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect
     return false;
 }
 
-void Backend::saveLash(QString p_rFile)
+void Backend::saveConnexions(QString p_rFile)
 {
     QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     xml += "<connexions>";
@@ -1536,7 +1536,7 @@ void Backend::saveLash(QString p_rFile)
     }
 }
 
-void Backend::restoreLash(QString p_rFile)
+void Backend::restoreConnexions(QString p_rFile)
 {
     QFile file(p_rFile);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {

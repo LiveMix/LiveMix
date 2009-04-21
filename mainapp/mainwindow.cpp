@@ -81,22 +81,22 @@ MainWindow::MainWindow(QString filename, QWidget* p) : QMainWindow(p), _initSche
 //    qDebug() << "MainWindow::MainWindow() finished...";
 }
 
-void MainWindow::saveLash(QString p_rDir)
+void MainWindow::saveConnexions(QString p_rDir)
 {
-//    qDebug() << "MainWindow::saveLash(" << p_rDir << ")";
+//    qDebug() << "MainWindow::saveConnexions(" << p_rDir << ")";
     saveFile(QString("%1/table.lm").arg(p_rDir));
 
-    Backend::instance()->saveLash(QString("%1/connexions.xml").arg(p_rDir));
+    Backend::instance()->saveConnexions(QString("%1/connexions.xml").arg(p_rDir));
 }
 
-void MainWindow::restoreLash(QString p_rDir)
+void MainWindow::restoreConnexions(QString p_rDir)
 {
-//    qDebug() << "MainWindow::restoreLash(" << p_rDir << ")";
+//    qDebug() << "MainWindow::restoreConnexions(" << p_rDir << ")";
     openFile(QString("%1/table.lm").arg(p_rDir));
 
-    Backend::instance()->restoreLash(QString("%1/connexions.xml").arg(p_rDir));
+    Backend::instance()->restoreConnexions(QString("%1/connexions.xml").arg(p_rDir));
 //    _lashclient->setJackName( "LiveMix" );
-//    qDebug() << "MainWindow::restoreLash() finished";
+//    qDebug() << "MainWindow::restoreConnexions() finished";
 }
 
 void MainWindow::init()
