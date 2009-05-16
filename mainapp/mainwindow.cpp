@@ -519,7 +519,7 @@ void MainWindow::timerEvent(QTimerEvent*)
 {
     QDir(QDir::homePath()).mkdir(".livemix");
     saveFile(QDir::homePath().append("/.livemix/table.lm"));
-    saveLash(QDir::homePath().append("/.livemix"));
+    saveConnexions(QDir::homePath().append("/.livemix"));
 }
 void MainWindow::saveFile()
 {

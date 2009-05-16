@@ -58,7 +58,7 @@ public slots:
     void saveFile();
     void saveFile(QString p_rPath);
 
-    void restoreLash(QString p_rDir);
+    void restoreConnexions(QString p_rDir);
 
 private slots:
     void closeEvent(QCloseEvent*);
@@ -97,7 +97,7 @@ private slots:
     void openDefaultMenu();
     void openEmpty();
 
-    void saveLash(QString p_rDir);
+    void saveConnexions(QString p_rDir);
 
 private:
     void toEmpty();
