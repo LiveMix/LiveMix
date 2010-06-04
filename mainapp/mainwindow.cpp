@@ -194,24 +194,24 @@ void MainWindow::init()
 
     _mixerwidget = new Widget(this);
 
-    QMenu* preferances = _editmenu->addMenu(trUtf8("Pre&ferances"));
+    QMenu* preferences = _editmenu->addMenu(trUtf8("Pre&ferences"));
 //    m_pShowGain = new QAction(trUtf8("Show/hide &gain"), this );
 //    connect(m_pShowGain, SIGNAL(triggered()), _mixerwidget, SLOT(showGain()));
-//    preferances->addAction(m_pShowGain);
+//    preferences->addAction(m_pShowGain);
 
     QAction *showAll = new QAction(trUtf8("&Show all part"), this);
     connect(showAll, SIGNAL(triggered()), _mixerwidget, SLOT(showAll()));
-    preferances->addAction(showAll);
+    preferences->addAction(showAll);
     QAction *hideAll = new QAction(trUtf8("&Hide all part"), this);
     connect(hideAll, SIGNAL(triggered()), _mixerwidget, SLOT(hideAll()));
-    preferances->addAction(hideAll);
+    preferences->addAction(hideAll);
 
     m_pFaderHeight = new QAction(trUtf8("Set &fader height..."), this);
     connect(m_pFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(faderHeight()));
-    preferances->addAction(m_pFaderHeight);
+    preferences->addAction(m_pFaderHeight);
     m_pEffectFaderHeight = new QAction(trUtf8("Set &effect fader height..."), this);
     connect(m_pEffectFaderHeight, SIGNAL(triggered()), _mixerwidget, SLOT(effectFaderHeight()));
-    preferances->addAction(m_pEffectFaderHeight);
+    preferences->addAction(m_pEffectFaderHeight);
 
     _helpmenu = menuBar()->addMenu(trUtf8("&Help"));
     _helpmenu->addAction(trUtf8("About &LiveMix"), this, SLOT(about()));
