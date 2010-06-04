@@ -27,6 +27,6 @@ INCLUDEPATH += . objs /usr/include/lash-1.0
 QT += svg
 QT += xml
 
-QMAKE_CXXFLAGS_RELEASE += -g -O3
-QMAKE_CXXFLAGS_DEBUG += -Werror -O3
+QMAKE_CXXFLAGS_RELEASE += -g -O2
+QMAKE_CXXFLAGS_DEBUG += -Werror -O2
 

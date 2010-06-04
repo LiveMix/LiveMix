@@ -133,13 +133,23 @@ bool Backend::addOutput(jack_port_t** l, jack_port_t** r, QString name, QString 
         if (stereo) {
             *l = jack_port_register(client, (prefix + "_" + name + "_l").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
             *r = jack_port_register(client, (prefix + "_" + name + "_r").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+            if (*l == NULL) {
+				qFatal("unable to create output channel: %s", (prefix + "_" + name + "_l").toStdString().c_str());
+			}
+            if (*r == NULL) {
+				qFatal("unable to create output channel: %s", (prefix + "_" + name + "_r").toStdString().c_str());
+			}
+            
         } else {
             *l = jack_port_register(client, (prefix + "_" + name + "_m").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+            if (*l == NULL) {
+				qFatal("unable to create output channel: %s", (prefix + "_" + name + "_m").toStdString().c_str());
+			}
             *r = NULL;
         }
-        return true;
     }
-    return false;
+//    qWarning() << "add output " << prefix << name;
+    return true;
 }
 bool Backend::addInput(jack_port_t** l, jack_port_t** r, QString name, QString prefix, bool stereo)
 {
@@ -147,13 +157,21 @@ bool Backend::addInput(jack_port_t** l, jack_port_t** r, QString name, QString p
         if (stereo) {
             *l = jack_port_register(client, (prefix + "_" + name + "_l").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
             *r = jack_port_register(client, (prefix + "_" + name + "_r").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+            if (*l == NULL) {
+				qFatal("unable to create input channel: %s", (prefix + "_" + name + "_l").toStdString().c_str());
+			}
+            if (*r == NULL) {
+				qFatal("unable to create input channel: %s", (prefix + "_" + name + "_r").toStdString().c_str());
+			}
         } else {
             *l = jack_port_register(client, (prefix + "_" + name + "_m").toStdString().c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
             *r = NULL;
+            if (*l == NULL) {
+				qFatal("unable to create input channel: %s", (prefix + "_" + name + "_m").toStdString().c_str());
+			}
         }
-        return true;
     }
-    return false;
+    return true;
 }
 
 bool Backend::removeOutput(jack_port_t* l, jack_port_t* r, QString /*name*/, QString /*prefix*/, bool stereo)
@@ -283,6 +301,9 @@ int process(jack_nframes_t nframes, void* arg)
                     for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_l[ n ] = 0;
                     for (jack_nframes_t n=0; n<nframes; n++) elem->out_s_r[ n ] = 0;
                 }
+                else {
+						qFatal("elem null");
+				}
             }
 
             // init listner
@@ -1297,38 +1318,68 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
 {
     switch (p_eType) {
     case IN:
-        return ins[p_rName];
+    {
+		in* ch = ins[p_rName];
+		if (ch == NULL) {
+			qFatal("In channel not found: %s", p_rName.toStdString().c_str());
+		}
+        return ch;
+	}
     case OUT:
-        return outs[p_rName];
+    {
+		out* ch = outs[p_rName];
+		if (ch == NULL) {
+			qFatal("Out channel not found: %s", p_rName.toStdString().c_str());
+		}
+        return ch;
+	}
     case PRE:
-        return pres[p_rName];
+    {
+		pre* ch = pres[p_rName];
+		if (ch == NULL) {
+			qFatal("Pre channel not found: %s", p_rName.toStdString().c_str());
+		}
+        return ch;
+	}
     case POST:
-        return posts[p_rName];
+    {
+		post* ch = posts[p_rName];
+		if (ch == NULL) {
+			qFatal("Post channel not found: %s", p_rName.toStdString().c_str());
+		}
+        return ch;
+	}
     case SUB:
-        return subs[p_rName];
+    {
+		sub* ch = subs[p_rName];
+		if (ch == NULL) {
+			qFatal("Sub channel not found: %s", p_rName.toStdString().c_str());
+		}
+        return ch;
+	}
     default:
         return NULL;
     }
 }
 const in* Backend::getInput(QString name)
 {
-    return ins[ name ];
+    return (const in*)getChannel(IN, name);
 }
 const out* Backend::getOutput(QString name)
 {
-    return outs[ name ];
+    return (const out*)getChannel(OUT, name);
 }
 const pre* Backend::getPre(QString name)
 {
-    return pres[ name ];
+    return (const pre*)getChannel(PRE, name);
 }
 const post* Backend::getPost(QString name)
 {
-    return posts[ name ];
+    return (const post*)getChannel(POST, name);
 }
 const sub* Backend::getSub(QString name)
 {
-    return subs[ name ];
+    return (const sub*)getChannel(SUB, name);
 }
 
 bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect, bool p_bLeft)

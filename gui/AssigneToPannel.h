@@ -21,10 +21,10 @@
 #ifndef ASSIGNETOPANNEL_H_
 #define ASSIGNETOPANNEL_H_
 
-#import "GetKeyField.h"
+#include "GetKeyField.h"
 
-#import <QDialog>
-#import <QLabel>
+#include <QDialog>
+#include <QLabel>
 
 namespace LiveMix
 {

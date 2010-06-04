@@ -23,7 +23,7 @@
 #include "mixingmatrix.h"
 #include "channelselector.h"
 #include "graphicalguiserver.h"
-#include "qlash.h"
+//#include "qlash.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -101,10 +101,10 @@ void MainWindow::restoreConnexions(QString p_rDir)
 
 void MainWindow::init()
 {
-    m_lash = new qLashClient("Livemix", 0, NULL, this);
-    connect(m_lash, SIGNAL(quitApp()), this, SLOT(close()));
-    connect(m_lash, SIGNAL(saveToDir(QString)), this, SLOT(saveLash(QString)));
-    connect(m_lash, SIGNAL(restoreFromDir(QString)), this, SLOT(restoreLash(QString)));
+//    m_lash = new qLashClient("Livemix", 0, NULL, this);
+//    connect(m_lash, SIGNAL(quitApp()), this, SLOT(close()));
+//    connect(m_lash, SIGNAL(saveToDir(QString)), this, SLOT(saveLash(QString)));
+//    connect(m_lash, SIGNAL(restoreFromDir(QString)), this, SLOT(restoreLash(QString)));
 
     layout()->setSizeConstraint(QLayout::SetMinimumSize);
 
@@ -520,6 +520,14 @@ void MainWindow::timerEvent(QTimerEvent*)
     QDir(QDir::homePath()).mkdir(".livemix");
     saveFile(QDir::homePath().append("/.livemix/table.lm"));
     saveConnexions(QDir::homePath().append("/.livemix"));
+}
+void MainWindow::saveLash(QString p_rPath) {
+    saveFile(p_rPath.append("/.livemix/table.lm"));
+    saveConnexions(p_rPath.append("/.livemix"));
+}
+void MainWindow::restoreLash(QString p_rPath){
+    openFile(p_rPath.append("/.livemix/table.lm"));
+    restoreConnexions(p_rPath.append("/.livemix"));
 }
 void MainWindow::saveFile()
 {

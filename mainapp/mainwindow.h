@@ -23,7 +23,7 @@
 
 #include "ladspa_fx.h"
 #include "backend.h"
-#include "qlash.h"
+//#include "qlash.h"
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QDockWidget>
@@ -57,6 +57,9 @@ public slots:
     void openFile(QString path);
     void saveFile();
     void saveFile(QString p_rPath);
+
+    void saveLash(QString p_rPath);
+    void restoreLash(QString p_rPath);
 
     void restoreConnexions(QString p_rDir);
 
@@ -137,7 +140,7 @@ private:
     QAction *_debugPrint;
     bool _initScheduled;
     void timerEvent(QTimerEvent*);
-    qLashClient *m_lash;
+//    qLashClient *m_lash;
 };
 
 }
