@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while [ true ]; do
+
+    ./livemix $*
+    
+    if [ $? -eq 0 ]; then
+        exit
+    fi
+    
+    echo "Resstart livemix at `date`"
+    
+done

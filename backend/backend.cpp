@@ -30,6 +30,19 @@
 #include <sys/time.h>
 //#include <jack/midiport.h>
 
+/*
+#include <string>
+#include <ext/hash_map>
+
+hash_map<string, MyType> my_map;
+
+for( hash_map<string, MyType>::iterator i = 
+         my_map.begin();
+     i != my_map.end(), ++i ) {
+
+     i->second.do_something();
+}
+*/
 
 namespace LiveMix
 {
@@ -57,7 +70,7 @@ Backend::Backend(GuiServer_Interface* g) :  gui(g)
         qWarning() << "\n No jack-connection! :(\n\n";
         gui->message(QObject::trUtf8("No Jack-connection :-("),
                      QObject::trUtf8("<qt><p>Sorry, I couldn't connect to Jack. This probably means that <b>no jackd is running</b>. Please start it (for example by using QJackCtl) and try LiveMix again.</p></qt>"));
-        exit(-1);
+        exit(0);
     }
     if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) >= 0) {
         m_iClient = snd_seq_set_client_name(seq, "LiveMix");
