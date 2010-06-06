@@ -450,36 +450,46 @@ void Widget::doSelect(ChannelType type, QString channel, bool p_bForce)
     switch (m_eSelectType) {
     case IN: {
         if (!p_bForce) showMessage(trUtf8("Input \"%1\" selected.").arg(Backend::instance()->getInput(m_sSelectChannel)->display_name));
-        foreach(effect* elem, *(Backend::instance()->getInEffects(m_sSelectChannel))) {
-            displayFX(elem, m_eSelectType, m_sSelectChannel);
+        list<effect*>* effects = Backend::instance()->getInEffects(m_sSelectChannel);
+        for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+            effect* effect = *i;
+            displayFX(effect, m_eSelectType, m_sSelectChannel);
         }
         break;
     }
     case OUT: {
         if (!p_bForce) showMessage(trUtf8("Output selected."));
-        foreach(effect* elem, *(Backend::instance()->getOutEffects(m_sSelectChannel))) {
-            displayFX(elem, m_eSelectType, m_sSelectChannel);
+        list<effect*>* effects = Backend::instance()->getOutEffects(m_sSelectChannel);
+        for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+            effect* effect = *i;
+            displayFX(effect, m_eSelectType, m_sSelectChannel);
         }
         break;
     }
     case PRE: {
         if (!p_bForce) showMessage(trUtf8("Pre fader aux \"%1\" selected.").arg(Backend::instance()->getPre(m_sSelectChannel)->display_name));
-        foreach(effect* elem, *(Backend::instance()->getPreEffects(m_sSelectChannel))) {
-            displayFX(elem, m_eSelectType, m_sSelectChannel);
+        list<effect*>* effects = Backend::instance()->getPreEffects(m_sSelectChannel);
+        for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+            effect* effect = *i;
+            displayFX(effect, m_eSelectType, m_sSelectChannel);
         }
         break;
     }
     case POST: {
         if (!p_bForce) showMessage(trUtf8("Post fader aux \"%1\" selected.").arg(Backend::instance()->getPost(m_sSelectChannel)->display_name));
-        foreach(effect* elem, *(Backend::instance()->getPostEffects(m_sSelectChannel))) {
-            displayFX(elem, m_eSelectType, m_sSelectChannel);
+        list<effect*>* effects = Backend::instance()->getPostEffects(m_sSelectChannel);
+        for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+            effect* effect = *i;
+            displayFX(effect, m_eSelectType, m_sSelectChannel);
         }
         break;
     }
     case SUB: {
         if (!p_bForce) showMessage(trUtf8("Sub-groupe \"%1\" selected.").arg(Backend::instance()->getSub(m_sSelectChannel)->display_name));
-        foreach(effect* elem, *(Backend::instance()->getSubEffects(m_sSelectChannel))) {
-            displayFX(elem, m_eSelectType, m_sSelectChannel);
+        list<effect*>* effects = Backend::instance()->getSubEffects(m_sSelectChannel);
+        for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+            effect* effect = *i;
+            displayFX(effect, m_eSelectType, m_sSelectChannel);
         }
         break;
     }
@@ -1666,39 +1676,66 @@ void Widget::setEffectFaderHeight(int p_iHeight)
     m_pEffectStart->setFixedHeight(m_iEffectFaderHeight + 64);
     effect_layout->parentWidget()->setFixedHeight(m_iEffectFaderHeight + 82);
 
-    foreach(QString channel, Backend::instance()->inchannels()) {
-        foreach(effect* fx, *Backend::instance()->getInEffects(channel)) {
-            if (fx->gui != NULL) {
-                fx->gui->setFaderHeight(m_iEffectFaderHeight);
+    switch (m_eSelectType) {
+        case IN: {
+            foreach(QString channel, Backend::instance()->inchannels()) {
+                list<effect*>* effects = Backend::instance()->getInEffects(m_sSelectChannel);
+                for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+                    effect* effect = *i;
+                    if (effect->gui != NULL) {
+                        effect->gui->setFaderHeight(m_iEffectFaderHeight);
+                    }
+                }
             }
+            break;
         }
-    }
-    foreach(QString channel, Backend::instance()->prechannels()) {
-        foreach(effect* fx, *Backend::instance()->getPreEffects(channel)) {
-            if (fx->gui != NULL) {
-                fx->gui->setFaderHeight(m_iEffectFaderHeight);
+        case PRE: {
+            foreach(QString channel, Backend::instance()->prechannels()) {
+                list<effect*>* effects = Backend::instance()->getPreEffects(m_sSelectChannel);
+                for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+                    effect* effect = *i;
+                    if (effect->gui != NULL) {
+                        effect->gui->setFaderHeight(m_iEffectFaderHeight);
+                    }
+                }
             }
+            break;
         }
-    }
-    foreach(QString channel, Backend::instance()->postchannels()) {
-        foreach(effect* fx, *Backend::instance()->getPostEffects(channel)) {
-            if (fx->gui != NULL) {
-                fx->gui->setFaderHeight(m_iEffectFaderHeight);
+        case POST: {
+            foreach(QString channel, Backend::instance()->postchannels()) {
+                list<effect*>* effects = Backend::instance()->getPostEffects(m_sSelectChannel);
+                for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+                    effect* effect = *i;
+                    if (effect->gui != NULL) {
+                        effect->gui->setFaderHeight(m_iEffectFaderHeight);
+                    }
+                }
             }
+            break;
         }
-    }
-    foreach(QString channel, Backend::instance()->subchannels()) {
-        foreach(effect* fx, *Backend::instance()->getSubEffects(channel)) {
-            if (fx->gui != NULL) {
-                fx->gui->setFaderHeight(m_iEffectFaderHeight);
+        case SUB: {
+            foreach(QString channel, Backend::instance()->subchannels()) {
+                list<effect*>* effects = Backend::instance()->getSubEffects(m_sSelectChannel);
+                for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+                    effect* effect = *i;
+                    if (effect->gui != NULL) {
+                        effect->gui->setFaderHeight(m_iEffectFaderHeight);
+                    }
+                }
             }
+            break;
         }
-    }
-    foreach(QString channel, Backend::instance()->outchannels()) {
-        foreach(effect* fx, *Backend::instance()->getOutEffects(channel)) {
-            if (fx->gui != NULL) {
-                fx->gui->setFaderHeight(m_iEffectFaderHeight);
+        case OUT: {
+            foreach(QString channel, Backend::instance()->outchannels()) {
+                list<effect*>* effects = Backend::instance()->getOutEffects(channel);
+                for (list<effect*>::iterator i = effects->begin() ; i != effects->end() ; i++) {
+                    effect* effect = *i;
+                    if (effect->gui != NULL) {
+                        effect->gui->setFaderHeight(m_iEffectFaderHeight);
+                    }
+                }
             }
+            break;
         }
     }
     if (diff > 0) {

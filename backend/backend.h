@@ -30,15 +30,20 @@
 #endif
 
 #include <QList>
-#include <QHash>
+//#include <QHash>
 //#include <QDebug>
 #include <QMutex>
+
+#include <string>
+#include <map>
 
 #include <jack/jack.h>
 #include <alsa/asoundlib.h>
 
 class QDomElement;
 class QDomDocument;
+
+using namespace std;
 
 namespace LiveMix
 {
@@ -141,7 +146,7 @@ public:
      * If the actual backend doesn't support adding and removing, thats
      * okay. Just return false..
      */
-//  bool removeOutput( QString );
+    bool removeOutput( QString );
     /**
      * @brief Remove a channel and return true on success.
      *
@@ -226,7 +231,7 @@ public slots:
     void setInSub(QString, QString, bool);
     effect* addInEffect(QString, LadspaFX* fx);
     void removeInEffect(QString, effect*);
-    QList<effect*>* getInEffects(QString);
+    list<effect*>* getInEffects(QString);
 //  void setInEffectMute( QString, int, bool );
 //  void setInEffectAttribute( QString, int, QString, float );
 
@@ -239,7 +244,7 @@ public slots:
     void setOutAfl(QString, bool);
     effect* addOutEffect(QString, LadspaFX* fx);
     void removeOutEffect(QString, effect*);
-    QList<effect*>* getOutEffects(QString);
+    list<effect*>* getOutEffects(QString);
 //  void setOutEffectMute( QString, int, bool );
 //  void setOutEffectAttribute( QString, int, QString, float );
 
@@ -252,7 +257,7 @@ public slots:
     void setPreAfl(QString, bool);
     effect* addPreEffect(QString, LadspaFX* fx);
     void removePreEffect(QString, effect*);
-    QList<effect*>* getPreEffects(QString);
+    list<effect*>* getPreEffects(QString);
 //  void setPreEffectMute( QString, int, bool );
 //  void setPreEffectAttribute( QString, int, QString, float );
 
@@ -269,7 +274,7 @@ public slots:
     void setPostSub(QString, QString, bool);
     effect* addPostEffect(QString, LadspaFX* fx);
     void removePostEffect(QString, effect*);
-    QList<effect*>* getPostEffects(QString);
+    list<effect*>* getPostEffects(QString);
 //  void setPostEffectMute( QString, int, bool );
 //  void setPostEffectAttribute( QString, int, QString, float );
 
@@ -283,7 +288,7 @@ public slots:
     void setSubMain(QString, bool);
     effect* addSubEffect(QString, LadspaFX* fx);
     void removeSubEffect(QString, effect*);
-    QList<effect*>* getSubEffects(QString);
+    list<effect*>* getSubEffects(QString);
 //  void setSubEffectMute( QString, int, bool );
 //  void setSubEffectAttribute( QString, int, QString, float );
 
@@ -309,11 +314,11 @@ private:
 //    jack_port_t *midi_in;
 //    jack_port_t *midi_out;
 
-    QHash<QString, in*> ins;
-    QHash<QString, out*> outs;
-    QHash<QString, pre*> pres;
-    QHash<QString, post*> posts;
-    QHash<QString, sub*> subs;
+    map<string, in*> ins;
+    map<string, out*> outs;
+    map<string, pre*> pres;
+    map<string, post*> posts;
+    map<string, sub*> subs;
 
     QStringList ins_order;
     QStringList outs_order;
@@ -331,7 +336,7 @@ private:
      * okay. Just return false..
      */
     bool addOutput(QString, bool);
-    bool removeOutput(QString);
+//    bool removeOutput(QString);
 
     void prossesLadspaFX(effect* pFX, float* left_channel, float* right_channel, uint nframes, bool bCalculatePk);
 

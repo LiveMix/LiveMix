@@ -23,7 +23,7 @@
 #include "mixingmatrix.h"
 #include "channelselector.h"
 #include "graphicalguiserver.h"
-//#include "qlash.h"
+#include "qlash.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -101,10 +101,10 @@ void MainWindow::restoreConnexions(QString p_rDir)
 
 void MainWindow::init()
 {
-//    m_lash = new qLashClient("Livemix", 0, NULL, this);
-//    connect(m_lash, SIGNAL(quitApp()), this, SLOT(close()));
-//    connect(m_lash, SIGNAL(saveToDir(QString)), this, SLOT(saveLash(QString)));
-//    connect(m_lash, SIGNAL(restoreFromDir(QString)), this, SLOT(restoreLash(QString)));
+    m_lash = new qLashClient("Livemix", 0, NULL, this);
+    connect(m_lash, SIGNAL(quitApp()), this, SLOT(close()));
+    connect(m_lash, SIGNAL(saveToDir(QString)), this, SLOT(saveLash(QString)));
+    connect(m_lash, SIGNAL(restoreFromDir(QString)), this, SLOT(restoreLash(QString)));
 
     layout()->setSizeConstraint(QLayout::SetMinimumSize);
 
@@ -281,19 +281,19 @@ void MainWindow::openDefaultMenu()
 void MainWindow::toEmpty()
 {
     while (Backend::instance()->inchannels().size() > 0) {
-        removeInput(Backend::instance()->inchannels()[ 0 ]);
+        removeInput(Backend::instance()->inchannels()[0]);
     }
     while (Backend::instance()->prechannels().size() > 0) {
-        removePre(Backend::instance()->prechannels()[ 0 ]);
+        removePre(Backend::instance()->prechannels()[0]);
     }
     while (Backend::instance()->postchannels().size() > 0) {
-        removePost(Backend::instance()->postchannels()[ 0 ]);
+        removePost(Backend::instance()->postchannels()[0]);
     }
     while (Backend::instance()->subchannels().size() > 0) {
-        removeSub(Backend::instance()->subchannels()[ 0 ]);
+        removeSub(Backend::instance()->subchannels()[0]);
     }
     while (Backend::instance()->getOutEffects(MAIN)->size() > 0) {
-        effect *fx = (*Backend::instance()->getOutEffects(MAIN))[0];
+        effect *fx = *Backend::instance()->getOutEffects(MAIN)->begin();
         _mixerwidget->removeFX(fx->gui, fx, OUT, MAIN);
     }
 
@@ -619,19 +619,21 @@ void MainWindow::saveFile(QString p_rPath)
         xml += saveMidiBinding(IN, name);
 
         foreach(QString pre, Backend::instance()->prechannels()) {
-            xml += QString("    <pre name=\"%1\" volume=\"%2\" />").arg(pre).arg(elem->pre[ pre ]);
+			map<QString, float> map = elem->pre;
+            xml += QString("    <pre name=\"%1\" volume=\"%2\" />").arg(pre).arg(map[pre]);
         }
         foreach(QString post, Backend::instance()->postchannels()) {
-            xml += QString("    <post name=\"%1\" volume=\"%2\" />").arg(post).arg(elem->post[ post ]);
+			map<QString, float> map = elem->post;
+            xml += QString("    <post name=\"%1\" volume=\"%2\" />").arg(post).arg(map[post]);
         }
         foreach(QString sub, Backend::instance()->subchannels()) {
-            xml += QString("    <sub name=\"%1\" mute=\"%2\" />").arg(sub).arg(fromBool(elem->sub[ sub ]));
+			map<QString, bool> map = elem->sub;
+            xml += QString("    <sub name=\"%1\" mute=\"%2\" />").arg(sub).arg(fromBool(map[sub]));
         }
 
-        for (QList<effect *>::const_iterator effect = elem->effects.begin();
-                effect != elem->effects.end();
-                ++effect) {
-            saveEffect(xml, *effect);
+		for (list<effect*>::const_iterator i = elem->effects.begin() ; i != elem->effects.end() ; i++) {
+			effect* effect = *i;
+            saveEffect(xml, effect);
         }
         xml += "  </in>";
     }
@@ -691,9 +693,7 @@ void MainWindow::saveFile(QString p_rPath)
         xml += saveMidiBinding(OUT, PFL);
         xml += QString("   </pfl>");
 
-        for (QList<effect *>::const_iterator effect = elem->effects.begin();
-                effect != elem->effects.end();
-                ++effect) {
+        for (list<effect*>::const_iterator effect = elem->effects.begin() ; effect != elem->effects.end() ; ++effect) {
             saveEffect(xml, *effect);
         }
         xml += "  </out>";
@@ -707,9 +707,7 @@ void MainWindow::saveFile(QString p_rPath)
         xml += saveActionBinding(PRE, name);
         xml += saveMidiBinding(PRE, name);
 
-        for (QList<effect *>::const_iterator effect = elem->effects.begin();
-                effect != elem->effects.end();
-                ++effect) {
+        for (list<effect*>::const_iterator effect = elem->effects.begin() ; effect != elem->effects.end() ; ++effect) {
             saveEffect(xml, *effect);
         }
         xml += "  </pre>";
@@ -728,9 +726,7 @@ void MainWindow::saveFile(QString p_rPath)
             xml += QString("    <sub name=\"%1\" mute=\"%2\" />").arg(sub).arg(fromBool(elem->sub[ sub ]));
         }
 
-        for (QList<effect *>::const_iterator effect = elem->effects.begin();
-                effect != elem->effects.end();
-                ++effect) {
+        for (list<effect*>::const_iterator effect = elem->effects.begin() ; effect != elem->effects.end() ; ++effect) {
             saveEffect(xml, *effect);
         }
         xml += "  </post>";
@@ -744,9 +740,7 @@ void MainWindow::saveFile(QString p_rPath)
         xml += saveActionBinding(SUB, name);
         xml += saveMidiBinding(SUB, name);
 
-        for (QList<effect *>::const_iterator effect = elem->effects.begin();
-                effect != elem->effects.end();
-                ++effect) {
+        for (list<effect*>::const_iterator effect = elem->effects.begin() ; effect != elem->effects.end() ; ++effect) {
             saveEffect(xml, *effect);
         }
         xml += "  </sub>";

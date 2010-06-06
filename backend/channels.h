@@ -31,6 +31,11 @@
 
 #include <QMap>
 
+#include <list>
+//#include <ext/hash_map>
+
+using namespace std;
+//using namespace __gnu_cxx;
 
 namespace LiveMix
 {
@@ -71,7 +76,7 @@ public:
     QString display_name;
     bool mute;
     bool stereo;
-    QList<effect*> effects;
+    list<effect*> effects;
     QMap<QString, effect*> effectsMap;
 // wrorking data:
     jack_default_audio_sample_t peak_l;
@@ -96,9 +101,9 @@ public:
     float bal;
     bool pfl;
     bool main;
-    QMap<QString, float> pre;
-    QMap<QString, float> post;
-    QMap<QString, bool> sub;
+    map<QString, float> pre;
+    map<QString, float> post;
+    map<QString, bool> sub;
 // wrorking data:
     jack_port_t* in_l;
     jack_port_t* in_r;
@@ -195,7 +200,7 @@ public:
     float bal;
     bool afl;
     bool main;
-    QList<effect*> effects;
+//    std::list<effect*> effects;
 // wrorking data:
     jack_port_t* out_l;
     jack_port_t* out_r;

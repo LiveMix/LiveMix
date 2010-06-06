@@ -30,19 +30,6 @@
 #include <sys/time.h>
 //#include <jack/midiport.h>
 
-/*
-#include <string>
-#include <ext/hash_map>
-
-hash_map<string, MyType> my_map;
-
-for( hash_map<string, MyType>::iterator i = 
-         my_map.begin();
-     i != my_map.end(), ++i ) {
-
-     i->second.do_something();
-}
-*/
 
 namespace LiveMix
 {
@@ -212,45 +199,46 @@ jack_default_audio_sample_t Backend::getInPeak(QString ch, bool left)
 {
     //qDebug() << "Backend::getInPeak(QString " << ch << " )";
     if (left) {
-        return ins[ch]->peak_l;
+        return ins[ch.toStdString()]->peak_l;
     } else {
-        return ins[ch]->peak_r;
+        return ins[ch.toStdString()]->peak_r;
     }
 }
 jack_default_audio_sample_t Backend::getOutPeak(QString ch, bool left)
 {
     //qDebug() << "Backend::getOutPeak(QString " << ch << " )";
     if (left) {
-        return outs[ch]->peak_l;
+        return outs[ch.toStdString()]->peak_l;
     } else {
-        return outs[ch]->peak_r;
+        return outs[ch.toStdString()]->peak_r;
     }
 }
 jack_default_audio_sample_t Backend::getPrePeak(QString ch, bool left)
 {
     //qDebug() << "Backend::getInPeak(QString " << ch << " )";
     if (left) {
-        return pres[ch]->peak_l;
+        return pres[ch.toStdString()]->peak_l;
     } else {
-        return pres[ch]->peak_r;
+        return pres[ch.toStdString()]->peak_r;
     }
 }
 jack_default_audio_sample_t Backend::getPostPeak(QString ch, bool left)
 {
     //qDebug() << "Backend::getInPeak(QString " << ch << " )";
     if (left) {
-        return posts[ch]->peak_l;
+        return posts[ch.toStdString()]->peak_l;
     } else {
-        return posts[ch]->peak_r;
+        return posts[ch.toStdString()]->peak_r;
     }
 }
 jack_default_audio_sample_t Backend::getSubPeak(QString ch, bool left)
 {
     //qDebug() << "Backend::getInPeak(QString " << ch << " )";
     if (left) {
-        return subs[ch]->peak_l;
+        return subs[ch.toStdString()]->peak_l;
+//        return subs[ch.toStdString()]->peak_l;
     } else {
-        return subs[ch]->peak_r;
+        return subs[ch.toStdString()]->peak_r;
     }
 }
 
@@ -302,7 +290,8 @@ int process(jack_nframes_t nframes, void* arg)
                             qDebug()<<ev.time<<ev.size<<ev.buffer;
                         }*/
 
-            foreach(out* elem, backend->outs) {
+			for (map<string, out*>::iterator i = backend->outs.begin() ; i != backend->outs.end() ; i++) {
+				out* elem = i->second;
                 if (elem != NULL) { // ???
                     if (elem->stereo) {
                         elem->out_s_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
@@ -336,7 +325,8 @@ int process(jack_nframes_t nframes, void* arg)
 
             //  JackMix::ports_it it;
             //qDebug() << "Calculate pre and post in levels.";
-            foreach(in* elem, backend->ins) {
+			for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
+				in* elem = i->second;
                 if (calculate_pk) {
                     elem->peak_l = elem->calculate_peak_l;
                     elem->peak_r = elem->calculate_peak_r;
@@ -360,7 +350,8 @@ int process(jack_nframes_t nframes, void* arg)
                         }
                     }
                     /// Effect.
-                    foreach(effect* effect, elem->effects) {
+ 					for (list<effect*>::iterator i = elem->effects.begin() ; i != elem->effects.end() ; i++) {
+						effect* effect = *i;
                         backend->prossesLadspaFX(effect, elem->pre_l, elem->pre_r, nframes, calculate_pk);
                     }
                     float bal_l = 1-elem->bal;
@@ -416,7 +407,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
 
             //qDebug() << "Blank outports...";
-            foreach(pre* elem, backend->pres) {
+			for (map<string, pre*>::iterator i = backend->pres.begin() ; i != backend->pres.end() ; i++) {
+				pre* elem = i->second;
                 elem->pre_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
                 if (elem->stereo) {
                     elem->pre_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
@@ -430,7 +422,8 @@ int process(jack_nframes_t nframes, void* arg)
                 }
             }
 
-            foreach(post* elem, backend->posts) {
+			for (map<string, post*>::iterator i = backend->posts.begin() ; i != backend->posts.end() ; i++) {
+				post* elem = i->second;
                 if (elem->external) {
                     elem->post_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
                     elem->post_r = elem->stereo ? (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes) : elem->post_l;
@@ -446,7 +439,8 @@ int process(jack_nframes_t nframes, void* arg)
                 }
             }
 
-            foreach(sub* elem, backend->subs) {
+			for (map<string, sub*>::iterator i = backend->subs.begin() ; i != backend->subs.end() ; i++) {
+				sub* elem = i->second;
                 if (elem->stereo) {
                     elem->sub_l = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_l, nframes);
                     elem->sub_r = (jack_default_audio_sample_t*)jack_port_get_buffer(elem->out_r, nframes);
@@ -460,7 +454,8 @@ int process(jack_nframes_t nframes, void* arg)
 
             //qDebug() << "The actual pre.";
             //qDebug() << "Adjust prelevels.";
-            foreach(pre* pre_elem, backend->pres) {
+			for (map<string, pre*>::iterator i = backend->pres.begin() ; i != backend->pres.end() ; i++) {
+				pre* pre_elem = i->second;
                 if (calculate_pk) {
                     pre_elem->peak_l = pre_elem->calculate_peak_l;
                     pre_elem->peak_r = pre_elem->calculate_peak_r;
@@ -469,14 +464,16 @@ int process(jack_nframes_t nframes, void* arg)
                 }
                 if (!pre_elem->mute) {
                     /// Effect.
-                    foreach(effect* effect, pre_elem->effects) {
+					for (list<effect*>::iterator i = pre_elem->effects.begin() ; i != pre_elem->effects.end() ; i++) {
+						effect* effect = *i;
                         backend->prossesLadspaFX(effect, pre_elem->pre_l, pre_elem->pre_r, nframes, calculate_pk);
                     }
 
                     float vol_l = pre_elem->volume * (1-pre_elem->bal);
                     float vol_r = pre_elem->volume * (1+pre_elem->bal);
-                    foreach(in* in_elem, backend->ins) {
-                        float volume = in_elem->pre[ pre_elem->name ];
+					for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
+						in* in_elem = i->second;
+                        float volume = in_elem->pre[pre_elem->name];
                         float vl = volume * vol_l;
                         float vr = volume * vol_r;
                         for (jack_nframes_t n=0; n<nframes; n++) {
@@ -496,7 +493,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
 
             //qDebug() << "The actual post.";
-            foreach(post* post_elem, backend->posts) {
+			for (map<string, post*>::iterator i = backend->posts.begin() ; i != backend->posts.end() ; i++) {
+				post* post_elem = i->second;
                 if (calculate_pk) {
                     post_elem->peak_l = post_elem->calculate_peak_l;
                     post_elem->peak_r = post_elem->calculate_peak_r;
@@ -510,7 +508,9 @@ int process(jack_nframes_t nframes, void* arg)
                     float vol_l = post_elem->prevolume;
                     float vol_r = post_elem->prevolume;
 
-                    foreach(in* in_elem, backend->ins) {
+					for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
+						in* in_elem = i->second;
+						
                         jack_default_audio_sample_t* inl = in_elem->post_l;
                         jack_default_audio_sample_t* inr = in_elem->post_r;
                         float volume = in_elem->post[ post_elem->name ];
@@ -534,7 +534,8 @@ int process(jack_nframes_t nframes, void* arg)
                     }
 
                     /// Effect.
-                    foreach(effect* effect, post_elem->effects) {
+					for (list<effect*>::iterator i = post_elem->effects.begin() ; i != post_elem->effects.end() ; i++) {
+						effect* effect = *i;
                         backend->prossesLadspaFX(effect, outl, outr, nframes, calculate_pk);
                     }
 
@@ -578,7 +579,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
             //qDebug() << "The actual sub.";
             //qDebug() << "in";
-            foreach(sub* sub_elem, backend->subs) {
+			for (map<string, sub*>::iterator i = backend->subs.begin() ; i != backend->subs.end() ; i++) {
+				sub* sub_elem = i->second;
                 if (calculate_pk) {
                     sub_elem->peak_l = sub_elem->calculate_peak_l;
                     sub_elem->peak_r = sub_elem->calculate_peak_r;
@@ -593,7 +595,8 @@ int process(jack_nframes_t nframes, void* arg)
                     jack_default_audio_sample_t* outl = sub_elem->sub_l;
                     jack_default_audio_sample_t* outr = sub_elem->sub_r;
 
-                    foreach(in* in_elem, backend->ins) {
+					for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
+						in* in_elem = i->second;
                         jack_default_audio_sample_t* inl = in_elem->post_l;
                         jack_default_audio_sample_t* inr = in_elem->post_r;
                         bool on = in_elem->sub[ sub_elem->name ];
@@ -605,7 +608,8 @@ int process(jack_nframes_t nframes, void* arg)
                         }
                     }
                     //qDebug() << "post return";
-                    foreach(post* post_elem, backend->posts) {
+					for (map<string, post*>::iterator i = backend->posts.begin() ; i != backend->posts.end() ; i++) {
+						post* post_elem = i->second;
                         jack_default_audio_sample_t* inl = post_elem->return_l;
                         jack_default_audio_sample_t* inr = post_elem->return_r;
                         bool on = post_elem->sub[ sub_elem->name ];
@@ -618,7 +622,8 @@ int process(jack_nframes_t nframes, void* arg)
                     }
 
                     //qDebug() << "Effect.";
-                    foreach(effect* effect, sub_elem->effects) {
+					for (list<effect*>::iterator i = sub_elem->effects.begin() ; i != sub_elem->effects.end() ; i++) {
+						effect* effect = *i;
                         backend->prossesLadspaFX(effect, outl, outr, nframes, calculate_pk);
                     }
                     /// Adjust sublevels.
@@ -657,7 +662,8 @@ int process(jack_nframes_t nframes, void* arg)
                     jack_default_audio_sample_t* main_l = main_elem->out_s_l;
                     jack_default_audio_sample_t* main_r = main_elem->out_s_r;
                     // in
-                    foreach(in* in_elem, backend->ins) {
+					for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
+						in* in_elem = i->second;
                         jack_default_audio_sample_t* inl = in_elem->post_l;
                         jack_default_audio_sample_t* inr = in_elem->post_r;
                         if (in_elem->main) {
@@ -668,7 +674,8 @@ int process(jack_nframes_t nframes, void* arg)
                         }
                     }
                     //qDebug() << "post return";
-                    foreach(post* post_elem, backend->posts) {
+					for (map<string, post*>::iterator i = backend->posts.begin() ; i != backend->posts.end() ; i++) {
+						post* post_elem = i->second;
                         jack_default_audio_sample_t* inl = post_elem->return_l;
                         jack_default_audio_sample_t* inr = post_elem->return_r;
                         if (post_elem->main) {
@@ -679,7 +686,8 @@ int process(jack_nframes_t nframes, void* arg)
                         }
                     }
                     //qDebug() << "sub";
-                    foreach(sub* sub_elem, backend->subs) {
+					for (map<string, sub*>::iterator i = backend->subs.begin() ; i != backend->subs.end() ; i++) {
+						sub* sub_elem = i->second;
                         jack_default_audio_sample_t* inl = sub_elem->sub_l;
                         jack_default_audio_sample_t* inr = sub_elem->sub_r;
                         if (sub_elem->main) {
@@ -700,7 +708,8 @@ int process(jack_nframes_t nframes, void* arg)
                     }
                     //qDebug() << "Effect.";
                     {
-                        foreach(effect* effect, main_elem->effects) {
+						for (list<effect*>::iterator i = main_elem->effects.begin() ; i != main_elem->effects.end() ; i++) {
+							effect* effect = *i;
                             backend->prossesLadspaFX(effect, main_l, main_r, nframes, calculate_pk);
                         }
                     }
@@ -734,7 +743,8 @@ int process(jack_nframes_t nframes, void* arg)
 
             //qDebug() << 25;
             // pre
-            foreach(pre* elem, backend->pres) {
+			for (map<string, pre*>::iterator i = backend->pres.begin() ; i != backend->pres.end() ; i++) {
+				pre* elem = i->second;
                 if (elem->afl) {
                     jack_default_audio_sample_t* inl = elem->pre_l;
                     jack_default_audio_sample_t* inr = elem->pre_r;
@@ -747,7 +757,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
             //qDebug() << 26;
             // post return
-            foreach(post* elem, backend->posts) {
+			for (map<string, post*>::iterator i = backend->posts.begin() ; i != backend->posts.end() ; i++) {
+				post* elem = i->second;
                 //qDebug() << 27;
                 if (elem->m_bAfl) {
                     pflOn = true;
@@ -761,7 +772,8 @@ int process(jack_nframes_t nframes, void* arg)
             }
             //qDebug() << 28;
             // sub
-            foreach(sub* elem, backend->subs) {
+			for (map<string, sub*>::iterator i = backend->subs.begin() ; i != backend->subs.end() ; i++) {
+				sub* elem = i->second;
                 if (elem->afl) {
                     pflOn = true;
                     jack_default_audio_sample_t* inl = elem->sub_l;
@@ -931,46 +943,46 @@ const QList<QString>& Backend::subchannels()
 
 void Backend::setInVolume(QString ch, float volume)
 {
-    ins[ ch ]->volume = volume;
+    ins[ch.toStdString()]->volume = volume;
 }
 void Backend::setInGain(QString ch, float gain)
 {
-    ins[ ch ]->gain = gain;
+    ins[ch.toStdString()]->gain = gain;
 }
 void Backend::setInBal(QString ch, float bal)
 {
-    ins[ ch ]->bal = bal;
+    ins[ch.toStdString()]->bal = bal;
 }
 void Backend::setInMute(QString ch, bool mute)
 {
-    ins[ ch ]->mute = mute;
+    ins[ch.toStdString()]->mute = mute;
 }
 void Backend::setInPfl(QString ch, bool pfl)
 {
-    ins[ ch ]->pfl = pfl;
+    ins[ch.toStdString()]->pfl = pfl;
 }
 void Backend::setInMain(QString ch, bool main)
 {
-    ins[ ch ]->main = main;
+    ins[ch.toStdString()]->main = main;
 }
 void Backend::setInPreVolume(QString ch, QString pre, float volume)
 {
-    ins[ ch ]->pre[ pre ] = volume;
+    ins[ch.toStdString()]->pre[ pre ] = volume;
 }
 void Backend::setInPostVolume(QString ch, QString post, float volume)
 {
-    ins[ ch ]->post[ post ] = volume;
+    ins[ch.toStdString()]->post[ post ] = volume;
 }
 void Backend::setInSub(QString ch, QString sub, bool on)
 {
-    ins[ ch ]->sub[ sub ] = on;
+    ins[ch.toStdString()]->sub[ sub ] = on;
 }
 effect* Backend::addInEffect(QString ch, LadspaFX* fx)
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    ins[ ch ]->effects << e;
+    ins[ch.toStdString()]->effects.push_back(e);
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     return e;
@@ -979,41 +991,41 @@ void Backend::removeInEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    if (ins[ch] != NULL) {
-        ins[ch]->effects.removeAll(eff);
+    if (ins[ch.toStdString()] != NULL) {
+        ins[ch.toStdString()]->effects.remove(eff);
     }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
-QList<effect*>* Backend::getInEffects(QString ch)
+list<effect*>* Backend::getInEffects(QString ch)
 {
-    return &(ins[ ch ]->effects);
+    return &(ins[ch.toStdString()]->effects);
 }
 
 void Backend::setOutVolume(QString ch, float volume)
 {
-    outs[ ch ]->volume = volume;
+    outs[ch.toStdString()]->volume = volume;
 }
 
 void Backend::setOutBal(QString ch, float bal)
 {
-    outs[ ch ]->bal = bal;
+    outs[ch.toStdString()]->bal = bal;
 }
 
 void Backend::setOutMute(QString ch, bool mute)
 {
-    outs[ ch ]->mute = mute;
+    outs[ch.toStdString()]->mute = mute;
 }
 void Backend::setOutAfl(QString ch, bool afl)
 {
-    outs[ ch ]->afl = afl;
+    outs[ch.toStdString()]->afl = afl;
 }
 effect* Backend::addOutEffect(QString ch, LadspaFX* fx)
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    outs[ ch ]->effects << e;
+    outs[ch.toStdString()]->effects.push_back(e);
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     return e;
@@ -1021,38 +1033,38 @@ effect* Backend::addOutEffect(QString ch, LadspaFX* fx)
 void Backend::removeOutEffect(QString ch, effect* eff)
 {
     _lock.lock();
-    if (outs[ch] != NULL) {
-        outs[ch]->effects.removeAll(eff);
+    if (outs[ch.toStdString()] != NULL) {
+        outs[ch.toStdString()]->effects.remove(eff);
     }
     _lock.unlock();
 }
-QList<effect*>* Backend::getOutEffects(QString ch)
+list<effect*>* Backend::getOutEffects(QString ch)
 {
-    return &(outs[ch]->effects);
+    return &(outs[ch.toStdString()]->effects);
 }
 
 void Backend::setPreVolume(QString ch, float volume)
 {
-    pres[ ch ]->volume = volume;
+    pres[ch.toStdString()]->volume = volume;
 }
 void Backend::setPreBal(QString ch, float bal)
 {
-    pres[ ch ]->bal = bal;
+    pres[ch.toStdString()]->bal = bal;
 }
 void Backend::setPreMute(QString ch, bool mute)
 {
-    pres[ ch ]->mute = mute;
+    pres[ch.toStdString()]->mute = mute;
 }
 void Backend::setPreAfl(QString ch, bool afl)
 {
-    pres[ ch ]->afl = afl;
+    pres[ch.toStdString()]->afl = afl;
 }
 effect* Backend::addPreEffect(QString ch, LadspaFX* fx)
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    pres[ ch ]->effects << e;
+    pres[ch.toStdString()]->effects.push_back(e);
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     return e;
@@ -1061,55 +1073,55 @@ void Backend::removePreEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    if (pres[ch] != NULL) {
-        pres[ch]->effects.removeAll(eff);
+    if (pres[ch.toStdString()] != NULL) {
+        pres[ch.toStdString()]->effects.remove(eff);
     }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
-QList<effect*>* Backend::getPreEffects(QString ch)
+list<effect*>* Backend::getPreEffects(QString ch)
 {
-    return &(pres[ ch ]->effects);
+    return &(pres[ch.toStdString()]->effects);
 }
 
 void Backend::setPostPreVolume(QString ch, float volume)
 {
-    posts[ ch ]->prevolume = volume;
+    posts[ch.toStdString()]->prevolume = volume;
 }
 void Backend::setPostPostVolume(QString ch, float volume)
 {
-    posts[ ch ]->postvolume = volume;
+    posts[ch.toStdString()]->postvolume = volume;
 }
 void Backend::setPostBal(QString ch, float bal)
 {
-    posts[ ch ]->bal = bal;
+    posts[ch.toStdString()]->bal = bal;
 }
 void Backend::setPostMute(QString ch, bool mute)
 {
-    posts[ ch ]->mute = mute;
+    posts[ch.toStdString()]->mute = mute;
 }
 void Backend::setPostPfl(QString ch, bool pfl)
 {
-    posts[ ch ]->m_bPfl = pfl;
+    posts[ch.toStdString()]->m_bPfl = pfl;
 }
 void Backend::setPostAfl(QString ch, bool afl)
 {
-    posts[ ch ]->m_bAfl = afl;
+    posts[ch.toStdString()]->m_bAfl = afl;
 }
 void Backend::setPostMain(QString ch, bool main)
 {
-    posts[ ch ]->main = main;
+    posts[ch.toStdString()]->main = main;
 }
 void Backend::setPostSub(QString ch, QString sub, bool on)
 {
-    posts[ ch ]->sub[ sub ] = on;
+    posts[ch.toStdString()]->sub[ sub ] = on;
 }
 effect* Backend::addPostEffect(QString ch, LadspaFX* fx)
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    posts[ ch ]->effects << e;
+    posts[ch.toStdString()]->effects.push_back(e);
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     return e;
@@ -1118,43 +1130,43 @@ void Backend::removePostEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    if (posts[ch] != NULL) {
-        posts[ch]->effects.removeAll(eff);
+    if (posts[ch.toStdString()] != NULL) {
+        posts[ch.toStdString()]->effects.remove(eff);
     }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
-QList<effect*>* Backend::getPostEffects(QString ch)
+list<effect*>* Backend::getPostEffects(QString ch)
 {
-    return &(posts[ ch ]->effects);
+    return &(posts[ch.toStdString()]->effects);
 }
 
 void Backend::setSubVolume(QString ch, float volume)
 {
-    subs[ ch ]->volume = volume;
+    subs[ch.toStdString()]->volume = volume;
 }
 void Backend::setSubBal(QString ch, float bal)
 {
-    subs[ ch ]->bal = bal;
+    subs[ch.toStdString()]->bal = bal;
 }
 void Backend::setSubMute(QString ch, bool mute)
 {
-    subs[ ch ]->mute = mute;
+    subs[ch.toStdString()]->mute = mute;
 }
 void Backend::setSubAfl(QString ch, bool afl)
 {
-    subs[ ch ]->afl = afl;
+    subs[ch.toStdString()]->afl = afl;
 }
 void Backend::setSubMain(QString ch, bool main)
 {
-    subs[ ch ]->main = main;
+    subs[ch.toStdString()]->main = main;
 }
 effect* Backend::addSubEffect(QString ch, LadspaFX* fx)
 {
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    subs[ ch ]->effects << e;
+    subs[ch.toStdString()]->effects.push_back(e);
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     return e;
@@ -1163,15 +1175,15 @@ void Backend::removeSubEffect(QString ch, effect* eff)
 {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
-    if (subs[ch] != NULL) {
-        subs[ch]->effects.removeAll(eff);
+    if (subs[ch.toStdString()] != NULL) {
+        subs[ch.toStdString()]->effects.remove(eff);
     }
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
 }
-QList<effect*>* Backend::getSubEffects(QString ch)
+list<effect*>* Backend::getSubEffects(QString ch)
 {
-    return &(subs[ ch ]->effects);
+    return &(subs[ch.toStdString()]->effects);
 }
 
 bool Backend::addInput(QString name, bool stereo)
@@ -1182,7 +1194,7 @@ bool Backend::addInput(QString name, bool stereo)
     if (result) {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
         _lock.lock();
-        ins[ name ] = new in(name, stereo, ::jack_get_buffer_size(client), *l, *r);
+        ins[name.toStdString()] = new in(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         ins_order << name;
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
         _lock.unlock();
@@ -1197,7 +1209,7 @@ bool Backend::addOutput(QString name, bool stereo)
     if (result) {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
         _lock.lock();
-        outs[ name ] = new out(name, stereo, ::jack_get_buffer_size(client), *l, *r);
+        outs[name.toStdString()] = new out(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         outs_order << name;
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
         _lock.unlock();
@@ -1212,7 +1224,7 @@ bool Backend::addPre(QString name, bool stereo)
     if (result) {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
         _lock.lock();
-        pres[ name ] = new pre(name, stereo, ::jack_get_buffer_size(client), *l, *r);
+        pres[name.toStdString()] = new pre(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         pres_order << name;
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
         _lock.unlock();
@@ -1233,7 +1245,7 @@ bool Backend::addPost(QString name, bool stereo, bool external)
     if (result) {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
         _lock.lock();
-        posts[ name ] = new post(name, stereo, external, ::jack_get_buffer_size(client), *s_l, *s_r, *r_l, *r_r);
+        posts[name.toStdString()] = new post(name, stereo, external, ::jack_get_buffer_size(client), *s_l, *s_r, *r_l, *r_r);
         posts_order << name;
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
         _lock.unlock();
@@ -1248,7 +1260,7 @@ bool Backend::addSub(QString name, bool stereo)
     if (result) {
 //qDebug()<<__FILE__<<__LINE__<<"lock";
         _lock.lock();
-        subs[ name ] = new sub(name, stereo, ::jack_get_buffer_size(client), *l, *r);
+        subs[name.toStdString()] = new sub(name, stereo, ::jack_get_buffer_size(client), *l, *r);
         subs_order << name;
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
         _lock.unlock();
@@ -1261,8 +1273,10 @@ bool Backend::removeInput(QString name)
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
     ins_order.removeAll(name);
-    in* elem = ins[name];
-    ins.remove(name);
+    in* elem = ins[name.toStdString()];
+    ins.find((const string)(name.toStdString()));
+    ins.erase((const string)(name.toStdString()));
+
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     removeInput(elem->in_l, elem->in_r, name, "in", elem->stereo);
@@ -1275,8 +1289,8 @@ bool Backend::removeOutput(QString name)
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
     outs_order.removeAll(name);
-    out* elem = outs[name];
-    outs.remove(name);
+    out* elem = outs[name.toStdString()];
+    outs.erase(name.toStdString());
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     removeOutput(elem->out_l, elem->out_r, name, "out", elem->stereo);
@@ -1289,8 +1303,8 @@ bool Backend::removePre(QString name)
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
     pres_order.removeAll(name);
-    pre* elem = pres[name];
-    pres.remove(name);
+    pre* elem = pres[name.toStdString()];
+    pres.erase(name.toStdString());
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     removeOutput(elem->out_l, elem->out_r, name, "pre", elem->stereo);
@@ -1302,8 +1316,8 @@ bool Backend::removePost(QString name)
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
     posts_order.removeAll(name);
-    post* elem = posts[name];
-    posts.remove(name);
+    post* elem = posts[name.toStdString()];
+    posts.erase(name.toStdString());
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     if (elem->external) {
@@ -1318,8 +1332,8 @@ bool Backend::removeSub(QString name)
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
     subs_order.removeAll(name);
-    sub* elem = subs[name];
-    subs.remove(name);
+    sub* elem = subs[name.toStdString()];
+    subs.erase(name.toStdString());
 //qDebug()<<__FILE__<<__LINE__<<"unlock";
     _lock.unlock();
     removeOutput(elem->out_l, elem->out_r, name, "sub", elem->stereo);
@@ -1332,7 +1346,7 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
     switch (p_eType) {
     case IN:
     {
-		in* ch = ins[p_rName];
+		in* ch = ins[p_rName.toStdString()];
 		if (ch == NULL) {
 			qFatal("In channel not found: %s", p_rName.toStdString().c_str());
 		}
@@ -1340,7 +1354,7 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
 	}
     case OUT:
     {
-		out* ch = outs[p_rName];
+		out* ch = outs[p_rName.toStdString()];
 		if (ch == NULL) {
 			qFatal("Out channel not found: %s", p_rName.toStdString().c_str());
 		}
@@ -1348,7 +1362,7 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
 	}
     case PRE:
     {
-		pre* ch = pres[p_rName];
+		pre* ch = pres[p_rName.toStdString()];
 		if (ch == NULL) {
 			qFatal("Pre channel not found: %s", p_rName.toStdString().c_str());
 		}
@@ -1356,7 +1370,7 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
 	}
     case POST:
     {
-		post* ch = posts[p_rName];
+		post* ch = posts[p_rName.toStdString()];
 		if (ch == NULL) {
 			qFatal("Post channel not found: %s", p_rName.toStdString().c_str());
 		}
@@ -1364,7 +1378,7 @@ channel* Backend::getChannel(ChannelType p_eType, QString p_rName)
 	}
     case SUB:
     {
-		sub* ch = subs[p_rName];
+		sub* ch = subs[p_rName.toStdString()];
 		if (ch == NULL) {
 			qFatal("Sub channel not found: %s", p_rName.toStdString().c_str());
 		}
@@ -1398,12 +1412,25 @@ const sub* Backend::getSub(QString name)
 bool Backend::moveEffect(ChannelType p_eType, QString p_rName, effect* p_pEffect, bool p_bLeft)
 {
     channel *ch = getChannel(p_eType, p_rName);
-    int index = ch->effects.indexOf(p_pEffect);
-    int indexTo = index + (p_bLeft ? -1 : 1);
-    if (indexTo >= 0 && indexTo < ch->effects.size()) {
+    list<effect*>::iterator pos = ch->effects.begin();
+	for ( ; pos != ch->effects.end() ; pos++) {
+		effect* effect = *pos;
+		if (effect == p_pEffect) {
+			break;
+		}
+	}
+    
+    if (p_bLeft ? pos != ch->effects.begin() : pos != ch->effects.end()) {
         qDebug()<<__FILE__<<__LINE__<<1248;
         _lock.lock();
-        ch->effects.move(index, indexTo);
+        ch->effects.erase(pos);
+        if (p_bLeft) {
+			pos--;
+		}
+		else {
+			pos++;
+		}
+        ch->effects.insert(pos,p_pEffect);
         qDebug()<<__FILE__<<__LINE__<<1251;
         _lock.unlock();
         return true;

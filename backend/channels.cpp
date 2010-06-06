@@ -88,9 +88,9 @@ channel::channel(QString p_name, bool p_stereo, jack_nframes_t /*p_nframes*/)
 channel::~channel()
 {
     while (effects.size() != 0) {
-        effect* fx = effects.takeLast();
-        effects.removeAll(fx);
-        delete fx;
+        list<effect*>::iterator fx = effects.end();
+        effects.erase(fx);
+        delete *fx;
     }
 }
 in::in(QString p_name, bool p_stereo, jack_nframes_t p_nframes, jack_port_t* l, jack_port_t* r) : channel(p_name, p_stereo, p_nframes)

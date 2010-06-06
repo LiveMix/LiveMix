@@ -23,7 +23,7 @@
 
 #include "ladspa_fx.h"
 #include "backend.h"
-//#include "qlash.h"
+#include "qlash.h"
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QDockWidget>
@@ -140,7 +140,7 @@ private:
     QAction *_debugPrint;
     bool _initScheduled;
     void timerEvent(QTimerEvent*);
-//    qLashClient *m_lash;
+    qLashClient *m_lash;
 };
 
 }
