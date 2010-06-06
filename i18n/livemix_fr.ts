@@ -81,17 +81,17 @@
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="59"/>
         <source>Key to select the %2 of the channel %1</source>
-        <translation>Raccourci pour sélectionner le %1 du cannal %2</translation>
+        <translation>Raccourci pour sélectionner le %1 du canal %2</translation>
     </message>
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="61"/>
         <source>Key to %2 the channel %1</source>
-        <translation>Raccourci pour %2 le cannal %1</translation>
+        <translation>Raccourci pour %2 le canal %1</translation>
     </message>
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="65"/>
         <source>Key to select the channel %1</source>
-        <translation>Raccourci pour selectionner le cannal %1</translation>
+        <translation>Raccourci pour selectionner le canal %1</translation>
     </message>
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="68"/>
@@ -101,7 +101,7 @@
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="70"/>
         <source>Key to %1 the selected channel</source>
-        <translation>Raccourci pour %1 le cannal selectionné</translation>
+        <translation>Raccourci pour %1 le canal selectionné</translation>
     </message>
     <message>
         <location filename="../gui/AssigneToPannel.cpp" line="82"/>
@@ -313,7 +313,7 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="185"/>
         <source>Add &amp;Mono...</source>
-        <translation>Ajoute un cannal &amp;mono...</translation>
+        <translation>Ajoute un canal &amp;mono...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="149"/>
@@ -331,7 +331,7 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="188"/>
         <source>Add &amp;Stereo...</source>
-        <translation>Ajoute un cannal &amp;stéréo...</translation>
+        <translation>Ajoute un canal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="166"/>
@@ -366,7 +366,7 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="197"/>
         <source>Pre&amp;ferences</source>
-        <translation>Pre&amp;ferences</translation>
+        <translation>Pré&amp;férences</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="216"/>
@@ -617,12 +617,12 @@
         <location filename="../mainapp/mainwindow.cpp" line="133"/>
         <location filename="../mainapp/mainwindow.cpp" line="155"/>
         <source>Add &amp;mono...</source>
-        <translation>Ajoute un cannal &amp;mono...</translation>
+        <translation>Ajoute un canal &amp;mono...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="137"/>
         <source>Add &amp;stereo ...</source>
-        <translation>Ajoute un cannal &amp;stéréo...</translation>
+        <translation>Ajoute un canal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="141"/>
@@ -632,18 +632,18 @@
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="145"/>
         <source>Add multiple stereo ...</source>
-        <translation>Ajout de plusieurs cannaux stéréo...</translation>
+        <translation>Ajout de plusieurs canaux stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="158"/>
         <source>Add &amp;stereo...</source>
-        <translation>Ajoute un cannal &amp;stéréo...</translation>
+        <translation>Ajoute un canal &amp;stéréo...</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="1041"/>
         <location filename="../mainapp/mainwindow.cpp" line="1057"/>
         <source>Channel numbers</source>
-        <translation>Nombre de cannaux</translation>
+        <translation>Nombre de canaux</translation>
     </message>
     <message>
         <location filename="../mainapp/mainwindow.cpp" line="202"/>
@@ -663,9 +663,6 @@
         <source>Return</source>
         <translation>Retour</translation>
     </message>
-</context>
-<context>
-    <name>LiveMix::SubWidget</name>
 </context>
 <context>
     <name>LiveMix::Widget</name>

@@ -1,3 +1,10 @@
+livemix (0.49~rc5-0ubuntu1) lucid; urgency=low
+
+  * Upstream release
+
+ -- Stephane Brunner (Stéphane) <stephane.brunner@gmail.com>  Sun, 06 Jun 2010 18:02:52 +0200
+
+
 livemix (0.49~rc4.1-0ubuntu1) jaunty; urgency=low
 
   * Intermediate release
