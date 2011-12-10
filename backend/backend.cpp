@@ -39,6 +39,7 @@ float m_fMaxProcessTime = 0.0f;   /// max ms usable in process with no xrun
 Backend* m_pInstance;
 
 Backend::Backend(GuiServer_Interface* g) :  gui(g)
+        , count(0)
         , _run(false)
         , seq(0)
 {
