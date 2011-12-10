@@ -328,12 +328,10 @@ int process(jack_nframes_t nframes, void* arg)
             //qDebug() << "Calculate pre and post in levels.";
 			for (map<string, in*>::iterator i = backend->ins.begin() ; i != backend->ins.end() ; i++) {
 				in* elem = i->second;
-                if (calculate_pk) {
-                    elem->peak_l = elem->calculate_peak_l;
-                    elem->peak_r = elem->calculate_peak_r;
-                    elem->calculate_peak_l = 0;
-                    elem->calculate_peak_r = 0;
-                }
+				elem->peak_l = elem->calculate_peak_l;
+				elem->peak_r = elem->calculate_peak_r;
+				elem->calculate_peak_l = 0;
+				elem->calculate_peak_r = 0;
                 if (!elem->mute || elem->pfl) {
                     elem->sample_l = (jack_default_audio_sample_t*) jack_port_get_buffer(elem->in_l, nframes);
                     elem->sample_r = elem->stereo ? (jack_default_audio_sample_t*) jack_port_get_buffer(
@@ -652,13 +650,11 @@ int process(jack_nframes_t nframes, void* arg)
             out* main_elem = backend->outs[MAIN];
 
             {
-                if (calculate_pk) {
-                    main_elem->peak_l = main_elem->calculate_peak_l;
-                    main_elem->peak_r = main_elem->calculate_peak_r;
+                main_elem->peak_l = main_elem->calculate_peak_l;
+                main_elem->peak_r = main_elem->calculate_peak_r;
 
-                    main_elem->calculate_peak_l = 0;
-                    main_elem->calculate_peak_r = 0;
-                }
+                main_elem->calculate_peak_l = 0;
+                main_elem->calculate_peak_r = 0;
                 if (!main_elem->mute) {
                     jack_default_audio_sample_t* main_l = main_elem->out_s_l;
                     jack_default_audio_sample_t* main_r = main_elem->out_s_r;
