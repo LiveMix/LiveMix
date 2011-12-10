@@ -979,6 +979,8 @@ void Backend::setInSub(QString ch, QString sub, bool on)
 }
 effect* Backend::addInEffect(QString ch, LadspaFX* fx)
 {
+    if (fx == NULL)
+        return NULL;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
@@ -1022,6 +1024,8 @@ void Backend::setOutAfl(QString ch, bool afl)
 }
 effect* Backend::addOutEffect(QString ch, LadspaFX* fx)
 {
+	if (fx == NULL)
+		return NULL;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
@@ -1061,6 +1065,8 @@ void Backend::setPreAfl(QString ch, bool afl)
 }
 effect* Backend::addPreEffect(QString ch, LadspaFX* fx)
 {
+    if (fx == NULL)
+        return NULL;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
@@ -1118,6 +1124,8 @@ void Backend::setPostSub(QString ch, QString sub, bool on)
 }
 effect* Backend::addPostEffect(QString ch, LadspaFX* fx)
 {
+	if (fx == NULL)
+		return NULL;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
@@ -1163,6 +1171,8 @@ void Backend::setSubMain(QString ch, bool main)
 }
 effect* Backend::addSubEffect(QString ch, LadspaFX* fx)
 {
+	if (fx == NULL)
+		return NULL;
     effect* e = new effect(fx, ::jack_get_buffer_size(client));
 //qDebug()<<__FILE__<<__LINE__<<"lock";
     _lock.lock();
