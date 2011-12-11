@@ -1763,8 +1763,8 @@ FWidget::FWidget(int p_fFaderHeignt, ChannelType p_eType, QString p_sChannelName
         : m_eType(p_eType)
         , m_sChannelName(p_sChannelName)
 {
-    m_pVolume = new Fader(this, false, false, true, Fader::FADER);
-    m_pMeter = new Fader(this, false, false, true, Fader::PK_VU);
+    m_pVolume = new Fader(this, false, true, Fader::FADER);
+    m_pMeter = new Fader(this, false, true, Fader::PK_VU);
     m_pLabelFader = new FaderName(this);
 
     setFixedSize(CHANNEL_WIDTH, p_fFaderHeignt);

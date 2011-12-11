@@ -36,9 +36,8 @@ namespace LiveMix
 /* less db for VU metre per segonds */
 #define VU_SUBSTRACT 5.0;
 
-Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb, Type p_eType)
+Fader::Fader(QWidget *pParent, bool bUseIntSteps, bool p_bLinDb, Type p_eType)
         : Volume(pParent)
-        , m_bWithoutKnob(bWithoutKnob)
         , m_bUseIntSteps(bUseIntSteps)
         , m_bLinDb(p_bLinDb)
         , m_rLastVuCalculate_L(QDateTime::currentDateTime())
@@ -424,7 +423,7 @@ void Fader::paintEvent(QPaintEvent*)
         }
     }
 
-    if (!m_bWithoutKnob) {
+    if (m_eType != PK_VU) {
         // knob
         static const int knob_height = 29;
         static const int knob_width = 15;

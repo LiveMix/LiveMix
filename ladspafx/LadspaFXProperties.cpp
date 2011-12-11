@@ -237,7 +237,7 @@ void LadspaFXProperties::updateControls()
                 toggleChanged(pToggle);
             } else {
                 // fader
-                Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, false, !pControlPort->m_bLogarithmic, Fader::FADER_PK);
+                Fader *pFader = new Fader(m_pFrame, pControlPort->m_bInteger, !pControlPort->m_bLogarithmic, Fader::FADER_PK);
                 WrappFXFader *pWrappFXFader = new WrappFXFader(pFader);
 
 //                connect(pFader, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
@@ -287,7 +287,7 @@ void LadspaFXProperties::updateControls()
             pName->setToolTip(pControl->m_sName);
 
             // fader
-            Fader *pFader = new Fader(m_pFrame, false, true, true, Fader::PK_VU);   // without knob!
+            Fader *pFader = new Fader(m_pFrame, false, true, Fader::PK_VU);   // without knob!
             pFader->move(xPos + 27, 56);
             pFader->setToolTip(pControl->m_sName);
 

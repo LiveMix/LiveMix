@@ -49,7 +49,7 @@ class Fader : public Volume
 public:
     enum Type {FADER_PK_VU, FADER_PK, FADER, PK_VU};
 
-    Fader(QWidget *pParent, bool bUseIntSteps, bool bWithoutKnob, bool p_bLinDb =true, Type p_eType =FADER_PK_VU);
+    Fader(QWidget *pParent, bool bUseIntSteps, bool p_bLinDb =true, Type p_eType =FADER_PK_VU);
     ~Fader();
     virtual QWidget* getWidget();
 
@@ -119,7 +119,6 @@ private:
     float m_fMousePressValue;
     float m_fMousePressY;
 
-    bool m_bWithoutKnob;
     bool m_bUseIntSteps;
     bool m_bLinDb;
 
