@@ -426,14 +426,14 @@ void Fader::paintEvent(QPaintEvent*)
 
     if (!m_bWithoutKnob) {
         // knob
-        static const uint knob_height = 29;
-        static const uint knob_width = 15;
+        static const int knob_height = 29;
+        static const int knob_width = 15;
 
         float fRange = m_fMaxValue - m_fMinValue;
 
         float realVal = m_fValue - m_fMinValue;
 
-        uint knob_y = (uint)(height() - ((height() - 30) * (realVal / fRange)));
+        int knob_y = (height() - ((height() - 30) * (realVal / fRange)));
 
         painter.drawPixmap(QRect((width() - knob_width) / 2, knob_y - knob_height, knob_width, knob_height), m_knob, QRect(0, 0, knob_width, knob_height));
     }
