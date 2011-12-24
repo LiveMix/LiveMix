@@ -70,7 +70,8 @@ if test "x$QTDIR" = "x"; then
 			/usr \
 			; do
 		if test "x$ac_qtlib" = "x"; then
-			if test -f $X/lib/libQtCore.a -o -f $X/lib/libQtCore.so -o -d $X/lib/QtCore.framework -o -f $X/lib/libQtCore.dylib; then
+			if test -f $X/lib/libQtCore.a -o -f $X/lib/libQtCore.so -o -d $X/lib/QtCore.framework \
+					-o -f $X/lib/libQtCore.dylib -o -f $X/lib/i386-linux-gnu/libQtCore.so; then
 				ac_qtlib=$X
 				QTDIR=$X
 				echo "   Found QT4 libraries in $X"
@@ -82,7 +83,9 @@ else
 	echo ""
 	ac_qtlib=""
 	if test "x$ac_qtlib" = "x"; then
-		if test -f $QTDIR/lib/libQtCore.so -o -f $QTDIR/lib/libQtCore.a -o -f $QTDIR/lib/libQtCore_debug.so -o -f $QTDIR/lib/libQtCore_debug.a -o -d $QTDIR/lib/QtCore.framework -o -f $QTDIR/lib/libQtCore.dylib; then
+		if test -f $QTDIR/lib/libQtCore.so -o -f $QTDIR/lib/libQtCore.a -o -f $QTDIR/lib/libQtCore_debug.so \
+				-o -f $QTDIR/lib/libQtCore_debug.a -o -d $QTDIR/lib/QtCore.framework \
+				-o -f $QTDIR/lib/libQtCore.dylib -o -f $QTDIR/lib/i386-linux-gnu/libQtCore.so; then
 			ac_qtlib=$QTDIR
 			echo " * Searching for QT library in $QTDIR [ OK ]"
 		else
