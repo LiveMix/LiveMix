@@ -32,8 +32,8 @@ do
   fi
 
   case $ac_option in
-  *=*)	ac_optarg=`expr "X$ac_option" : '[^=]*=\(.*\)'` ;;
-  *)	ac_optarg=yes ;;
+  *=*)    ac_optarg=`expr "X$ac_option" : '[^=]*=\(.*\)'` ;;
+  *)    ac_optarg=yes ;;
   esac
 
   case $ac_option in
@@ -46,58 +46,58 @@ do
 done
 
 if test "x$prefix" = "x"; then
-	default_prefix=/usr/local/livemix
-	echo " * prefix is not set, using default $default_prefix"
-	prefix=$default_prefix
+    default_prefix=/usr/local/livemix
+    echo " * prefix is not set, using default $default_prefix"
+    prefix=$default_prefix
 fi
 
 
 
 if test "x$QTDIR" = "x"; then
-	# is not set
-	echo " * QTDIR enviroment variable is not set...searching for installed QT4 library"
-	echo ""
+    # is not set
+    echo " * QTDIR enviroment variable is not set...searching for installed QT4 library"
+    echo ""
 
-	ac_qtlib=""
-	for X in \
-			/usr/local/Trolltech/Qt-4.3.1 \
-			/usr/local/Trolltech/Qt-4.3.0 \
-			/usr/local/Trolltech/Qt-4.2.0 \
-			/usr/local/Trolltech/Qt-4.1.3 \
-			/usr/local/Trolltech/Qt-4.1.2 \
-			/usr/local/Trolltech/Qt-4.1.1 \
-			/usr/local/Trolltech/Qt-4.1.0 \
-			/usr \
-			; do
-		if test "x$ac_qtlib" = "x"; then
-			if test -f $X/lib/libQtCore.a -o -f $X/lib/libQtCore.so -o -d $X/lib/QtCore.framework \
-					-o -f $X/lib/libQtCore.dylib -o -f $X/lib/i386-linux-gnu/libQtCore.so; then
-				ac_qtlib=$X
-				QTDIR=$X
-				echo "   Found QT4 libraries in $X"
-			fi
-		fi
-	done
+    ac_qtlib=""
+    for X in \
+            /usr/local/Trolltech/Qt-4.3.1 \
+            /usr/local/Trolltech/Qt-4.3.0 \
+            /usr/local/Trolltech/Qt-4.2.0 \
+            /usr/local/Trolltech/Qt-4.1.3 \
+            /usr/local/Trolltech/Qt-4.1.2 \
+            /usr/local/Trolltech/Qt-4.1.1 \
+            /usr/local/Trolltech/Qt-4.1.0 \
+            /usr \
+            ; do
+        if test "x$ac_qtlib" = "x"; then
+            if test -f $X/lib/libQtCore.a -o -f $X/lib/libQtCore.so -o -d $X/lib/QtCore.framework \
+                    -o -f $X/lib/libQtCore.dylib -o -f $X/lib/i386-linux-gnu/libQtCore.so; then
+                ac_qtlib=$X
+                QTDIR=$X
+                echo "   Found QT4 libraries in $X"
+            fi
+        fi
+    done
 else
-	echo " * QTDIR = $QTDIR"
-	echo ""
-	ac_qtlib=""
-	if test "x$ac_qtlib" = "x"; then
-		if test -f $QTDIR/lib/libQtCore.so -o -f $QTDIR/lib/libQtCore.a -o -f $QTDIR/lib/libQtCore_debug.so \
-				-o -f $QTDIR/lib/libQtCore_debug.a -o -d $QTDIR/lib/QtCore.framework \
-				-o -f $QTDIR/lib/libQtCore.dylib -o -f $QTDIR/lib/i386-linux-gnu/libQtCore.so; then
-			ac_qtlib=$QTDIR
-			echo " * Searching for QT library in $QTDIR [ OK ]"
-		else
-			echo " * Searching for QT library in $QTDIR *** Not found ***"
-		fi
-	fi
+    echo " * QTDIR = $QTDIR"
+    echo ""
+    ac_qtlib=""
+    if test "x$ac_qtlib" = "x"; then
+        if test -f $QTDIR/lib/libQtCore.so -o -f $QTDIR/lib/libQtCore.a -o -f $QTDIR/lib/libQtCore_debug.so \
+                -o -f $QTDIR/lib/libQtCore_debug.a -o -d $QTDIR/lib/QtCore.framework \
+                -o -f $QTDIR/lib/libQtCore.dylib -o -f $QTDIR/lib/i386-linux-gnu/libQtCore.so; then
+            ac_qtlib=$QTDIR
+            echo " * Searching for QT library in $QTDIR [ OK ]"
+        else
+            echo " * Searching for QT library in $QTDIR *** Not found ***"
+        fi
+    fi
 fi
 
 if test "x$ac_qtlib" = "x"; then
-	echo ""
-	echo " *** ERROR: QT library not found. Maybe QT development libraries are not installed or QTDIR isn't properly set."
-	exit 1
+    echo ""
+    echo " *** ERROR: QT library not found. Maybe QT development libraries are not installed or QTDIR isn't properly set."
+    exit 1
 fi
 
 
@@ -110,7 +110,7 @@ QMAKE_BIN=$QTDIR/bin/qmake
 
 if [ -f $QTDIR/bin/qmake-qt4 ]
 then
-	QMAKE_BIN=$QTDIR/bin/qmake-qt4
+    QMAKE_BIN=$QTDIR/bin/qmake-qt4
 fi
 
 echo ""
