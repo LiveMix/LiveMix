@@ -3,13 +3,21 @@ Section: sound
 Priority: optional
 Maintainer: Ubuntu Universe Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: Stéphane Brunner <stephane.brunner@gmail.com>
-Build-Depends: debhelper (>= 5), docbook-to-man, libqt4-dev, libjack-jackd2-dev, liblrdf-dev, ladspa-sdk, liblash-dev, libasound2-dev
-Standards-Version: 3.8.0
-Homepage: http://livemix.codingteam.net/
+Build-Depends: debhelper (>= 7.0.50~), 
+ docbook-to-man,
+ ladspa-sdk,
+ libasound2-dev
+ libjack-jackd2-dev,
+ liblash-compat-dev,
+ liblrdf-dev,
+ libqt4-dev,
+ python (>= 2.4)
+Standards-Version: 3.9.2
+Homepage: https://github.com/LiveMix/LiveMix
 
 Package: livemix
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: swh-plugins
 Suggests: cmt, tap-plugins, ladspa-plugin
 Description: Simple mixer for live performances

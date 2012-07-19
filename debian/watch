@@ -3,4 +3,7 @@
 
 version=3
 
-opts="dversionmangle=s/~//" http://www.codingteam.net/livemix-down_en.html compte.php\?ida=http://www.codingteam.net/upload/.*-livemix-([0-9.svnrc]*)\.tar\.bz2&amp;idb=livemix
+opts=uversionmangle=s/rc/~rc/,\
+downloadurlmangle=s/download\//download\/file\/livemix-/;s/$/.tar.bz2/ \
+http://codingteam.net/project/livemix/download/ \
+.*/download/(\d.+)

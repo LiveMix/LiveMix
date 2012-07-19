@@ -1,10 +1,7 @@
 This package was debianized by Stéphane Brunner <stephane.brunner@gmail.com> on
 Tue,  4 Sep 2007 10:04:57 +0200.
 
-It was downloaded from http://livemix.codingteam.net/
-
-MD5 sum of the upstream file (livemix-0.49rc2.tar.bz2): 
-1650dd73a6a4c954937c870b5eacaa1b
+It was downloaded from https://github.com/LiveMix/LiveMix
 
 Upstream Author:
 Copyright 2002 - 2007 Alex >Comix< Cominu

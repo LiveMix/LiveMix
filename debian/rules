@@ -1,72 +1,13 @@
 #!/usr/bin/make -f
 
-config.status: configure
-	dh_testdir
+%:
+	dh $@
 
-	qmake-qt4 all.pro prefix=/usr -config release && \
-	cd i18n&&lrelease-qt4 *.ts
+override_dh_auto_configure:
+	chmod -x default.lm dist/*
+	qmake-qt4 all.pro prefix=/usr -config release
+	cd i18n && lrelease-qt4 *.ts
 
-build: build-stamp
-
-build-stamp:  config.status
-	dh_testdir
-
-	$(MAKE)
+override_dh_auto_build:
+	dh_auto_build
 	docbook-to-man debian/livemix.sgml > livemix.1
-
-	touch $@
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp 
-
-	[ ! -f Makefile ] || $(MAKE) distclean
-
-	dh_clean 
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k 
-	dh_installdirs
-
-	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/livemix install
-
-binary-indep: build install
-
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs ChangeLog
-	dh_installdocs
-	dh_installmenu
-	dh_installmime
-	dh_desktop
-	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-
-get-orig-source:
-	UPSTREAMURL="$(shell uscan --dehs | grep upstream-url | cut -f 2 -d\> | cut -f 1 -d\<)";\
-    UPSTREAMVERSION="$(shell uscan --dehs | grep debian-mangled-uversion | cut -f 2 -d\> | cut -f 1 -d\<)";\
-    p=$$(pwd);\
-    cd ..;\
-    pwd;\
-    wget $${UPSTREAMURL} -O livemix-$${UPSTREAMVERSION}-src.tar.bz2;\
-    bunzip2 livemix-$${UPSTREAMVERSION}-src.tar.bz2;\
-    tar --delete --file=livemix-$${UPSTREAMVERSION}-src.tar livemix-$${UPSTREAMVERSION}/debian;\
-    gzip -9 livemix-$${UPSTREAMVERSION}-src.tar;\
-    ln -s livemix-$${UPSTREAMVERSION}-src.tar.gz livemix_$${UPSTREAMVERSION}.orig.tar.gz;\
-    cd $$p
-
-.PHONY: build clean binary-indep binary-arch binary install get-orig-source

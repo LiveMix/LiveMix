@@ -16,7 +16,7 @@ manpage.1: manpage.sgml
   -->
 
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
-  <!ENTITY dhfirstname "<firstname>Stphane</firstname>">
+  <!ENTITY dhfirstname "<firstname>Stéphane</firstname>">
   <!ENTITY dhsurname   "<surname>Brunner</surname>">
   <!-- Please adjust the date whenever revising the manpage. -->
   <!ENTITY dhdate      "<date>septembre 4, 2007</date>">
@@ -24,7 +24,7 @@ manpage.1: manpage.sgml
        allowed: see man(7), man(1). -->
   <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
   <!ENTITY dhemail     "<email>stephane.brunner@gmail.com</email>">
-  <!ENTITY dhusername  "Stphane Brunner">
+  <!ENTITY dhusername  "Stéphane Brunner">
   <!ENTITY dhucpackage "<refentrytitle>LIVEMIX</refentrytitle>">
   <!ENTITY dhpackage   "livemix">
 
