@@ -5,13 +5,7 @@ macx-g++ {
 }
 
 
-linux-g++ {
-	LMDEFINES += JACK_SUPPORT
-	LMDEFINES += LADSPA_SUPPORT
-	LMDEFINES += LRDF_SUPPORT
-}
-
-linux-g++-64 {
+linux-g++ | linux-g++-64 {
 	LMDEFINES += JACK_SUPPORT
 	LMDEFINES += LADSPA_SUPPORT
 	LMDEFINES += LRDF_SUPPORT
